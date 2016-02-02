@@ -1,0 +1,65 @@
+/**
+*** ////////////////////////////////////////////
+*** /////Autor: Juan Daniel Laserna Condado/////
+*** ////////////////////////////////////////////
+**/
+
+#ifndef __SECURITY_H__
+#define __SECURITY_H__
+
+//#include "ref_ptr.h"
+//#include "scoped_array.h"
+
+#include <stdio.h>
+
+namespace ROTOM {
+  namespace SECURITY {
+    static enum MyClass {
+      MyClass_None = 0,
+      MyClass_Camera,
+      MyClass_Chronometer,
+      MyClass_Command,
+      MyClass_CommandClear,
+      MyClass_CommandDrawObject,
+      MyClass_Countdown,
+      MyClass_Drawable,
+      MyClass_Geometry,
+      MyClass_Material,
+      MyClass_Node,
+      MyClass_Task,
+      MyClass_TaskManager,
+      MyClass_TaskCalculateModel,
+      MyClass_Worker
+    };
+
+    struct Counter {
+      //int MyClass_None;
+      int MyClass_Camera;
+      int MyClass_Chronometer;
+      int MyClass_Command;
+      int MyClass_CommandClear;
+      int MyClass_CommandDrawObject;
+      int MyClass_Countdown;
+      int MyClass_Drawable;
+      int MyClass_Geometry;
+      int MyClass_Material;
+      int MyClass_Node;
+      int MyClass_Task;
+      int MyClass_TaskManager;
+      int MyClass_TaskCalculateModel;
+      int MyClass_Worker;
+    };
+
+    static Counter counter;
+
+    void addSecurityCount(MyClass type);
+
+    void removeSecurityCount(MyClass type);
+
+    int checkSecurityCount(MyClass type = MyClass_None);
+
+    void drawSecurity();
+  }
+}
+
+#endif //__SECURITY_H__
