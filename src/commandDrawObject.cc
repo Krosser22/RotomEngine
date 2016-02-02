@@ -87,7 +87,7 @@ void ROTOM::CommandDrawObject::draw(Drawable *drawable) {
   glUniformMatrix4fv(u_model, 1, GL_FALSE, f_model);
   glUniformMatrix4fv(u_view, 1, GL_FALSE, f_view);
   glUniformMatrix4fv(u_projection, 1, GL_FALSE, projectionMatrix_);
-  glUniform3f(u_lightPosition, 1, GL_FALSE, lightPosition_[0]);
+  glUniform3f(u_lightPosition, lightPosition_[0], lightPosition_[1], lightPosition_[2]);
 
   //glUniform4f(u_color, color[0], color[1], color[2], color[3]);
   glUniform3f(u_lightColor, lightColor_[0], lightColor_[1], lightColor_[2]);
