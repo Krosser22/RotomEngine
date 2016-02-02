@@ -12,29 +12,7 @@
 #include "time.h"
 #include "window.h"
 
-ROTOM::Drawable drawable1, drawable2, drawable3;
 ROTOM::Camera camera;
-
-void hud() {
-  ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-  ImGui::Begin("Input");
-  {
-    if (ImGui::Button("Detach")) {
-      if (drawable3.parent() == &drawable2) {
-        drawable3.setParent(&drawable1);
-      } else {
-        drawable3.setParent(&drawable2);
-      }
-    }
-    ImGui::SliderFloat3("LightPosition", camera.commandDrawObject_.lightPosition_, -1000, 1000);
-    ImGui::SliderFloat3("LightColor", camera.commandDrawObject_.lightColor_, -1000, 1000);
-    ImGui::SliderFloat("Shininess", &camera.commandDrawObject_.shininess_, 0, 1000);
-    ImGui::SliderFloat4("specularIntensity", camera.commandDrawObject_.specularIntensity_, -1000, 1000);
-    ImGui::SliderFloat4("specularMaterial", camera.commandDrawObject_.specularMaterial_, -1000, 1000);
-  }
-  ImGui::End();
-}
 
 int ROTOM::main(int argc, char** argv) {
   ROTOM::WindowInit(1280, 720);
@@ -56,10 +34,7 @@ int ROTOM::main(int argc, char** argv) {
   std::shared_ptr<ROTOM::Material> material3(new ROTOM::Material("../../../../img/texture3.png"));
   std::shared_ptr<ROTOM::Material> material4(new ROTOM::Material());
 
-  //ROTOM::Drawable drawable1(geometry, material1, camera.root());
-  //ROTOM::Drawable drawable2(geometry, material2, &drawable1);
-  //ROTOM::Drawable drawable3(geometry, material3, &drawable2);
-
+  ROTOM::Drawable drawable1, drawable2, drawable3;
   drawable1.setGeometry(geometry);
   drawable2.setGeometry(geometry);
   drawable3.setGeometry(geometry);
@@ -109,10 +84,26 @@ int ROTOM::main(int argc, char** argv) {
     //...
 
     //Draw 2D (IMGUI)
-    hud();
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+    ImGui::Begin("Input");
+    {
+      if (ImGui::Button("Detach")) {
+        if (drawable3.parent() == &drawable2) {
+          drawable3.setParent(&drawable1);
+        } else {
+          drawable3.setParent(&drawable2);
+        }
+      }
+      ImGui::SliderFloat3("LightPosition", camera.commandDrawObject_.lightPosition_, -1000, 1000);
+      ImGui::SliderFloat3("LightColor", camera.commandDrawObject_.lightColor_, -1000, 1000);
+      ImGui::SliderFloat("Shininess", &camera.commandDrawObject_.shininess_, 0, 1000);
+      ImGui::SliderFloat4("specularIntensity", camera.commandDrawObject_.specularIntensity_, -1000, 1000);
+      ImGui::SliderFloat4("specularMaterial", camera.commandDrawObject_.specularMaterial_, -1000, 1000);
+    }
+    ImGui::End();
     //...
   }
-  ROTOM::WindowDestroy();
   return 0;
 }
 

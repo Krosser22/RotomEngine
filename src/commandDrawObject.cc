@@ -11,9 +11,9 @@
 ROTOM::CommandDrawObject::CommandDrawObject() {
   ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_CommandDrawObject);
 
-  lightPosition_[0] = -50.0f;
-  lightPosition_[1] = -1000.0f;
-  lightPosition_[2] = -1000.0f;
+  lightPosition_[0] = 0.0f;
+  lightPosition_[1] = 0.0f;
+  lightPosition_[2] = 0.0f;
 
   lightColor_[0] = 1.0f;
   lightColor_[1] = 0.0f;

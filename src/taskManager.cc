@@ -61,6 +61,11 @@ ROTOM::TaskManager::~TaskManager() {
         threads_.at(i).join();
       }
     }
+    /*while (threads_.size() > 0) {
+      //threads_.at(threads_.size() - 1).detach();
+      threads_.pop_back();
+    }*/
+    //threads_.clear();
 
     //self_.reset();
   } /*else {

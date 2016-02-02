@@ -29,18 +29,34 @@ int ROTOM::main(int argc, char** argv) {
   camera.setPosition(camera_position);
 
   std::shared_ptr<ROTOM::Geometry> geometry(new ROTOM::Geometry());
-  std::shared_ptr<ROTOM::Material> material(new ROTOM::Material());
+  std::shared_ptr<ROTOM::Material> material(new ROTOM::Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
   ROTOM::Drawable drawable(geometry, material, camera.root());
 
-  //LoadObj
   std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data(new ROTOM::Geometry::GeometryData);
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
 
+#define OBJ_BLONDE
+//#define OBJ_IRONMAN
+//#define OBJ_SIRIUS_5_COLONIAL_CITY
+#ifdef OBJ_BLONDE
   const char *base_path = "../../../../obj/";
   const char *path = "Blonde/";
   const char *name = "Blonde";
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
+#elif defined OBJ_IRONMAN
+  const char *base_path = "../../../../obj/";
+  const char *path = "IronMan/";
+  const char *name = "IronMan";
+  const char *old_ext = ".obj";
+  const char *new_ext = ".rotom";
+#elif defined OBJ_SIRIUS_5_COLONIAL_CITY
+  const char *base_path = "../../../../obj/";
+  const char *path = "Sirus5ColonialCity/";
+  const char *name = "sirus_city";
+  const char *old_ext = ".obj";
+  const char *new_ext = ".rotom";
+#endif
 
   char final_path[256];
   strcpy(final_path, base_path);
@@ -93,11 +109,5 @@ int ROTOM::main(int argc, char** argv) {
     ImGui::DragFloat3("Scale", node_scale, -50.0f, 50.0f);
     //...
   }
-  ROTOM::WindowDestroy();
-  return 0;
-}
-
-int main(int argc, char** argv) {
-  ROTOM::main(argc, argv);
   return 0;
 }

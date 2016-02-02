@@ -451,13 +451,13 @@ void ROTOM::WindowDestroy() {
 }
 
 bool ROTOM::WindowIsOpened() {
-  // Swap the buffers
-  ImGui::Render();
-  glDepthRange(0, 1);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-  glfwSwapBuffers(window);
   if (!glfwWindowShouldClose(window)) {
+    // Swap the buffers
+    ImGui::Render();
+    glDepthRange(0, 1);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glfwSwapBuffers(window);
     clear();
     return true;
   } else {

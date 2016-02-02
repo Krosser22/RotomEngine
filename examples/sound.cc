@@ -207,5 +207,4 @@ void run_scene_sound() {
     imgui();
     //...
   }
-  ROTOM::WindowDestroy();
 }

@@ -36,17 +36,54 @@ solution "ROTOM"
 		value   = "path",
 		description = "Set the output location for the generated files"
 	}
+  
+  os.mkdir("../project/build/bin/windows")
+  os.copyfile("../lib/openal32.dll", "../project/build/bin/windows/openal32.dll")
+  os.copyfile("../lib/openal32.lib", "../project/build/bin/windows/openal32.lib")
 
+--[[--------------------------------------------
+------------- EXAMPLES AND TESTING -------------
+--]]--------------------------------------------
+project "ROTOM_testing"
+  targetname "ROTOM_testing"
+  language "C++"
+  location "../project/build"
+	libdirs "../project/build/bin/windows"
+  kind "ConsoleApp"
+  
+  links {
+    "opengl32",
+    "openal32",
+    "ROTOM",
+  }
+  
+  includedirs {
+    "../include",
+    "../deps/glm",
+    "../deps/imgui",
+    --"../deps/sqlite",
+    --"../deps/tinyobjloader",
+  }
+  
+  files {
+    "../img/*.*",
+    "../shaders/*.*",
+    "../include/*.h",
+    "../examples/*.cc",
+    "../deps/imgui/*.cpp",
+    --"../deps/sqlite/*.c",
+    --"../deps/tinyobjloader/*.cc",
+  }
+
+--[[--------------------------------------------
+----------------- ROTOM ENGINE -----------------
+--]]--------------------------------------------
 project "ROTOM"
   targetname "ROTOM"
   language "C++"
   location "../project/build"
 	libdirs "../lib"
   kind "StaticLib"
-  
-  os.mkdir("../project/build/bin/windows")
-  os.copyfile("../lib/openal32.dll", "../project/build/bin/windows/openal32.dll")
-  os.copyfile("../lib/openal32.lib", "../project/build/bin/windows/openal32.lib")
   
   --[[flags {
     "No64BitChecks",
@@ -91,37 +128,9 @@ project "ROTOM"
     --"../deps/tinyobjloader/*.cc",
   }
 
-project "ROTOM_testing"
-  targetname "ROTOM_testing"
-  language "C++"
-  location "../project/build"
-	libdirs "../project/build/bin/windows"
-  kind "ConsoleApp"
-  
-  links {
-    "opengl32",
-    "openal32",
-    "ROTOM",
-  }
-  
-  includedirs {
-    "../include",
-    "../deps/glm",
-    "../deps/imgui",
-    --"../deps/sqlite",
-    --"../deps/tinyobjloader",
-  }
-  
-  files {
-    "../img/*.*",
-    "../shaders/*.*",
-    "../include/*.h",
-    "../examples/*.cc",
-    "../deps/imgui/*.cpp",
-    --"../deps/sqlite/*.c",
-    --"../deps/tinyobjloader/*.cc",
-  }
-
+--[[--------------------------------------------
+-------------- TOOL - Mesh_Loader --------------
+--]]--------------------------------------------
 project "ROTOM_tool_meshLoader"
   targetname "ROTOM_tool_meshLoader"
   language "C++"
