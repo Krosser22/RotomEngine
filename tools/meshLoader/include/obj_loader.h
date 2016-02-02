@@ -1,7 +1,13 @@
+/**
+*** ////////////////////////////////////////////
+*** /////Autor: Juan Daniel Laserna Condado/////
+*** ////////////////////////////////////////////
+**/
+
 #ifndef __OBJ_LOADER_H__
 #define __OBJ_LOADER_H__
 
-#include <EDK3/ref_ptr.h>
+#include <memory>
 
 class Obj_loader {
 public:
@@ -14,10 +20,10 @@ public:
 
 private:
   int dataCount_;
-  EDK3::ref_ptr<float> bufferData_;
+  std::shared_ptr<float> bufferData_;
 
   int indexCount_;
-  EDK3::ref_ptr<int> bufferIndex_;
+  std::shared_ptr<int> bufferIndex_;
 };
 
 #endif //__OBJ_LOADER_H__

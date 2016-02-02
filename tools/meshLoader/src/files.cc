@@ -10,7 +10,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-void ROTOM::FILES::Load_file(const char* path, EDK3::scoped_array<char> *source) {
+void ROTOM::FILES::Load_file(const char* path, std::shared_ptr<char[]> source) {
   FILE *file = fopen(path, "rb");
   if (file == NULL) {
     printf("ERROR: File doesn't found (%s)\n", path);
@@ -18,13 +18,13 @@ void ROTOM::FILES::Load_file(const char* path, EDK3::scoped_array<char> *source)
   } else {
     fseek(file, 0L, SEEK_END);
     int file_length = ftell(file);
-    source->alloc(file_length + 1);
+    //source->alloc(file_length + 1);
     fseek(file, 0L, SEEK_SET);
     for (int i = 0; i < file_length; ++i) {
-      source->get()[i] = fgetc(file);
+      ((*source.get())[i]) = fgetc(file);
       //printf("%c", source->get()[i]);
     }
-    source->get()[file_length] = '\0';
+    ((*source.get())[file_length]) = '\0';
     //printf("%s\n\n", source);
     fclose(file);
   }
@@ -145,232 +145,232 @@ void ROTOM::FILES::Load_OBJ2(const char* path, ROTOM::Geometry::GeometryData *ob
 
   FILE *file = fopen(path, "r");
   if (file == NULL){
-    printf("ERROR: File doesn't found\n");
+    assert(printf("ERROR: File doesn't found\n"));
     //return false;
-  }
+  } else {
+    while (true) {
+      char lineHeader[128];
+      // read the first word of the line
+      int res = fscanf(file, "%s", lineHeader);
+      if (res == EOF)
+        break; // EOF = End Of File. Quit the loop.
+      // else : parse lineHeader
 
-  while (1){
-    char lineHeader[128];
-    // read the first word of the line
-    int res = fscanf(file, "%s", lineHeader);
-    if (res == EOF)
-      break; // EOF = End Of File. Quit the loop.
-    // else : parse lineHeader
-
-    if (strcmp(lineHeader, "v") == 0){
-      glm::vec3 vertex;
-      int matches = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-      if (matches < 3) {
-        printf("ERROR: v[%d]\n", matches);
-      }
-      if (!aux_init){
-        aux_init = true;
-        aux_value_x = vertex.x;
-        aux_value_y = vertex.y;
-        aux_value_z = vertex.z;
-      }
-      vertex.x -= aux_value_x;
-      vertex.y -= aux_value_y;
-      vertex.z -= aux_value_z;
-      vertex.x *= size_x;
-      vertex.y *= size_y;
-      vertex.z *= size_z;
-      temp_vertices.push_back(vertex);
-    } else if (strcmp(lineHeader, "vt") == 0){
-      glm::vec2 uv;
-      int matches = fscanf(file, "%f %f\n", &uv.x, &uv.y);
-      if (matches < 2) {
-        printf("ERROR: vt[%d]\n", matches);
-      }
-      temp_uvs.push_back(uv);
-    } else if (strcmp(lineHeader, "vn") == 0){
-      glm::vec3 normal;
-      int matches = fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-      if (matches < 3) {
-        printf("ERROR: uv[%d]\n", matches);
-      }
-      temp_normals.push_back(normal);
-    } else if (strcmp(lineHeader, "f") == 0){
-      unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-      int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-      if (matches != 9 && matches != 2 && matches != 1){
-        printf("ERROR: matches [%d]\n", matches);
-      }
-      switch (matches) {
-      case 9:
-        vertexIndices.push_back(vertexIndex[0]);
-        vertexIndices.push_back(vertexIndex[1]);
-        vertexIndices.push_back(vertexIndex[2]);
-        uvIndices.push_back(uvIndex[0]);
-        uvIndices.push_back(uvIndex[1]);
-        uvIndices.push_back(uvIndex[2]);
-        normalIndices.push_back(normalIndex[0]);
-        normalIndices.push_back(normalIndex[1]);
-        normalIndices.push_back(normalIndex[2]);
-        break;
-      case 2:
-        vertexIndices.push_back(vertexIndex[0]);
-        uvIndices.push_back(uvIndex[0]);
-        matches = fscanf(file, " %d/%d %d/%d\n", &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2]);
-        vertexIndices.push_back(vertexIndex[1]);
-        vertexIndices.push_back(vertexIndex[2]);
-        uvIndices.push_back(uvIndex[0]);
-        uvIndices.push_back(uvIndex[1]);
-        uvIndices.push_back(uvIndex[2]);
-        normalIndices.push_back(-1);
-        normalIndices.push_back(-1);
-        normalIndices.push_back(-1);
-        break;
-      case 1:
-        vertexIndices.push_back(vertexIndex[0]);
-        matches = fscanf(file, "/%d %d//%d %d//%d\n", &normalIndex[0], &vertexIndex[1], &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
-
-        if (matches == 5){
-          vertexIndices.push_back(vertexIndex[1]);
-          vertexIndices.push_back(vertexIndex[2]);
-          uvIndices.push_back(1);
-          uvIndices.push_back(1);
-          uvIndices.push_back(1);
-          normalIndices.push_back(normalIndex[0]);
-          normalIndices.push_back(normalIndex[1]);
-          normalIndices.push_back(normalIndex[2]);
-        } else {
-          matches = fscanf(file, " %d %d\n", &vertexIndex[1], &vertexIndex[2]);
-          vertexIndices.push_back(vertexIndex[1]);
-          vertexIndices.push_back(vertexIndex[2]);
-          uvIndices.push_back(1);
-          uvIndices.push_back(1);
-          uvIndices.push_back(1);
-          normalIndices.push_back(-1);
-          normalIndices.push_back(-1);
-          normalIndices.push_back(-1);
+      if (strcmp(lineHeader, "v") == 0){
+        glm::vec3 vertex;
+        int matches = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+        if (matches < 3) {
+          printf("ERROR: v[%d]\n", matches);
         }
-        break;
-      default:
-        printf("ERROR: f[%d]\n", matches);
-        //return false;
-        break;
+        if (!aux_init){
+          aux_init = true;
+          aux_value_x = vertex.x;
+          aux_value_y = vertex.y;
+          aux_value_z = vertex.z;
+        }
+        vertex.x -= aux_value_x;
+        vertex.y -= aux_value_y;
+        vertex.z -= aux_value_z;
+        vertex.x *= size_x;
+        vertex.y *= size_y;
+        vertex.z *= size_z;
+        temp_vertices.push_back(vertex);
+      } else if (strcmp(lineHeader, "vt") == 0){
+        glm::vec2 uv;
+        int matches = fscanf(file, "%f %f\n", &uv.x, &uv.y);
+        if (matches < 2) {
+          printf("ERROR: vt[%d]\n", matches);
+        }
+        temp_uvs.push_back(uv);
+      } else if (strcmp(lineHeader, "vn") == 0){
+        glm::vec3 normal;
+        int matches = fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+        if (matches < 3) {
+          printf("ERROR: uv[%d]\n", matches);
+        }
+        temp_normals.push_back(normal);
+      } else if (strcmp(lineHeader, "f") == 0){
+        unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+        int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+        if (matches != 9 && matches != 2 && matches != 1){
+          printf("ERROR: matches [%d]\n", matches);
+        }
+        switch (matches) {
+          case 9:
+            vertexIndices.push_back(vertexIndex[0]);
+            vertexIndices.push_back(vertexIndex[1]);
+            vertexIndices.push_back(vertexIndex[2]);
+            uvIndices.push_back(uvIndex[0]);
+            uvIndices.push_back(uvIndex[1]);
+            uvIndices.push_back(uvIndex[2]);
+            normalIndices.push_back(normalIndex[0]);
+            normalIndices.push_back(normalIndex[1]);
+            normalIndices.push_back(normalIndex[2]);
+            break;
+          case 2:
+            vertexIndices.push_back(vertexIndex[0]);
+            uvIndices.push_back(uvIndex[0]);
+            matches = fscanf(file, " %d/%d %d/%d\n", &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2]);
+            vertexIndices.push_back(vertexIndex[1]);
+            vertexIndices.push_back(vertexIndex[2]);
+            uvIndices.push_back(uvIndex[0]);
+            uvIndices.push_back(uvIndex[1]);
+            uvIndices.push_back(uvIndex[2]);
+            normalIndices.push_back(-1);
+            normalIndices.push_back(-1);
+            normalIndices.push_back(-1);
+            break;
+          case 1:
+            vertexIndices.push_back(vertexIndex[0]);
+            matches = fscanf(file, "/%d %d//%d %d//%d\n", &normalIndex[0], &vertexIndex[1], &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
+
+            if (matches == 5){
+              vertexIndices.push_back(vertexIndex[1]);
+              vertexIndices.push_back(vertexIndex[2]);
+              uvIndices.push_back(1);
+              uvIndices.push_back(1);
+              uvIndices.push_back(1);
+              normalIndices.push_back(normalIndex[0]);
+              normalIndices.push_back(normalIndex[1]);
+              normalIndices.push_back(normalIndex[2]);
+            } else {
+              matches = fscanf(file, " %d %d\n", &vertexIndex[1], &vertexIndex[2]);
+              vertexIndices.push_back(vertexIndex[1]);
+              vertexIndices.push_back(vertexIndex[2]);
+              uvIndices.push_back(1);
+              uvIndices.push_back(1);
+              uvIndices.push_back(1);
+              normalIndices.push_back(-1);
+              normalIndices.push_back(-1);
+              normalIndices.push_back(-1);
+            }
+            break;
+          default:
+            printf("ERROR: f[%d]\n", matches);
+            //return false;
+            break;
+        }
       }
     }
-  }
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  //Transform Input
-  glm::vec3 vertex;
-  glm::vec3 normales;
-  glm::vec2 uv;
-  std::vector<glm::vec3> out_vertex;
-  std::vector<glm::vec2> out_uv;
-  std::vector<glm::vec3> out_normal;
-  for (unsigned int i = 0; i < vertexIndices.size(); ++i){
-    //Position
-    vertex = temp_vertices[vertexIndices[i] - 1];
-    out_vertex.push_back(vertex);
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //Transform Input
+    glm::vec3 vertex;
+    glm::vec3 normales;
+    glm::vec2 uv;
+    std::vector<glm::vec3> out_vertex;
+    std::vector<glm::vec2> out_uv;
+    std::vector<glm::vec3> out_normal;
+    for (unsigned int i = 0; i < vertexIndices.size(); ++i){
+      //Position
+      vertex = temp_vertices[vertexIndices[i] - 1];
+      out_vertex.push_back(vertex);
 
-    //Normales
-    if (temp_normals.size() >= normalIndices[i]) {
-      normales = temp_normals[normalIndices[i] - 1];
-    } else {
-      normales.x = 0;
-      normales.y = 0;
-      normales.z = 1;
+      //Normales
+      if (temp_normals.size() >= normalIndices[i]) {
+        normales = temp_normals[normalIndices[i] - 1];
+      } else {
+        normales.x = 0;
+        normales.y = 0;
+        normales.z = 1;
+      }
+      out_normal.push_back(normales);
+
+      //UV
+      if (temp_uvs.size() >= uvIndices[i]) {
+        uv = temp_uvs[uvIndices[i] - 1];
+      } else {
+        uv.x = 0;
+        uv.y = 0;
+      }
+      out_uv.push_back(uv);
     }
-    out_normal.push_back(normales);
-
-    //UV
-    if (temp_uvs.size() >= uvIndices[i]) {
-      uv = temp_uvs[uvIndices[i] - 1];
-    } else {
-      uv.x = 0;
-      uv.y = 0;
-    }
-    out_uv.push_back(uv);
-  }
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
 
 
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  //Data Output
-  const int vertexSize = 3 + 3 + 2;
-  for (unsigned int i = 0; i < out_vertex.size(); ++i) {
-    int index = i * vertexSize;
-
-    //Positions
-    obj_data->data.push_back(out_vertex[i].x);
-    obj_data->data.push_back(out_vertex[i].y);
-    obj_data->data.push_back(out_vertex[i].z);
-
-    //Normals
-    obj_data->data.push_back(out_normal[i].x);
-    obj_data->data.push_back(out_normal[i].y);
-    obj_data->data.push_back(out_normal[i].z);
-
-    //UVs
-    obj_data->data.push_back(out_uv[i].x);
-    obj_data->data.push_back(out_uv[i].y);
-  }
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-
-
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  //Index Output
-  for (unsigned int i = 0; i < vertexIndices.size(); ++i) {
-    obj_data->index.push_back(i);
-  }
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-
-
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  //Debug
-  //Print log
-  bool debug = false;
-  if (debug) {
-    //Vertex
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //Data Output
+    const int vertexSize = 3 + 3 + 2;
     for (unsigned int i = 0; i < out_vertex.size(); ++i) {
       int index = i * vertexSize;
-      printf("[%f %f %f][%f %f %f][%.3f %.3f]\n",
-        obj_data->data.at(index + 0), obj_data->data.at(index + 1), obj_data->data.at(index + 2), //Positions
-        obj_data->data.at(index + 3), obj_data->data.at(index + 4), obj_data->data.at(index + 5), //Normals
-        obj_data->data.at(index + 6), obj_data->data.at(index + 7)); //UVs
-    }
 
-    //Index
+      //Positions
+      obj_data->data.push_back(out_vertex[i].x);
+      obj_data->data.push_back(out_vertex[i].y);
+      obj_data->data.push_back(out_vertex[i].z);
+
+      //Normals
+      obj_data->data.push_back(out_normal[i].x);
+      obj_data->data.push_back(out_normal[i].y);
+      obj_data->data.push_back(out_normal[i].z);
+
+      //UVs
+      obj_data->data.push_back(out_uv[i].x);
+      obj_data->data.push_back(out_uv[i].y);
+    }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //Index Output
     for (unsigned int i = 0; i < vertexIndices.size(); ++i) {
-      if (i % 3 == 0) {
-        printf("\nIndex position %d", obj_data->index.at(i));
-      } else {
-        printf("/%d", obj_data->index.at(i));
+      obj_data->index.push_back(i);
+    }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //Debug
+    //Print log
+    bool debug = false;
+    if (debug) {
+      //Vertex
+      for (unsigned int i = 0; i < out_vertex.size(); ++i) {
+        int index = i * vertexSize;
+        printf("[%f %f %f][%f %f %f][%.3f %.3f]\n",
+          obj_data->data.at(index + 0), obj_data->data.at(index + 1), obj_data->data.at(index + 2), //Positions
+          obj_data->data.at(index + 3), obj_data->data.at(index + 4), obj_data->data.at(index + 5), //Normals
+          obj_data->data.at(index + 6), obj_data->data.at(index + 7)); //UVs
+      }
+
+      //Index
+      for (unsigned int i = 0; i < vertexIndices.size(); ++i) {
+        if (i % 3 == 0) {
+          printf("\nIndex position %d", obj_data->index.at(i));
+        } else {
+          printf("/%d", obj_data->index.at(i));
+        }
       }
     }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+
+
+
+    //Restart the static values
+    aux_value_x = 0;
+    aux_value_y = 0;
+    aux_value_z = 0;
+    aux_init = false;
   }
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-
-
-
-  //Restart the static values
-  aux_value_x = 0;
-  aux_value_y = 0;
-  aux_value_z = 0;
-  aux_init = false;
 }
 
-void ROTOM::FILES::Load_ROTOM_OBJ(const char *path, EDK3::scoped_ptr<ROTOM::Geometry::GeometryData> *obj_data) {
-  obj_data->get()->data.clear();
-  obj_data->get()->index.clear();
+void ROTOM::FILES::Load_ROTOM_OBJ(const char *path, std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data) {
+  obj_data->data.clear();
+  obj_data->index.clear();
 
   FILE *file = fopen(path, "rb");
-  if (file){
+  if (file) {
     //IndexCount
     int indexCount = -1;
     fread(&indexCount, sizeof(int), 1, file);
@@ -383,17 +383,17 @@ void ROTOM::FILES::Load_ROTOM_OBJ(const char *path, EDK3::scoped_ptr<ROTOM::Geom
     int indexAux = 0;
     for (int i = 0; i < indexCount; ++i) {
       fread(&indexAux, sizeof(int), 1, file);
-      obj_data->get()->index.push_back(indexAux);
+      obj_data->index.push_back(indexAux);
     }
     
     //Data
     float dataAux = -1.0f;
     for (int i = 0; i < dataCount; ++i) {
       fread(&dataAux, sizeof(float), 1, file);
-      obj_data->get()->data.push_back(dataAux);
+      obj_data->data.push_back(dataAux);
     }
+    fclose(file);
   }
-  fclose(file);
 }
 
 void ROTOM::FILES::Save_ROTOM_OBJ(const char *path, ROTOM::Geometry::GeometryData *obj_data) {
@@ -417,6 +417,6 @@ void ROTOM::FILES::Save_ROTOM_OBJ(const char *path, ROTOM::Geometry::GeometryDat
     for (int i = 0; i < dataCount; ++i) {
       fwrite(&obj_data->data.at(i), sizeof(float), 1, file);
     }
+    fclose(file);
   }
-  fclose(file);
 }

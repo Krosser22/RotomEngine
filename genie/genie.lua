@@ -75,7 +75,6 @@ project "ROTOM"
     --"../deps/sqlite",
     "../deps/stb",
     --"../deps/tinyobjloader",
-    "../deps/EDK3",
   }
   
   files {
@@ -90,7 +89,6 @@ project "ROTOM"
     --"../deps/sqlite/*.c",
     "../deps/stb/*.c",
     --"../deps/tinyobjloader/*.cc",
-    "../deps/EDK3/*.*",
   }
 
 project "ROTOM_testing"
@@ -112,7 +110,6 @@ project "ROTOM_testing"
     "../deps/imgui",
     --"../deps/sqlite",
     --"../deps/tinyobjloader",
-    "../deps/EDK3",
   }
   
   files {
@@ -123,7 +120,6 @@ project "ROTOM_testing"
     "../deps/imgui/*.cpp",
     --"../deps/sqlite/*.c",
     --"../deps/tinyobjloader/*.cc",
-    "../deps/EDK3/*.*",
   }
 
 project "ROTOM_tool_meshLoader"
@@ -144,19 +140,18 @@ project "ROTOM_tool_meshLoader"
     "../deps/glm",
     "../deps/imgui",
     "../tools/meshLoader/include",
-    "../deps/sqlite",
+    --"../deps/sqlite",
     "../deps/tinyobjloader",
-    "../deps/EDK3",
   }
   
   files {
     "../img/*.*",
     "../shaders/*.*",
+    "../obj/*.*",
     "../include/*.h",
     "../tools/meshLoader/include/*.h",
     "../tools/meshLoader/src/*.cc",
     "../deps/imgui/*.cpp",
-    "../deps/sqlite/*.c",
+    --"../deps/sqlite/*.c",
     "../deps/tinyobjloader/*.cc",
-    "../deps/EDK3/*.*",
   }

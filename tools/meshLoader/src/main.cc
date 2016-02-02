@@ -15,42 +15,28 @@
 #include "time.h"
 #include "window.h"
 
-//General data info
-struct Data {
-  ROTOM::DisplayList displayList;
-  ROTOM::Camera camera;
-  ROTOM::Drawable root;
-} data;
-
 int ROTOM::main(int argc, char** argv) {
   ROTOM::WindowInit(1600, 900);
 
-  //General data
   float camera_position[3] = { 0.0f, 0.0f, -500.0f };
-  data.camera.setPosition(camera_position);
-  data.camera.setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
-  data.camera.setupPerspective(45.0f, (float)ROTOM::WindowWidth() / (float)ROTOM::WindowHeight(), 0.1f, 1000.0f);
-  data.displayList.setCamera(&data.camera);
-
-  ROTOM::CommandDrawObject commandDrawObject(&data.root);
-  ROTOM::Geometry geometry;
-  ROTOM::Material material;
-  //material.setTexture("../../../deps/img/defaultTexture.png");
-
-  ROTOM::Drawable drawable(&geometry, &material, &data.root);
   float node_position[3] = { 0.0f, 1.0f, -5.0f };
   float node_rotation[3] = { 0.0f, 0.0f, 0.0f };
   float node_scale[3] = { 1.0f, 1.0f, 1.0f };
 
-  //Sound
-  //sound::init();
+  ROTOM::Camera camera;
+  camera.setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
+  camera.setupPerspective(45.0f, (float)ROTOM::WindowWidth() / (float)ROTOM::WindowHeight(), 0.1f, 100.0f);
+  camera.setPosition(camera_position);
+
+  std::shared_ptr<ROTOM::Geometry> geometry(new ROTOM::Geometry());
+  std::shared_ptr<ROTOM::Material> material(new ROTOM::Material());
+  ROTOM::Drawable drawable(geometry, material, camera.root());
 
   //LoadObj
-  EDK3::scoped_ptr<ROTOM::Geometry::GeometryData> obj_data;
-  obj_data.alloc();
+  std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data(new ROTOM::Geometry::GeometryData);
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
 
-  const char *base_path = "../../../deps/obj/";
+  const char *base_path = "../../../../obj/";
   const char *path = "Blonde/";
   const char *name = "Blonde";
   const char *old_ext = ".obj";
@@ -83,22 +69,21 @@ int ROTOM::main(int argc, char** argv) {
   //ROTOM Loading
   printf(".Loading ROTOM: ");
   t_load_ROTOM.start();
-  ROTOM::FILES::Load_ROTOM_OBJ(new_path, &obj_data);
+  ROTOM::FILES::Load_ROTOM_OBJ(new_path, obj_data);
   printf("%f seconds.\n", t_load_ROTOM.end());
   printf(".................................\n");
 
-  geometry.loadGeometry(&obj_data);
+  geometry->loadGeometry(&obj_data);
 
   while (ROTOM::WindowIsOpened()) {
     //update
-    data.displayList.addCommand(&commandDrawObject);
     drawable.setPosition(node_position);
     drawable.setRotation(node_rotation);
     drawable.setScale(node_scale);
     //...
     
     //draw 3D
-    data.displayList.runAll();
+    camera.doRender();
     //...
 
     //draw 2D (IMGUI)

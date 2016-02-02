@@ -1,3 +1,9 @@
+/**
+*** ////////////////////////////////////////////
+*** /////Autor: Juan Daniel Laserna Condado/////
+*** ////////////////////////////////////////////
+**/
+
 #include "obj_loader.h"
 #include <vector>
 #include "glm/glm.hpp"
@@ -44,9 +50,9 @@ bool Obj_loader::init(const char *path, int size_x, int size_y, int size_z) {
       }
       if (!aux_init){
         aux_init = true;
-        aux_value_x = vertex.x;
-        aux_value_y = vertex.y;
-        aux_value_z = vertex.z;
+        aux_value_x = (int)vertex.x;
+        aux_value_y = (int)vertex.y;
+        aux_value_z = (int)vertex.z;
       }
       vertex.x -= aux_value_x;
       vertex.y -= aux_value_y;
@@ -223,4 +229,5 @@ bool Obj_loader::init(const char *path, int size_x, int size_y, int size_z) {
   /*for (unsigned int i = 0; i < size_index_; ++i) {
     printf("%d\n", index[i]);
   }*/
+  return true;
 }

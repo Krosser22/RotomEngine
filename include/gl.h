@@ -4,6 +4,9 @@
 *** ////////////////////////////////////////////
 **/
 
+#ifndef __MY_GL_FILE_H__
+#define __MY_GL_FILE_H__
+
 // GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -17,3 +20,5 @@
 #define GLFW_EXPOSE_NATIVE_WGL
 #include <GLFW/glfw3native.h>
 #endif
+
+#endif //__MY_GL_FILE_H__

@@ -8,7 +8,7 @@
 #define __GEOMETRY_H__
 
 #include <vector>
-#include "scoped_ptr.h"
+#include <memory>
 
 namespace ROTOM {
   class Geometry {
@@ -24,7 +24,7 @@ namespace ROTOM {
     //Vertex = p, p, p, n, n, n, uv, uv, ... and again till end
     void loadGeometry(const float *vertex, const unsigned int *index, const int vertexCount);
 
-    void loadGeometry(EDK3::scoped_ptr<ROTOM::Geometry::GeometryData> *geometryData);
+    void loadGeometry(std::shared_ptr<ROTOM::Geometry::GeometryData> *geometryData);
     
     const unsigned int vertexCount();
 
