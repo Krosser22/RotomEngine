@@ -84,9 +84,9 @@ const char* fragmentShaderSource_ = "#version 330\n"
 "  vec4 specularColor = vec4(pow(cosAngleSpecular, u_shininess) * u_specularIntensity * u_specularMaterial, 1.0);\n"
 "  vec4 finalColor = difuseColor + specularColor;\n"
 "  finalColor.w = min(1.0, finalColor.w);\n"
-"  finalColor.x = 1.0 - finalColor.x;\n"
-"  finalColor.y = 1.0 - finalColor.y;\n"
-"  finalColor.z = 1.0 - finalColor.z;\n"
+//"  finalColor.x = 1.0 - finalColor.x;\n"
+//"  finalColor.y = 1.0 - finalColor.y;\n"
+//"  finalColor.z = 1.0 - finalColor.z;\n"
 "  fragment = finalColor;\n"
 
 ////////////////////////////////////////////
@@ -98,7 +98,7 @@ const char* fragmentShaderSource_ = "#version 330\n"
 //"  fragment = vec4(halfWay, 1.0);\n"
 //"  fragment = vec4(cosAngleDifuse, cosAngleDifuse, cosAngleDifuse, 1.0);\n"
 //"  fragment = vec4(cosAngleSpecular, cosAngleSpecular, cosAngleSpecular, 1.0);\n"
-"  fragment = vec4(texture(u_texture, uvMaterial).xyz * cosAngleSpecular, 1.0);\n"
+//"  fragment = vec4(texture(u_texture, uvMaterial).xyz * cosAngleSpecular, 1.0);\n"
 ////////////////////////////////////////////
 
 "};\0";

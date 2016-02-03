@@ -34,18 +34,18 @@ int ROTOM::main(int argc, char** argv) {
   std::shared_ptr<Material> material3(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4(new Material());
 
-  Drawable drawable1, drawable2, drawable3;
+  Drawable drawable1;//, drawable2, drawable3;
   drawable1.setGeometry(geometry);
-  drawable2.setGeometry(geometry);
-  drawable3.setGeometry(geometry);
+  //drawable2.setGeometry(geometry);
+  //drawable3.setGeometry(geometry);
   drawable1.setMaterial(material1);
-  drawable2.setMaterial(material2);
-  drawable3.setMaterial(material3);
+  //drawable2.setMaterial(material2);
+  //drawable3.setMaterial(material3);
   drawable1.setParent(camera.root());
-  drawable2.setParent(&drawable1);
-  drawable3.setParent(&drawable2);
+  //drawable2.setParent(&drawable1);
+  //drawable3.setParent(&drawable2);
   
-  const int amount = 1722;
+  /*const int amount = 1722;
   Drawable d[amount];
 
   float pos[3] = { 0.0f, 0.0f, 0.0f };
@@ -63,7 +63,7 @@ int ROTOM::main(int argc, char** argv) {
     d[i].setMaterial(material4);
     d[i].setParent(&drawable1);
     d[i].setPosition(pos);
-  }
+  }*/
 
   float sin_time = 0.0f;
   node1_position[0] = sin(TIME::appTime()) * 2.2f;
@@ -75,9 +75,9 @@ int ROTOM::main(int argc, char** argv) {
     node2_position[1] = sin_time;
     node3_position[2] = sin_time;
     drawable1.setPosition(node1_position);
-    drawable2.setPosition(node2_position);
-    drawable3.setPosition(node3_position);
-    drawable2.setRotationZ(sin_time);
+    //drawable2.setPosition(node2_position);
+    //drawable3.setPosition(node3_position);
+    //drawable2.setRotationZ(sin_time);
     //...
 
     //Draw 3D
@@ -89,18 +89,18 @@ int ROTOM::main(int argc, char** argv) {
 
     ImGui::Begin("Input");
     {
-      if (ImGui::Button("Detach")) {
+      /*if (ImGui::Button("Detach")) {
         if (drawable3.parent() == &drawable2) {
           drawable3.setParent(&drawable1);
         } else {
           drawable3.setParent(&drawable2);
         }
-      }
-      ImGui::SliderFloat3("LightPosition", camera.commandDrawObject_.lightPosition_, -1000, 1000);
-      ImGui::SliderFloat3("LightColor", camera.commandDrawObject_.lightColor_, -1000, 1000);
-      ImGui::SliderFloat("Shininess", &camera.commandDrawObject_.shininess_, 0, 1000);
-      ImGui::SliderFloat4("specularIntensity", camera.commandDrawObject_.specularIntensity_, -1000, 1000);
-      ImGui::SliderFloat4("specularMaterial", camera.commandDrawObject_.specularMaterial_, -1000, 1000);
+      }*/
+      ImGui::DragFloat3("LightPosition", camera.commandDrawObject_.lightPosition_, -100, 100);
+      ImGui::DragFloat3("LightColor", camera.commandDrawObject_.lightColor_, 0.0f, 1.0f);
+      ImGui::DragFloat("Shininess", &camera.commandDrawObject_.shininess_, 0.0f, 1000.0f);
+      ImGui::DragFloat4("specularIntensity", camera.commandDrawObject_.specularIntensity_, 0.0f, 1.0f);
+      ImGui::DragFloat4("specularMaterial", camera.commandDrawObject_.specularMaterial_, 0.0f, 1.0f);
     }
     ImGui::End();
     //...

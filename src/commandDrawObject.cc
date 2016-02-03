@@ -16,7 +16,7 @@ ROTOM::CommandDrawObject::CommandDrawObject() {
   lightPosition_[2] = 0.0f;
 
   lightColor_[0] = 1.0f;
-  lightColor_[1] = 0.0f;
+  lightColor_[1] = 1.0f;
   lightColor_[2] = 1.0f;
 
   shininess_ = 500.0f;

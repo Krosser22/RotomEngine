@@ -212,10 +212,10 @@ int ROTOM::SECURITY::checkSecurityCount(MyClass type) {
     if (typeCount == 0) {
       printf("All classes removed\n");
       system("pause");
-    } /*else {
+    } else {
       printf("Not all classes removed\n");
       system("pause");
-    }*/
+    }
     break;
   case MyClass_AutoLayering:
     typeCount = counter.MyClass_AutoLayering;
