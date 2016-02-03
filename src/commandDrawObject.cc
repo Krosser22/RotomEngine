@@ -9,7 +9,7 @@
 #include "gl.h"
 
 ROTOM::CommandDrawObject::CommandDrawObject() {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_CommandDrawObject);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_CommandDrawObject);
 
   lightPosition_[0] = 0.0f;
   lightPosition_[1] = 0.0f;
@@ -33,7 +33,7 @@ ROTOM::CommandDrawObject::CommandDrawObject() {
 }
 
 ROTOM::CommandDrawObject::~CommandDrawObject() {
-  ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass::MyClass_CommandDrawObject);
+  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_CommandDrawObject);
 }
 
 void ROTOM::CommandDrawObject::run() {
@@ -51,8 +51,8 @@ void ROTOM::CommandDrawObject::setProjectionMatrix(float *projectionMatrix) {
 }
 
 void ROTOM::CommandDrawObject::draw(Drawable *drawable) {
-  std::shared_ptr<ROTOM::Geometry> geometry = drawable->geometry();
-  std::shared_ptr<ROTOM::Material> material = drawable->material();
+  std::shared_ptr<Geometry> geometry = drawable->geometry();
+  std::shared_ptr<Material> material = drawable->material();
   const float *color = material->color();
   const unsigned int program = material->shaderProgram();
   glUseProgram(program);

@@ -26,7 +26,7 @@ namespace ROTOM {
     //It does what the command should do (it's called from the displayList class)
     void run();
 
-    void setRoot(ROTOM::Node *root);
+    void setRoot(Node *root);
 
     void setProjectionMatrix(float *projectionMatrix);
 

@@ -74,7 +74,7 @@ namespace ROTOM {
 
     TaskManager taskManager_;
 
-    std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateMatrix_;
+    std::shared_ptr<TaskCalculateMatrix> taskCalculateMatrix_;
 
     void cleanViewMatrix();
 

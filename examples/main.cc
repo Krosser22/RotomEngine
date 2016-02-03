@@ -15,7 +15,7 @@
 ROTOM::Camera camera;
 
 int ROTOM::main(int argc, char** argv) {
-  ROTOM::WindowInit(1280, 720);
+  WindowInit(1280, 720);
 
   float camera_position[3] = { 0.0f, 0.0f, 0.0f };
   float node1_position[3] = { 0.0f, 0.0f, -5.0f };
@@ -24,17 +24,17 @@ int ROTOM::main(int argc, char** argv) {
 
   //General Data
   camera.setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
-  camera.setupPerspective(45.0f, (float)ROTOM::WindowWidth() / (float)ROTOM::WindowHeight(), 0.1f, 100.0f);
+  camera.setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   camera.setPosition(camera_position);
   
-  std::shared_ptr<ROTOM::Geometry> geometry(new ROTOM::Geometry());
+  std::shared_ptr<Geometry> geometry(new Geometry());
 
-  std::shared_ptr<ROTOM::Material> material1(new ROTOM::Material("../../../../img/texture1.png"));
-  std::shared_ptr<ROTOM::Material> material2(new ROTOM::Material("../../../../img/texture2.png"));
-  std::shared_ptr<ROTOM::Material> material3(new ROTOM::Material("../../../../img/texture3.png"));
-  std::shared_ptr<ROTOM::Material> material4(new ROTOM::Material());
+  std::shared_ptr<Material> material1(new Material("../../../../img/texture1.png"));
+  std::shared_ptr<Material> material2(new Material("../../../../img/texture2.png"));
+  std::shared_ptr<Material> material3(new Material("../../../../img/texture3.png"));
+  std::shared_ptr<Material> material4(new Material());
 
-  ROTOM::Drawable drawable1, drawable2, drawable3;
+  Drawable drawable1, drawable2, drawable3;
   drawable1.setGeometry(geometry);
   drawable2.setGeometry(geometry);
   drawable3.setGeometry(geometry);
@@ -46,7 +46,7 @@ int ROTOM::main(int argc, char** argv) {
   drawable3.setParent(&drawable2);
   
   const int amount = 1722;
-  ROTOM::Drawable d[amount];
+  Drawable d[amount];
 
   float pos[3] = { 0.0f, 0.0f, 0.0f };
   float separation = -2.2f;
@@ -66,17 +66,18 @@ int ROTOM::main(int argc, char** argv) {
   }
 
   float sin_time = 0.0f;
-  node1_position[0] = sin(ROTOM::TIME::appTime()) * 2.2f;
+  node1_position[0] = sin(TIME::appTime()) * 2.2f;
   drawable1.setPosition(node1_position);
-  while (ROTOM::WindowIsOpened()) {
+  while (WindowIsOpened()) {
     //Update
-    sin_time = sin(ROTOM::TIME::appTime()) * 2.2f;
+    sin_time = sin(TIME::appTime()) * 2.2f;
     node1_position[0] = sin_time;
     node2_position[1] = sin_time;
     node3_position[2] = sin_time;
     drawable1.setPosition(node1_position);
     drawable2.setPosition(node2_position);
     drawable3.setPosition(node3_position);
+    drawable2.setRotationZ(sin_time);
     //...
 
     //Draw 3D
@@ -122,7 +123,6 @@ int ROTOM::main(int argc, char** argv) {
 ----------
 ---TODO---
 ----------
-+Actualizar genie
 +Add LUA
 +Use my render list with IMGUI
 +Add a class DB with SQLite or another library

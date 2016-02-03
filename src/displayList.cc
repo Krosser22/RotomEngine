@@ -5,6 +5,15 @@
 **/
 
 #include "displayList.h"
+#include "security.h"
+
+ROTOM::DisplayList::DisplayList() {
+  SECURITY::addSecurityCount(SECURITY::MyClass_DisplayList);
+}
+
+ROTOM::DisplayList::~DisplayList() {
+  SECURITY::removeSecurityCount(SECURITY::MyClass_DisplayList);
+}
 
 void ROTOM::DisplayList::addCommand(void *command) {
   commandList_.push_back(command);

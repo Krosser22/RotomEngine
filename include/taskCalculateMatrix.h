@@ -24,12 +24,12 @@ namespace ROTOM {
 
     void clearTask();
 
-    void setInput(std::shared_ptr<ROTOM::Node *> root);
+    void setInput(std::shared_ptr<Node *> root);
 
     void runOnNode(Node *node);
 
   private:
-    std::shared_ptr<ROTOM::Node *> root_;
+    std::shared_ptr<Node *> root_;
   };
 }
 

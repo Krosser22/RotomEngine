@@ -104,7 +104,7 @@ const char* fragmentShaderSource_ = "#version 330\n"
 "};\0";
 
 ROTOM::Material::Material() {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Material);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Material);
 
   setColor(1.0f, 1.0f, 1.0f, 1.0f);
   setTexture("../../../../img/texture.png"); //TODO - change this path XD
@@ -112,7 +112,7 @@ ROTOM::Material::Material() {
 }
 
 ROTOM::Material::Material(const char *texturePath) {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Material);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Material);
 
   setColor(1.0f, 1.0f, 1.0f, 1.0f);
   setTexture(texturePath);
@@ -120,7 +120,7 @@ ROTOM::Material::Material(const char *texturePath) {
 }
 
 ROTOM::Material::~Material() {
-  ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Material);
+  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Material);
 
   // Properly de-allocate all resources once they've outlived their purpose
   glDeleteProgram(shaderProgram_);

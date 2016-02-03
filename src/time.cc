@@ -27,25 +27,25 @@ ROTOM::TIME::Countdown::~Countdown() {
 };
 
 void ROTOM::TIME::Countdown::startTimer(const double timeAmount) {
-  timeToEnd_ = ROTOM::TIME::appTime() + timeAmount;
+  timeToEnd_ = TIME::appTime() + timeAmount;
 }
 
 bool ROTOM::TIME::Countdown::finish() {
-  return (ROTOM::TIME::appTime() > timeToEnd_);
+  return (TIME::appTime() > timeToEnd_);
 }
 
 ROTOM::TIME::Chronometer::Chronometer() {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Chronometer);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Chronometer);
 };
 
 ROTOM::TIME::Chronometer::~Chronometer() {
-  ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Chronometer);
+  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Chronometer);
 };
 
 void ROTOM::TIME::Chronometer::start() {
-  timeWhenStarted_ = ROTOM::TIME::appTime();
+  timeWhenStarted_ = TIME::appTime();
 }
 
 const double ROTOM::TIME::Chronometer::end() {
-  return (ROTOM::TIME::appTime() - timeWhenStarted_);
+  return (TIME::appTime() - timeWhenStarted_);
 }

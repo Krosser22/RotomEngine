@@ -8,24 +8,24 @@
 #include "security.h"
 
 ROTOM::Node::Node() {
-  SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass_Node);
+  SECURITY::addSecurityCount(SECURITY::MyClass_Node);
 
-  float position[3] = { 0.0f, 0.0f, 0.0f };
-  setPosition(position);
+  setPositionX(0.0f);
+  setPositionY(0.0f);
+  setPositionZ(0.0f);
 
-  float rotation[3] = { 0.0f, 0.0f, 0.0f };
-  setRotation(rotation);
+  setRotationX(0.0f);
+  setRotationY(0.0f);
+  setRotationZ(0.0f);
 
-  float scale[3] = { 1.0f, 1.0f, 1.0f };
-  setScale(scale);
+  setScaleX(1.0f);
+  setScaleY(1.0f);
+  setScaleZ(1.0f);
 
   parent_ = NULL;
 
-  b_dirtyModelLocal_ = false;
-  b_dirtyModelWorld_ = false;
-
-  m_modelLocal_ = glm::mat4();
-  m_modelWorld_ = glm::mat4();
+  b_dirtyModelLocal_ = true;
+  b_dirtyModelWorld_ = true;
 };
 
 ROTOM::Node::~Node() {
@@ -41,14 +41,58 @@ ROTOM::Node::~Node() {
   }
 }
 
+void ROTOM::Node::move(const float movement[3]) {
+  v_position_.x += movement[0];
+  v_position_.y += movement[1];
+  v_position_.z += movement[2];
+}
+
+void ROTOM::Node::moveX(const float movementX) {
+  v_position_.x += movementX;
+}
+
+void ROTOM::Node::moveY(const float movementY) {
+  v_position_.y += movementY;
+}
+
+void ROTOM::Node::moveZ(const float movementZ) {
+  v_position_.z += movementZ;
+}
+
 void ROTOM::Node::setPosition(const float position[3]) {
-  v_position_ = glm::vec3(position[0], position[1], position[2]);
+  v_position_.x = position[0];
+  v_position_.y = position[1];
+  v_position_.z = position[2];
   b_dirtyModelLocal_ = true;
   alertChildsModelWorldChanged();
 }
 
 glm::vec3 ROTOM::Node::position() {
   return v_position_;
+}
+
+void ROTOM::Node::setPositionX(const float positionX) {
+  v_position_.x = positionX;
+}
+
+float ROTOM::Node::positionX() {
+  return v_position_.x;
+}
+
+void ROTOM::Node::setPositionY(const float positionY) {
+  v_position_.y = positionY;
+}
+
+float ROTOM::Node::positionY() {
+  return v_position_.y;
+}
+
+void ROTOM::Node::setPositionZ(const float positionZ) {
+  v_position_.z = positionZ;
+}
+
+float ROTOM::Node::positionZ() {
+  return v_position_.z;
 }
 
 void ROTOM::Node::setRotation(const float rotation[3]) {
@@ -61,6 +105,30 @@ glm::vec3 ROTOM::Node::rotation() {
   return v_rotation_;
 }
 
+void ROTOM::Node::setRotationX(const float rotationX) {
+  v_rotation_.x = rotationX;
+}
+
+float ROTOM::Node::rotationX() {
+  return v_rotation_.x;
+}
+
+void ROTOM::Node::setRotationY(const float rotationY) {
+  v_rotation_.y = rotationY;
+}
+
+float ROTOM::Node::rotationY() {
+  return v_rotation_.y;
+}
+
+void ROTOM::Node::setRotationZ(const float rotationZ) {
+  v_rotation_.z = rotationZ;
+}
+
+float ROTOM::Node::rotationZ() {
+  return v_rotation_.z;
+}
+
 void ROTOM::Node::setScale(const float scale[3]) {
   v_scale_ = glm::vec3(scale[0], scale[1], scale[2]);
   b_dirtyModelLocal_ = true;
@@ -69,6 +137,30 @@ void ROTOM::Node::setScale(const float scale[3]) {
 
 glm::vec3 ROTOM::Node::scale() {
   return v_scale_;
+}
+
+void ROTOM::Node::setScaleX(const float scaleX) {
+  v_scale_.x = scaleX;
+}
+
+float ROTOM::Node::scaleX() {
+  return v_scale_.x;
+}
+
+void ROTOM::Node::setScaleY(const float scaleY) {
+  v_scale_.y = scaleY;
+}
+
+float ROTOM::Node::scaleY() {
+  return v_scale_.y;
+}
+
+void ROTOM::Node::setScaleZ(const float scaleZ) {
+  v_scale_.z = scaleZ;
+}
+
+float ROTOM::Node::scaleZ() {
+  return v_scale_.z;
 }
 
 void ROTOM::Node::setModelLocal(glm::mat4 modelLocal) {

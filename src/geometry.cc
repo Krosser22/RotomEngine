@@ -76,13 +76,13 @@ unsigned int index[36] = {
 };
 
 ROTOM::Geometry::Geometry() {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Geometry);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Geometry);
 
   loadGeometry(vertex, index, 36);
 }
 
 ROTOM::Geometry::~Geometry() {
-  ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Geometry);
+  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Geometry);
 
   // Properly de-allocate all resources once they've outlived their purpose
   glDeleteVertexArrays(1, &VAO_);

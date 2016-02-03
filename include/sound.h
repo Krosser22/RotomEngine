@@ -10,7 +10,7 @@
 #include <vector>
 
 namespace ROTOM {
-  namespace Sound {
+  namespace SOUND {
     void init();
 
     class Sound {

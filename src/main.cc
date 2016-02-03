@@ -6,10 +6,12 @@
 
 #include "window.h"
 #include "sound.h"
+#include "security.h"
 
 int main(int argc, char** argv) {
-  ROTOM::Sound::init(); //Hardware check
+  ROTOM::SOUND::init(); //Hardware check
   ROTOM::main(argc, argv);
   ROTOM::WindowDestroy();
+  //ROTOM::SECURITY::checkSecurityCount();
   return 0;
 }

@@ -20,14 +20,49 @@ namespace ROTOM {
     Node();
     virtual ~Node();
 
+    void move(const float movement[3]);
+
+    void moveX(const float movementX);
+
+    void moveY(const float movementY);
+
+    void moveZ(const float movementZ);
+
     void setPosition(const float position[3]);
     glm::vec3 position();
+
+    void setPositionX(const float positionX);
+    float positionX();
+
+    void setPositionY(const float positionY);
+    float positionY();
+
+    void setPositionZ(const float positionZ);
+    float positionZ();
 
     void setRotation(const float rotation[3]);
     glm::vec3 rotation();
 
+    void setRotationX(const float rotationX);
+    float rotationX();
+
+    void setRotationY(const float rotationY);
+    float rotationY();
+
+    void setRotationZ(const float rotationZ);
+    float rotationZ();
+
     void setScale(const float scale[3]);
     glm::vec3 scale();
+
+    void setScaleX(const float scaleX);
+    float scaleX();
+
+    void setScaleY(const float scaleY);
+    float scaleY();
+
+    void setScaleZ(const float scaleZ);
+    float scaleZ();
 
     void setModelLocal(glm::mat4 modelLocal);
     glm::mat4 *modelLocal();

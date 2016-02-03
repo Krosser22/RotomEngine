@@ -8,7 +8,7 @@
 #include "security.h"
 
 ROTOM::Camera::Camera() {
-  SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass_Camera);
+  SECURITY::addSecurityCount(SECURITY::MyClass_Camera);
 
   commandDrawObject_.setRoot(&root_);
   commandDrawObject_.setProjectionMatrix(projectionMatrix());

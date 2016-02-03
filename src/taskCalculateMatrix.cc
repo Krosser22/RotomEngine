@@ -8,13 +8,13 @@
 #include "security.h"
 
 ROTOM::TaskCalculateMatrix::TaskCalculateMatrix(TaskType taskType) {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_TaskCalculateModel);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_TaskCalculateModel);
 
   taskType_ = taskType;
 };
 
 ROTOM::TaskCalculateMatrix::~TaskCalculateMatrix() {
-  ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass::MyClass_TaskCalculateModel);
+  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_TaskCalculateModel);
 };
 
 void ROTOM::TaskCalculateMatrix::run() {
@@ -40,11 +40,11 @@ void ROTOM::TaskCalculateMatrix::clearTask() {
   nextTaskList_.clear();
 }
 
-void ROTOM::TaskCalculateMatrix::setInput(std::shared_ptr<ROTOM::Node *> root) {
+void ROTOM::TaskCalculateMatrix::setInput(std::shared_ptr<Node *> root) {
   root_ = root;
 }
 
-void ROTOM::TaskCalculateMatrix::runOnNode(ROTOM::Node *node) {
+void ROTOM::TaskCalculateMatrix::runOnNode(Node *node) {
   //ModelLocal
   if (node->isDirtyModelLocal()) {
     glm::mat4 modelLocal;

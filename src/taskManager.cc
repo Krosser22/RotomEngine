@@ -8,15 +8,15 @@
 #include "security.h"
 
 ROTOM::Task::Task() {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Task);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Task);
 }
 
 ROTOM::Task::~Task() {
-  ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass::MyClass_Task);
+  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Task);
 }
 
 ROTOM::TaskManager::TaskManager() {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_TaskManager);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_TaskManager);
   
   isOff_ = false;
 
@@ -33,13 +33,13 @@ ROTOM::TaskManager::TaskManager() {
   self_ = std::shared_ptr<TaskManager>(this);
   for (int i = 0; i < threardsCount_ - threardsNotUsed_; ++i) {
     char c = i + 1;
-    threads_.push_back(std::thread(&ROTOM::TaskManager::threadLoop, self_, i + 1, c));
+    threads_.push_back(std::thread(&TaskManager::threadLoop, self_, i + 1, c));
   }
 }
 
 ROTOM::TaskManager::~TaskManager() {
-  if (ROTOM::SECURITY::checkSecurityCount(ROTOM::SECURITY::MyClass::MyClass_TaskManager) > 0) {
-    ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass::MyClass_TaskManager);
+  if (SECURITY::checkSecurityCount(SECURITY::MyClass::MyClass_TaskManager) > 0) {
+    SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_TaskManager);
 
     bool threadsWorking = true;
     while (threadsWorking) {
@@ -103,7 +103,7 @@ void ROTOM::TaskManager::addNextTasksOf(std::shared_ptr<Task> task) {
 }
 
 std::shared_ptr<ROTOM::Task> ROTOM::TaskManager::getNextTask() {
-  std::shared_ptr<ROTOM::Task> task;
+  std::shared_ptr<Task> task;
   lock_taskList_->lock();
   if (taskList_.size() > 0) {
     task = taskList_.at(taskList_.size() - 1);

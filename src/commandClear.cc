@@ -9,13 +9,13 @@
 #include "draw.h"
 
 ROTOM::CommandClear::CommandClear() {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass::MyClass_CommandClear);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_CommandClear);
 };
 
 ROTOM::CommandClear::~CommandClear() {
-  ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass::MyClass_CommandClear);
+  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_CommandClear);
 };
 
 void ROTOM::CommandClear::run() {
-  ROTOM::DrawClear();
+  DrawClear();
 }

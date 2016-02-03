@@ -27,11 +27,11 @@ static const float imgui_height = 45.0f;
 static const ImVec2 sizeOfBlocks(imgui_width, imgui_height * 2);
 static const ImVec2 sizeOfElements(imgui_width, imgui_height);
 
-std::vector<ROTOM::Sound::Sound *> sounds;
-ROTOM::Sound::TrackList trackList;
-ROTOM::Sound::AutoLayering autoLayering;
-ROTOM::Sound::Layering layering;
-ROTOM::Sound::Branching branching;
+std::vector<ROTOM::SOUND::Sound *> sounds;
+ROTOM::SOUND::TrackList trackList;
+ROTOM::SOUND::AutoLayering autoLayering;
+ROTOM::SOUND::Layering layering;
+ROTOM::SOUND::Branching branching;
 
 void changePlaying(Playing newPlaying) {
   switch (playing)
@@ -155,13 +155,13 @@ void imgui() {
       if (playing == Playing_Branching) {
         branching.update();
         if (ImGui::Button("Move to A")) {
-          branching.changeBranch(ROTOM::Sound::Branch::Branch_A);
+          branching.changeBranch(ROTOM::SOUND::Branch::Branch_A);
         }
         if (ImGui::Button("Move to B")) {
-          branching.changeBranch(ROTOM::Sound::Branch::Branch_B);
+          branching.changeBranch(ROTOM::SOUND::Branch::Branch_B);
         }
         if (ImGui::Button("Move to C")) {
-          branching.changeBranch(ROTOM::Sound::Branch::Branch_C);
+          branching.changeBranch(ROTOM::SOUND::Branch::Branch_C);
         }
       } else if (ImGui::Button("Play Branching")) {
         changePlaying(Playing_Branching);
@@ -180,9 +180,9 @@ void run_scene_sound() {
   camera.setPosition(cameraPosition);
 
   //Sound
-  sounds.push_back(new ROTOM::Sound::Sound("sound/Layering/LAYER_C_0.ogg"));
-  sounds.push_back(new ROTOM::Sound::Sound("sound/Layering/LAYER_C_1.ogg"));
-  sounds.push_back(new ROTOM::Sound::Sound("sound/Layering/LAYER_C_2.ogg"));
+  sounds.push_back(new ROTOM::SOUND::Sound("sound/Layering/LAYER_C_0.ogg"));
+  sounds.push_back(new ROTOM::SOUND::Sound("sound/Layering/LAYER_C_1.ogg"));
+  sounds.push_back(new ROTOM::SOUND::Sound("sound/Layering/LAYER_C_2.ogg"));
   trackList.addSound(sounds.at(0));
   trackList.addSound(sounds.at(1));
   trackList.addSound(sounds.at(2));
@@ -192,10 +192,10 @@ void run_scene_sound() {
   layering.addSound(sounds.at(0));
   layering.addSound(sounds.at(1));
   layering.addSound(sounds.at(2));
-  branching.addSound(new ROTOM::Sound::Sound("sound/Branching/Branching_A_0.ogg"));
-  branching.addSound(new ROTOM::Sound::Sound("sound/Branching/Branching_B_0.ogg"));
-  branching.addSound(new ROTOM::Sound::Sound("sound/Branching/Branching_B_1.ogg"));
-  branching.setTransitionSound(new ROTOM::Sound::Sound("sound/Branching/Branching_Transition.ogg"));
+  branching.addSound(new ROTOM::SOUND::Sound("sound/Branching/Branching_A_0.ogg"));
+  branching.addSound(new ROTOM::SOUND::Sound("sound/Branching/Branching_B_0.ogg"));
+  branching.addSound(new ROTOM::SOUND::Sound("sound/Branching/Branching_B_1.ogg"));
+  branching.setTransitionSound(new ROTOM::SOUND::Sound("sound/Branching/Branching_Transition.ogg"));
 
   float sin_time = 0.0f;
   while (ROTOM::WindowIsOpened()) {

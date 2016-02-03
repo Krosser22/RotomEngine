@@ -8,14 +8,14 @@
 #include "security.h"
 
 ROTOM::Drawable::Drawable() {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass_Drawable);
+  SECURITY::addSecurityCount(SECURITY::MyClass_Drawable);
 
   geometry_ = NULL;
   material_ = NULL;
 }
 
 ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, Node *parent) {
-  ROTOM::SECURITY::addSecurityCount(ROTOM::SECURITY::MyClass_Drawable);
+  SECURITY::addSecurityCount(SECURITY::MyClass_Drawable);
 
   setGeometry(geometry);
   setMaterial(material);
@@ -23,7 +23,7 @@ ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Ma
 }
 
 ROTOM::Drawable::~Drawable() {
-  ROTOM::SECURITY::removeSecurityCount(ROTOM::SECURITY::MyClass_Drawable);
+  SECURITY::removeSecurityCount(SECURITY::MyClass_Drawable);
 }
 
 void ROTOM::Drawable::setGeometry(std::shared_ptr<Geometry> geometry) {
