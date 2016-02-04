@@ -190,13 +190,14 @@ bool ROTOM::Node::isDirtyModelWorld() {
 }
 
 void ROTOM::Node::setParent(Node *parent) {
-  //TODO - Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
+  //TODO - Para que al attacharle un nuevo padre no se teletransporte 
+  //[La inversa del padre nuevo] * [tu matriz world]
   m_modelLocal_ = glm::inverse(*parent->modelWorld()) * m_modelWorld_;
   
   glm::quat rotation;
   glm::vec3 skew;
   glm::vec4 perspective;
-  glm::decompose(m_modelLocal_, v_scale_, rotation, v_position_, skew, perspective);
+  glm::decompose(m_modelWorld_, v_scale_, rotation, v_position_, skew, perspective);
   v_rotation_ = glm::vec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
 
   if (parent_) {
@@ -205,6 +206,12 @@ void ROTOM::Node::setParent(Node *parent) {
   parent_ = parent;
   parent_->addChild(this);
   b_dirtyModelWorld_ = true;
+
+  if (parent_) {
+    parent_->removeChild(this);
+  }
+  parent_ = parent;
+  parent_->addChild(this);
 }
 
 const ROTOM::Node *ROTOM::Node::parent() {
@@ -217,6 +224,7 @@ void ROTOM::Node::addChild(Node *child) {
     childs_.at(childs_.size() - 1)->setParent(this);
   }
 }
+
 void ROTOM::Node::removeChild(const Node *child) {
   for (unsigned int i = 0; i < childs_.size(); ++i) {
     if (child == childs_.at(i)) {

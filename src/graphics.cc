@@ -56,9 +56,9 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
 void ROTOM::GRAPHICS::useMaterial(ShaderData *shaderData, Drawable *drawable, float *projectionMatrix) {
   //printf("%f - %f - %f\n", generalData.lightPositionX, generalData.lightPositionY, generalData.lightPositionZ);
   float *f_model = glm::value_ptr(drawable->modelLocal()[0]);
-  float *f_view = glm::value_ptr(drawable->modelWorld()[0]);
-  float lightPosition[3] = { drawable->material()->generalShaderData.lightPositionX, drawable->material()->generalShaderData.lightPositionY, drawable->material()->generalShaderData.lightPositionZ };
-  float lightColor[3] = { drawable->material()->generalShaderData.lightColorX, drawable->material()->generalShaderData.lightColorY, drawable->material()->generalShaderData.lightColorZ };
+  float *f_view = glm::value_ptr(drawable->modelWorld()[0]); //TODO - Use the real view
+  float lightPosition[3] = { drawable->material()->generalShaderData_->lightPositionX, drawable->material()->generalShaderData_->lightPositionY, drawable->material()->generalShaderData_->lightPositionZ };
+  float lightColor[3] = { drawable->material()->generalShaderData_->lightColorX, drawable->material()->generalShaderData_->lightColorY, drawable->material()->generalShaderData_->lightColorZ };
   //const float *color = drawable->material()->color();
   const float shininess = drawable->material()->shininess_;
   const float *specularIntensity = drawable->material()->specularIntensity_;

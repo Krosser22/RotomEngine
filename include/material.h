@@ -22,16 +22,15 @@ namespace ROTOM {
     unsigned int u_specularMaterial;
   };
 
-  static struct GeneralShaderData {
-    float lightPositionX = 0.0f;
-    float lightPositionY = 0.0f;
-    float lightPositionZ = 0.0f;
+  struct GeneralShaderData {
+    float lightPositionX = 100.0f;
+    float lightPositionY = 100.0f;
+    float lightPositionZ = 100.0f;
 
     float lightColorX = 1.0f;
     float lightColorY = 1.0f;
     float lightColorZ = 1.0f;
   };
-  static GeneralShaderData generalData;
 
   class Material {
   public:
@@ -40,7 +39,7 @@ namespace ROTOM {
 
     //TODO - Move this to private and create functions to set/get the values
     ShaderData shaderData_;
-    GeneralShaderData generalShaderData;
+    GeneralShaderData *generalShaderData_;
     float shininess_;
     float specularIntensity_[4];
     float specularMaterial_[4];
