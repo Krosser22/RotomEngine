@@ -59,7 +59,7 @@ void ROTOM::TaskCalculateMatrix::runOnNode(Node *node) {
   //ModelWorld
   if (node->isDirtyModelWorld()) {
     Node *parent = ((Node *)node->parent());
-    glm::mat4 modelWorld = (*parent->modelWorld()) * (*parent->modelLocal());
+    glm::mat4 modelWorld = (*parent->modelWorld()) * (*node->modelLocal());
     node->setModelWorld(modelWorld);
   }
 

@@ -27,7 +27,7 @@ namespace ROTOM {
   namespace GRAPHICS {
     void setShader(ShaderData *shaderData, const char *vertexShaderSource, const char *fragmentShaderSource);
 
-    void useMaterial(ShaderData *shaderData, Drawable *drawable, float *projectionMatrix);
+    void useMaterial(ShaderData *shaderData, Drawable *drawable, float *projectionMatrix, float *viewMatrix);
   }
 }
 

@@ -23,8 +23,11 @@ namespace ROTOM {
 
     void setProjectionMatrix(float *projectionMatrix);
 
+    void setViewMatrix(float *viewMatrix);
+
   private:
     float *projectionMatrix_;
+    float *viewMatrix_;
 
     Node *root_;
 

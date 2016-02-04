@@ -12,6 +12,7 @@ ROTOM::Camera::Camera() {
 
   commandDrawObject_.setRoot(&root_);
   commandDrawObject_.setProjectionMatrix(projectionMatrix());
+  commandDrawObject_.setViewMatrix(viewMatrix());
 
   taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
 };

@@ -166,6 +166,7 @@ float ROTOM::Node::scaleZ() {
 void ROTOM::Node::setModelLocal(glm::mat4 modelLocal) {
   m_modelLocal_ = modelLocal;
   b_dirtyModelLocal_ = false;
+  b_dirtyModelWorld_ = true;
 }
 
 glm::mat4 *ROTOM::Node::modelLocal() {
@@ -192,13 +193,15 @@ bool ROTOM::Node::isDirtyModelWorld() {
 void ROTOM::Node::setParent(Node *parent) {
   //TODO - Para que al attacharle un nuevo padre no se teletransporte 
   //[La inversa del padre nuevo] * [tu matriz world]
-  m_modelLocal_ = glm::inverse(*parent->modelWorld()) * m_modelWorld_;
-  
-  glm::quat rotation;
-  glm::vec3 skew;
-  glm::vec4 perspective;
-  glm::decompose(m_modelWorld_, v_scale_, rotation, v_position_, skew, perspective);
-  v_rotation_ = glm::vec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
+  //m_modelLocal_ = glm::inverse(*parent->modelWorld()) * m_modelWorld_;
+
+  glm::vec3 oldScale;
+  glm::quat oldRotation;
+  glm::vec3 oldPosition;
+  glm::vec3 oldSkew;
+  glm::vec4 oldPerspective;
+  glm::decompose(m_modelWorld_, oldScale, oldRotation, oldPosition, oldSkew, oldPerspective);
+  //v_rotation_ = glm::vec3(*glm::value_ptr(oldRotation)); //TODO - Change the variable type of rotation to glm::quat
 
   if (parent_) {
     parent_->removeChild(this);
@@ -207,11 +210,16 @@ void ROTOM::Node::setParent(Node *parent) {
   parent_->addChild(this);
   b_dirtyModelWorld_ = true;
 
-  if (parent_) {
-    parent_->removeChild(this);
-  }
-  parent_ = parent;
-  parent_->addChild(this);
+  glm::vec3 newScale;
+  glm::quat newRotation;
+  glm::vec3 newPosition;
+  glm::vec3 newSkew;
+  glm::vec4 newPerspective;
+  glm::decompose(m_modelWorld_, newScale, newRotation, newPosition, newSkew, newPerspective);
+
+  v_scale_ = oldScale + (newScale - oldScale);
+  v_rotation_ = glm::vec3(*glm::value_ptr(oldRotation)) + (glm::vec3(*glm::value_ptr(newRotation)) - glm::vec3(*glm::value_ptr(oldRotation)));
+  v_position_ = oldPosition + (newPosition - oldPosition);
 }
 
 const ROTOM::Node *ROTOM::Node::parent() {
