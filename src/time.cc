@@ -6,7 +6,7 @@
 
 #include "time.h"
 
-#include "gl.h"
+#include "graphics.h"
 #include "security.h"
 
 float ROTOM::TIME::appTime() {

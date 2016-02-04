@@ -6,8 +6,7 @@
 
 #include "window.h"
 
-#include "draw.h"
-#include "gl.h"
+#include "graphics.h"
 #include "imgui.h"
 #include "security.h"
 #include "time.h"
@@ -387,7 +386,7 @@ void ImGui_NewFrame() {
 }
 
 void clear() {
-  ROTOM::DrawClear();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //TODO - This is repeated
   g_MousePressed[0] = false;
   g_MousePressed[1] = false;
   g_MousePressed[2] = false;
@@ -433,7 +432,7 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
   
   ImGui_Init(window, true);
 
-  DrawClearColor(0.1f, 0.5f, 0.6f, 1.0f);
+  glClearColor(0.1f, 0.5f, 0.6f, 1.0f);
 
   clear();
 

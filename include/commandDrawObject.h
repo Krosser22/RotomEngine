@@ -16,13 +16,6 @@ namespace ROTOM {
     CommandDrawObject();
     virtual ~CommandDrawObject();
 
-    //TODO - The shader of this isnot working
-    float lightPosition_[3];
-    float lightColor_[3];
-    float shininess_;
-    float specularIntensity_[4];
-    float specularMaterial_[4];
-
     //It does what the command should do (it's called from the displayList class)
     void run();
 

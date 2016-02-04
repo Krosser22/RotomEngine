@@ -6,7 +6,7 @@
 
 #include "material.h"
 
-#include "gl.h"
+#include "graphics.h"
 #include "security.h"
 #include "soil.h"
 
@@ -100,69 +100,36 @@ const char* fragmentShaderSource_ = "#version 330\n"
 //"  fragment = vec4(cosAngleSpecular, cosAngleSpecular, cosAngleSpecular, 1.0);\n"
 //"  fragment = vec4(texture(u_texture, uvMaterial).xyz * cosAngleSpecular, 1.0);\n"
 ////////////////////////////////////////////
-
 "};\0";
-
-ROTOM::Material::Material() {
-  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Material);
-
-  setColor(1.0f, 1.0f, 1.0f, 1.0f);
-  setTexture("../../../../img/texture.png"); //TODO - change this path XD
-  setShader(vertexShaderSource_, fragmentShaderSource_);
-}
 
 ROTOM::Material::Material(const char *texturePath) {
   SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Material);
-
   setColor(1.0f, 1.0f, 1.0f, 1.0f);
   setTexture(texturePath);
   setShader(vertexShaderSource_, fragmentShaderSource_);
+
+  shininess_ = 500.0f;
+
+  specularIntensity_[0] = 0.0f;
+  specularIntensity_[1] = 0.0f;
+  specularIntensity_[2] = 0.0f;
+  specularIntensity_[3] = 0.0f;
+
+  specularMaterial_[0] = 0.0f;
+  specularMaterial_[1] = 0.0f;
+  specularMaterial_[2] = 0.0f;
+  specularMaterial_[3] = 0.0f;
 }
 
 ROTOM::Material::~Material() {
   SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Material);
 
   // Properly de-allocate all resources once they've outlived their purpose
-  glDeleteProgram(shaderProgram_);
+  glDeleteProgram(shaderData_.shaderProgram);
 }
 
 void ROTOM::Material::setShader(const char *vertexShaderSource, const char *fragmentShaderSource) {
-  GLint success;
-  GLchar infoLog[512];
-
-  // Vertex shader
-  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glCompileShader(vertexShader);
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);// Check for compile time errors
-  if (!success) {
-    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s\n", infoLog);
-  }
-
-  // Fragment shader
-  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-  glCompileShader(fragmentShader);
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);// Check for compile time errors
-  if (!success) {
-    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-    printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s\n", infoLog);
-  }
-
-  // Link shaders
-  shaderProgram_ = glCreateProgram();
-  glAttachShader(shaderProgram_, vertexShader);
-  glAttachShader(shaderProgram_, fragmentShader);
-  glLinkProgram(shaderProgram_);
-  glGetProgramiv(shaderProgram_, GL_LINK_STATUS, &success);// Check for linking errors
-  if (!success) {
-    glGetProgramInfoLog(shaderProgram_, 512, NULL, infoLog);
-    printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s\n", infoLog);
-  }
-
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
+  GRAPHICS::setShader(&shaderData_, vertexShaderSource, fragmentShaderSource);
 }
 
 void ROTOM::Material::setColor(const float r, const float g, const float b, const float a) {
@@ -211,5 +178,5 @@ const unsigned int ROTOM::Material::texture() {
 }
 
 const unsigned int ROTOM::Material::shaderProgram() {
-  return shaderProgram_;
+  return shaderData_.shaderProgram;
 }

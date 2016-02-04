@@ -6,7 +6,7 @@
 
 #include "geometry.h"
 
-#include "gl.h"
+#include "graphics.h"
 #include "security.h"
 
 //Default Square

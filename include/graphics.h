@@ -4,8 +4,8 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __MY_GL_FILE_H__
-#define __MY_GL_FILE_H__
+#ifndef __GRAPHICS_H__
+#define __GRAPHICS_H__
 
 // GLEW
 #define GLEW_STATIC
@@ -21,4 +21,14 @@
 #include <GLFW/glfw3native.h>
 #endif
 
-#endif //__MY_GL_FILE_H__
+#include "drawable.h"
+
+namespace ROTOM {
+  namespace GRAPHICS {
+    void setShader(ShaderData *shaderData, const char *vertexShaderSource, const char *fragmentShaderSource);
+
+    void useMaterial(ShaderData *shaderData, Drawable *drawable, float *projectionMatrix);
+  }
+}
+
+#endif //__GRAPHICS_H__

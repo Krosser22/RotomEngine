@@ -6,7 +6,7 @@
 
 #include "commandClear.h"
 #include "security.h"
-#include "draw.h"
+#include "graphics.h"
 
 ROTOM::CommandClear::CommandClear() {
   SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_CommandClear);
@@ -17,5 +17,5 @@ ROTOM::CommandClear::~CommandClear() {
 };
 
 void ROTOM::CommandClear::run() {
-  DrawClear();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //TODO - This is repeated
 }
