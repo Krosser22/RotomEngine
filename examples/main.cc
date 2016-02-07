@@ -50,7 +50,7 @@ int ROTOM::main(int argc, char** argv) {
   drawable2.setParent(&drawable1);
   drawable3.setParent(&drawable2);
 
-  /*const int amount = 1722;
+  const int amount = 1722;
   Drawable d[amount];
 
   float pos[3] = { 0.0f, 0.0f, 0.0f };
@@ -68,7 +68,7 @@ int ROTOM::main(int argc, char** argv) {
     d[i].setMaterial(material4);
     d[i].setParent(&drawable1);
     d[i].setPosition(pos);
-  }*/
+  }
 
   drawable1.setPosition(node1_position);
   drawable2.setPosition(node2_position);
@@ -82,8 +82,8 @@ int ROTOM::main(int argc, char** argv) {
     node1_position[0] = sin_time;
     node2_position[1] = sin_time;
     node3_position[2] = sin_time;
-    //drawable1.setPosition(node1_position);
-    //drawable2.setPosition(node2_position);
+    drawable1.setPosition(node1_position);
+    drawable2.setPosition(node2_position);
     drawable3.setPosition(node3_position);
     //drawable2.setRotationZ(sin_time);
     //...

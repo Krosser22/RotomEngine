@@ -210,16 +210,17 @@ void ROTOM::Node::setParent(Node *parent) {
   parent_->addChild(this);
   b_dirtyModelWorld_ = true;
 
+  glm::mat4 newModelWorld = (*parent->modelWorld()) * (m_modelLocal_);
   glm::vec3 newScale;
   glm::quat newRotation;
   glm::vec3 newPosition;
   glm::vec3 newSkew;
   glm::vec4 newPerspective;
-  glm::decompose(m_modelWorld_, newScale, newRotation, newPosition, newSkew, newPerspective);
+  glm::decompose(newModelWorld, newScale, newRotation, newPosition, newSkew, newPerspective);
 
   v_scale_ = oldScale + (newScale - oldScale);
   v_rotation_ = glm::vec3(*glm::value_ptr(oldRotation)) + (glm::vec3(*glm::value_ptr(newRotation)) - glm::vec3(*glm::value_ptr(oldRotation)));
-  v_position_ = oldPosition + (newPosition - oldPosition);
+  v_position_ = (newPosition + oldPosition);
 }
 
 const ROTOM::Node *ROTOM::Node::parent() {
