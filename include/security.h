@@ -34,7 +34,7 @@ namespace ROTOM {
       MyClass_Sound,
       MyClass_Task,
       MyClass_TaskManager,
-      MyClass_TaskCalculateModel,
+      MyClass_TaskCalculateMatrix,
       MyClass_TrackList,
       MyClass_Worker
     };
@@ -59,7 +59,7 @@ namespace ROTOM {
       int MyClass_Sound;
       int MyClass_Task;
       int MyClass_TaskManager;
-      int MyClass_TaskCalculateModel;
+      int MyClass_TaskCalculateMatrix;
       int MyClass_TrackList;
       int MyClass_Worker;
     };

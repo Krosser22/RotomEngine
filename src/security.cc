@@ -67,8 +67,8 @@ void ROTOM::SECURITY::addSecurityCount(MyClass type) {
   case MyClass_TaskManager:
     counter.MyClass_TaskManager++;
     break;
-  case MyClass_TaskCalculateModel:
-    counter.MyClass_TaskCalculateModel++;
+  case MyClass_TaskCalculateMatrix:
+    counter.MyClass_TaskCalculateMatrix++;
     break;
   case MyClass_TrackList:
     counter.MyClass_TrackList++;
@@ -141,8 +141,8 @@ void ROTOM::SECURITY::removeSecurityCount(MyClass type) {
   case MyClass_TaskManager:
     counter.MyClass_TaskManager--;
     break;
-  case MyClass_TaskCalculateModel:
-    counter.MyClass_TaskCalculateModel--;
+  case MyClass_TaskCalculateMatrix:
+    counter.MyClass_TaskCalculateMatrix--;
     break;
   case MyClass_TrackList:
     counter.MyClass_TrackList--;
@@ -172,7 +172,7 @@ void ROTOM::SECURITY::removeSecurityCount(MyClass type) {
       counter.MyClass_Sound +
       counter.MyClass_Task +
       counter.MyClass_TaskManager +
-      counter.MyClass_TaskCalculateModel +
+      counter.MyClass_TaskCalculateMatrix +
       counter.MyClass_TrackList +
       counter.MyClass_Worker) == 0) {
     printf("All classes removed\n");
@@ -206,7 +206,7 @@ int ROTOM::SECURITY::checkSecurityCount(MyClass type) {
       counter.MyClass_Sound +
       counter.MyClass_Task +
       counter.MyClass_TaskManager +
-      counter.MyClass_TaskCalculateModel +
+      counter.MyClass_TaskCalculateMatrix +
       counter.MyClass_TrackList +
       counter.MyClass_Worker;
     if (typeCount == 0) {
@@ -271,8 +271,8 @@ int ROTOM::SECURITY::checkSecurityCount(MyClass type) {
   case MyClass_TaskManager:
     typeCount = counter.MyClass_TaskManager;
     break;
-  case MyClass_TaskCalculateModel:
-    typeCount = counter.MyClass_TaskCalculateModel;
+  case MyClass_TaskCalculateMatrix:
+    typeCount = counter.MyClass_TaskCalculateMatrix;
     break;
   case MyClass_TrackList:
     typeCount = counter.MyClass_TrackList;

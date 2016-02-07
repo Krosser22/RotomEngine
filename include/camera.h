@@ -79,7 +79,7 @@ namespace ROTOM {
     void cleanViewMatrix();
 
     //Task
-    void updateTaskCalculateModel();
+    void updateTaskCalculateMatrix();
 
     void updateTasks();
   };

@@ -115,7 +115,7 @@ void ROTOM::Camera::cleanViewMatrix() {
   b_dirtyView_ = false;
 }
 
-void ROTOM::Camera::updateTaskCalculateModel() {
+void ROTOM::Camera::updateTaskCalculateMatrix() {
   taskCalculateMatrix_->nextTaskList_.clear();
   taskCalculateMatrix_->clearTask();
   std::shared_ptr<Node *>node = std::make_shared<Node *>(&root_);
@@ -124,6 +124,6 @@ void ROTOM::Camera::updateTaskCalculateModel() {
 }
 
 void ROTOM::Camera::updateTasks() {
-  updateTaskCalculateModel();
+  updateTaskCalculateMatrix();
   //updateCalculateViews();
 }

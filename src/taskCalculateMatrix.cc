@@ -8,13 +8,13 @@
 #include "security.h"
 
 ROTOM::TaskCalculateMatrix::TaskCalculateMatrix(TaskType taskType) {
-  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_TaskCalculateModel);
+  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_TaskCalculateMatrix);
 
   taskType_ = taskType;
 };
 
 ROTOM::TaskCalculateMatrix::~TaskCalculateMatrix() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_TaskCalculateModel);
+  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_TaskCalculateMatrix);
 };
 
 void ROTOM::TaskCalculateMatrix::run() {
