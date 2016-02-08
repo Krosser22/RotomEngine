@@ -85,7 +85,7 @@ int ROTOM::main(int argc, char** argv) {
     //...
 
     //Draw 2D (IMGUI)
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    /*ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     ImGui::Begin("Input");
     {
@@ -102,7 +102,7 @@ int ROTOM::main(int argc, char** argv) {
       ImGui::DragFloat4("specularIntensity", drawable1.material()->specularIntensity_, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
       ImGui::DragFloat4("specularMaterial", drawable1.material()->specularMaterial_, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     }
-    ImGui::End();
+    ImGui::End();*/
     //...
   }
   return 0;
