@@ -85,87 +85,17 @@ ROTOM::Geometry::~Geometry() {
   SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Geometry);
 
   // Properly de-allocate all resources once they've outlived their purpose
-  glDeleteVertexArrays(1, &VAO_);
-  glDeleteBuffers(1, &EBO_);
-  glDeleteBuffers(1, &VBO_);
+  GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
 }
 
 void ROTOM::Geometry::loadGeometry(const float *vertex, const unsigned int *index, const int vertexCount) {
   vertexCount_ = vertexCount;
-
-  glGenVertexArrays(1, &VAO_);
-  glGenBuffers(1, &VBO_);
-  glGenBuffers(1, &EBO_);
-
-  glBindVertexArray(VAO_); // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-
-  int fNumberOfElementsPerVertex = sizeof(GLfloat) * numberOfElementsPerVertex_;
-  //Vertex
-  glBindBuffer(GL_ARRAY_BUFFER, VBO_); //Bind the buffer to the GL_ARRAY_BUFFER target
-  glBufferData(GL_ARRAY_BUFFER, fNumberOfElementsPerVertex * vertexCount_, vertex, GL_STATIC_DRAW); //Copies the previously defined vertex data into the buffer's memory
-
-  //Index
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * vertexCount_, index, GL_STATIC_DRAW);
-
-  //Position attribute
-  int numberOfPositions = 3;
-  glVertexAttribPointer(0, numberOfPositions, GL_FLOAT, GL_FALSE, fNumberOfElementsPerVertex, (GLvoid*)0);
-  glEnableVertexAttribArray(0);
-
-  //Normal attribute
-  int numberOfNormals = 3;
-  glVertexAttribPointer(1, numberOfNormals, GL_FLOAT, GL_FALSE, fNumberOfElementsPerVertex, (GLvoid*)(numberOfPositions * sizeof(GLfloat)));
-  glEnableVertexAttribArray(1);
-  
-  //UV attribute
-  int numberOfUVs = 2;
-  glVertexAttribPointer(2, numberOfUVs, GL_FLOAT, GL_FALSE, fNumberOfElementsPerVertex, (GLvoid*)((numberOfPositions + numberOfNormals) * sizeof(GLfloat)));
-  glEnableVertexAttribArray(2);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-  glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
+  GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float)* numberOfElementsPerVertex_, vertexCount_, (float *)vertex, (int *)index);
 }
 
 void ROTOM::Geometry::loadGeometry(std::shared_ptr<ROTOM::Geometry::GeometryData> *geometryData) {
   vertexCount_ = geometryData->get()->index.size();
-
-  if (vertexCount_ <= 0) {
-    printf("ERROR: loadGreometry() geometryData is NULL\n");
-  } else {
-    glGenVertexArrays(1, &VAO_);
-    glGenBuffers(1, &VBO_);
-    glGenBuffers(1, &EBO_);
-
-    glBindVertexArray(VAO_); // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-
-    int fNumberOfElementsPerVertex = sizeof(GLfloat) * numberOfElementsPerVertex_;
-    //Vertex
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_); //Bind the buffer to the GL_ARRAY_BUFFER target
-    glBufferData(GL_ARRAY_BUFFER, fNumberOfElementsPerVertex * vertexCount_, &geometryData->get()->data[0], GL_STATIC_DRAW); //Copies the previously defined vertex data into the buffer's memory
-
-    //Index
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * vertexCount_, &geometryData->get()->index[0], GL_STATIC_DRAW);
-
-    //Position attribute
-    int numberOfPositions = 3;
-    glVertexAttribPointer(0, numberOfPositions, GL_FLOAT, GL_FALSE, fNumberOfElementsPerVertex, (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-
-    //Normal attribute
-    int numberOfNormals = 3;
-    glVertexAttribPointer(1, numberOfNormals, GL_FLOAT, GL_FALSE, fNumberOfElementsPerVertex, (GLvoid*)(numberOfPositions * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
-    //UV attribute
-    int numberOfUVs = 2;
-    glVertexAttribPointer(2, numberOfUVs, GL_FLOAT, GL_FALSE, fNumberOfElementsPerVertex, (GLvoid*)((numberOfPositions + numberOfNormals) * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-    glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
-  }
+  GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float)* numberOfElementsPerVertex_, vertexCount_, &geometryData->get()->data[0], (int *)(geometryData->get()->index[0]));
 }
 
 const unsigned int ROTOM::Geometry::vertexCount() {

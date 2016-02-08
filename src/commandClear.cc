@@ -17,5 +17,5 @@ ROTOM::CommandClear::~CommandClear() {
 };
 
 void ROTOM::CommandClear::run() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //TODO - This is repeated
+  GRAPHICS::clearScreen();
 }

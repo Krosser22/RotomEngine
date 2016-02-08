@@ -10,7 +10,7 @@
 #include "security.h"
 
 float ROTOM::TIME::appTime() {
-  return (float)glfwGetTime();
+  return GRAPHICS::getTime();
 }
 
 ROTOM::TIME::Countdown::Countdown() {

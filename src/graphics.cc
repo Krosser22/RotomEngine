@@ -1,5 +1,8 @@
 #include "graphics.h"
 
+float ROTOM::GRAPHICS::getTime() {
+  return (float)glfwGetTime();
+}
 void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShaderSource, const char *fragmentShaderSource) {
   GLint success;
   GLchar infoLog[512];
@@ -53,6 +56,27 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_specularMaterial = glGetUniformLocation(shaderData->shaderProgram, "u_specularMaterial");
 }
 
+void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
+  glGenTextures(1, texture);
+  glBindTexture(GL_TEXTURE_2D, *texture); // All upcoming GL_TEXTURE_2D operations now have effect on this texture object
+
+  // Set the texture wrapping/filtering options (on the currently bound texture object)
+  // Set the texture wrapping parameters
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  // Set texture filtering parameters
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, *textureWidth, *textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+  glGenerateMipmap(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
+}
+
+void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
+  glDeleteProgram(shaderProgram);
+}
+
 void ROTOM::GRAPHICS::useMaterial(ShaderData *shaderData, Drawable *drawable, float *projectionMatrix, float *viewMatrix) {
   float *lightPosition = &drawable->material()->generalShaderData_->lightPositionX;
   float *lightColor = &drawable->material()->generalShaderData_->lightColorX;
@@ -79,4 +103,47 @@ void ROTOM::GRAPHICS::useMaterial(ShaderData *shaderData, Drawable *drawable, fl
   glBindVertexArray(drawable->geometry()->VAO());
   glDrawElements(GL_TRIANGLES, drawable->geometry()->vertexCount(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
+}
+
+void ROTOM::GRAPHICS::clearScreen() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void ROTOM::GRAPHICS::loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index) {
+  glGenVertexArrays(1, VAO);
+  glGenBuffers(1, VBO);
+  glGenBuffers(1, EBO);
+
+  glBindVertexArray(*VAO); // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
+  //Vertex
+  glBindBuffer(GL_ARRAY_BUFFER, *VBO); //Bind the buffer to the GL_ARRAY_BUFFER target
+  glBufferData(GL_ARRAY_BUFFER, numberOfElementsPerVertex * vertexCount, vertex, GL_STATIC_DRAW); //Copies the previously defined vertex data into the buffer's memory
+
+  //Index
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * vertexCount, index, GL_STATIC_DRAW);
+
+  //Position attribute
+  int numberOfPositions = 3;
+  glVertexAttribPointer(0, numberOfPositions, GL_FLOAT, GL_FALSE, numberOfElementsPerVertex, (GLvoid*)0);
+  glEnableVertexAttribArray(0);
+
+  //Normal attribute
+  int numberOfNormals = 3;
+  glVertexAttribPointer(1, numberOfNormals, GL_FLOAT, GL_FALSE, numberOfElementsPerVertex, (GLvoid*)(numberOfPositions * sizeof(GLfloat)));
+  glEnableVertexAttribArray(1);
+
+  //UV attribute
+  int numberOfUVs = 2;
+  glVertexAttribPointer(2, numberOfUVs, GL_FLOAT, GL_FALSE, numberOfElementsPerVertex, (GLvoid*)((numberOfPositions + numberOfNormals) * sizeof(GLfloat)));
+  glEnableVertexAttribArray(2);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+  glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
+}
+
+void ROTOM::GRAPHICS::releaseGeometry(unsigned int VAO, unsigned int VBO, unsigned int EBO) {
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &EBO);
+  glDeleteBuffers(1, &VBO);
 }

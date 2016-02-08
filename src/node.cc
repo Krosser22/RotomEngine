@@ -211,6 +211,9 @@ void ROTOM::Node::setParent(Node *parent) {
   glm::vec4 perspective;
   glm::decompose(m_modelLocal_, v_scale_, rotation, v_position_, skew, perspective);
   v_rotation_ = glm::vec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
+  v_rotation_.x = glm::degrees(rotation.x);
+  v_rotation_.y = glm::degrees(rotation.y);
+  v_rotation_.z = glm::degrees(rotation.z);
 
   if (parent_) {
     parent_->removeChild(this);
@@ -218,6 +221,8 @@ void ROTOM::Node::setParent(Node *parent) {
   parent_ = parent;
   parent_->addChild(this);
   b_dirtyModelWorld_ = true;
+
+  m_modelWorld_ = *parent->modelWorld() * m_modelLocal_;
 }
 
 const ROTOM::Node *ROTOM::Node::parent() {

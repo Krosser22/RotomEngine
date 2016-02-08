@@ -22,12 +22,25 @@
 #endif
 
 #include "drawable.h"
+#include "geometry.h"
 
 namespace ROTOM {
   namespace GRAPHICS {
+    float getTime();
+
     void setShader(ShaderData *shaderData, const char *vertexShaderSource, const char *fragmentShaderSource);
 
+    void setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight);
+
+    void releaseMaterial(unsigned int shaderProgram);
+
     void useMaterial(ShaderData *shaderData, Drawable *drawable, float *projectionMatrix, float *viewMatrix);
+
+    void clearScreen();
+
+    void loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index);
+
+    void releaseGeometry(unsigned int VAO, unsigned int VBO, unsigned int EBO);
   }
 }
 

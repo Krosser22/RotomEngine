@@ -48,7 +48,7 @@ int ROTOM::main(int argc, char** argv) {
   drawable3.setParent(&drawable2);
   drawable3.setPosition(0.0f, 0.0f, 0.0f);
 
-  /*const int amount = 1722;
+  const int amount = 2722;
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
   const float pos_y_started = 7.0f;
@@ -65,7 +65,7 @@ int ROTOM::main(int argc, char** argv) {
     d[i].setMaterial(material4);
     d[i].setParent(&drawable1);
     d[i].setPosition(pos);
-  }*/
+  }
 
   std::shared_ptr<std::string> source(new std::string);
   ROTOM::read_file("../../../../shaders/shader.frag", source);
@@ -85,7 +85,7 @@ int ROTOM::main(int argc, char** argv) {
     //...
 
     //Draw 2D (IMGUI)
-    /*ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     ImGui::Begin("Input");
     {
@@ -102,7 +102,7 @@ int ROTOM::main(int argc, char** argv) {
       ImGui::DragFloat4("specularIntensity", drawable1.material()->specularIntensity_, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
       ImGui::DragFloat4("specularMaterial", drawable1.material()->specularMaterial_, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     }
-    ImGui::End();*/
+    ImGui::End();
     //...
   }
   return 0;
@@ -117,6 +117,7 @@ int ROTOM::main(int argc, char** argv) {
 -----------
 ---DOING---
 -----------
+Quitar static de los parámetros de la luz del material para hacerlo accesible desde fuera del fichero de la clase
 
 
 ----------
