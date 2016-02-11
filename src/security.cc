@@ -55,6 +55,9 @@ void ROTOM::SECURITY::addSecurityCount(MyClass type) {
   case MyClass_Material:
     counter.MyClass_Material++;
     break;
+  case MyClass_MaterialSettings:
+    counter.MyClass_MaterialSettings++;
+    break;
   case MyClass_Node:
     counter.MyClass_Node++;
     break;
@@ -129,6 +132,9 @@ void ROTOM::SECURITY::removeSecurityCount(MyClass type) {
   case MyClass_Material:
     counter.MyClass_Material--;
     break;
+  case MyClass_MaterialSettings:
+    counter.MyClass_MaterialSettings--;
+    break;
   case MyClass_Node:
     counter.MyClass_Node--;
     break;
@@ -154,7 +160,7 @@ void ROTOM::SECURITY::removeSecurityCount(MyClass type) {
     printf("ERROR: [Security.cc]\n");
     break;
   }
-  /*if ((counter.MyClass_AutoLayering +
+  if ((counter.MyClass_AutoLayering +
       counter.MyClass_Branching +
       counter.MyClass_Camera +
       counter.MyClass_Chronometer +
@@ -168,6 +174,7 @@ void ROTOM::SECURITY::removeSecurityCount(MyClass type) {
       counter.MyClass_Geometry +
       counter.MyClass_Layering +
       counter.MyClass_Material +
+      counter.MyClass_MaterialSettings +
       counter.MyClass_Node +
       counter.MyClass_Sound +
       counter.MyClass_Task +
@@ -176,7 +183,7 @@ void ROTOM::SECURITY::removeSecurityCount(MyClass type) {
       counter.MyClass_TrackList +
       counter.MyClass_Worker) == 0) {
     printf("All classes removed\n");
-    system("pause");
+    //system("pause");
   } /*else {
     printf("Not all classes removed\n");
     system("pause");
@@ -202,6 +209,7 @@ int ROTOM::SECURITY::checkSecurityCount(MyClass type) {
       counter.MyClass_Geometry +
       counter.MyClass_Layering +
       counter.MyClass_Material +
+      counter.MyClass_MaterialSettings +
       counter.MyClass_Node +
       counter.MyClass_Sound +
       counter.MyClass_Task +
@@ -258,6 +266,9 @@ int ROTOM::SECURITY::checkSecurityCount(MyClass type) {
     break;
   case MyClass_Material:
     typeCount = counter.MyClass_Material;
+    break;
+  case MyClass_MaterialSettings:
+    typeCount = counter.MyClass_MaterialSettings;
     break;
   case MyClass_Node:
     typeCount = counter.MyClass_Node;

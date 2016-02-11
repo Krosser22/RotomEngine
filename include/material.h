@@ -8,20 +8,6 @@
 #define __MATERIAL_H__
 
 namespace ROTOM {
-  struct ShaderData { //TODO - Create a shader class
-    unsigned int shaderProgram;
-    unsigned int u_color;
-    unsigned int u_model;
-    unsigned int u_view;
-    unsigned int u_projection;
-    unsigned int u_lightPosition;
-    unsigned int u_lightColor;
-    unsigned int u_texture;
-    unsigned int u_shininess;
-    unsigned int u_specularIntensity;
-    unsigned int u_specularMaterial;
-  };
-
   struct GeneralShaderData {
     float lightPositionX = 100.0f;
     float lightPositionY = 100.0f;
@@ -38,7 +24,6 @@ namespace ROTOM {
     ~Material();
 
     //TODO - Move this to private and create functions to set/get the values
-    ShaderData shaderData_;
     GeneralShaderData *generalShaderData_;
     float shininess_;
     float specularIntensity_[4];

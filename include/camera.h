@@ -13,7 +13,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "node.h"
-#include "taskManager.h"
 #include "taskCalculateMatrix.h"
 
 namespace ROTOM {
@@ -71,8 +70,6 @@ namespace ROTOM {
     DisplayList displayList_;
 
     bool b_dirtyView_;
-
-    TaskManager taskManager_;
 
     std::shared_ptr<TaskCalculateMatrix> taskCalculateMatrix_;
 

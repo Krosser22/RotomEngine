@@ -37,7 +37,7 @@ static GLFWwindow  *window = NULL;
 static double       g_Time = 0.0f;
 static bool         g_MousePressed[3] = { false, false, false };
 static float        g_MouseWheel = 0.0f;
-static GLuint       g_FontTexture = 0;
+static unsigned int g_FontTexture = 0;
 static int          g_ShaderHandle = 0, g_VertHandle = 0, g_FragHandle = 0;
 static int          g_AttribLocationTex = 0, g_AttribLocationProjMtx = 0;
 static int          g_AttribLocationPosition = 0, g_AttribLocationUV = 0, g_AttribLocationColor = 0;

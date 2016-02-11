@@ -14,11 +14,12 @@ ROTOM::Drawable::Drawable() {
   material_ = NULL;
 }
 
-ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, Node *parent) {
+ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, std::shared_ptr<MaterialSettings> materialSettings, Node *parent) {
   SECURITY::addSecurityCount(SECURITY::MyClass_Drawable);
 
   setGeometry(geometry);
   setMaterial(material);
+  setMaterialSettings(materialSettings);
   setParent(parent);
 }
 

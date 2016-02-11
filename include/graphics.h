@@ -28,13 +28,13 @@ namespace ROTOM {
   namespace GRAPHICS {
     float getTime();
 
-    void setShader(ShaderData *shaderData, const char *vertexShaderSource, const char *fragmentShaderSource);
+    void setShader(MaterialSettings *materialSettings, const char *vertexShaderSource, const char *fragmentShaderSource);
 
     void setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight);
 
     void releaseMaterial(unsigned int shaderProgram);
 
-    void useMaterial(ShaderData *shaderData, Drawable *drawable, float *projectionMatrix, float *viewMatrix);
+    void useMaterial(MaterialSettings *materialSettings, Drawable *drawable, float *projectionMatrix, float *viewMatrix);
 
     void clearScreen();
 

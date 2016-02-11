@@ -30,6 +30,7 @@ namespace ROTOM {
       MyClass_Geometry,
       MyClass_Layering,
       MyClass_Material,
+      MyClass_MaterialSettings,
       MyClass_Node,
       MyClass_Sound,
       MyClass_Task,
@@ -55,6 +56,7 @@ namespace ROTOM {
       int MyClass_Geometry;
       int MyClass_Layering;
       int MyClass_Material;
+      int MyClass_MaterialSettings;
       int MyClass_Node;
       int MyClass_Sound;
       int MyClass_Task;

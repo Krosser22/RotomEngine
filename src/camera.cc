@@ -6,6 +6,7 @@
 
 #include "camera.h"
 #include "security.h"
+#include "taskManager.h"
 
 ROTOM::Camera::Camera() {
   SECURITY::addSecurityCount(SECURITY::MyClass_Camera);
@@ -96,7 +97,7 @@ ROTOM::Node *ROTOM::Camera::root() {
 //void ROTOM::Camera::doCull(const Node *root) {}
 
 void ROTOM::Camera::doRender() {
-  taskManager_.waitUntilFinish();
+  ROTOM::TaskManager::waitUntilFinish();
 
   //DisplayList
   displayList_.addCommand(commandDrawObject_.get());
@@ -120,7 +121,7 @@ void ROTOM::Camera::updateTaskCalculateMatrix() {
   taskCalculateMatrix_->clearTask();
   std::shared_ptr<Node *>node = std::make_shared<Node *>(&root_);
   taskCalculateMatrix_->setInput(node);
-  taskManager_.addTask(taskCalculateMatrix_);
+  ROTOM::TaskManager::addTask(taskCalculateMatrix_);
 }
 
 void ROTOM::Camera::updateTasks() {

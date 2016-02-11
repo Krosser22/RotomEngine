@@ -35,7 +35,7 @@ void ROTOM::CommandDrawObject::setViewMatrix(float *viewMatrix) {
 }
 
 void ROTOM::CommandDrawObject::draw(Drawable *drawable) {
-  GRAPHICS::useMaterial(&drawable->material()->shaderData_, drawable, projectionMatrix_, viewMatrix_);
+  GRAPHICS::useMaterial(drawable->materialSettings().get(), drawable, projectionMatrix_, viewMatrix_);
   drawChilds(drawable);
 }
 
