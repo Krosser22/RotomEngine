@@ -6,7 +6,11 @@
 
 #include "scene.h"
 
-ROTOM::Scene::Scene() {
+static ROTOM::DisplayList displayList_;
+static ROTOM::CommandDrawObject commandDrawObject_;
+static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateMatrix_;
+
+void ROTOM::Scene::init() {
   if (lights_.size() <= 0) {
     lights_.push_back(Light());
   }
@@ -17,12 +21,7 @@ ROTOM::Scene::Scene() {
   taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
 }
 
-ROTOM::Scene::~Scene() {
-  commandDrawObject_.~CommandDrawObject();
-  root_.~Node();
-}
-
-void ROTOM::Scene::update() {
+void ROTOM::Scene::draw() {
   ROTOM::TASKMANAGER::waitUntilFinish();
 
   //DisplayList
@@ -35,4 +34,13 @@ void ROTOM::Scene::update() {
   taskCalculateMatrix_->clearTask();
   taskCalculateMatrix_->setInput(node);
   ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
+}
+
+void ROTOM::Scene::destroy() {
+  commandDrawObject_.~CommandDrawObject();
+  root_.~Node();
+}
+
+ROTOM::Node *ROTOM::Scene::getRoot() {
+  return &root_;
 }

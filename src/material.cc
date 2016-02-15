@@ -26,6 +26,10 @@ ROTOM::Material::~Material() {
   SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Material);
 }
 
+void ROTOM::Material::setShader(MaterialSettings *materialSettings, const char *vertexShaderSource, const char *fragmentShaderSource) {
+  GRAPHICS::setShader(materialSettings, vertexShaderSource, fragmentShaderSource);
+}
+
 void ROTOM::Material::setTexture(const char *texturePath) {
   // Load and generate the texture
   // Load image, create texture and generate mipmaps

@@ -232,7 +232,7 @@ const ROTOM::Node *ROTOM::Node::parent() {
 void ROTOM::Node::addChild(Node *child) {
   childs_.push_back(child);
   if (child->parent_ != this) {
-    childs_.at(childs_.size() - 1)->setParent(this);
+    child->setParent(this);
   }
 }
 

@@ -7,6 +7,8 @@
 #ifndef __MATERIAL_H__
 #define __MATERIAL_H__
 
+#include "materialSettings.h"
+
 namespace ROTOM {
   class Material {
   public:
@@ -15,6 +17,8 @@ namespace ROTOM {
 
     float shininess_;
     float specularMaterial_[4];
+
+    void setShader(MaterialSettings *materialSettings, const char *vertexShaderSource, const char *fragmentShaderSource);
 
     //Set the texture of the object
     void setTexture(const char *texturePath);

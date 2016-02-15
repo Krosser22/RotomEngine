@@ -3,6 +3,7 @@
 float ROTOM::GRAPHICS::getTime() {
   return (float)glfwGetTime();
 }
+
 void ROTOM::GRAPHICS::setShader(MaterialSettings *materialSettings, const char *vertexShaderSource, const char *fragmentShaderSource) {
   GLint success;
   GLchar infoLog[512];

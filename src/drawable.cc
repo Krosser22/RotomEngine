@@ -107,7 +107,7 @@ ROTOM::Drawable::Drawable() {
   material_ = NULL;
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings));
   setColor(1.0f, 1.0f, 1.0f, 1.0f);
-  setShader(vertexShaderSource_, fragmentShaderSource_);
+  material_->setShader(materialSettings_.get(), vertexShaderSource_, fragmentShaderSource_);
 }
 
 ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, Node *parent) {
@@ -148,10 +148,6 @@ void ROTOM::Drawable::setMaterialSettings(std::shared_ptr<MaterialSettings> mate
 
 std::shared_ptr<ROTOM::MaterialSettings> ROTOM::Drawable::materialSettings() {
   return materialSettings_;
-}
-
-void ROTOM::Drawable::setShader(const char *vertexShaderSource, const char *fragmentShaderSource) {
-  GRAPHICS::setShader(materialSettings_.get(), vertexShaderSource, fragmentShaderSource);
 }
 
 void ROTOM::Drawable::setColor(const float r, const float g, const float b, const float a) {

@@ -14,19 +14,23 @@
 namespace ROTOM {
   class Scene {
   public:
-    Scene(); //Init
-    ~Scene(); //Destroy
+    Scene() {};
+    ~Scene() {};
 
-    void update();
+    void init();
 
+    void update() {};
+
+    void draw();
+
+    void destroy();
+
+    Node *getRoot();
+
+  protected:
     Camera camera_;
     Node root_;
     std::vector<Light> lights_;
-
-  private:
-    DisplayList displayList_;
-    CommandDrawObject commandDrawObject_;
-    std::shared_ptr<TaskCalculateMatrix> taskCalculateMatrix_;
   };
 }
 
