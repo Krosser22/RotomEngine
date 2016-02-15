@@ -18,20 +18,18 @@
 int ROTOM::main(int argc, char** argv) {
   ROTOM::WindowInit(1600, 900);
 
-  float camera_position[3] = { 0.0f, 0.0f, -500.0f };
-  float node_position[3] = { 0.0f, 1.0f, -5.0f };
-  float node_rotation[3] = { 0.0f, 0.0f, 0.0f };
-  float node_scale[3] = { 1.0f, 1.0f, 1.0f };
-
+  float camera_position[3] = { 0.0f, 0.0f, 500.0f };
   ROTOM::Camera camera;
   camera.setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
-  camera.setupPerspective(45.0f, (float)ROTOM::WindowWidth() / (float)ROTOM::WindowHeight(), 0.1f, 100.0f);
+  camera.setupPerspective(45.0f, (float)ROTOM::WindowWidth() / (float)ROTOM::WindowHeight(), 0.1f, 1000.0f);
   camera.setPosition(camera_position);
 
   std::shared_ptr<ROTOM::Geometry> geometry(new ROTOM::Geometry());
   std::shared_ptr<ROTOM::Material> material(new ROTOM::Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
+  ROTOM::GeneralShaderData generalShaderData;
+  material->generalShaderData_ = &generalShaderData;
   ROTOM::Drawable drawable(geometry, material, camera.root());
-
+  drawable.setPositionZ(-500.0f);
   std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data(new ROTOM::Geometry::GeometryData);
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
 
@@ -93,9 +91,9 @@ int ROTOM::main(int argc, char** argv) {
 
   while (ROTOM::WindowIsOpened()) {
     //update
-    drawable.setPosition(node_position);
-    drawable.setRotation(node_rotation);
-    drawable.setScale(node_scale);
+    //drawable.setPosition(drawable.po);
+    //drawable.setRotation(node_rotation);
+    //drawable.setScale(node_scale);
     //...
     
     //draw 3D
@@ -104,9 +102,9 @@ int ROTOM::main(int argc, char** argv) {
 
     //draw 2D (IMGUI)
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::DragFloat3("Position", node_position, -50.0f, 50.0f);
-    ImGui::DragFloat3("Rotation", node_rotation, -50.0f, 50.0f);
-    ImGui::DragFloat3("Scale", node_scale, -50.0f, 50.0f);
+    //ImGui::DragFloat3("Position", node_position, -50.0f, 50.0f);
+    //ImGui::DragFloat3("Rotation", node_rotation, -50.0f, 50.0f);
+    //ImGui::DragFloat3("Scale", node_scale, -50.0f, 50.0f);
     //...
   }
   return 0;

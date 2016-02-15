@@ -82,6 +82,7 @@ int ROTOM::main(int argc, char** argv) {
 
     //Draw 2D (IMGUI)
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("%d Cubes * 6 faces * 2 Triangles * 3 Points = %d Points", amount + 3, (amount + 3) * 6 * 2 * 3);
 
     ImGui::Begin("Input");
     {
@@ -92,6 +93,7 @@ int ROTOM::main(int argc, char** argv) {
           drawable3.setParent(&drawable2);
         }
       }
+
       ImGui::DragFloat3("LightPosition", &drawable1.material()->generalShaderData_->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
       ImGui::DragFloat3("LightColor", &drawable1.material()->generalShaderData_->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
       ImGui::DragFloat("Shininess", &drawable1.material()->shininess_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
@@ -105,6 +107,13 @@ int ROTOM::main(int argc, char** argv) {
 }
 
 /*
+---------
+---ASK---
+---------
+More than 1 Light
+
+
+
 ----------
 ---DONE---
 ----------
@@ -113,7 +122,6 @@ int ROTOM::main(int argc, char** argv) {
 -----------
 ---DOING---
 -----------
-Quitar static de los parámetros de la luz del material para hacerlo accesible desde fuera del fichero de la clase
 
 
 ----------
@@ -121,6 +129,6 @@ Quitar static de los parámetros de la luz del material para hacerlo accesible de
 ----------
 +Add LUA
 +Use my render list with IMGUI
-+Add a class DB with SQLite or another library
++Add a class DB with SQLite or another library to save the game
 +add asset importer http://assimp.sourceforge.net/
 */

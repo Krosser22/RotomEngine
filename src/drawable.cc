@@ -105,17 +105,17 @@ ROTOM::Drawable::Drawable() {
 
   geometry_ = NULL;
   material_ = NULL;
-  materialSettings_ = std::shared_ptr<MaterialSettings>(new MaterialSettings);
+  setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings));
   setColor(1.0f, 1.0f, 1.0f, 1.0f);
   setShader(vertexShaderSource_, fragmentShaderSource_);
 }
 
-ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, std::shared_ptr<MaterialSettings> materialSettings, Node *parent) {
+ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, Node *parent) {
   SECURITY::addSecurityCount(SECURITY::MyClass_Drawable);
 
   setGeometry(geometry);
   setMaterial(material);
-  setMaterialSettings(materialSettings);
+  setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings));
   setParent(parent);
 }
 
