@@ -10,19 +10,11 @@
 
 ROTOM::Camera::Camera() {
   SECURITY::addSecurityCount(SECURITY::MyClass_Camera);
-
-  commandDrawObject_.setRoot(&root_);
-  commandDrawObject_.setProjectionMatrix(projectionMatrix());
-  commandDrawObject_.setViewMatrix(viewMatrix());
-
-  taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
+  setPosition(0.0f, 0.0f, 0.0f);
 };
 
 ROTOM::Camera::~Camera() {
   SECURITY::removeSecurityCount(SECURITY::MyClass_Camera);
-
-  commandDrawObject_.~CommandDrawObject();
-  root_.~Node();
 };
 
 void ROTOM::Camera::setupPerspective(const float fovy, const float aspect, const float znear, const float zfar) {
@@ -35,24 +27,6 @@ void ROTOM::Camera::setupOrtho(const float left, const float right, const float 
 
 void ROTOM::Camera::setupFrustum(const float left, const float right, const float bottom, const float top, const float znear, const float zfar) {
   m_projection_ = glm::frustum(left, right, bottom, top, znear, zfar);
-}
-
-void ROTOM::Camera::setPosition(const float pos[3]) {
-  v_position_ = glm::vec3(pos[0], pos[1], pos[2]);
-  b_dirtyView_ = true;
-}
-
-float *ROTOM::Camera::position() {
-  return glm::value_ptr(v_position_);
-}
-
-void ROTOM::Camera::setRotation(const float rot[3]) {
-  v_rotation_ = glm::vec3(rot[0], rot[1], rot[2]);
-  b_dirtyView_ = true;
-}
-
-float *ROTOM::Camera::rotation() {
-  return glm::value_ptr(v_rotation_);
 }
 
 //void ROTOM::Camera::set_view_direction(const float pos[3]) {}
@@ -90,21 +64,17 @@ float *ROTOM::Camera::viewMatrix() {
   return glm::value_ptr(m_view_);
 }
 
-ROTOM::Node *ROTOM::Camera::root() {
-  return &root_;
-}
-
 //void ROTOM::Camera::doCull(const Node *root) {}
 
 void ROTOM::Camera::doRender() {
-  ROTOM::TaskManager::waitUntilFinish();
+  //ROTOM::TASKMANAGER::waitUntilFinish();
 
   //DisplayList
-  displayList_.addCommand(commandDrawObject_.get());
-  displayList_.runAll();
+  //displayList_.addCommand(commandDrawObject_.get());
+  //displayList_.runAll();
 
   //TaskManager
-  updateTasks();
+  //updateTasks();
 }
 
 void ROTOM::Camera::cleanViewMatrix() {
@@ -116,15 +86,10 @@ void ROTOM::Camera::cleanViewMatrix() {
   b_dirtyView_ = false;
 }
 
-void ROTOM::Camera::updateTaskCalculateMatrix() {
+/*void ROTOM::Camera::updateTaskCalculateMatrix() {
   taskCalculateMatrix_->nextTaskList_.clear();
   taskCalculateMatrix_->clearTask();
   std::shared_ptr<Node *>node = std::make_shared<Node *>(&root_);
   taskCalculateMatrix_->setInput(node);
-  ROTOM::TaskManager::addTask(taskCalculateMatrix_);
-}
-
-void ROTOM::Camera::updateTasks() {
-  updateTaskCalculateMatrix();
-  //updateCalculateViews();
-}
+  ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
+}*/

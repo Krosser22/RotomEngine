@@ -34,8 +34,12 @@ void ROTOM::CommandDrawObject::setViewMatrix(float *viewMatrix) {
   viewMatrix_ = viewMatrix;
 }
 
+void ROTOM::CommandDrawObject::setLight(Light *light) {
+  light_ = light;
+}
+
 void ROTOM::CommandDrawObject::draw(Drawable *drawable) {
-  GRAPHICS::useMaterial(drawable->materialSettings().get(), drawable, projectionMatrix_, viewMatrix_);
+  GRAPHICS::useMaterial(drawable, projectionMatrix_, viewMatrix_, light_);
   drawChilds(drawable);
 }
 

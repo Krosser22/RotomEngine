@@ -4,22 +4,22 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __TASK_MANAGER_H__
-#define __TASK_MANAGER_H__
+#ifndef __RENDER_MANAGER_H__
+#define __RENDER_MANAGER_H__
 
-#include "task.h"
+#include "command.h"
 #include <memory>
 
 namespace ROTOM {
-  namespace TASKMANAGER {
+  namespace RENDERMANAGER {
     void init();
 
     void destroy();
 
-    void addTask(std::shared_ptr<Task> task);
+    void addCommand(std::shared_ptr<Command> command);
 
-    void waitUntilFinish();
+    void draw();
   }
 }
 
-#endif //__TASK_MANAGER_H__
+#endif //__RENDER_MANAGER_H__

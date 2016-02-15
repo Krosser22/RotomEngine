@@ -16,11 +16,6 @@ ROTOM::Material::Material(const char *texturePath) {
 
   shininess_ = 500.0f;
 
-  specularIntensity_[0] = 0.0f;
-  specularIntensity_[1] = 0.0f;
-  specularIntensity_[2] = 0.0f;
-  specularIntensity_[3] = 0.0f;
-
   specularMaterial_[0] = 0.0f;
   specularMaterial_[1] = 0.0f;
   specularMaterial_[2] = 0.0f;

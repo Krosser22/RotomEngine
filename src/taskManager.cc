@@ -11,7 +11,7 @@
 #include <condition_variable>
 #include <vector>
 
-struct TaskManagerData {
+static struct TaskManagerData{
   int threardsCount_;
   static const int threardsNotUsed_ = 2;
 
@@ -22,7 +22,6 @@ struct TaskManagerData {
   std::vector<std::thread> threads_;
 
   std::vector<std::shared_ptr<ROTOM::Task>> taskList_;
-
   std::shared_ptr<std::mutex> lock_taskList_;
 
   bool isOff_;
@@ -30,10 +29,7 @@ struct TaskManagerData {
   //std::condition_variable cv_;
 
   //std::shared_ptr<std::lock_guard<std::mutex>> lk_;
-
-};
-
-static TaskManagerData taskManagerData;
+} taskManagerData;
 
 static void addNextTasksOf(std::shared_ptr<ROTOM::Task> task) {
   taskManagerData.lock_taskPending_->lock();
@@ -64,7 +60,7 @@ static std::shared_ptr<ROTOM::Task> getNextTask() {
   return task;
 }
 
-void threadLoop(int ID) {
+static void threadLoop(int ID) {
   std::shared_ptr<ROTOM::Task> actualTask = NULL;
   //std::unique_lock<std::mutex> lck(taskManager->lock_taskList_);
   //taskManager->cv_.wait(lck);
@@ -80,7 +76,7 @@ void threadLoop(int ID) {
   }
 }
 
-void ROTOM::TaskManager::init() {
+void ROTOM::TASKMANAGER::init() {
   SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_TaskManager);
   
   taskManagerData.isOff_ = false;
@@ -101,7 +97,7 @@ void ROTOM::TaskManager::init() {
   }
 }
 
-void ROTOM::TaskManager::destroy() {
+void ROTOM::TASKMANAGER::destroy() {
   SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_TaskManager);
 
   bool threadsWorking = true;
@@ -130,7 +126,7 @@ void ROTOM::TaskManager::destroy() {
   taskManagerData.threads_.clear();
 }
 
-void ROTOM::TaskManager::addTask(std::shared_ptr<Task> task) {
+void ROTOM::TASKMANAGER::addTask(std::shared_ptr<Task> task) {
   taskManagerData.lock_taskList_->lock();
   taskManagerData.taskList_.push_back(task);
   taskManagerData.lock_taskList_->unlock();
@@ -141,7 +137,7 @@ void ROTOM::TaskManager::addTask(std::shared_ptr<Task> task) {
   //cv_.notify_all();
 }
 
-void ROTOM::TaskManager::waitUntilFinish() {
+void ROTOM::TASKMANAGER::waitUntilFinish() {
   bool hasTaskManagerFinishTheFrame = false;
   while (!hasTaskManagerFinishTheFrame) {
     taskManagerData.lock_taskPending_->lock();

@@ -9,6 +9,7 @@
 
 #include "command.h"
 #include "drawable.h"
+#include "light.h"
 
 namespace ROTOM {
   class CommandDrawObject : public Command {
@@ -25,9 +26,12 @@ namespace ROTOM {
 
     void setViewMatrix(float *viewMatrix);
 
+    void setLight(Light *light);
+
   private:
     float *projectionMatrix_;
     float *viewMatrix_;
+    Light *light_;
 
     Node *root_;
 

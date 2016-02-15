@@ -23,6 +23,7 @@
 
 #include "drawable.h"
 #include "geometry.h"
+#include "light.h"
 
 namespace ROTOM {
   namespace GRAPHICS {
@@ -34,7 +35,7 @@ namespace ROTOM {
 
     void releaseMaterial(unsigned int shaderProgram);
 
-    void useMaterial(MaterialSettings *materialSettings, Drawable *drawable, float *projectionMatrix, float *viewMatrix);
+    void useMaterial(Drawable *drawable, float *projectionMatrix, float *viewMatrix, Light *light);
 
     void clearScreen();
 

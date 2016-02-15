@@ -10,32 +10,26 @@
 #include "text.h"
 #include "time.h"
 #include "window.h"
+#include "scene.h"
 
 int ROTOM::main(int argc, char** argv) {
   WindowInit(1280, 720);
+  Scene scene;
 
-  //General Data
-  float camera_position[3] = { 0.0f, 0.0f, 0.0f };
-  ROTOM::Camera camera;
-  camera.setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
-  camera.setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  camera.setPosition(camera_position);
+  scene.camera_.setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
+  scene.camera_.setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  scene.camera_.setPosition(0.0f, 0.0f, 0.0f);
 
   std::shared_ptr<Geometry> geometry(new Geometry());
   std::shared_ptr<Material> material1(new Material("../../../../img/texture1.png"));
   std::shared_ptr<Material> material2(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4(new Material());
-  ROTOM::GeneralShaderData generalShaderData;
-  material1->generalShaderData_ = &generalShaderData;
-  material2->generalShaderData_ = &generalShaderData;
-  material3->generalShaderData_ = &generalShaderData;
-  material4->generalShaderData_ = &generalShaderData;
 
   Drawable drawable1, drawable2, drawable3;
   drawable1.setGeometry(geometry);
   drawable1.setMaterial(material1);
-  drawable1.setParent(camera.root());
+  drawable1.setParent(&scene.root_);
   drawable1.setPosition(0.0f, 0.0f, -5.0f);
   drawable2.setGeometry(geometry);
   drawable2.setMaterial(material2);
@@ -77,7 +71,7 @@ int ROTOM::main(int argc, char** argv) {
     //...
 
     //Draw 3D
-    camera.doRender();
+    scene.update();
     //...
 
     //Draw 2D (IMGUI)
@@ -94,10 +88,10 @@ int ROTOM::main(int argc, char** argv) {
         }
       }
 
-      ImGui::DragFloat3("LightPosition", &drawable1.material()->generalShaderData_->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-      ImGui::DragFloat3("LightColor", &drawable1.material()->generalShaderData_->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+      ImGui::DragFloat3("LightPosition", &scene.lights_.at(0).lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
+      ImGui::DragFloat3("LightColor", &scene.lights_.at(0).lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
       ImGui::DragFloat("Shininess", &drawable1.material()->shininess_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
-      ImGui::DragFloat4("specularIntensity", drawable1.material()->specularIntensity_, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+      ImGui::DragFloat4("specularIntensity", &scene.lights_.at(0).specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
       ImGui::DragFloat4("specularMaterial", drawable1.material()->specularMaterial_, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     }
     ImGui::End();

@@ -29,13 +29,13 @@ int ROTOM::main(int argc, char** argv) {
   ROTOM::GeneralShaderData generalShaderData;
   material->generalShaderData_ = &generalShaderData;
   ROTOM::Drawable drawable(geometry, material, camera.root());
-  drawable.setPositionZ(-500.0f);
+  drawable.setPositionZ(-50.0f);
   std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data(new ROTOM::Geometry::GeometryData);
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
 
-#define OBJ_BLONDE
+//#define OBJ_BLONDE
 //#define OBJ_IRONMAN
-//#define OBJ_SIRIUS_5_COLONIAL_CITY
+#define OBJ_SIRIUS_5_COLONIAL_CITY
 #ifdef OBJ_BLONDE
   const char *base_path = "../../../../obj/";
   const char *path = "Blonde/";

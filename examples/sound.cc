@@ -173,11 +173,12 @@ void imgui() {
 }
 
 void run_scene_sound() {
+  //WindowInit(1280, 720);
+
   ROTOM::Camera camera;
-  float cameraPosition[3] = { 0.0f, 0.0f, 0.0f };
   camera.setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   camera.setupPerspective(45.0f, (float)ROTOM::WindowWidth() / (float)ROTOM::WindowHeight(), 0.1f, 100.0f);
-  camera.setPosition(cameraPosition);
+  camera.setPosition(0.0f, 0.0f, 0.0f);
 
   //Sound
   sounds.push_back(new ROTOM::SOUND::Sound("sound/Layering/LAYER_C_0.ogg"));
