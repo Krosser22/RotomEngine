@@ -13,7 +13,6 @@ namespace ROTOM {
     MaterialSettings();
     ~MaterialSettings();
 
-  private:
     unsigned int shaderProgram;
     unsigned int u_color;
     unsigned int u_model;

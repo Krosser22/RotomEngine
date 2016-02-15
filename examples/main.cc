@@ -26,10 +26,6 @@ int ROTOM::main(int argc, char** argv) {
   std::shared_ptr<Material> material2(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4(new Material());
-  std::shared_ptr<MaterialSettings> materialSettings1(new MaterialSettings());
-  std::shared_ptr<MaterialSettings> materialSettings2(new MaterialSettings());
-  std::shared_ptr<MaterialSettings> materialSettings3(new MaterialSettings());
-  std::shared_ptr<MaterialSettings> materialSettings4(new MaterialSettings());
   ROTOM::GeneralShaderData generalShaderData;
   material1->generalShaderData_ = &generalShaderData;
   material2->generalShaderData_ = &generalShaderData;
@@ -39,17 +35,14 @@ int ROTOM::main(int argc, char** argv) {
   Drawable drawable1, drawable2, drawable3;
   drawable1.setGeometry(geometry);
   drawable1.setMaterial(material1);
-  drawable1.setMaterialSettings(materialSettings1);
   drawable1.setParent(camera.root());
   drawable1.setPosition(0.0f, 0.0f, -5.0f);
   drawable2.setGeometry(geometry);
   drawable2.setMaterial(material2);
-  drawable2.setMaterialSettings(materialSettings2);
   drawable2.setParent(&drawable1);
   drawable2.setPosition(0.0f, 0.0f, 0.0f);
   drawable3.setGeometry(geometry);
   drawable3.setMaterial(material3);
-  drawable3.setMaterialSettings(materialSettings3);
   drawable3.setParent(&drawable2);
   drawable3.setPosition(0.0f, 0.0f, 0.0f);
 
@@ -62,14 +55,12 @@ int ROTOM::main(int argc, char** argv) {
   const int cols = 15;
   float pos[3] = { 0.0f, 0.0f, 0.0f };
   Drawable d[amount];
-  std::shared_ptr<MaterialSettings> materialSettings;
   for (int i = 0; i < amount; ++i) {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (rows * cols)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
     d[i].setGeometry(geometry);
     d[i].setMaterial(material4);
-    d[i].setMaterialSettings(materialSettings);
     d[i].setParent(&drawable1);
     d[i].setPosition(pos);
   }
