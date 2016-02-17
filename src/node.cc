@@ -45,6 +45,10 @@ void ROTOM::Node::move(const float movement[3]) {
   setPosition(v_position_.x + movement[0], v_position_.y + movement[1], v_position_.z + movement[2]);
 }
 
+void ROTOM::Node::move(const float x, const float y, const float z) {
+  setPosition(v_position_.x + x, v_position_.y + y, v_position_.z + z);
+}
+
 void ROTOM::Node::moveX(const float movementX) {
   setPosition(v_position_.x + movementX, v_position_.y, v_position_.z);
 }
@@ -206,19 +210,19 @@ void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   //TODO - Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
   m_modelLocal_ = glm::inverse(*parent->modelWorld()) * m_modelWorld_;
 
-  /*glm::quat rotation;
+  glm::quat rotation;
   glm::vec3 skew;
   glm::vec4 perspective;
   glm::decompose(m_modelLocal_, v_scale_, rotation, v_position_, skew, perspective);
   v_rotation_ = glm::vec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
   v_rotation_.x = glm::degrees(rotation.x);
   v_rotation_.y = glm::degrees(rotation.y);
-  v_rotation_.z = glm::degrees(rotation.z);*/
+  v_rotation_.z = glm::degrees(rotation.z);
 
   if (parent_) {
     parent_->removeChild(shared_from_this());
   }
-  parent_ = std::make_shared<ROTOM::Node>(*parent);
+  parent_ = parent;
   parent_->addChild(shared_from_this());
   
   b_dirtyModelWorld_ = true;
@@ -231,7 +235,7 @@ std::shared_ptr<ROTOM::Node> ROTOM::Node::parent() {
 }
 
 void ROTOM::Node::addChild(std::shared_ptr<Node> child) {
-  childs_.push_back(std::make_shared<ROTOM::Node>(*child));
+  childs_.push_back(child);
   if (child->parent_.get() != this) {
     child->setParent(shared_from_this());
   }

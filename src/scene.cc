@@ -6,12 +6,12 @@
 
 #include "scene.h"
 
-static ROTOM::DisplayList displayList_;
-static ROTOM::CommandDrawObject commandDrawObject_;
-static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateMatrix_;
-static ROTOM::Camera camera_;
-static std::shared_ptr<ROTOM::Node> root_;
-static std::vector<std::shared_ptr<ROTOM::Light>> lights_;
+ROTOM::DisplayList displayList_;
+ROTOM::CommandDrawObject commandDrawObject_;
+std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateMatrix_;
+ROTOM::Camera camera_;
+std::shared_ptr<ROTOM::Node> root_;
+std::vector<std::shared_ptr<ROTOM::Light>> lights_;
 
 void ROTOM::Scene::init() {
   root_ = std::shared_ptr<Node>(new Node());
@@ -42,7 +42,6 @@ void ROTOM::Scene::draw() {
 
 void ROTOM::Scene::destroy() {
   commandDrawObject_.~CommandDrawObject();
-  root_.get()->~Node();
 }
 
 std::shared_ptr<ROTOM::Node> ROTOM::Scene::getRoot() {

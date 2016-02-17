@@ -19,6 +19,8 @@ namespace ROTOM {
 
     void init();
 
+    void input() {};
+
     void update() {};
 
     void draw();

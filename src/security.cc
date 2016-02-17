@@ -183,7 +183,7 @@ void ROTOM::SECURITY::removeSecurityCount(MyClass type) {
       counter.MyClass_TrackList +
       counter.MyClass_Worker) == 0) {
     printf("All classes removed\n");
-    //system("pause");
+    system("pause");
   } /*else {
     printf("Not all classes removed\n");
     system("pause");

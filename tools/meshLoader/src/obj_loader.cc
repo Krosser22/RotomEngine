@@ -10,16 +10,11 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-static int aux_value_x = 0;
-static int aux_value_y = 0;
-static int aux_value_z = 0;
-static bool aux_init = false;
-
 bool Obj_loader::init(const char *path, int size_x, int size_y, int size_z) {
-  aux_value_x = 0;
-  aux_value_y = 0;
-  aux_value_z = 0;
-  aux_init = false;
+  int aux_value_x = 0;
+  int aux_value_y = 0;
+  int aux_value_z = 0;
+  bool aux_init = false;
   unsigned int size_vertex_ = 0;
   unsigned int size_normal_ = 0;
   unsigned int size_uv_ = 0;

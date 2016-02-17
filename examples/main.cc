@@ -13,7 +13,7 @@
 #include "scene.h"
 #include <memory>
 
-const int amount = 1;
+const int amount = 1722;
 
 namespace ROTOM {
   class DefaultScene : public ROTOM::Scene {
@@ -28,6 +28,18 @@ namespace ROTOM {
     void draw();
 
     void destroy();
+
+    std::shared_ptr<Geometry> geometry;
+    std::shared_ptr<Material> material1;
+    std::shared_ptr<Material> material2;
+    std::shared_ptr<Material> material3;
+    std::shared_ptr<Material> material4;
+
+    std::shared_ptr<Drawable> drawable1;
+    std::shared_ptr<Drawable> drawable2;
+    std::shared_ptr<Drawable> drawable3;
+
+    std::shared_ptr<Drawable> drawable[amount];
   };
 }
 
@@ -38,15 +50,16 @@ void ROTOM::DefaultScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
-  std::shared_ptr<Geometry> geometry(new Geometry());
-  std::shared_ptr<Material> material1(new Material("../../../../img/texture1.png"));
-  std::shared_ptr<Material> material2(new Material("../../../../img/texture2.png"));
-  std::shared_ptr<Material> material3(new Material("../../../../img/texture3.png"));
-  std::shared_ptr<Material> material4(new Material());
+  geometry = std::shared_ptr<Geometry>(new Geometry());
+  material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
+  material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
+  material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
+  material4 = std::shared_ptr<Material>(new Material());
 
-  std::shared_ptr<Drawable> drawable1(new Drawable());
-  std::shared_ptr<Drawable> drawable2(new Drawable());
-  std::shared_ptr<Drawable> drawable3(new Drawable());
+  drawable1 = std::shared_ptr<Drawable>(new Drawable());
+  drawable2 = std::shared_ptr<Drawable>(new Drawable());
+  drawable3 = std::shared_ptr<Drawable>(new Drawable());
+
   drawable1->setGeometry(geometry);
   drawable1->setMaterial(material1);
   drawable1->setParent(getRoot());
@@ -67,29 +80,27 @@ void ROTOM::DefaultScene::init() {
   const int rows = 15;
   const int cols = 15;
   float pos[3] = { 0.0f, 0.0f, 0.0f };
+  printf("Creating array of drawables\n");
   for (int i = 0; i < amount; ++i) {
     //printf("Creating Node: %d/%d\n", i, amount);
-    std::shared_ptr<Drawable> drawable;
-    drawable = std::make_shared<Drawable>();
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    drawable->setGeometry(geometry);
-    drawable->setMaterial(material4);
-    drawable->setPosition(pos);
-    drawable->setParent(drawable1);
+    drawable[i] = std::shared_ptr<Drawable>(new Drawable());
+    drawable[i]->setGeometry(geometry);
+    drawable[i]->setMaterial(material4);
+    drawable[i]->setParent(drawable1);
+    drawable[i]->setPosition(pos);
   }
-  int count = getRoot()->childCount();
-  printf("%d\n", count);
 }
 
 void ROTOM::DefaultScene::update() {
   Scene::update();
 
   float sin_time = sin(TIME::appTime()) * 0.022f;
-  //root_.getChildAt(0)->moveX(sin_time);
-  //root_.getChildAt(0)->getChildAt(0)->moveY(sin_time);
-  //root_.getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
+  getRoot()->getChildAt(0)->moveX(sin_time);
+  getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
+  getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
 }
 
 void ROTOM::DefaultScene::draw() {
@@ -98,9 +109,6 @@ void ROTOM::DefaultScene::draw() {
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
   ImGui::Text("%d Cubes * 6 faces * 2 Triangles * 3 Points = %d Points", amount + 3, (amount + 3) * 6 * 2 * 3);
   
-  if (getRoot()->childCount() <= 0) {
-    printf("ERROR\n");
-  }
   ImGui::Begin("Input");
   {
     /*if (ImGui::Button("Detach")) {
@@ -130,12 +138,11 @@ int ROTOM::main(int argc, char** argv) {
   DefaultScene defaultScene;
   defaultScene.init();
 
-  //std::shared_ptr<std::string> source(new std::string);
-  //ROTOM::read_file("../../../../shaders/shader.frag", source);
+  std::shared_ptr<std::string> source(new std::string);
+  ROTOM::read_file("../../../../shaders/shader.frag", source);
 
-  printf("%d\n", defaultScene.getRoot()->childCount());
   while (WindowIsOpened()) {
-    //defaultScene.input();
+    defaultScene.input();
     defaultScene.update();
     defaultScene.draw();
   }
@@ -147,7 +154,6 @@ int ROTOM::main(int argc, char** argv) {
 ---------
 ---ASK---
 ---------
-More than 1 Light
 
 
 

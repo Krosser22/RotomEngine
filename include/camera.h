@@ -29,8 +29,10 @@ namespace ROTOM {
 
     //void setViewDirection(const float pos[3]);
 
-    //void setViewTarget(const float pos[3]);
-    //const float *target();
+    void setViewTarget(const float pos[3]);
+    const float *target();
+
+    const float *forward();
 
     //void setUpDirection(const float pos[3]);
     //const float *upDirection();
@@ -48,7 +50,7 @@ namespace ROTOM {
     void doRender();
 
   private:
-    //glm::vec3 v_target_;
+    glm::vec3 v_target_;
 
     glm::mat4 m_view_;
     glm::mat4 m_projection_;

@@ -21,6 +21,7 @@ namespace ROTOM {
     virtual ~Node();
 
     void move(const float movement[3]);
+    void move(const float x, const float y, const float z);
     void moveX(const float movementX);
     void moveY(const float movementY);
     void moveZ(const float movementZ);

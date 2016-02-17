@@ -31,15 +31,19 @@ void ROTOM::Camera::setupFrustum(const float left, const float right, const floa
 
 //void ROTOM::Camera::set_view_direction(const float pos[3]) {}
 
-/*void ROTOM::Camera::set_view_target(const float pos[3]) {
+void ROTOM::Camera::setViewTarget(const float pos[3]) {
   glm::vec3 cameraDirection;
   glm::vec3 p = glm::vec3(*pos);
   cameraDirection = glm::normalize(p - v_target_);
-}*/
+}
 
-/*const float *ROTOM::Camera::target() {
+const float *ROTOM::Camera::target() {
   return glm::value_ptr(v_target_);
-}*/
+}
+
+const float *ROTOM::Camera::forward() {
+  return glm::value_ptr(v_target_ - v_position_);
+}
 
 //void ROTOM::Camera::set_up_direction(const float pos[3]) {}
 

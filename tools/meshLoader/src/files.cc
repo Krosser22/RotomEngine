@@ -128,16 +128,16 @@ void ROTOM::FILES::Load_OBJ2(const char* path, ROTOM::Geometry::GeometryData *ob
   obj_data->data.clear();
   obj_data->index.clear();
 
-  static float aux_value_x = 0.0f;
-  static float aux_value_y = 0.0f;
-  static float aux_value_z = 0.0f;
-  static int size_x = 1;
-  static int size_y = 1;
-  static int size_z = 1;
+  float aux_value_x = 0.0f;
+  float aux_value_y = 0.0f;
+  float aux_value_z = 0.0f;
+  int size_x = 1;
+  int size_y = 1;
+  int size_z = 1;
 
   //true = will make the obj to be in the position (0, 0, 0) - (aux_value_x, aux_value_y, aux_value_z)
   //false = will make the obj to start in the first position that have in the file
-  static bool aux_init = false;
+  bool aux_init = false;
 
   std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
   std::vector<glm::vec3> temp_vertices, temp_normals;
