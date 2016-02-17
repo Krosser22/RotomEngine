@@ -13,7 +13,7 @@
 #include "scene.h"
 #include <memory>
 
-const int amount = 1722;
+const int amount = 1;
 
 namespace ROTOM {
   class DefaultScene : public ROTOM::Scene {
@@ -44,7 +44,9 @@ void ROTOM::DefaultScene::init() {
   std::shared_ptr<Material> material3(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4(new Material());
 
-  Drawable *drawable1, *drawable2, *drawable3;
+  std::shared_ptr<Drawable> drawable1(new Drawable());
+  std::shared_ptr<Drawable> drawable2(new Drawable());
+  std::shared_ptr<Drawable> drawable3(new Drawable());
   drawable1->setGeometry(geometry);
   drawable1->setMaterial(material1);
   drawable1->setParent(getRoot());
@@ -67,16 +69,18 @@ void ROTOM::DefaultScene::init() {
   float pos[3] = { 0.0f, 0.0f, 0.0f };
   for (int i = 0; i < amount; ++i) {
     //printf("Creating Node: %d/%d\n", i, amount);
-    std::shared_ptr<Drawable> drawable(new Drawable());
+    std::shared_ptr<Drawable> drawable;
+    drawable = std::make_shared<Drawable>();
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
     drawable->setGeometry(geometry);
     drawable->setMaterial(material4);
-    drawable->setParent(drawable1);
     drawable->setPosition(pos);
+    drawable->setParent(drawable1);
   }
-  printf("%d\n", Scene::getRoot()->childCount());
+  int count = getRoot()->childCount();
+  printf("%d\n", count);
 }
 
 void ROTOM::DefaultScene::update() {

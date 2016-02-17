@@ -32,7 +32,7 @@ void ROTOM::TaskCalculateMatrix::run() {
   }
 
   for (unsigned int i = 0; i < (*root_)->childCount(); ++i) {
-    runOnNode((*root_)->getChildAt(i));
+    runOnNode((*root_)->getChildAt(i).get());
   }
 }
 
@@ -58,12 +58,14 @@ void ROTOM::TaskCalculateMatrix::runOnNode(Node *node) {
 
   //ModelWorld
   if (node->isDirtyModelWorld()) {
-    Node *parent = ((Node *)node->parent());
+    std::shared_ptr<Node> parent = node->parent();
     glm::mat4 modelWorld = (*parent->modelWorld()) * (*node->modelLocal());
+    //glm::mat4 modelWorld = (*node->parent()->modelWorld()) * (*node->modelLocal());
+    //TODO - change the two lines to the one commented
     node->setModelWorld(modelWorld);
   }
 
   for (unsigned int i = 0; i < node->childCount(); ++i) {
-    runOnNode(node->getChildAt(i));
+    runOnNode(node->getChildAt(i).get());
   }
 }

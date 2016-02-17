@@ -16,7 +16,7 @@ static std::vector<std::shared_ptr<ROTOM::Light>> lights_;
 void ROTOM::Scene::init() {
   root_ = std::shared_ptr<Node>(new Node());
   if (lights_.size() <= 0) {
-    lights_.push_back(std::shared_ptr<ROTOM::Light>());
+    lights_.push_back(std::shared_ptr<ROTOM::Light>(new Light()));
   }
   commandDrawObject_.setLight(lights_.at(0).get());
   commandDrawObject_.setProjectionMatrix(camera_.projectionMatrix());
@@ -45,8 +45,8 @@ void ROTOM::Scene::destroy() {
   root_.get()->~Node();
 }
 
-ROTOM::Node *ROTOM::Scene::getRoot() {
-  return root_.get();
+std::shared_ptr<ROTOM::Node> ROTOM::Scene::getRoot() {
+  return root_;
 }
 
 ROTOM::Camera *ROTOM::Scene::getCamera() {
@@ -57,6 +57,6 @@ std::vector<std::shared_ptr<ROTOM::Light>> ROTOM::Scene::getLight() {
   return lights_;
 }
 
-void ROTOM::Scene::addLight(ROTOM::Light *light) {
-  lights_.push_back(std::make_shared<Light>(light));
+void ROTOM::Scene::addLight(std::shared_ptr<Light> light) {
+  lights_.push_back(light);
 }

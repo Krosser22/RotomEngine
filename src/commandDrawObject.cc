@@ -18,7 +18,7 @@ ROTOM::CommandDrawObject::~CommandDrawObject() {
 
 void ROTOM::CommandDrawObject::run() {
   for (unsigned int i = 0; i < root_->childCount(); ++i) {
-    draw((Drawable *)root_->getChildAt(i));
+    draw((Drawable *)root_->getChildAt(i).get());
   }
 }
 
@@ -45,6 +45,6 @@ void ROTOM::CommandDrawObject::draw(Drawable *drawable) {
 
 void ROTOM::CommandDrawObject::drawChilds(Drawable *drawable) {
   for (unsigned int i = 0; i < drawable->childCount(); ++i) {
-    draw((Drawable *)drawable->getChildAt(i));
+    draw((Drawable *)drawable->getChildAt(i).get());
   }
 }

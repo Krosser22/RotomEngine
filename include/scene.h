@@ -25,13 +25,13 @@ namespace ROTOM {
 
     void destroy();
 
-    ROTOM::Node *getRoot();
+    std::shared_ptr<Node> getRoot();
 
     Camera *getCamera();
 
     std::vector<std::shared_ptr<Light>> getLight();
 
-    void addLight(Light *light);
+    void addLight(std::shared_ptr<Light> light);
   };
 }
 

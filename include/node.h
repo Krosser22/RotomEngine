@@ -15,7 +15,7 @@
 #include <vector>
 
 namespace ROTOM {
-  class Node {
+  class Node : public std::enable_shared_from_this<Node> {
   public:
     Node();
     virtual ~Node();
@@ -63,12 +63,12 @@ namespace ROTOM {
     glm::mat4 *modelWorld();
     bool isDirtyModelWorld();
 
-    void setParent(Node *parent);
-    Node *parent();
+    void setParent(std::shared_ptr<Node> parent);
+    std::shared_ptr<Node> parent();
 
-    void addChild(Node *child);
-    void removeChild(Node *child);
-    Node *getChildAt(unsigned int i);
+    void addChild(std::shared_ptr<Node> child);
+    void removeChild(std::shared_ptr<Node> child);
+    std::shared_ptr<Node> getChildAt(unsigned int i);
     const unsigned int childCount();
 
   protected:

@@ -17,7 +17,7 @@ namespace ROTOM {
   class Drawable : public Node {
   public:
     Drawable();
-    Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, Node *parent);
+    Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, std::shared_ptr<Node> parent);
     virtual ~Drawable();
     
     void setGeometry(std::shared_ptr<Geometry> geometry);

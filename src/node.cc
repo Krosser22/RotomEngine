@@ -32,7 +32,7 @@ ROTOM::Node::~Node() {
   SECURITY::removeSecurityCount(SECURITY::MyClass_Node);
 
   if (parent_ != NULL) {
-    parent_->removeChild(this);
+    parent_->removeChild(shared_from_this());
   }
 
   while (childs_.size() > 0) {
@@ -202,50 +202,51 @@ bool ROTOM::Node::isDirtyModelWorld() {
   return b_dirtyModelWorld_;
 }
 
-void ROTOM::Node::setParent(ROTOM::Node *parent) {
+void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   //TODO - Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
   m_modelLocal_ = glm::inverse(*parent->modelWorld()) * m_modelWorld_;
 
-  glm::quat rotation;
+  /*glm::quat rotation;
   glm::vec3 skew;
   glm::vec4 perspective;
   glm::decompose(m_modelLocal_, v_scale_, rotation, v_position_, skew, perspective);
   v_rotation_ = glm::vec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
   v_rotation_.x = glm::degrees(rotation.x);
   v_rotation_.y = glm::degrees(rotation.y);
-  v_rotation_.z = glm::degrees(rotation.z);
+  v_rotation_.z = glm::degrees(rotation.z);*/
 
   if (parent_) {
-    parent_->removeChild(this);
+    parent_->removeChild(shared_from_this());
   }
-  parent_ = std::make_shared<ROTOM::Node>(parent);
-  parent_->addChild(this);
+  parent_ = std::make_shared<ROTOM::Node>(*parent);
+  parent_->addChild(shared_from_this());
+  
   b_dirtyModelWorld_ = true;
 
   m_modelWorld_ = *parent->modelWorld() * m_modelLocal_;
 }
 
-ROTOM::Node *ROTOM::Node::parent() {
-  return parent_.get();
+std::shared_ptr<ROTOM::Node> ROTOM::Node::parent() {
+  return parent_;
 }
 
-void ROTOM::Node::addChild(ROTOM::Node *child) {
-  childs_.push_back(std::make_shared<ROTOM::Node>(child));
+void ROTOM::Node::addChild(std::shared_ptr<Node> child) {
+  childs_.push_back(std::make_shared<ROTOM::Node>(*child));
   if (child->parent_.get() != this) {
-    child->setParent(this);
+    child->setParent(shared_from_this());
   }
 }
 
-void ROTOM::Node::removeChild(ROTOM::Node *child) {
+void ROTOM::Node::removeChild(std::shared_ptr<Node> child) {
   for (unsigned int i = 0; i < childs_.size(); ++i) {
-    if (child == childs_.at(i).get()) {
+    if (child.get() == childs_.at(i).get()) {
       childs_.erase(childs_.begin() + i);
     }
   }
 }
 
-ROTOM::Node *ROTOM::Node::getChildAt(unsigned int i) {
-  return childs_.at(i).get();
+std::shared_ptr<ROTOM::Node> ROTOM::Node::getChildAt(unsigned int i) {
+  return childs_.at(i);
 }
 
 const unsigned int ROTOM::Node::childCount() {
