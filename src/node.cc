@@ -202,7 +202,7 @@ bool ROTOM::Node::isDirtyModelWorld() {
   return b_dirtyModelWorld_;
 }
 
-void ROTOM::Node::setParent(Node *parent) {
+void ROTOM::Node::setParent(ROTOM::Node *parent) {
   //TODO - Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
   m_modelLocal_ = glm::inverse(*parent->modelWorld()) * m_modelWorld_;
 
@@ -218,34 +218,34 @@ void ROTOM::Node::setParent(Node *parent) {
   if (parent_) {
     parent_->removeChild(this);
   }
-  parent_ = parent;
+  parent_ = std::make_shared<ROTOM::Node>(parent);
   parent_->addChild(this);
   b_dirtyModelWorld_ = true;
 
   m_modelWorld_ = *parent->modelWorld() * m_modelLocal_;
 }
 
-const ROTOM::Node *ROTOM::Node::parent() {
-  return parent_;
+ROTOM::Node *ROTOM::Node::parent() {
+  return parent_.get();
 }
 
-void ROTOM::Node::addChild(Node *child) {
-  childs_.push_back(child);
-  if (child->parent_ != this) {
+void ROTOM::Node::addChild(ROTOM::Node *child) {
+  childs_.push_back(std::make_shared<ROTOM::Node>(child));
+  if (child->parent_.get() != this) {
     child->setParent(this);
   }
 }
 
-void ROTOM::Node::removeChild(const Node *child) {
+void ROTOM::Node::removeChild(ROTOM::Node *child) {
   for (unsigned int i = 0; i < childs_.size(); ++i) {
-    if (child == childs_.at(i)) {
+    if (child == childs_.at(i).get()) {
       childs_.erase(childs_.begin() + i);
     }
   }
 }
 
 ROTOM::Node *ROTOM::Node::getChildAt(unsigned int i) {
-  return childs_.at(i);
+  return childs_.at(i).get();
 }
 
 const unsigned int ROTOM::Node::childCount() {

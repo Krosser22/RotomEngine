@@ -40,7 +40,7 @@ void ROTOM::TaskCalculateMatrix::clearTask() {
   nextTaskList_.clear();
 }
 
-void ROTOM::TaskCalculateMatrix::setInput(std::shared_ptr<Node *> root) {
+void ROTOM::TaskCalculateMatrix::setInput(std::shared_ptr<Node*> root) {
   root_ = root;
 }
 

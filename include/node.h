@@ -11,7 +11,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
-
+#include <memory>
 #include <vector>
 
 namespace ROTOM {
@@ -64,10 +64,10 @@ namespace ROTOM {
     bool isDirtyModelWorld();
 
     void setParent(Node *parent);
-    const Node *parent();
+    Node *parent();
 
     void addChild(Node *child);
-    void removeChild(const Node *child);
+    void removeChild(Node *child);
     Node *getChildAt(unsigned int i);
     const unsigned int childCount();
 
@@ -82,8 +82,8 @@ namespace ROTOM {
     bool b_dirtyModelLocal_;
     bool b_dirtyModelWorld_;
 
-    Node *parent_;
-    std::vector<Node *> childs_;
+    std::shared_ptr<Node> parent_;
+    std::vector<std::shared_ptr<Node>> childs_;
 
     void setModelLocalDirty();
 

@@ -9,14 +9,18 @@
 static ROTOM::DisplayList displayList_;
 static ROTOM::CommandDrawObject commandDrawObject_;
 static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateMatrix_;
+static ROTOM::Camera camera_;
+static std::shared_ptr<ROTOM::Node> root_;
+static std::vector<std::shared_ptr<ROTOM::Light>> lights_;
 
 void ROTOM::Scene::init() {
+  root_ = std::shared_ptr<Node>(new Node());
   if (lights_.size() <= 0) {
-    lights_.push_back(Light());
+    lights_.push_back(std::shared_ptr<ROTOM::Light>());
   }
-  commandDrawObject_.setLight(&lights_.at(0));
+  commandDrawObject_.setLight(lights_.at(0).get());
   commandDrawObject_.setProjectionMatrix(camera_.projectionMatrix());
-  commandDrawObject_.setRoot(&root_);
+  commandDrawObject_.setRoot(root_.get());
   commandDrawObject_.setViewMatrix(camera_.viewMatrix());
   taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
 }
@@ -29,7 +33,7 @@ void ROTOM::Scene::draw() {
   displayList_.runAll();
 
   //TaskManager
-  std::shared_ptr<Node *>node = std::make_shared<Node *>(&root_);
+  std::shared_ptr<Node *> node = std::make_shared<Node *>(root_.get());
   taskCalculateMatrix_->nextTaskList_.clear();
   taskCalculateMatrix_->clearTask();
   taskCalculateMatrix_->setInput(node);
@@ -38,9 +42,21 @@ void ROTOM::Scene::draw() {
 
 void ROTOM::Scene::destroy() {
   commandDrawObject_.~CommandDrawObject();
-  root_.~Node();
+  root_.get()->~Node();
 }
 
 ROTOM::Node *ROTOM::Scene::getRoot() {
-  return &root_;
+  return root_.get();
+}
+
+ROTOM::Camera *ROTOM::Scene::getCamera() {
+  return &camera_;
+}
+
+std::vector<std::shared_ptr<ROTOM::Light>> ROTOM::Scene::getLight() {
+  return lights_;
+}
+
+void ROTOM::Scene::addLight(ROTOM::Light *light) {
+  lights_.push_back(std::make_shared<Light>(light));
 }
