@@ -13,8 +13,8 @@
 #include "text.h"
 
 //#define OBJ_BLONDE
-//#define OBJ_IRONMAN
-#define OBJ_SIRIUS_5_COLONIAL_CITY
+#define OBJ_IRONMAN
+//#define OBJ_SIRIUS_5_COLONIAL_CITY
 
 static const float max_rot = 628.32f; //[0-628.32]
 
@@ -55,7 +55,7 @@ namespace ROTOM {
 void ROTOM::MeshLoaderScene::init() {
   Scene::init();
 
-  /*getCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
+  getCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
@@ -66,26 +66,23 @@ void ROTOM::MeshLoaderScene::init() {
   drawable->setGeometry(geometry);
   drawable->setMaterial(material);
   drawable->setParent(getRoot());
-  drawable->setPosition(0.0f, 0.0f, -5.0f);*/
+  drawable->setPosition(0.0f, 0.0f, -5.0f);
 
   obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
 
 #ifdef OBJ_BLONDE
-  const char *base_path = "../../../../obj/";
-  const char *path = "Blonde/";
+  const char *base_path = "../../../../obj/Blonde/";
   const char *name = "Blonde";
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
 #elif defined OBJ_IRONMAN
-  const char *base_path = "../../../../obj/";
-  const char *path = "IronMan/";
+  const char *base_path = "../../../../obj/IronMan/";
   const char *name = "IronMan";
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
 #elif defined OBJ_SIRIUS_5_COLONIAL_CITY
-  const char *base_path = "../../../../obj/";
-  const char *path = "Sirus5ColonialCity/";
+  const char *base_path = "../../../../obj/Sirus5ColonialCity/";
   const char *name = "sirus_city";
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
@@ -93,7 +90,7 @@ void ROTOM::MeshLoaderScene::init() {
 
   char final_path[256];
   strcpy(final_path, base_path);
-  strcat(final_path, path);
+  //strcat(final_path, path);
   strcat(final_path, name);
   strcat(final_path, old_ext);
 
@@ -106,13 +103,14 @@ void ROTOM::MeshLoaderScene::init() {
   //Normal Loading
   printf(".Loading OBJ  : ");
   t_load_OBJ.start();
-  ROTOM::FILES::Load_OBJ2(final_path, obj_data.get());
+  //ROTOM::FILES::Load_OBJ2(final_path, obj_data.get());
+  //ROTOM::FILES::Load_OBJ3(final_path, base_path, obj_data.get());
   printf("%f seconds.\n", t_load_OBJ.end());
 
   //Saving from OBJ to ROTOM
   printf(".OBJ to ROTOM : ");
   t_save_from_OBJ_to_ROTOM.start();
-  ROTOM::FILES::Save_ROTOM_OBJ(new_path, obj_data.get());
+  //ROTOM::FILES::Save_ROTOM_OBJ(new_path, obj_data.get());
   printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
 
   //ROTOM Loading
@@ -123,6 +121,7 @@ void ROTOM::MeshLoaderScene::init() {
   printf(".................................\n");
 
   geometry->loadGeometry(&obj_data);
+  getRoot()->getChildAt(0)->move(0, -100, 0);
 }
 
 void ROTOM::MeshLoaderScene::input() {
@@ -155,9 +154,10 @@ void ROTOM::MeshLoaderScene::input() {
 void ROTOM::MeshLoaderScene::update() {
   Scene::update();
 
-  float sin_time = sin(TIME::appTime()) * 0.22f;
-  //getRoot()->getChildAt(0)->move(sin_time, sin_time, sin_time);
-
+  float sin_time = sin(TIME::appTime()) * 20.22f;
+  //getRoot()->getChildAt(0)->setRotation(sin_time, sin_time, sin_time);
+  //Pos 0, -100, -5
+  //rot 8.40
   //updateCamera();
 }
 
@@ -174,7 +174,9 @@ void ROTOM::MeshLoaderScene::draw() {
     ImGui::DragFloat4("specularIntensity", &getLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     ImGui::DragFloat("Shininess", &(((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
     ImGui::DragFloat4("specularMaterial", (((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->specularMaterial_), 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat3("Position", &getRoot()->getChildAt(0)->position()[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f);
+    if (ImGui::DragFloat3("Position", &getRoot()->getChildAt(0)->position()[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
+      printf("H");
+    }
     ImGui::DragFloat3("Rotation", &getRoot()->getChildAt(0)->rotation()[0], 1.0f, 0.0f, 360.0f, "%.2f", 1.0f);
     ImGui::DragFloat3("Scale", &getRoot()->getChildAt(0)->scale()[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f);
   }
@@ -218,8 +220,8 @@ void ROTOM::MeshLoaderScene::moveCamera(char key) {
 }
 
 void ROTOM::MeshLoaderScene::rotateCamera() {
-  getCamera()->rotation()[0] += (mx_last_frame - mx) * 0.4;
-  getCamera()->rotation()[1] -= (my_last_frame - my);
+  getCamera()->rotation()[0] += (float)((mx_last_frame - mx) * 0.4);
+  getCamera()->rotation()[1] -= (float)((my_last_frame - my));
 
   //min and max X rotation
   if (getCamera()->rotation()[0] < -max_rot) getCamera()->rotation()[0] += max_rot;

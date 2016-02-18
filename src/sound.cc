@@ -43,7 +43,7 @@ void ROTOM::SOUND::init() {
   ALCcontext *context = alcCreateContext(device, NULL);
   alcMakeContextCurrent(context);
   if (!device || !context) {
-    printf("No hardware sound detected\n");
+    printf("No sound hardware detected\n");
   }
 }
 

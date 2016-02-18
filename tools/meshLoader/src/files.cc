@@ -9,6 +9,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "tiny_obj_loader.h"
 
 void ROTOM::FILES::Load_file(const char* path, std::shared_ptr<char[]> source) {
   FILE *file = fopen(path, "rb");
@@ -362,6 +363,64 @@ void ROTOM::FILES::Load_OBJ2(const char* path, ROTOM::Geometry::GeometryData *ob
     aux_value_y = 0;
     aux_value_z = 0;
     aux_init = false;
+  }
+}
+
+void ROTOM::FILES::Load_OBJ3(const char* path, const char* basePath, ROTOM::Geometry::GeometryData *obj_data) {
+  obj_data->data.clear();
+  obj_data->index.clear();
+
+  std::cout << "Loading.: " << path << std::endl;
+  std::vector<tinyobj::shape_t> shapes;
+  std::vector<tinyobj::material_t> materials;
+  std::string err = tinyobj::LoadObj(shapes, materials, path, basePath);
+
+  if (!err.empty()) {
+    printf("ERROR [files.cc]: loading OBJ\n");
+    std::cerr << err << std::endl;
+    system("pause");
+  } else {
+    //PrintInfo(shapes, materials);
+
+    for (size_t shape = 0; shape < shapes.size(); shape++) {
+      for (size_t triangle = 0; triangle < shapes[shape].mesh.indices.size() / 3; triangle++) {
+        //Index
+        obj_data->index.push_back(shapes[shape].mesh.indices[3 * triangle + 0]);
+        obj_data->index.push_back(shapes[shape].mesh.indices[3 * triangle + 1]);
+        obj_data->index.push_back(shapes[shape].mesh.indices[3 * triangle + 2]);
+
+        //Vector
+        for (size_t vector = 0; vector < 3; ++vector) {
+          int index = 3 * shapes[shape].mesh.indices[3 * triangle + vector];
+
+          //Positions
+          obj_data->data.push_back(shapes[shape].mesh.positions[index + 0]);
+          obj_data->data.push_back(shapes[shape].mesh.positions[index + 1]);
+          obj_data->data.push_back(shapes[shape].mesh.positions[index + 2]);
+
+          //Normals
+          if (shapes[shape].mesh.normals.size() > index + 2) {
+            obj_data->data.push_back(shapes[shape].mesh.normals[index + 0]);
+            obj_data->data.push_back(shapes[shape].mesh.normals[index + 1]);
+            obj_data->data.push_back(shapes[shape].mesh.normals[index + 2]);
+          } else {
+            obj_data->data.push_back(0);
+            obj_data->data.push_back(0);
+            obj_data->data.push_back(0);
+          }
+
+          //UV
+          if (shapes[shape].mesh.texcoords.size() > index / 3 * 2 + 1) {
+            obj_data->data.push_back(shapes[shape].mesh.texcoords[index / 3 * 2 + 0]);
+            obj_data->data.push_back(shapes[shape].mesh.texcoords[index / 3 * 2 + 1]);
+          } else {
+            obj_data->data.push_back(0);
+            obj_data->data.push_back(0);
+          }
+        }
+      }
+    }
+    std::cout << "Loaded..: " << path << std::endl;
   }
 }
 
