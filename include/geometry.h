@@ -22,7 +22,7 @@ namespace ROTOM {
     };
     
     //Vertex = p, p, p, n, n, n, uv, uv, ... and again till end
-    void loadGeometry(const float *vertex, const unsigned int *index, const int vertexCount);
+    void loadGeometry(float *vertex, int *index, const int vertexCount);
 
     void loadGeometry(std::shared_ptr<Geometry::GeometryData> *geometryData);
     

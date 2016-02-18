@@ -48,13 +48,14 @@ namespace ROTOM {
     double my = 0;
     double mx_last_frame = 0;
     double my_last_frame = 0;
+    std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data;
   };
 }
 
 void ROTOM::MeshLoaderScene::init() {
   Scene::init();
 
-  getCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
+  /*getCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
@@ -65,9 +66,9 @@ void ROTOM::MeshLoaderScene::init() {
   drawable->setGeometry(geometry);
   drawable->setMaterial(material);
   drawable->setParent(getRoot());
-  drawable->setPosition(0.0f, 0.0f, -5.0f);
+  drawable->setPosition(0.0f, 0.0f, -5.0f);*/
 
-  std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data(new ROTOM::Geometry::GeometryData);
+  obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
 
 #ifdef OBJ_BLONDE
@@ -100,8 +101,8 @@ void ROTOM::MeshLoaderScene::init() {
   strcpy(new_path, base_path);
   strcat(new_path, name);
   strcat(new_path, new_ext);
-
-  /*printf(".................................\n");
+  
+  printf(".................................\n");
   //Normal Loading
   printf(".Loading OBJ  : ");
   t_load_OBJ.start();
@@ -112,7 +113,7 @@ void ROTOM::MeshLoaderScene::init() {
   printf(".OBJ to ROTOM : ");
   t_save_from_OBJ_to_ROTOM.start();
   ROTOM::FILES::Save_ROTOM_OBJ(new_path, obj_data.get());
-  printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());*/
+  printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
 
   //ROTOM Loading
   printf(".Loading ROTOM: ");

@@ -49,7 +49,7 @@ float vertex[192] = {
   -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,  // Top Left 
 };
 
-unsigned int index[36] = {
+int index[36] = {
   //Front side
   0, 1, 3,
   1, 2, 3,
@@ -78,6 +78,11 @@ unsigned int index[36] = {
 ROTOM::Geometry::Geometry() {
   SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Geometry);
 
+  vertexCount_ = 0;
+  VBO_ = 0;
+  VAO_ = 0;
+  EBO_ = 0;
+
   loadGeometry(vertex, index, 36);
 }
 
@@ -88,14 +93,13 @@ ROTOM::Geometry::~Geometry() {
   GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
 }
 
-void ROTOM::Geometry::loadGeometry(const float *vertex, const unsigned int *index, const int vertexCount) {
+void ROTOM::Geometry::loadGeometry(float *vertex, int *index, const int vertexCount) {
   vertexCount_ = vertexCount;
-  GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float)* numberOfElementsPerVertex_, vertexCount_, (float *)vertex, (int *)index);
+  GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float) * numberOfElementsPerVertex_, vertexCount_, vertex, index);
 }
 
 void ROTOM::Geometry::loadGeometry(std::shared_ptr<ROTOM::Geometry::GeometryData> *geometryData) {
-  vertexCount_ = geometryData->get()->index.size();
-  GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float)* numberOfElementsPerVertex_, vertexCount_, &geometryData->get()->data[0], (int *)(geometryData->get()->index[0]));
+  loadGeometry(&geometryData->get()->data[0], &geometryData->get()->index[0], geometryData->get()->index.size());
 }
 
 const unsigned int ROTOM::Geometry::vertexCount() {

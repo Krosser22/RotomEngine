@@ -115,11 +115,15 @@ void ROTOM::GRAPHICS::clearScreen() {
 }
 
 void ROTOM::GRAPHICS::loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index) {
+  //Release the elements in case the user load a geometry inside a geometry
+  releaseGeometry(*VAO, *VBO, *EBO);
+
   glGenVertexArrays(1, VAO);
   glGenBuffers(1, VBO);
   glGenBuffers(1, EBO);
 
   glBindVertexArray(*VAO); // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
+  
   //Vertex
   glBindBuffer(GL_ARRAY_BUFFER, *VBO); //Bind the buffer to the GL_ARRAY_BUFFER target
   glBufferData(GL_ARRAY_BUFFER, numberOfElementsPerVertex * vertexCount, vertex, GL_STATIC_DRAW); //Copies the previously defined vertex data into the buffer's memory
@@ -148,7 +152,13 @@ void ROTOM::GRAPHICS::loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigne
 }
 
 void ROTOM::GRAPHICS::releaseGeometry(unsigned int VAO, unsigned int VBO, unsigned int EBO) {
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &EBO);
-  glDeleteBuffers(1, &VBO);
+  if (VAO > 0) {
+    glDeleteVertexArrays(1, &VAO);
+  }
+  if (EBO > 0) {
+    glDeleteBuffers(1, &EBO);
+  }
+  if (VBO > 0) {
+    glDeleteBuffers(1, &VBO);
+  }
 }
