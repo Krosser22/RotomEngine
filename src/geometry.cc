@@ -83,7 +83,7 @@ ROTOM::Geometry::Geometry() {
   VAO_ = 0;
   EBO_ = 0;
 
-  loadGeometry(vertex, index, 36);
+  //loadGeometry(vertex, index, 36);
 }
 
 ROTOM::Geometry::~Geometry() {
@@ -99,7 +99,7 @@ void ROTOM::Geometry::loadGeometry(float *vertex, int *index, const int vertexCo
 }
 
 void ROTOM::Geometry::loadGeometry(std::shared_ptr<ROTOM::Geometry::GeometryData> *geometryData) {
-  loadGeometry(&geometryData->get()->data[0], &geometryData->get()->index[0], geometryData->get()->index.size());
+  loadGeometry(&geometryData->get()->data[0], &geometryData->get()->index[0], geometryData->get()->data.size() / 8);
 }
 
 const unsigned int ROTOM::Geometry::vertexCount() {

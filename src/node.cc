@@ -102,7 +102,7 @@ float ROTOM::Node::positionZ() {
 }
 
 void ROTOM::Node::setRotation(const float rotation[3]) {
-  setPosition(rotation[0], rotation[1], rotation[2]);
+  setRotation(rotation[0], rotation[1], rotation[2]);
 }
 
 void ROTOM::Node::setRotation(const float x, const float y, const float z) {

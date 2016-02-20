@@ -12,8 +12,8 @@
 #include "scene.h"
 #include "text.h"
 
-//#define OBJ_BLONDE
-#define OBJ_IRONMAN
+#define OBJ_BLONDE
+//#define OBJ_IRONMAN
 //#define OBJ_SIRIUS_5_COLONIAL_CITY
 
 static const float max_rot = 628.32f; //[0-628.32]
@@ -49,6 +49,10 @@ namespace ROTOM {
     double mx_last_frame = 0;
     double my_last_frame = 0;
     std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data;
+
+    float position[3];
+    float rotation[3];
+    float scale[3];
   };
 }
 
@@ -72,18 +76,18 @@ void ROTOM::MeshLoaderScene::init() {
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
 
 #ifdef OBJ_BLONDE
-  const char *base_path = "../../../../obj/Blonde/";
-  const char *name = "Blonde";
+  const char *base_path = "../../../../obj/Blonde";
+  const char *name = "/Blonde";
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
 #elif defined OBJ_IRONMAN
-  const char *base_path = "../../../../obj/IronMan/";
-  const char *name = "IronMan";
+  const char *base_path = "../../../../obj/IronMan";
+  const char *name = "/IronMan";
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
 #elif defined OBJ_SIRIUS_5_COLONIAL_CITY
-  const char *base_path = "../../../../obj/Sirus5ColonialCity/";
-  const char *name = "sirus_city";
+  const char *base_path = "../../../../obj/Sirus5ColonialCity";
+  const char *name = "/sirus_city";
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
 #endif
@@ -104,13 +108,13 @@ void ROTOM::MeshLoaderScene::init() {
   printf(".Loading OBJ  : ");
   t_load_OBJ.start();
   //ROTOM::FILES::Load_OBJ2(final_path, obj_data.get());
-  //ROTOM::FILES::Load_OBJ3(final_path, base_path, obj_data.get());
+  ROTOM::FILES::Load_OBJ3(final_path, base_path, obj_data.get());
   printf("%f seconds.\n", t_load_OBJ.end());
 
   //Saving from OBJ to ROTOM
   printf(".OBJ to ROTOM : ");
   t_save_from_OBJ_to_ROTOM.start();
-  //ROTOM::FILES::Save_ROTOM_OBJ(new_path, obj_data.get());
+  ROTOM::FILES::Save_ROTOM_OBJ(new_path, obj_data.get());
   printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
 
   //ROTOM Loading
@@ -121,7 +125,19 @@ void ROTOM::MeshLoaderScene::init() {
   printf(".................................\n");
 
   geometry->loadGeometry(&obj_data);
-  getRoot()->getChildAt(0)->move(0, -100, 0);
+
+  position[0] = 0.0f;
+  position[1] = 0.0f;
+  position[2] = -1.0f;
+  rotation[0] = 0.0f;
+  rotation[1] = 0.0f;
+  rotation[2] = 0.0f;
+  scale[0] = 1.0f;
+  scale[1] = 1.0f;
+  scale[2] = 1.0f;
+  getRoot()->getChildAt(0)->setPosition(position);
+  getRoot()->getChildAt(0)->setRotation(rotation);
+  getRoot()->getChildAt(0)->setScale(scale);
 }
 
 void ROTOM::MeshLoaderScene::input() {
@@ -174,11 +190,15 @@ void ROTOM::MeshLoaderScene::draw() {
     ImGui::DragFloat4("specularIntensity", &getLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     ImGui::DragFloat("Shininess", &(((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
     ImGui::DragFloat4("specularMaterial", (((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->specularMaterial_), 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    if (ImGui::DragFloat3("Position", &getRoot()->getChildAt(0)->position()[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
-      printf("H");
+    if (ImGui::DragFloat3("Position", &position[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
+      getRoot()->getChildAt(0)->setPosition(position);
     }
-    ImGui::DragFloat3("Rotation", &getRoot()->getChildAt(0)->rotation()[0], 1.0f, 0.0f, 360.0f, "%.2f", 1.0f);
-    ImGui::DragFloat3("Scale", &getRoot()->getChildAt(0)->scale()[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f);
+    if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 360.0f, "%.2f", 1.0f)) {
+      getRoot()->getChildAt(0)->setRotation(rotation);
+    }
+    if (ImGui::DragFloat3("Scale", &scale[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f)) {
+      getRoot()->getChildAt(0)->setScale(scale);
+    }
   }
   ImGui::End();
 }
