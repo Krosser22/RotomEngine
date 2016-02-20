@@ -1,0 +1,11 @@
+/**
+*** ////////////////////////////////////////////
+*** /////Autor: Juan Daniel Laserna Condado/////
+*** ////////////////////////////////////////////
+**/
+
+#include "taskManager/task.h"
+
+ROTOM::Task::Task() {}
+
+ROTOM::Task::~Task() {}

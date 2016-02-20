@@ -5,9 +5,7 @@
 **/
 
 #include "geometry.h"
-
-#include "graphics.h"
-#include "security.h"
+#include "render/graphics.h"
 
 //Default Square
 float vertex[192] = {
@@ -76,19 +74,15 @@ int index[36] = {
 };
 
 ROTOM::Geometry::Geometry() {
-  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Geometry);
-
   vertexCount_ = 0;
   VBO_ = 0;
   VAO_ = 0;
   EBO_ = 0;
 
-  //loadGeometry(vertex, index, 36);
+  loadGeometry(vertex, index, 36);
 }
 
 ROTOM::Geometry::~Geometry() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Geometry);
-
   // Properly de-allocate all resources once they've outlived their purpose
   GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
 }

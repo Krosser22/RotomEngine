@@ -5,10 +5,12 @@
 **/
 
 #include "window.h"
-
-#include "graphics.h"
+#include "render/commandDrawObject.h"
+#include "render/displayList.h"
+#include "render/graphics.h"
+#include "taskManager/taskCalculateMatrix.h"
+#include "taskManager/taskManager.h"
 #include "imgui.h"
-#include "security.h"
 #include "time.h"
 
 #define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
@@ -42,6 +44,14 @@ static int          g_ShaderHandle = 0, g_VertHandle = 0, g_FragHandle = 0;
 static int          g_AttribLocationTex = 0, g_AttribLocationProjMtx = 0;
 static int          g_AttribLocationPosition = 0, g_AttribLocationUV = 0, g_AttribLocationColor = 0;
 static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
+
+static ROTOM::DisplayList displayList_;
+static ROTOM::CommandDrawObject commandDrawObject_;
+static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateMatrix_;
+static ROTOM::Camera camera_;
+static std::shared_ptr<ROTOM::Node> root_;
+static std::vector<std::shared_ptr<ROTOM::Light>> lights_;
+static ROTOM::Scene *scene_;
 
 static void error_callback(int error, const char* description) {
   fputs(description, stderr);
@@ -436,10 +446,22 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
 
   clear();
 
+  root_ = std::shared_ptr<Node>(new Node());
+  if (lights_.size() <= 0) {
+    lights_.push_back(std::shared_ptr<ROTOM::Light>(new Light()));
+  }
+  commandDrawObject_.setLight(lights_.at(0).get());
+  commandDrawObject_.setProjectionMatrix(camera_.projectionMatrix());
+  commandDrawObject_.setRoot(root_.get());
+  commandDrawObject_.setViewMatrix(camera_.viewMatrix());
+  taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
+
   return true;
 }
 
 void ROTOM::WindowDestroy() {
+  commandDrawObject_.~CommandDrawObject();
+
   ImGui_InvalidateDeviceObjects();
   ImGui::Shutdown();
 
@@ -449,7 +471,7 @@ void ROTOM::WindowDestroy() {
   //exit(EXIT_SUCCESS);
 }
 
-bool ROTOM::WindowIsOpened() {
+bool WindowIsOpened() {
   if (!glfwWindowShouldClose(window)) {
     // Swap the buffers
     ImGui::Render();
@@ -458,10 +480,43 @@ bool ROTOM::WindowIsOpened() {
     glDepthFunc(GL_LEQUAL);
     glfwSwapBuffers(window);
     clear();
+
+    ROTOM::TASKMANAGER::waitUntilFinish();
+
+    //DisplayList
+    displayList_.addCommand(commandDrawObject_.get());
+    displayList_.runAll();
+
+    //TaskManager
+    std::shared_ptr<ROTOM::Node *> node = std::make_shared<ROTOM::Node *>(root_.get());
+    taskCalculateMatrix_->nextTaskList_.clear();
+    taskCalculateMatrix_->clearTask();
+    taskCalculateMatrix_->setInput(node);
+    ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
+
+    assert(scene_);
+    scene_->input();
+    scene_->update();
+    scene_->draw();
+
     return true;
   } else {
     return false;
   }
+}
+
+void ROTOM::SetScene(Scene *scene) {
+  if (scene_ != NULL) {
+    scene_->destroy();
+  }
+  scene_ = scene;
+
+  scene_->init();
+
+  while (WindowIsOpened()) {
+    ;
+  }
+  scene_->destroy();
 }
 
 int ROTOM::WindowHeight() {
@@ -474,4 +529,20 @@ int ROTOM::WindowWidth() {
   int width = 0, height = 0;
   glfwGetFramebufferSize(window, &width, &height);
   return width;
+}
+
+std::shared_ptr<ROTOM::Node> ROTOM::GetRoot() {
+  return root_;
+}
+
+ROTOM::Camera *ROTOM::GetCamera() {
+  return &camera_;
+}
+
+std::vector<std::shared_ptr<ROTOM::Light>> ROTOM::GetLight() {
+  return lights_;
+}
+
+void ROTOM::AddLight(std::shared_ptr<Light> light) {
+  lights_.push_back(light);
 }

@@ -7,13 +7,8 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-#include "commandDrawObject.h"
-#include "displayList.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
 #include "node.h"
-#include "taskCalculateMatrix.h"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace ROTOM {
   class Camera : public Node {

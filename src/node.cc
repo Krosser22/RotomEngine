@@ -5,22 +5,13 @@
 **/
 
 #include "node.h"
-#include "security.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/matrix_decompose.hpp"
 
 ROTOM::Node::Node() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Node);
-
-  setPositionX(0.0f);
-  setPositionY(0.0f);
-  setPositionZ(0.0f);
-
-  setRotationX(0.0f);
-  setRotationY(0.0f);
-  setRotationZ(0.0f);
-
-  setScaleX(1.0f);
-  setScaleY(1.0f);
-  setScaleZ(1.0f);
+  setPosition(0.0f, 0.0f, 0.0f);
+  setRotation(0.0f, 0.0f, 0.0f);
+  setScale(1.0f, 1.0f, 1.0f);
 
   parent_ = NULL;
 
@@ -29,8 +20,6 @@ ROTOM::Node::Node() {
 };
 
 ROTOM::Node::~Node() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_Node);
-
   if (parent_ != NULL) {
     parent_->removeChild(shared_from_this());
   }

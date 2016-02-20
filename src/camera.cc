@@ -5,17 +5,11 @@
 **/
 
 #include "camera.h"
-#include "security.h"
-#include "taskManager.h"
+#include "glm/gtc/matrix_transform.hpp"
 
-ROTOM::Camera::Camera() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Camera);
-  setPosition(0.0f, 0.0f, 0.0f);
-};
+ROTOM::Camera::Camera() {}
 
-ROTOM::Camera::~Camera() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_Camera);
-};
+ROTOM::Camera::~Camera() {}
 
 void ROTOM::Camera::setupPerspective(const float fovy, const float aspect, const float znear, const float zfar) {
   m_projection_ = glm::perspective(fovy, aspect, znear, zfar);

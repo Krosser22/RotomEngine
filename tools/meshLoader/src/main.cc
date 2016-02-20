@@ -14,8 +14,25 @@
 #define OBJ_MONKEY
 //#define OBJ_BLONDE
 //#define OBJ_IRONMAN
+//#define OBJ_DRAGON
 //#define OBJ_SIRIUS_5_COLONIAL_CITY
 
+#ifdef OBJ_MONKEY
+const char *base_path = "../../../../obj/";
+const char *name = "Monkey";
+#elif defined OBJ_BLONDE
+const char *base_path = "../../../../obj/Blonde/";
+const char *name = "Blonde";
+#elif defined OBJ_IRONMAN
+const char *base_path = "../../../../obj/Blonde/";
+const char *name = "Blonde";
+#elif defined OBJ_DRAGON
+const char *base_path = "../../../../obj/";
+const char *name = "dragon2";
+#elif defined OBJ_SIRIUS_5_COLONIAL_CITY
+const char *base_path = "../../../../obj/Sirus5ColonialCity/";
+const char *name = "sirus_city";
+#endif
 static const float max_rot = 628.32f; //[0-628.32]
 
 namespace ROTOM {
@@ -74,20 +91,6 @@ void ROTOM::MeshLoaderScene::init() {
 
   obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
 
-#ifdef OBJ_MONKEY
-  const char *base_path = "../../../../obj/";
-  const char *name = "Monkey";
-#elif defined OBJ_BLONDE
-  const char *base_path = "../../../../obj/Blonde/";
-  const char *name = "Blonde";
-#elif defined OBJ_IRONMAN
-  const char *base_path = "../../../../obj/IronMan/";
-  const char *name = "IronMan";
-#elif defined OBJ_SIRIUS_5_COLONIAL_CITY
-  const char *base_path = "../../../../obj/Sirus5ColonialCity/";
-  const char *name = "sirus_city";
-#endif
-
   char finalPath[256];
   strcpy(finalPath, base_path);
   strcat(finalPath, name);
@@ -96,13 +99,12 @@ void ROTOM::MeshLoaderScene::init() {
   strcpy(newPath, base_path);
   strcat(newPath, name);
   
-  ROTOM::FILES::Load_OBJ(finalPath, obj_data);
-  //ROTOM::FILES::Load_OBJ(base_path, name, obj_data);
+  //ROTOM::FILES::Load_OBJ(finalPath, obj_data, false);
+  ROTOM::FILES::Load_OBJ(base_path, name, obj_data);
 
   geometry->loadGeometry(&obj_data);
 
-  getRoot()->setPosition(0.0f, 0.0f, -10.0f);
-  //getRoot()->setScale(0.1f, 0.1f, 0.1f);
+  getRoot()->setPosition(0.0f, 0.0f, -5.0f);
 
   position[0] = 0.0f;
   position[1] = 0.0f;

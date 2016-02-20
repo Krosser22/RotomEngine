@@ -7,33 +7,21 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
-#include "camera.h"
-#include "light.h"
-#include <vector>
-
 namespace ROTOM {
   class Scene {
   public:
     Scene() {};
     ~Scene() {};
 
-    void init();
+    virtual void init() = 0 {};
 
-    void input() {};
+    virtual void input() = 0 {};
 
-    void update() {};
+    virtual void update() = 0 {};
 
-    void draw();
+    virtual void draw() = 0 {};
 
-    void destroy();
-
-    std::shared_ptr<Node> getRoot();
-
-    Camera *getCamera();
-
-    std::vector<std::shared_ptr<Light>> getLight();
-
-    void addLight(std::shared_ptr<Light> light);
+    virtual void destroy() = 0 {};
   };
 }
 

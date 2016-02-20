@@ -59,6 +59,7 @@ project "ROTOM_testing"
   
   includedirs {
     "../include",
+    "../examples/include",
     "../deps/glm",
     "../deps/imgui",
     --"../deps/sqlite",
@@ -68,8 +69,8 @@ project "ROTOM_testing"
   files {
     "../img/*.*",
     "../shaders/*.*",
-    "../include/*.h",
-    "../examples/*.cc",
+    "../include/**.h",
+    "../examples/**.*",
     "../deps/imgui/*.cpp",
     --"../deps/sqlite/*.c",
     --"../deps/tinyobjloader/*.cc",
@@ -117,8 +118,8 @@ project "ROTOM"
   files {
     --"../img/*.*",
     --"../shaders/*.*",
-    "../include/*.h",
-    "../src/*.cc",
+    "../include/**.h",
+    "../src/**.cc",
     "../deps/glew/src/glew.c",
     "../deps/glfw/src/*.c",
     "../deps/imgui/*.cpp",
@@ -157,9 +158,9 @@ project "ROTOM_tool_meshLoader"
     "../img/*.*",
     "../shaders/*.*",
     "../obj/*.*",
-    "../include/*.h",
+    "../include/**.h",
     "../tools/meshLoader/include/*.h",
-    "../tools/meshLoader/src/*.cc",
+    "../tools/meshLoader/src/**.cc",
     "../deps/imgui/*.cpp",
     --"../deps/sqlite/*.c",
     "../deps/tinyobjloader/*.cc",

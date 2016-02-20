@@ -5,13 +5,10 @@
 **/
 
 #include "material.h"
-
-#include "graphics.h"
-#include "security.h"
+#include "render/graphics.h"
 #include "soil.h"
 
 ROTOM::Material::Material(const char *texturePath) {
-  SECURITY::addSecurityCount(SECURITY::MyClass::MyClass_Material);
   setTexture(texturePath);
 
   shininess_ = 500.0f;
@@ -22,9 +19,7 @@ ROTOM::Material::Material(const char *texturePath) {
   specularMaterial_[3] = 0.0f;
 }
 
-ROTOM::Material::~Material() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass::MyClass_Material);
-}
+ROTOM::Material::~Material() {}
 
 void ROTOM::Material::setShader(MaterialSettings *materialSettings, const char *vertexShaderSource, const char *fragmentShaderSource) {
   GRAPHICS::setShader(materialSettings, vertexShaderSource, fragmentShaderSource);

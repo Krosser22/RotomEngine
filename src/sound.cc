@@ -7,12 +7,7 @@
 #include "sound.h"
 #include "stb_vorbis.h"
 #include "AL\alext.h"
-#include "stdio.h"
 #include "time.h"
-#include "security.h"
-//#include "AL\al.h"
-//#include "AL\alc.h"
-//#include "AL\efx-creative.h"
 
 void sound::init() {
   int channels = -1, sample_rate = -1, size = -1;
@@ -48,8 +43,6 @@ void ROTOM::SOUND::init() {
 }
 
 ROTOM::SOUND::Sound::Sound() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Sound);
-
   id_ = -1;
   duration_ = 0.0f;
   gain_ = 1.0f;
@@ -61,8 +54,6 @@ ROTOM::SOUND::Sound::Sound() {
 }
 
 ROTOM::SOUND::Sound::Sound(char *soundPath) {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Sound);
-
   id_ = -1;
   duration_ = 0.0f;
   gain_ = 1.0f;
@@ -75,9 +66,7 @@ ROTOM::SOUND::Sound::Sound(char *soundPath) {
   load(soundPath);
 }
 
-ROTOM::SOUND::Sound::~Sound() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_Sound);
-}
+ROTOM::SOUND::Sound::~Sound() {}
 
 unsigned int ROTOM::SOUND::Sound::load(char *soundPath) {
   size_ = stb_vorbis_decode_filename(soundPath, &channels_, &sampleRate_, &rawSoundData_);
@@ -173,8 +162,6 @@ bool ROTOM::SOUND::Sound::isLoop() {
 //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 ROTOM::SOUND::Crossfading::Crossfading() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Crossfading);
-
   soundFadeOut_ = NULL;
   soundFadeIn_ = NULL;
 
@@ -186,9 +173,7 @@ ROTOM::SOUND::Crossfading::Crossfading() {
   timeStartedTheFadeIn_ = TIME::appTime();
 }
 
-ROTOM::SOUND::Crossfading::~Crossfading() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_Crossfading);
-}
+ROTOM::SOUND::Crossfading::~Crossfading() {}
 
 void ROTOM::SOUND::Crossfading::start(Sound* soundFadeOut, Sound* soundFadeIn) {
   crossfading_ = false;
@@ -261,8 +246,6 @@ float ROTOM::SOUND::Crossfading::timeToCrossfadin() {
 //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 ROTOM::SOUND::TrackList::TrackList() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_TrackList);
-
   loop_ = true;
   playing_ = false;
   actualSoundPlaying_ = 0;
@@ -270,8 +253,6 @@ ROTOM::SOUND::TrackList::TrackList() {
 }
 
 ROTOM::SOUND::TrackList::~TrackList() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_TrackList);
-
   trackList_.clear();
 }
 
@@ -340,8 +321,6 @@ void ROTOM::SOUND::TrackList::update() {
 //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 ROTOM::SOUND::AutoLayering::AutoLayering() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_AutoLayering);
-
   soundList_.clear();
 
   timeStarted_ = 0.0f;
@@ -351,9 +330,7 @@ ROTOM::SOUND::AutoLayering::AutoLayering() {
   playing_ = false;
 }
 
-ROTOM::SOUND::AutoLayering::~AutoLayering() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_AutoLayering);
-}
+ROTOM::SOUND::AutoLayering::~AutoLayering() {}
 
 void ROTOM::SOUND::AutoLayering::addSound(Sound *sound) {
   soundList_.push_back(sound);
@@ -422,8 +399,6 @@ float ROTOM::SOUND::AutoLayering::speed() {
 //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 ROTOM::SOUND::Layering::Layering() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Layering);
-
   soundList_.clear();
 
   timeStarted_ = 0.0f;
@@ -434,9 +409,7 @@ ROTOM::SOUND::Layering::Layering() {
   actualSound_ = -1;
 }
 
-ROTOM::SOUND::Layering::~Layering() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_Layering);
-}
+ROTOM::SOUND::Layering::~Layering() {}
 
 void ROTOM::SOUND::Layering::addSound(Sound *sound) {
   sound->stop();
@@ -513,16 +486,12 @@ float ROTOM::SOUND::Layering::timeToChange() {
 //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 ROTOM::SOUND::Branching::Branching() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Branching);
-
   soundList_.clear();
   action = Action_None;
   branch_ = Branch_None;
 }
 
-ROTOM::SOUND::Branching::~Branching() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_Branching);
-}
+ROTOM::SOUND::Branching::~Branching() {}
 
 void ROTOM::SOUND::Branching::addSound(Sound *sound) {
   sound->stop();

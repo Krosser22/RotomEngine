@@ -5,7 +5,6 @@
 **/
 
 #include "files.h"
-#include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "tiny_obj_loader.h"
@@ -346,7 +345,11 @@ void ROTOM::FILES::Load_OBJ(const char *pathWithoutExtensionFile, std::shared_pt
     printf("%f seconds.\n", t_load_ROTOM.end());
     printf(".................................\n");
   } else {
-  Load_ROTOM_OBJ(newPath, obj_data);
+    printf(".Loading ROTOM: ");
+    t_load_ROTOM.start();
+    Load_ROTOM_OBJ(newPath, obj_data);
+    printf("%f seconds.\n", t_load_ROTOM.end());
+    printf(".................................\n");
   }
 }
 
@@ -431,7 +434,11 @@ void ROTOM::FILES::Load_OBJ(const char* basePath, const char* nameWithoutExtensi
     printf("%f seconds.\n", t_load_ROTOM.end());
     printf(".................................\n");
   } else {
+    printf(".Loading ROTOM: ");
+    t_load_ROTOM.start();
     Load_ROTOM_OBJ(newPath, obj_data);
+    printf("%f seconds.\n", t_load_ROTOM.end());
+    printf(".................................\n");
   }
 }
 

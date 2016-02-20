@@ -5,8 +5,7 @@
 **/
 
 #include "drawable.h"
-#include "security.h"
-#include "graphics.h"
+#include "render/graphics.h"
 
 // Default Shaders
 /*const char* vertexShaderSource_ = "#version 330 core\n"
@@ -86,23 +85,9 @@ const char* fragmentShaderSource_ = "#version 330\n"
 //"  finalColor.y = 1.0 - finalColor.y;\n"
 //"  finalColor.z = 1.0 - finalColor.z;\n"
 "  fragment = finalColor;\n"
-
-////////////////////////////////////////////
-//TODO - TESTING!!!!!!!!
-//"  fragment = difuseColor;\n"
-//"  fragment = specularColor;\n"
-//"  fragment = vec4(u_lightColor * cosAngleDifuse, 1.0);\n"
-//"  fragment = vec4(normalize(lightDirection), 1.0);\n"
-//"  fragment = vec4(halfWay, 1.0);\n"
-//"  fragment = vec4(cosAngleDifuse, cosAngleDifuse, cosAngleDifuse, 1.0);\n"
-//"  fragment = vec4(cosAngleSpecular, cosAngleSpecular, cosAngleSpecular, 1.0);\n"
-//"  fragment = vec4(texture(u_texture, uvMaterial).xyz * cosAngleSpecular, 1.0);\n"
-////////////////////////////////////////////
 "};\0";
 
 ROTOM::Drawable::Drawable() {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Drawable);
-
   geometry_ = NULL;
   material_ = NULL;
   materialSettings_ = std::shared_ptr<MaterialSettings>(new MaterialSettings);
@@ -110,8 +95,6 @@ ROTOM::Drawable::Drawable() {
 }
 
 ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, std::shared_ptr<Node> parent) {
-  SECURITY::addSecurityCount(SECURITY::MyClass_Drawable);
-
   setGeometry(geometry);
   setMaterial(material);
   setParent(parent);
@@ -119,8 +102,6 @@ ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Ma
 }
 
 ROTOM::Drawable::~Drawable() {
-  SECURITY::removeSecurityCount(SECURITY::MyClass_Drawable);
-
   // Properly de-allocate all resources once they've outlived their purpose
   GRAPHICS::releaseMaterial(materialSettings_->shaderProgram);
 }
