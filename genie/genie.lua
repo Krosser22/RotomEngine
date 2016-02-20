@@ -2,7 +2,6 @@
 -- default when folks build using the makefile. That way they don't have to
 -- worry about the /scripts argument and all that.
 --
-	--premake.make.override = { "TARGET" }
 
 solution "ROTOM"
   configurations { "Release", "Debug" }
@@ -55,15 +54,15 @@ project "ROTOM_testing"
     "opengl32",
     "openal32",
     "ROTOM",
+    "ROTOM_tool_meshLoader",
   }
   
   includedirs {
     "../include",
+    "../tools/meshLoader/include",
     "../examples/include",
     "../deps/glm",
     "../deps/imgui",
-    --"../deps/sqlite",
-    --"../deps/tinyobjloader",
   }
   
   files {
@@ -72,8 +71,7 @@ project "ROTOM_testing"
     "../include/**.h",
     "../examples/**.*",
     "../deps/imgui/*.cpp",
-    --"../deps/sqlite/*.c",
-    --"../deps/tinyobjloader/*.cc",
+    "../tools/meshLoader/include/**.h",
   }
 
 --[[--------------------------------------------
@@ -104,29 +102,25 @@ project "ROTOM"
   
   includedirs {
     "../include",
+    "../tools/meshLoader/include",
     "../deps/glew/include",
     "../deps/glfw/include",
     "../deps/glm",
     "../deps/imgui",
     "../deps/openal/include",
     "../deps/soil",
-    --"../deps/sqlite",
     "../deps/stb",
-    --"../deps/tinyobjloader",
   }
   
   files {
-    --"../img/*.*",
-    --"../shaders/*.*",
     "../include/**.h",
     "../src/**.cc",
     "../deps/glew/src/glew.c",
     "../deps/glfw/src/*.c",
     "../deps/imgui/*.cpp",
     "../deps/soil/*.c",
-    --"../deps/sqlite/*.c",
     "../deps/stb/*.c",
-    --"../deps/tinyobjloader/*.cc",
+    "../tools/meshLoader/include/**.h",
   }
 
 --[[--------------------------------------------
@@ -137,7 +131,7 @@ project "ROTOM_tool_meshLoader"
   language "C++"
   location "../project/build"
 	libdirs "../project/build/bin/windows"
-  kind "ConsoleApp"
+  kind "StaticLib"
   
   links {
     "opengl32",
@@ -150,7 +144,6 @@ project "ROTOM_tool_meshLoader"
     "../deps/glm",
     "../deps/imgui",
     "../tools/meshLoader/include",
-    --"../deps/sqlite",
     "../deps/tinyobjloader",
   }
   
@@ -159,9 +152,8 @@ project "ROTOM_tool_meshLoader"
     "../shaders/*.*",
     "../obj/*.*",
     "../include/**.h",
-    "../tools/meshLoader/include/*.h",
+    "../tools/meshLoader/include/**.h",
     "../tools/meshLoader/src/**.cc",
     "../deps/imgui/*.cpp",
-    --"../deps/sqlite/*.c",
     "../deps/tinyobjloader/*.cc",
   }

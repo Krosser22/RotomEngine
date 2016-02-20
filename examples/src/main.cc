@@ -7,11 +7,13 @@
 #include "window.h"
 #include "scenes/defaultScene.h"
 #include "scenes/soundScene.h"
+#include "scenes/meshLoaderScene.h"
 
 int ROTOM::main(int argc, char** argv) {
   WindowInit(1280, 720);
-  //DefaultScene scene;
-  SoundScene scene;
+  DefaultScene scene;
+  //SoundScene scene;
+  //MeshLoaderScene scene;
   SetScene(&scene);
   return 0;
 }
