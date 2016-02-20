@@ -58,42 +58,13 @@ float *ROTOM::Camera::projectionMatrix() {
 }
 
 void ROTOM::Camera::setViewMatrix(const float data[16]) {
-  m_view_ = glm::mat4(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
+  m_modelLocal_ = glm::mat4(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
 }
 
 float *ROTOM::Camera::viewMatrix() {
-  if (b_dirtyView_) {
-    cleanViewMatrix();
-  }
-  return glm::value_ptr(m_view_);
+  return glm::value_ptr(m_modelLocal_);
 }
 
 //void ROTOM::Camera::doCull(const Node *root) {}
 
-void ROTOM::Camera::doRender() {
-  //ROTOM::TASKMANAGER::waitUntilFinish();
-
-  //DisplayList
-  //displayList_.addCommand(commandDrawObject_.get());
-  //displayList_.runAll();
-
-  //TaskManager
-  //updateTasks();
-}
-
-void ROTOM::Camera::cleanViewMatrix() {
-  //m_view_ = glm::scale(glm::mat4(), v_scale_);
-  m_view_ = glm::rotate(glm::mat4(), v_rotation_[0], glm::vec3(1.0f, 0.0f, 0.0f));
-  m_view_ = glm::rotate(m_view_, v_rotation_[1], glm::vec3(0.0f, 1.0f, 0.0f));
-  m_view_ = glm::rotate(m_view_, v_rotation_[2], glm::vec3(0.0f, 0.0f, 1.0f));
-  m_view_ = glm::translate(m_view_, v_position_);
-  b_dirtyView_ = false;
-}
-
-/*void ROTOM::Camera::updateTaskCalculateMatrix() {
-  taskCalculateMatrix_->nextTaskList_.clear();
-  taskCalculateMatrix_->clearTask();
-  std::shared_ptr<Node *>node = std::make_shared<Node *>(&root_);
-  taskCalculateMatrix_->setInput(node);
-  ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
-}*/
+//void ROTOM::Camera::doRender(const Node *root) {}

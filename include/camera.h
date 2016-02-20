@@ -47,17 +47,12 @@ namespace ROTOM {
     //void doCull(const Node *root);
 
     //Renders all visible (not culled) objects
-    void doRender();
+    //void doRender();
 
   private:
     glm::vec3 v_target_;
 
-    glm::mat4 m_view_;
     glm::mat4 m_projection_;
-
-    bool b_dirtyView_;
-
-    void cleanViewMatrix();
   };
 }
 

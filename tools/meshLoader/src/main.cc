@@ -7,12 +7,12 @@
 #include "imgui.h"
 #include "drawable.h"
 #include "files.h"
-#include "time.h"
 #include "window.h"
 #include "scene.h"
 #include "text.h"
 
-#define OBJ_BLONDE
+#define OBJ_MONKEY
+//#define OBJ_BLONDE
 //#define OBJ_IRONMAN
 //#define OBJ_SIRIUS_5_COLONIAL_CITY
 
@@ -73,62 +73,40 @@ void ROTOM::MeshLoaderScene::init() {
   drawable->setPosition(0.0f, 0.0f, -5.0f);
 
   obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
-  ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
 
-#ifdef OBJ_BLONDE
-  const char *base_path = "../../../../obj/Blonde";
-  const char *name = "/Blonde";
-  const char *old_ext = ".obj";
-  const char *new_ext = ".rotom";
+#ifdef OBJ_MONKEY
+  const char *base_path = "../../../../obj/";
+  const char *name = "Monkey";
+#elif defined OBJ_BLONDE
+  const char *base_path = "../../../../obj/Blonde/";
+  const char *name = "Blonde";
 #elif defined OBJ_IRONMAN
-  const char *base_path = "../../../../obj/IronMan";
-  const char *name = "/IronMan";
-  const char *old_ext = ".obj";
-  const char *new_ext = ".rotom";
+  const char *base_path = "../../../../obj/IronMan/";
+  const char *name = "IronMan";
 #elif defined OBJ_SIRIUS_5_COLONIAL_CITY
-  const char *base_path = "../../../../obj/Sirus5ColonialCity";
-  const char *name = "/sirus_city";
-  const char *old_ext = ".obj";
-  const char *new_ext = ".rotom";
+  const char *base_path = "../../../../obj/Sirus5ColonialCity/";
+  const char *name = "sirus_city";
 #endif
 
-  char final_path[256];
-  strcpy(final_path, base_path);
-  //strcat(final_path, path);
-  strcat(final_path, name);
-  strcat(final_path, old_ext);
+  char finalPath[256];
+  strcpy(finalPath, base_path);
+  strcat(finalPath, name);
 
-  char new_path[256];
-  strcpy(new_path, base_path);
-  strcat(new_path, name);
-  strcat(new_path, new_ext);
+  char newPath[256];
+  strcpy(newPath, base_path);
+  strcat(newPath, name);
   
-  printf(".................................\n");
-  //Normal Loading
-  printf(".Loading OBJ  : ");
-  t_load_OBJ.start();
-  //ROTOM::FILES::Load_OBJ2(final_path, obj_data.get());
-  ROTOM::FILES::Load_OBJ3(final_path, base_path, obj_data.get());
-  printf("%f seconds.\n", t_load_OBJ.end());
-
-  //Saving from OBJ to ROTOM
-  printf(".OBJ to ROTOM : ");
-  t_save_from_OBJ_to_ROTOM.start();
-  ROTOM::FILES::Save_ROTOM_OBJ(new_path, obj_data.get());
-  printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
-
-  //ROTOM Loading
-  printf(".Loading ROTOM: ");
-  t_load_ROTOM.start();
-  ROTOM::FILES::Load_ROTOM_OBJ(new_path, obj_data);
-  printf("%f seconds.\n", t_load_ROTOM.end());
-  printf(".................................\n");
+  ROTOM::FILES::Load_OBJ(finalPath, obj_data);
+  //ROTOM::FILES::Load_OBJ(base_path, name, obj_data);
 
   geometry->loadGeometry(&obj_data);
 
+  getRoot()->setPosition(0.0f, 0.0f, -10.0f);
+  //getRoot()->setScale(0.1f, 0.1f, 0.1f);
+
   position[0] = 0.0f;
   position[1] = 0.0f;
-  position[2] = -1.0f;
+  position[2] = 0.0f;
   rotation[0] = 0.0f;
   rotation[1] = 0.0f;
   rotation[2] = 0.0f;
@@ -172,8 +150,6 @@ void ROTOM::MeshLoaderScene::update() {
 
   float sin_time = sin(TIME::appTime()) * 20.22f;
   //getRoot()->getChildAt(0)->setRotation(sin_time, sin_time, sin_time);
-  //Pos 0, -100, -5
-  //rot 8.40
   //updateCamera();
 }
 

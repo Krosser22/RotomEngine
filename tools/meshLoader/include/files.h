@@ -13,11 +13,11 @@ namespace ROTOM {
   namespace FILES {
     void Load_file(const char *path, std::shared_ptr<char[]> source);
 
-    void Load_OBJ(const char* path, const char* basePath, ROTOM::Geometry::GeometryData *obj_data);
+    //Use this just for testing because it load faster the obj file but it will not be optimized
+    void Load_OBJ(const char *pathWithoutExtensionFile, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile = true);
 
-    void Load_OBJ2(const char* path, ROTOM::Geometry::GeometryData *obj_data);
-
-    void Load_OBJ3(const char* path, const char* basePath, ROTOM::Geometry::GeometryData *obj_data);
+    //Recomended
+    void Load_OBJ(const char* basePath, const char* nameWithoutExtension, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile = true);
 
     void Load_ROTOM_OBJ(const char *path, std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data);
 

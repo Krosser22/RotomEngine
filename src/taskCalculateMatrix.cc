@@ -18,9 +18,7 @@ ROTOM::TaskCalculateMatrix::~TaskCalculateMatrix() {
 };
 
 void ROTOM::TaskCalculateMatrix::run() {
-  //runOnNode(*(&root_)->get());
-  //runOnNode(*root_);
-
+  //ModelLocal
   if ((*root_)->isDirtyModelLocal()) {
     glm::mat4 modelLocal;
     modelLocal = glm::scale(glm::mat4(), (*root_)->scale());
@@ -29,6 +27,12 @@ void ROTOM::TaskCalculateMatrix::run() {
     modelLocal = glm::rotate(modelLocal, (*root_)->rotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
     modelLocal = glm::translate(modelLocal, (*root_)->position());
     (*root_)->setModelLocal(modelLocal);
+  }
+
+  //ModelWorld
+  if ((*root_)->isDirtyModelWorld()) {
+    glm::mat4 modelWorld = glm::mat4() * (*(*root_)->modelLocal());
+    (*root_)->setModelWorld(modelWorld);
   }
 
   for (unsigned int i = 0; i < (*root_)->childCount(); ++i) {
@@ -44,6 +48,29 @@ void ROTOM::TaskCalculateMatrix::setInput(std::shared_ptr<Node*> root) {
   root_ = root;
 }
 
+/*void ROTOM::TaskCalculateMatrix::setMyCamera(std::shared_ptr<Camera *> camera) {
+  camera_ = camera;
+}
+
+void ROTOM::TaskCalculateMatrix::runOnCamera() {
+  //ModelLocal
+  if ((*camera_)->isDirtyModelLocal()) {
+    glm::mat4 modelLocal;
+    modelLocal = glm::scale(glm::mat4(), (*camera_)->scale());
+    modelLocal = glm::rotate(modelLocal, (*camera_)->rotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
+    modelLocal = glm::rotate(modelLocal, (*camera_)->rotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
+    modelLocal = glm::rotate(modelLocal, (*camera_)->rotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
+    modelLocal = glm::translate(modelLocal, (*camera_)->position());
+    (*camera_)->setModelLocal(modelLocal);
+  }
+
+  //ModelWorld
+  if ((*camera_)->isDirtyModelWorld()) {
+    glm::mat4 modelWorld = (*(*camera_)->parent()->modelWorld()) * (*(*camera_)->modelLocal());
+    (*camera_)->setModelWorld(modelWorld);
+  }
+}*/
+
 void ROTOM::TaskCalculateMatrix::runOnNode(Node *node) {
   //ModelLocal
   if (node->isDirtyModelLocal()) {
@@ -58,10 +85,7 @@ void ROTOM::TaskCalculateMatrix::runOnNode(Node *node) {
 
   //ModelWorld
   if (node->isDirtyModelWorld()) {
-    std::shared_ptr<Node> parent = node->parent();
-    glm::mat4 modelWorld = (*parent->modelWorld()) * (*node->modelLocal());
-    //glm::mat4 modelWorld = (*node->parent()->modelWorld()) * (*node->modelLocal());
-    //TODO - change the two lines to the one commented
+    glm::mat4 modelWorld = (*node->parent()->modelWorld()) * (*node->modelLocal());
     node->setModelWorld(modelWorld);
   }
 

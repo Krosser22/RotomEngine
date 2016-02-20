@@ -5,11 +5,12 @@
 **/
 
 #include "files.h"
-#include <iostream>
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "tiny_obj_loader.h"
+#include "time.h"
+#include <iostream>
 
 void ROTOM::FILES::Load_file(const char* path, std::shared_ptr<char[]> source) {
   FILE *file = fopen(path, "rb");
@@ -38,17 +39,17 @@ void PrintInfo(const std::vector<tinyobj::shape_t>& shapes, const std::vector<ti
   for (size_t i = 0; i < shapes.size(); i++) {
     printf("shape[%ld].name = %s\n", i, shapes[i].name.c_str());
     printf("Size of shape[%ld].indices: %ld\n", i, shapes[i].mesh.indices.size());
-    printf("Size of shape[%ld].material_ids: %ld\n", i, shapes[i].mesh.material_ids.size());
+    //printf("Size of shape[%ld].material_ids: %ld\n", i, shapes[i].mesh.material_ids.size());
     assert((shapes[i].mesh.indices.size() % 3) == 0);
-    /*for (size_t f = 0; f < shapes[i].mesh.indices.size() / 3; f++) {
-      printf("  idx[%ld] = %d, %d, %d. mat_id = %d\n", f, shapes[i].mesh.indices[3 * f + 0], shapes[i].mesh.indices[3 * f + 1], shapes[i].mesh.indices[3 * f + 2], shapes[i].mesh.material_ids[f]);
-    }*/
+    for (size_t f = 0; f < shapes[i].mesh.indices.size() / 3; f++) {
+      printf("  idx[%ld] = %d, %d, %d\n", f, shapes[i].mesh.indices[3 * f + 0], shapes[i].mesh.indices[3 * f + 1], shapes[i].mesh.indices[3 * f + 2]);
+    }
 
     printf("shape[%ld].vertices: %ld\n", i, shapes[i].mesh.positions.size());
     assert((shapes[i].mesh.positions.size() % 3) == 0);
-    /*for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++) {
+    for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++) {
       printf("  v[%ld] = (%f, %f, %f)\n", v, shapes[i].mesh.positions[3 * v + 0], shapes[i].mesh.positions[3 * v + 1], shapes[i].mesh.positions[3 * v + 2]);
-    }*/
+    }
   }
 
   /*for (size_t i = 0; i < materials.size(); i++) {
@@ -78,344 +79,359 @@ void PrintInfo(const std::vector<tinyobj::shape_t>& shapes, const std::vector<ti
   }*/
 }
 
-void ROTOM::FILES::Load_OBJ(const char* path, const char* basePath, ROTOM::Geometry::GeometryData *obj_data) {
+void ROTOM::FILES::Load_OBJ(const char *pathWithoutExtensionFile, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile) {
+  printf(".................................\n");
+  ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
+  char finalPath[256];
+  char newPath[256];
+  const char *old_ext = ".obj";
+  const char *new_ext = ".rotom";
+
   obj_data->data.clear();
   obj_data->index.clear();
 
-  std::cout << "Loading.: " << path << std::endl;
-  std::vector<tinyobj::shape_t> shapes;
-  std::vector<tinyobj::material_t> materials;
-  std::string err = tinyobj::LoadObj(shapes, materials, path);
+  strcpy(finalPath, pathWithoutExtensionFile);
+  strcat(finalPath, old_ext);
 
-  if (!err.empty()) {
-    printf("ERROR [files.cc]: loading OBJ\n");
-    std::cerr << err << std::endl;
-    system("pause");
-  } else {
-    //PrintInfo(shapes, materials);
+  strcpy(newPath, pathWithoutExtensionFile);
+  strcat(newPath, new_ext);
 
-    for (size_t shape = 0; shape < shapes.size(); shape++) {
-      for (size_t triangle = 0; triangle < shapes[shape].mesh.indices.size() / 3; triangle++) {
-        //Index
-        obj_data->index.push_back(shapes[shape].mesh.indices[3 * triangle + 0]);
-        obj_data->index.push_back(shapes[shape].mesh.indices[3 * triangle + 1]);
-        obj_data->index.push_back(shapes[shape].mesh.indices[3 * triangle + 2]);
+  if (reloadFile) {
+    printf(".Loading OBJ  : ");
+    t_load_OBJ.start();
 
-        //Vector
-        for (size_t vector = 0; vector < 3; ++vector) {
-          int index = 3 * shapes[shape].mesh.indices[3 * triangle + vector];
+    float aux_value_x = 0.0f;
+    float aux_value_y = 0.0f;
+    float aux_value_z = 0.0f;
+    int size_x = 1;
+    int size_y = 1;
+    int size_z = 1;
 
-          //Positions
-          obj_data->data.push_back(shapes[shape].mesh.positions[index + 0]);
-          obj_data->data.push_back(shapes[shape].mesh.positions[index + 1]);
-          obj_data->data.push_back(shapes[shape].mesh.positions[index + 2]);
+    //true = will make the obj to be in the position (0, 0, 0) - (aux_value_x, aux_value_y, aux_value_z)
+    //false = will make the obj to start in the first position that have in the file
+    bool aux_init = false;
 
-          //Normals
-          obj_data->data.push_back(shapes[shape].mesh.normals[index + 0]);
-          obj_data->data.push_back(shapes[shape].mesh.normals[index + 1]);
-          obj_data->data.push_back(shapes[shape].mesh.normals[index + 2]);
+    std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+    std::vector<glm::vec3> temp_vertices, temp_normals;
+    std::vector<glm::vec2> temp_uvs;
 
-          //UV
-          obj_data->data.push_back(shapes[shape].mesh.texcoords[index / 3 * 2 + 0]);
-          obj_data->data.push_back(shapes[shape].mesh.texcoords[index / 3 * 2 + 1]);
-        }
-      }
-    }
-    std::cout << "Loaded..: " << path << std::endl;
-  }
-}
+    FILE *file = fopen(finalPath, "r");
+    if (file == NULL){
+      assert(printf("ERROR: File doesn't found\n"));
+      //return false;
+    } else {
+      while (true) {
+        char lineHeader[128];
+        // read the first word of the line
+        int res = fscanf(file, "%s", lineHeader);
+        if (res == EOF)
+          break; // EOF = End Of File. Quit the loop.
+        // else : parse lineHeader
 
-void ROTOM::FILES::Load_OBJ2(const char* path, ROTOM::Geometry::GeometryData *obj_data) {
-  obj_data->data.clear();
-  obj_data->index.clear();
-
-  float aux_value_x = 0.0f;
-  float aux_value_y = 0.0f;
-  float aux_value_z = 0.0f;
-  int size_x = 1;
-  int size_y = 1;
-  int size_z = 1;
-
-  //true = will make the obj to be in the position (0, 0, 0) - (aux_value_x, aux_value_y, aux_value_z)
-  //false = will make the obj to start in the first position that have in the file
-  bool aux_init = false;
-
-  std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-  std::vector<glm::vec3> temp_vertices, temp_normals;
-  std::vector<glm::vec2> temp_uvs;
-
-  FILE *file = fopen(path, "r");
-  if (file == NULL){
-    assert(printf("ERROR: File doesn't found\n"));
-    //return false;
-  } else {
-    while (true) {
-      char lineHeader[128];
-      // read the first word of the line
-      int res = fscanf(file, "%s", lineHeader);
-      if (res == EOF)
-        break; // EOF = End Of File. Quit the loop.
-      // else : parse lineHeader
-
-      if (strcmp(lineHeader, "v") == 0){
-        glm::vec3 vertex;
-        int matches = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-        if (matches < 3) {
-          printf("ERROR: v[%d]\n", matches);
-        }
-        if (!aux_init){
-          aux_init = true;
-          aux_value_x = vertex.x;
-          aux_value_y = vertex.y;
-          aux_value_z = vertex.z;
-        }
-        vertex.x -= aux_value_x;
-        vertex.y -= aux_value_y;
-        vertex.z -= aux_value_z;
-        vertex.x *= size_x;
-        vertex.y *= size_y;
-        vertex.z *= size_z;
-        temp_vertices.push_back(vertex);
-      } else if (strcmp(lineHeader, "vt") == 0){
-        glm::vec2 uv;
-        int matches = fscanf(file, "%f %f\n", &uv.x, &uv.y);
-        if (matches < 2) {
-          printf("ERROR: vt[%d]\n", matches);
-        }
-        temp_uvs.push_back(uv);
-      } else if (strcmp(lineHeader, "vn") == 0){
-        glm::vec3 normal;
-        int matches = fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-        if (matches < 3) {
-          printf("ERROR: uv[%d]\n", matches);
-        }
-        temp_normals.push_back(normal);
-      } else if (strcmp(lineHeader, "f") == 0){
-        unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-        int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-        if (matches != 9 && matches != 2 && matches != 1){
-          printf("ERROR: matches [%d]\n", matches);
-        }
-        switch (matches) {
-          case 9:
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
-            uvIndices.push_back(uvIndex[0]);
-            uvIndices.push_back(uvIndex[1]);
-            uvIndices.push_back(uvIndex[2]);
-            normalIndices.push_back(normalIndex[0]);
-            normalIndices.push_back(normalIndex[1]);
-            normalIndices.push_back(normalIndex[2]);
-            break;
-          case 2:
-            vertexIndices.push_back(vertexIndex[0]);
-            uvIndices.push_back(uvIndex[0]);
-            matches = fscanf(file, " %d/%d %d/%d\n", &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
-            uvIndices.push_back(uvIndex[0]);
-            uvIndices.push_back(uvIndex[1]);
-            uvIndices.push_back(uvIndex[2]);
-            normalIndices.push_back(-1);
-            normalIndices.push_back(-1);
-            normalIndices.push_back(-1);
-            break;
-          case 1:
-            vertexIndices.push_back(vertexIndex[0]);
-            matches = fscanf(file, "/%d %d//%d %d//%d\n", &normalIndex[0], &vertexIndex[1], &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
-
-            if (matches == 5){
+        if (strcmp(lineHeader, "v") == 0){
+          glm::vec3 vertex;
+          int matches = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+          if (matches < 3) {
+            printf("ERROR: v[%d]\n", matches);
+          }
+          if (!aux_init){
+            aux_init = true;
+            aux_value_x = vertex.x;
+            aux_value_y = vertex.y;
+            aux_value_z = vertex.z;
+          }
+          vertex.x -= aux_value_x;
+          vertex.y -= aux_value_y;
+          vertex.z -= aux_value_z;
+          vertex.x *= size_x;
+          vertex.y *= size_y;
+          vertex.z *= size_z;
+          temp_vertices.push_back(vertex);
+        } else if (strcmp(lineHeader, "vt") == 0){
+          glm::vec2 uv;
+          int matches = fscanf(file, "%f %f\n", &uv.x, &uv.y);
+          if (matches < 2) {
+            printf("ERROR: vt[%d]\n", matches);
+          }
+          temp_uvs.push_back(uv);
+        } else if (strcmp(lineHeader, "vn") == 0){
+          glm::vec3 normal;
+          int matches = fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+          if (matches < 3) {
+            printf("ERROR: uv[%d]\n", matches);
+          }
+          temp_normals.push_back(normal);
+        } else if (strcmp(lineHeader, "f") == 0){
+          unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+          int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+          if (matches != 9 && matches != 2 && matches != 1){
+            printf("ERROR: matches [%d]\n", matches);
+          }
+          switch (matches) {
+            case 9:
+              vertexIndices.push_back(vertexIndex[0]);
               vertexIndices.push_back(vertexIndex[1]);
               vertexIndices.push_back(vertexIndex[2]);
-              uvIndices.push_back(1);
-              uvIndices.push_back(1);
-              uvIndices.push_back(1);
+              uvIndices.push_back(uvIndex[0]);
+              uvIndices.push_back(uvIndex[1]);
+              uvIndices.push_back(uvIndex[2]);
               normalIndices.push_back(normalIndex[0]);
               normalIndices.push_back(normalIndex[1]);
               normalIndices.push_back(normalIndex[2]);
-            } else {
-              matches = fscanf(file, " %d %d\n", &vertexIndex[1], &vertexIndex[2]);
+              break;
+            case 2:
+              vertexIndices.push_back(vertexIndex[0]);
+              uvIndices.push_back(uvIndex[0]);
+              matches = fscanf(file, " %d/%d %d/%d\n", &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2]);
               vertexIndices.push_back(vertexIndex[1]);
               vertexIndices.push_back(vertexIndex[2]);
-              uvIndices.push_back(1);
-              uvIndices.push_back(1);
-              uvIndices.push_back(1);
+              uvIndices.push_back(uvIndex[0]);
+              uvIndices.push_back(uvIndex[1]);
+              uvIndices.push_back(uvIndex[2]);
               normalIndices.push_back(-1);
               normalIndices.push_back(-1);
               normalIndices.push_back(-1);
-            }
-            break;
-          default:
-            printf("ERROR: f[%d]\n", matches);
-            //return false;
-            break;
+              break;
+            case 1:
+              vertexIndices.push_back(vertexIndex[0]);
+              matches = fscanf(file, "/%d %d//%d %d//%d\n", &normalIndex[0], &vertexIndex[1], &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
+
+              if (matches == 5){
+                vertexIndices.push_back(vertexIndex[1]);
+                vertexIndices.push_back(vertexIndex[2]);
+                uvIndices.push_back(1);
+                uvIndices.push_back(1);
+                uvIndices.push_back(1);
+                normalIndices.push_back(normalIndex[0]);
+                normalIndices.push_back(normalIndex[1]);
+                normalIndices.push_back(normalIndex[2]);
+              } else {
+                matches = fscanf(file, " %d %d\n", &vertexIndex[1], &vertexIndex[2]);
+                vertexIndices.push_back(vertexIndex[1]);
+                vertexIndices.push_back(vertexIndex[2]);
+                uvIndices.push_back(1);
+                uvIndices.push_back(1);
+                uvIndices.push_back(1);
+                normalIndices.push_back(-1);
+                normalIndices.push_back(-1);
+                normalIndices.push_back(-1);
+              }
+              break;
+            default:
+              printf("ERROR: f[%d]\n", matches);
+              //return false;
+              break;
+          }
         }
       }
-    }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    //Transform Input
-    glm::vec3 vertex;
-    glm::vec3 normales;
-    glm::vec2 uv;
-    std::vector<glm::vec3> out_vertex;
-    std::vector<glm::vec2> out_uv;
-    std::vector<glm::vec3> out_normal;
-    for (unsigned int i = 0; i < vertexIndices.size(); ++i){
-      //Position
-      vertex = temp_vertices[vertexIndices[i] - 1];
-      out_vertex.push_back(vertex);
+      ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
+      //Transform Input
+      glm::vec3 vertex;
+      glm::vec3 normales;
+      glm::vec2 uv;
+      std::vector<glm::vec3> out_vertex;
+      std::vector<glm::vec2> out_uv;
+      std::vector<glm::vec3> out_normal;
+      for (unsigned int i = 0; i < vertexIndices.size(); ++i){
+        //Position
+        vertex = temp_vertices[vertexIndices[i] - 1];
+        out_vertex.push_back(vertex);
 
-      //Normales
-      if (temp_normals.size() >= normalIndices[i]) {
-        normales = temp_normals[normalIndices[i] - 1];
-      } else {
-        normales.x = 0;
-        normales.y = 0;
-        normales.z = 1;
+        //Normales
+        if (temp_normals.size() >= normalIndices[i]) {
+          normales = temp_normals[normalIndices[i] - 1];
+        } else {
+          normales.x = 0;
+          normales.y = 0;
+          normales.z = 1;
+        }
+        out_normal.push_back(normales);
+
+        //UV
+        if (temp_uvs.size() >= uvIndices[i]) {
+          uv = temp_uvs[uvIndices[i] - 1];
+        } else {
+          uv.x = 0;
+          uv.y = 0;
+        }
+        out_uv.push_back(uv);
       }
-      out_normal.push_back(normales);
-
-      //UV
-      if (temp_uvs.size() >= uvIndices[i]) {
-        uv = temp_uvs[uvIndices[i] - 1];
-      } else {
-        uv.x = 0;
-        uv.y = 0;
-      }
-      out_uv.push_back(uv);
-    }
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
 
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    //Data Output
-    const int vertexSize = 3 + 3 + 2;
-    for (unsigned int i = 0; i < out_vertex.size(); ++i) {
-      int index = i * vertexSize;
-
-      //Positions
-      obj_data->data.push_back(out_vertex[i].x);
-      obj_data->data.push_back(out_vertex[i].y);
-      obj_data->data.push_back(out_vertex[i].z);
-
-      //Normals
-      obj_data->data.push_back(out_normal[i].x);
-      obj_data->data.push_back(out_normal[i].y);
-      obj_data->data.push_back(out_normal[i].z);
-
-      //UVs
-      obj_data->data.push_back(out_uv[i].x);
-      obj_data->data.push_back(out_uv[i].y);
-    }
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-
-
-
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    //Index Output
-    for (unsigned int i = 0; i < vertexIndices.size(); ++i) {
-      obj_data->index.push_back(i);
-    }
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-
-
-
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    //Debug
-    //Print log
-    bool debug = false;
-    if (debug) {
-      //Vertex
+      ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
+      //Data Output
+      const int vertexSize = 3 + 3 + 2;
       for (unsigned int i = 0; i < out_vertex.size(); ++i) {
         int index = i * vertexSize;
-        printf("[%f %f %f][%f %f %f][%.3f %.3f]\n",
-          obj_data->data.at(index + 0), obj_data->data.at(index + 1), obj_data->data.at(index + 2), //Positions
-          obj_data->data.at(index + 3), obj_data->data.at(index + 4), obj_data->data.at(index + 5), //Normals
-          obj_data->data.at(index + 6), obj_data->data.at(index + 7)); //UVs
-      }
 
-      //Index
+        //Positions
+        obj_data->data.push_back(out_vertex[i].x);
+        obj_data->data.push_back(out_vertex[i].y);
+        obj_data->data.push_back(out_vertex[i].z);
+
+        //Normals
+        obj_data->data.push_back(out_normal[i].x);
+        obj_data->data.push_back(out_normal[i].y);
+        obj_data->data.push_back(out_normal[i].z);
+
+        //UVs
+        obj_data->data.push_back(out_uv[i].x);
+        obj_data->data.push_back(out_uv[i].y);
+      }
+      ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
+
+
+
+      ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
+      //Index Output
       for (unsigned int i = 0; i < vertexIndices.size(); ++i) {
-        if (i % 3 == 0) {
-          printf("\nIndex position %d", obj_data->index.at(i));
-        } else {
-          printf("/%d", obj_data->index.at(i));
+        obj_data->index.push_back(i);
+      }
+      ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
+
+
+
+      ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
+      //Debug
+      //Print log
+      bool debug = false;
+      if (debug) {
+        //Vertex
+        for (unsigned int i = 0; i < out_vertex.size(); ++i) {
+          int index = i * vertexSize;
+          printf("[%f %f %f][%f %f %f][%.3f %.3f]\n",
+            obj_data->data.at(index + 0), obj_data->data.at(index + 1), obj_data->data.at(index + 2), //Positions
+            obj_data->data.at(index + 3), obj_data->data.at(index + 4), obj_data->data.at(index + 5), //Normals
+            obj_data->data.at(index + 6), obj_data->data.at(index + 7)); //UVs
+        }
+
+        //Index
+        for (unsigned int i = 0; i < vertexIndices.size(); ++i) {
+          if (i % 3 == 0) {
+            printf("\nIndex position %d", obj_data->index.at(i));
+          } else {
+            printf("/%d", obj_data->index.at(i));
+          }
         }
       }
+      ////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////
+
+      //Restart the static values
+      aux_value_x = 0;
+      aux_value_y = 0;
+      aux_value_z = 0;
+      aux_init = false;
     }
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+    printf("%f seconds.\n", t_load_OBJ.end());
 
+    printf(".OBJ to ROTOM : ");
+    t_save_from_OBJ_to_ROTOM.start();
+    ROTOM::FILES::Save_ROTOM_OBJ(newPath, obj_data.get());
+    printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
 
-
-    //Restart the static values
-    aux_value_x = 0;
-    aux_value_y = 0;
-    aux_value_z = 0;
-    aux_init = false;
+    printf(".Loading ROTOM: ");
+    t_load_ROTOM.start();
+    ROTOM::FILES::Load_ROTOM_OBJ(newPath, obj_data);
+    printf("%f seconds.\n", t_load_ROTOM.end());
+    printf(".................................\n");
+  } else {
+  Load_ROTOM_OBJ(newPath, obj_data);
   }
 }
 
-void ROTOM::FILES::Load_OBJ3(const char* path, const char* basePath, ROTOM::Geometry::GeometryData *obj_data) {
+void ROTOM::FILES::Load_OBJ(const char* basePath, const char* nameWithoutExtension, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile) {
+  printf(".................................\n");
+  ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
+  char finalPath[256];
+  char newPath[256];
+  const char *old_ext = ".obj";
+  const char *new_ext = ".rotom";
+
   obj_data->data.clear();
   obj_data->index.clear();
 
-  std::cout << "Loading.: " << path << std::endl;
-  std::vector<tinyobj::shape_t> shapes;
-  std::vector<tinyobj::material_t> materials;
-  std::string err = tinyobj::LoadObj(shapes, materials, "../../../../obj/blonde/blonde.obj");
+  strcpy(finalPath, basePath);
+  strcat(finalPath, nameWithoutExtension);
+  strcat(finalPath, old_ext);
 
-  if (!err.empty()) {
-    printf("ERROR [files.cc]: loading OBJ\n");
-    std::cerr << err << std::endl;
-    system("pause");
-  } else {
-    //PrintInfo(shapes, materials);
+  strcpy(newPath, basePath);
+  strcat(newPath, nameWithoutExtension);
+  strcat(newPath, new_ext);
 
-    for (size_t shape = 0; shape < shapes.size(); shape++) {
-      //Index
-      for (size_t index = 0; index < shapes[shape].mesh.indices.size(); ++index) {
-        obj_data->index.push_back(shapes[shape].mesh.indices[index]);
-      }
+  if (reloadFile) {
+    printf(".Loading OBJ  : ");
+    t_load_OBJ.start();
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string err = tinyobj::LoadObj(shapes, materials, finalPath, basePath);
 
-      for (size_t position = 0; position < shapes[shape].mesh.positions.size() / 3; ++position) {
-        //Positions
-        obj_data->data.push_back(shapes[shape].mesh.positions[3 * position + 0]);
-        obj_data->data.push_back(shapes[shape].mesh.positions[3 * position + 1]);
-        obj_data->data.push_back(shapes[shape].mesh.positions[3 * position + 2]);
+    if (!err.empty()) {
+      printf("ERROR [files.cc]: loading OBJ\n");
+      std::cerr << err << std::endl;
+      system("pause");
+    } else {
+      //PrintInfo(shapes, materials);
 
-        //Normals
-        if (shapes[shape].mesh.normals.size() > position * 3 + 2) {
-          obj_data->data.push_back(shapes[shape].mesh.normals[3 * position + 0]);
-          obj_data->data.push_back(shapes[shape].mesh.normals[3 * position + 1]);
-          obj_data->data.push_back(shapes[shape].mesh.normals[3 * position + 2]);
-        } else {
-          obj_data->data.push_back(1.0f);
-          obj_data->data.push_back(1.0f);
-          obj_data->data.push_back(1.0f);
+      for (size_t shape = 0; shape < shapes.size(); shape++) {
+        //Index
+        for (size_t index = 0; index < shapes[shape].mesh.indices.size(); ++index) {
+          obj_data->index.push_back(shapes[shape].mesh.indices[index]);
         }
 
-        //UV
-        if (shapes[shape].mesh.texcoords.size() > position * 2 + 1) {
-          obj_data->data.push_back(shapes[shape].mesh.texcoords[2 * position + 0]);
-          obj_data->data.push_back(shapes[shape].mesh.texcoords[2 * position + 1]);
-        } else {
-          obj_data->data.push_back(1.0f);
-          obj_data->data.push_back(1.0f);
+        //Vector
+        for (size_t position = 0; position < shapes[shape].mesh.positions.size() / 3; ++position) {
+          //Positions
+          obj_data->data.push_back(shapes[shape].mesh.positions[3 * position + 0]);
+          obj_data->data.push_back(shapes[shape].mesh.positions[3 * position + 1]);
+          obj_data->data.push_back(shapes[shape].mesh.positions[3 * position + 2]);
+
+          //Normals
+          if (shapes[shape].mesh.normals.size() > position * 3 + 2) {
+            obj_data->data.push_back(shapes[shape].mesh.normals[3 * position + 0]);
+            obj_data->data.push_back(shapes[shape].mesh.normals[3 * position + 1]);
+            obj_data->data.push_back(shapes[shape].mesh.normals[3 * position + 2]);
+          } else {
+            obj_data->data.push_back(1.0f);
+            obj_data->data.push_back(1.0f);
+            obj_data->data.push_back(1.0f);
+          }
+
+          //UV
+          if (shapes[shape].mesh.texcoords.size() > position * 2 + 1) {
+            obj_data->data.push_back(shapes[shape].mesh.texcoords[2 * position + 0]);
+            obj_data->data.push_back(shapes[shape].mesh.texcoords[2 * position + 1]);
+          } else {
+            obj_data->data.push_back(1.0f);
+            obj_data->data.push_back(1.0f);
+          }
         }
       }
     }
-    std::cout << "Loaded..: " << path << std::endl;
+    printf("%f seconds.\n", t_load_OBJ.end());
+
+    printf(".OBJ to ROTOM : ");
+    t_save_from_OBJ_to_ROTOM.start();
+    ROTOM::FILES::Save_ROTOM_OBJ(newPath, obj_data.get());
+    printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
+
+    printf(".Loading ROTOM: ");
+    t_load_ROTOM.start();
+    ROTOM::FILES::Load_ROTOM_OBJ(newPath, obj_data);
+    printf("%f seconds.\n", t_load_ROTOM.end());
+    printf(".................................\n");
+  } else {
+    Load_ROTOM_OBJ(newPath, obj_data);
   }
 }
 
