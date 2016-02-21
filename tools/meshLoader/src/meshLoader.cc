@@ -4,32 +4,12 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "files.h"
+#include "meshLoader.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "tiny_obj_loader.h"
 #include "time.h"
 #include <iostream>
-
-void ROTOM::FILES::Load_file(const char* path, std::shared_ptr<char[]> source) {
-  FILE *file = fopen(path, "rb");
-  if (file == NULL) {
-    printf("ERROR: File doesn't found (%s)\n", path);
-    system("pause");
-  } else {
-    fseek(file, 0L, SEEK_END);
-    int file_length = ftell(file);
-    //source->alloc(file_length + 1);
-    fseek(file, 0L, SEEK_SET);
-    for (int i = 0; i < file_length; ++i) {
-      ((*source.get())[i]) = fgetc(file);
-      //printf("%c", source->get()[i]);
-    }
-    ((*source.get())[file_length]) = '\0';
-    //printf("%s\n\n", source);
-    fclose(file);
-  }
-}
 
 void PrintInfo(const std::vector<tinyobj::shape_t>& shapes, const std::vector<tinyobj::material_t>& materials) {
   std::cout << "# of shapes    : " << shapes.size() << std::endl;
@@ -78,7 +58,7 @@ void PrintInfo(const std::vector<tinyobj::shape_t>& shapes, const std::vector<ti
   }*/
 }
 
-void ROTOM::FILES::Load_OBJ(const char *pathWithoutExtensionFile, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile) {
+void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile) {
   printf(".................................\n");
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
   char finalPath[256];
@@ -336,12 +316,12 @@ void ROTOM::FILES::Load_OBJ(const char *pathWithoutExtensionFile, std::shared_pt
 
     printf(".OBJ to ROTOM : ");
     t_save_from_OBJ_to_ROTOM.start();
-    ROTOM::FILES::Save_ROTOM_OBJ(newPath, obj_data.get());
+    Save_ROTOM_OBJ(newPath, obj_data.get());
     printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
 
     printf(".Loading ROTOM: ");
     t_load_ROTOM.start();
-    ROTOM::FILES::Load_ROTOM_OBJ(newPath, obj_data);
+    Load_ROTOM_OBJ(newPath, obj_data);
     printf("%f seconds.\n", t_load_ROTOM.end());
     printf(".................................\n");
   } else {
@@ -353,7 +333,7 @@ void ROTOM::FILES::Load_OBJ(const char *pathWithoutExtensionFile, std::shared_pt
   }
 }
 
-void ROTOM::FILES::Load_OBJ(const char* basePath, const char* nameWithoutExtension, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile) {
+void ROTOM::MESHLOADER::Load_OBJ(const char* basePath, const char* nameWithoutExtension, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile) {
   printf(".................................\n");
   ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
   char finalPath[256];
@@ -425,12 +405,12 @@ void ROTOM::FILES::Load_OBJ(const char* basePath, const char* nameWithoutExtensi
 
     printf(".OBJ to ROTOM : ");
     t_save_from_OBJ_to_ROTOM.start();
-    ROTOM::FILES::Save_ROTOM_OBJ(newPath, obj_data.get());
+    Save_ROTOM_OBJ(newPath, obj_data.get());
     printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
 
     printf(".Loading ROTOM: ");
     t_load_ROTOM.start();
-    ROTOM::FILES::Load_ROTOM_OBJ(newPath, obj_data);
+    Load_ROTOM_OBJ(newPath, obj_data);
     printf("%f seconds.\n", t_load_ROTOM.end());
     printf(".................................\n");
   } else {
@@ -442,7 +422,7 @@ void ROTOM::FILES::Load_OBJ(const char* basePath, const char* nameWithoutExtensi
   }
 }
 
-void ROTOM::FILES::Load_ROTOM_OBJ(const char *path, std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data) {
+void ROTOM::MESHLOADER::Load_ROTOM_OBJ(const char *path, std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data) {
   obj_data->data.clear();
   obj_data->index.clear();
 
@@ -473,7 +453,7 @@ void ROTOM::FILES::Load_ROTOM_OBJ(const char *path, std::shared_ptr<ROTOM::Geome
   }
 }
 
-void ROTOM::FILES::Save_ROTOM_OBJ(const char *path, ROTOM::Geometry::GeometryData *obj_data) {
+void ROTOM::MESHLOADER::Save_ROTOM_OBJ(const char *path, ROTOM::Geometry::GeometryData *obj_data) {
   FILE *file = fopen(path, "wb");
   if (file) {
     int indexCount = obj_data->index.size();

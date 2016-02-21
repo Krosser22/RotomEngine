@@ -8,9 +8,15 @@
 #include "scenes/defaultScene.h"
 #include "scenes/soundScene.h"
 #include "scenes/meshLoaderScene.h"
+#include "time.h"
 
 int ROTOM::main(int argc, char** argv) {
+  TIME::Chronometer c;
+  printf("Creating window.\n");
+  c.start();
   WindowInit(1280, 720);
+  printf("Time to create the windows: %f.\n\n\n", c.end());
+
   DefaultScene scene;
   //SoundScene scene;
   //MeshLoaderScene scene;
@@ -23,6 +29,7 @@ int ROTOM::main(int argc, char** argv) {
 ---ASK---
 ---------
 GetRoot() Donde???
+fileManager ??? Lo que mas tarda es la creación de la ventana, seguido del acceso a ficheros
 
 
 ----------
@@ -40,5 +47,4 @@ GetRoot() Donde???
 ----------
 +Add LUA
 +Use my render list with IMGUI
-+Add a class DB with SQLite or another library to save the game
 */

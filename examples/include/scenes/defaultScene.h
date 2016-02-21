@@ -29,16 +29,9 @@ namespace ROTOM {
 
     void destroy() {};
 
-    std::shared_ptr<Geometry> geometry;
-    std::shared_ptr<Material> material1;
-    std::shared_ptr<Material> material2;
-    std::shared_ptr<Material> material3;
-    std::shared_ptr<Material> material4;
-
     std::shared_ptr<Drawable> drawable1;
     std::shared_ptr<Drawable> drawable2;
     std::shared_ptr<Drawable> drawable3;
-
     std::shared_ptr<Drawable> drawable[amount];
   };
 }

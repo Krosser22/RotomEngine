@@ -10,7 +10,7 @@ float ROTOM::GRAPHICS::getTime() {
   return (float)glfwGetTime();
 }
 
-void ROTOM::GRAPHICS::setShader(MaterialSettings *materialSettings, const char *vertexShaderSource, const char *fragmentShaderSource) {
+void ROTOM::GRAPHICS::setShader(Material *material, const char *vertexShaderSource, const char *fragmentShaderSource) {
   GLint success;
   GLchar infoLog[512];
 
@@ -35,32 +35,32 @@ void ROTOM::GRAPHICS::setShader(MaterialSettings *materialSettings, const char *
   }
 
   // Link shaders
-  materialSettings->shaderProgram = glCreateProgram();
-  glAttachShader(materialSettings->shaderProgram, vertexShader);
-  glAttachShader(materialSettings->shaderProgram, fragmentShader);
-  glLinkProgram(materialSettings->shaderProgram);
-  glGetProgramiv(materialSettings->shaderProgram, GL_LINK_STATUS, &success);// Check for linking errors
+  material->shaderProgram = glCreateProgram();
+  glAttachShader(material->shaderProgram, vertexShader);
+  glAttachShader(material->shaderProgram, fragmentShader);
+  glLinkProgram(material->shaderProgram);
+  glGetProgramiv(material->shaderProgram, GL_LINK_STATUS, &success);// Check for linking errors
   if (!success) {
-    glGetProgramInfoLog(materialSettings->shaderProgram, 512, NULL, infoLog);
+    glGetProgramInfoLog(material->shaderProgram, 512, NULL, infoLog);
     printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s\n", infoLog);
   }
 
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  glUseProgram(materialSettings->shaderProgram);
+  glUseProgram(material->shaderProgram);
 
   // Get their uniform location
-  materialSettings->u_color = glGetUniformLocation(materialSettings->shaderProgram, "u_color");
-  materialSettings->u_model = glGetUniformLocation(materialSettings->shaderProgram, "u_model");
-  materialSettings->u_view = glGetUniformLocation(materialSettings->shaderProgram, "u_view");
-  materialSettings->u_projection = glGetUniformLocation(materialSettings->shaderProgram, "u_projection");
-  materialSettings->u_lightPosition = glGetUniformLocation(materialSettings->shaderProgram, "u_lightPosition");
-  materialSettings->u_lightColor = glGetUniformLocation(materialSettings->shaderProgram, "u_lightColor");
-  materialSettings->u_texture = glGetUniformLocation(materialSettings->shaderProgram, "u_texture");
-  materialSettings->u_shininess = glGetUniformLocation(materialSettings->shaderProgram, "u_shininess");
-  materialSettings->u_specularIntensity = glGetUniformLocation(materialSettings->shaderProgram, "u_specularIntensity");
-  materialSettings->u_specularMaterial = glGetUniformLocation(materialSettings->shaderProgram, "u_specularMaterial");
+  material->u_color = glGetUniformLocation(material->shaderProgram, "u_color");
+  material->u_model = glGetUniformLocation(material->shaderProgram, "u_model");
+  material->u_view = glGetUniformLocation(material->shaderProgram, "u_view");
+  material->u_projection = glGetUniformLocation(material->shaderProgram, "u_projection");
+  material->u_lightPosition = glGetUniformLocation(material->shaderProgram, "u_lightPosition");
+  material->u_lightColor = glGetUniformLocation(material->shaderProgram, "u_lightColor");
+  material->u_texture = glGetUniformLocation(material->shaderProgram, "u_texture");
+  material->u_shininess = glGetUniformLocation(material->shaderProgram, "u_shininess");
+  material->u_specularIntensity = glGetUniformLocation(material->shaderProgram, "u_specularIntensity");
+  material->u_specularMaterial = glGetUniformLocation(material->shaderProgram, "u_specularMaterial");
 }
 
 void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
@@ -95,21 +95,21 @@ void ROTOM::GRAPHICS::useMaterial(Drawable *drawable, float *projectionMatrix, f
   //const float *color = material->color();
   const float *specularMaterial = material->specularMaterial_;
 
-  glUseProgram(materialSettings->shaderProgram);
+  glUseProgram(material->shaderProgram);
 
   //Texture
   glBindTexture(GL_TEXTURE_2D, material->texture());
 
   // Pass them to the shaders
-  glUniformMatrix4fv(materialSettings->u_model, 1, GL_FALSE, glm::value_ptr(drawable->modelWorld()[0]));
-  glUniformMatrix4fv(materialSettings->u_view, 1, GL_FALSE, viewMatrix);
-  glUniformMatrix4fv(materialSettings->u_projection, 1, GL_FALSE, projectionMatrix);
-  glUniform3f(materialSettings->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
+  glUniformMatrix4fv(material->u_model, 1, GL_FALSE, glm::value_ptr(drawable->modelWorld()[0]));
+  glUniformMatrix4fv(material->u_view, 1, GL_FALSE, viewMatrix);
+  glUniformMatrix4fv(material->u_projection, 1, GL_FALSE, projectionMatrix);
+  glUniform3f(material->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
   //glUniform4f(u_color, color[0], color[1], color[2], color[3]);
-  glUniform3f(materialSettings->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
-  glUniform1f(materialSettings->u_shininess, material->shininess_);
-  glUniform4f(materialSettings->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2], specularIntensity[3]);
-  glUniform4f(materialSettings->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2], specularMaterial[3]);
+  glUniform3f(material->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
+  glUniform1f(material->u_shininess, material->shininess_);
+  glUniform4f(material->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2], specularIntensity[3]);
+  glUniform4f(material->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2], specularMaterial[3]);
 
   glBindVertexArray(geometry->VAO());
   glDrawElements(GL_TRIANGLES, geometry->vertexCount(), GL_UNSIGNED_INT, 0);

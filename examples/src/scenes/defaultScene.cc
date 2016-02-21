@@ -6,7 +6,7 @@
 
 #include "scenes/defaultScene.h"
 #include "imgui.h"
-#include "text.h"
+#include "files.h"
 #include "time.h"
 #include "window.h"
 
@@ -15,11 +15,11 @@ void ROTOM::DefaultScene::init() {
   GetCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   GetCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
-  geometry = std::shared_ptr<Geometry>(new Geometry());
-  material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
-  material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
-  material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
-  material4 = std::shared_ptr<Material>(new Material());
+  std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
+  std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
+  std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
+  std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
+  std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material());
 
   drawable1 = std::shared_ptr<Drawable>(new Drawable());
   drawable2 = std::shared_ptr<Drawable>(new Drawable());
@@ -28,15 +28,13 @@ void ROTOM::DefaultScene::init() {
   drawable1->setGeometry(geometry);
   drawable1->setMaterial(material1);
   drawable1->setParent(GetRoot());
-  drawable1->setPosition(0.0f, 0.0f, -5.0f);
+  drawable1->setPositionZ(-5.0f);
   drawable2->setGeometry(geometry);
   drawable2->setMaterial(material2);
   drawable2->setParent(drawable1);
-  drawable2->setPosition(0.0f, 0.0f, 0.0f);
   drawable3->setGeometry(geometry);
   drawable3->setMaterial(material3);
   drawable3->setParent(drawable2);
-  drawable3->setPosition(0.0f, 0.0f, 0.0f);
 
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
@@ -45,9 +43,7 @@ void ROTOM::DefaultScene::init() {
   const int rows = 15;
   const int cols = 15;
   float pos[3] = { 0.0f, 0.0f, 0.0f };
-  printf("Creating array of drawables\n");
   for (int i = 0; i < amount; ++i) {
-    //printf("Creating Node: %d/%d\n", i, amount);
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;

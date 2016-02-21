@@ -26,6 +26,7 @@ namespace ROTOM {
     void setMaterial(std::shared_ptr<Material> material);
     std::shared_ptr<Material> material();
 
+    void setMaterialSettings(std::shared_ptr<MaterialSettings> materialSettings);
     std::shared_ptr<MaterialSettings> materialSettings();
 
   private:

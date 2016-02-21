@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "text.h"
+#include "files.h"
 
 /*void SetText(int x, int y, int size, int r, int g, int b, int a, int blur, char *text){
   ESAT::DrawSetTextFont("test.ttf");
@@ -23,10 +23,30 @@ void SetText(int x, int y, int size, int r, int g, int b, int a, int blur, int n
   ESAT::DrawText(x, y + size, itoa(number, text, 10));
 }*/
 
-void ROTOM::read_file(const char* file_name, std::shared_ptr<std::string> source) {
-  FILE *file = fopen(file_name, "rb");
+void ROTOM::FILES::Load_file(const char* path, std::shared_ptr<char[]> source) {
+  FILE *file = fopen(path, "rb");
   if (file == NULL) {
-    printf("ERROR: File doesn't found (%s)\n", file_name);
+    printf("ERROR: File doesn't found (%s)\n", path);
+    system("pause");
+  } else {
+    fseek(file, 0L, SEEK_END);
+    int file_length = ftell(file);
+    //source->alloc(file_length + 1);
+    fseek(file, 0L, SEEK_SET);
+    for (int i = 0; i < file_length; ++i) {
+      ((*source.get())[i]) = fgetc(file);
+      //printf("%c", source->get()[i]);
+    }
+    ((*source.get())[file_length]) = '\0';
+    //printf("%s\n\n", source);
+    fclose(file);
+  }
+}
+
+void ROTOM::FILES::read_file(const char* path, std::shared_ptr<std::string> source) {
+  FILE *file = fopen(path, "rb");
+  if (file == NULL) {
+    printf("ERROR: File doesn't found (%s)\n", path);
     system("pause");
   } else {
     fseek(file, 0L, SEEK_END);

@@ -10,7 +10,7 @@
 #include "files.h"
 #include "window.h"
 #include "scene.h"
-#include "text.h"
+#include "meshLoader.h"
 #include "time.h"
 
 float cameraSpeed = 8.0f;
@@ -71,8 +71,8 @@ void ROTOM::MeshLoaderScene::init() {
   strcpy(newPath, base_path);
   strcat(newPath, name);
 
-  //ROTOM::FILES::Load_OBJ(finalPath, obj_data, false);
-  ROTOM::FILES::Load_OBJ(base_path, name, obj_data);
+  //ROTOM::MESHLOADER::Load_OBJ(finalPath, obj_data, false);
+  ROTOM::MESHLOADER::Load_OBJ(base_path, name, obj_data);
 
   geometry->loadGeometry(&obj_data);
 

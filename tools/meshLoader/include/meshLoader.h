@@ -4,15 +4,13 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __FILES_H__
-#define __FILES_H__
+#ifndef __MESH_LOADER_H__
+#define __MESH_LOADER_H__
 
 #include "geometry.h"
 
 namespace ROTOM {
-  namespace FILES {
-    void Load_file(const char *path, std::shared_ptr<char[]> source);
-
+  namespace MESHLOADER {
     //Use this just for testing because it load faster the obj file but it will not be optimized
     void Load_OBJ(const char *pathWithoutExtensionFile, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile = true);
 
@@ -25,4 +23,4 @@ namespace ROTOM {
   }
 }
 
-#endif __FILES_H__
+#endif //__MESH_LOADER_H__
