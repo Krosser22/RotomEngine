@@ -9,7 +9,3 @@
 ROTOM::Command::Command() {}
 
 ROTOM::Command::~Command() {}
-
-void *ROTOM::Command::get() {
-  return (void *)this;
-}

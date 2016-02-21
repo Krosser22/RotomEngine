@@ -447,15 +447,12 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
   clear();
 
   root_ = std::shared_ptr<Node>(new Node());
-  if (lights_.size() <= 0) {
-    lights_.push_back(std::shared_ptr<ROTOM::Light>(new Light()));
-  }
-  commandDrawObject_.setLight(lights_.at(0).get());
-  commandDrawObject_.setProjectionMatrix(camera_.projectionMatrix());
-  commandDrawObject_.setRoot(root_.get());
-  commandDrawObject_.setViewMatrix(camera_.viewMatrix());
+  lights_.push_back(std::shared_ptr<ROTOM::Light>(new Light()));
   taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
-
+  commandDrawObject_.setRoot(root_.get());
+  commandDrawObject_.setProjectionMatrix(camera_.projectionMatrix());
+  commandDrawObject_.setViewMatrix(camera_.viewMatrix());
+  commandDrawObject_.setLight(lights_.at(0).get());
   return true;
 }
 
@@ -481,23 +478,22 @@ bool WindowIsOpened() {
     glfwSwapBuffers(window);
     clear();
 
-    ROTOM::TASKMANAGER::waitUntilFinish();
-
-    //DisplayList
-    displayList_.addCommand(commandDrawObject_.get());
-    displayList_.runAll();
-
-    //TaskManager
-    std::shared_ptr<ROTOM::Node *> node = std::make_shared<ROTOM::Node *>(root_.get());
-    taskCalculateMatrix_->nextTaskList_.clear();
-    taskCalculateMatrix_->clearTask();
-    taskCalculateMatrix_->setInput(node);
-    ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
-
     assert(scene_);
     scene_->input();
     scene_->update();
     scene_->draw();
+
+    ROTOM::TASKMANAGER::waitUntilFinish();
+
+    //DisplayList
+    displayList_.addCommand(&commandDrawObject_);
+    displayList_.runAll();
+
+    //TaskManager
+    taskCalculateMatrix_->nextTaskList_.clear();
+    taskCalculateMatrix_->clearTask();
+    taskCalculateMatrix_->setInput(root_);
+    ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
 
     return true;
   } else {

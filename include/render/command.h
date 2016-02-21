@@ -14,8 +14,6 @@ namespace ROTOM {
     virtual ~Command();
 
     virtual void run() = 0;
-
-    void *get();
   };
 }
 

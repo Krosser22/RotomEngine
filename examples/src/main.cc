@@ -45,6 +45,8 @@ fileManager ??? Lo que mas tarda es la creación de la ventana, seguido del acces
 ----------
 ---TODO---
 ----------
++The threads of the taskManager must stop when they have no task to do.
++The taskManager must start the render with a task.
 +Add LUA
 +Use my render list with IMGUI
 */

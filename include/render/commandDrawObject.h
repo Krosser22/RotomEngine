@@ -29,11 +29,10 @@ namespace ROTOM {
     void setLight(Light *light);
 
   private:
+    Node *root_;
     float *projectionMatrix_;
     float *viewMatrix_;
     Light *light_;
-
-    Node *root_;
 
     void draw(Drawable *drawable);
 

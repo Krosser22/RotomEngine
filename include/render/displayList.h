@@ -16,9 +16,9 @@ namespace ROTOM {
     DisplayList();
     ~DisplayList();
 
-    std::vector<void *> commandList_;
+    std::vector<Command *> commandList_;
 
-    void addCommand(void *command);
+    void addCommand(Command *command);
 
     void clearCommandList();
 
