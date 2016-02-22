@@ -25,6 +25,7 @@ float scale[3];
 
 #define OBJ_MONKEY
 //#define OBJ_BLONDE
+//#define OBJ_DEADPOOL
 //#define OBJ_IRONMAN
 //#define OBJ_DRAGON
 //#define OBJ_SIRIUS_5_COLONIAL_CITY
@@ -35,6 +36,9 @@ const char *name = "Monkey";
 #elif defined OBJ_BLONDE
 const char *base_path = "../../../../obj/Blonde/";
 const char *name = "Blonde";
+#elif defined OBJ_DEADPOOL
+const char *base_path = "../../../../obj/Deadpool/";
+const char *name = "Deadpool";
 #elif defined OBJ_IRONMAN
 const char *base_path = "../../../../obj/Blonde/";
 const char *name = "Blonde";
