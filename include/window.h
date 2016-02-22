@@ -7,8 +7,6 @@
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
 
-#include "camera.h"
-#include "light.h"
 #include "scene.h"
 
 namespace ROTOM {
@@ -32,14 +30,6 @@ namespace ROTOM {
   
   //Must be declared by the user in order to use this library
   int main(int argc, char **argv);
-
-  std::shared_ptr<Node> GetRoot();
-
-  Camera *GetCamera();
-
-  std::vector<std::shared_ptr<Light>> GetLight();
-
-  void AddLight(std::shared_ptr<Light> light);
 }
 
 #endif //__WINDOW_H__

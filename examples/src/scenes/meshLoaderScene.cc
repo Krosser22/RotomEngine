@@ -49,8 +49,8 @@ static const float max_rot = 628.32f; //[0-628.32]
 
 void ROTOM::MeshLoaderScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
-  GetCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  GetCamera()->setPosition(0.0f, 0.0f, 0.0f);
+  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
@@ -59,7 +59,7 @@ void ROTOM::MeshLoaderScene::init() {
 
   drawable->setGeometry(geometry);
   drawable->setMaterial(material);
-  drawable->setParent(GetRoot());
+  drawable->setParent(getRoot());
   drawable->setPosition(0.0f, 0.0f, -5.0f);
 
   obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
@@ -69,7 +69,7 @@ void ROTOM::MeshLoaderScene::init() {
 
   geometry->loadGeometry(&obj_data);
 
-  GetRoot()->setPosition(0.0f, 0.0f, -5.0f);
+  getRoot()->setPosition(0.0f, 0.0f, -5.0f);
 
   position[0] = 0.0f;
   position[1] = 0.0f;
@@ -80,9 +80,9 @@ void ROTOM::MeshLoaderScene::init() {
   scale[0] = 1.0f;
   scale[1] = 1.0f;
   scale[2] = 1.0f;
-  GetRoot()->getChildAt(0)->setPosition(position);
-  GetRoot()->getChildAt(0)->setRotation(rotation);
-  GetRoot()->getChildAt(0)->setScale(scale);
+  getRoot()->getChildAt(0)->setPosition(position);
+  getRoot()->getChildAt(0)->setRotation(rotation);
+  getRoot()->getChildAt(0)->setScale(scale);
 }
 
 void ROTOM::MeshLoaderScene::input() {
@@ -124,19 +124,19 @@ void ROTOM::MeshLoaderScene::draw() {
 
   ImGui::Begin("Input");
   {
-    ImGui::DragFloat3("LightPosition", &GetLight().at(0).get()->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-    ImGui::DragFloat3("LightColor", &GetLight().at(0).get()->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat4("specularIntensity", &GetLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat("Shininess", &(((Drawable *)(&GetRoot()->getChildAt(0))->get())->material()->shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
-    ImGui::DragFloat4("specularMaterial", (((Drawable *)(&GetRoot()->getChildAt(0))->get())->material()->specularMaterial_), 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+    ImGui::DragFloat3("LightPosition", &getLight().at(0).get()->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
+    ImGui::DragFloat3("LightColor", &getLight().at(0).get()->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+    ImGui::DragFloat4("specularIntensity", &getLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+    ImGui::DragFloat("Shininess", &(((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+    ImGui::DragFloat4("specularMaterial", (((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.specularMaterial_), 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     if (ImGui::DragFloat3("Position", &position[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
-      GetRoot()->getChildAt(0)->setPosition(position);
+      getRoot()->getChildAt(0)->setPosition(position);
     }
     if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 360.0f, "%.2f", 1.0f)) {
-      GetRoot()->getChildAt(0)->setRotation(rotation);
+      getRoot()->getChildAt(0)->setRotation(rotation);
     }
     if (ImGui::DragFloat3("Scale", &scale[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f)) {
-      GetRoot()->getChildAt(0)->setScale(scale);
+      getRoot()->getChildAt(0)->setScale(scale);
     }
   }
   ImGui::End();
@@ -144,14 +144,14 @@ void ROTOM::MeshLoaderScene::draw() {
 
 void ROTOM::MeshLoaderScene::moveCamera(char key) {
   //printf("%c\n", key);
-  const float *temp_forward = GetCamera()->forward();
+  const float *temp_forward = getCamera()->forward();
   float forward[3] = { temp_forward[0], temp_forward[1], temp_forward[2] };
   float length = sqrt((forward[0] * forward[0]) + (forward[1] * forward[1]) + (forward[2] * forward[2]));
   for (unsigned int i = 0; i < 3; ++i) {
     forward[i] /= length;
   }
 
-  float *cameraPos = &GetCamera()->position()[0];
+  float *cameraPos = &getCamera()->position()[0];
   switch (key) {
     case 'W':
       cameraPos[0] += (forward[0] * cameraSpeed);
@@ -175,16 +175,16 @@ void ROTOM::MeshLoaderScene::moveCamera(char key) {
 }
 
 void ROTOM::MeshLoaderScene::rotateCamera() {
-  GetCamera()->rotation()[0] += (float)((mx_last_frame - mx) * 0.4);
-  GetCamera()->rotation()[1] -= (float)((my_last_frame - my));
+  getCamera()->rotation()[0] += (float)((mx_last_frame - mx) * 0.4);
+  getCamera()->rotation()[1] -= (float)((my_last_frame - my));
 
   //min and max X rotation
-  if (GetCamera()->rotation()[0] < -max_rot) GetCamera()->rotation()[0] += max_rot;
-  if (GetCamera()->rotation()[0] > max_rot) GetCamera()->rotation()[0] -= max_rot;
+  if (getCamera()->rotation()[0] < -max_rot) getCamera()->rotation()[0] += max_rot;
+  if (getCamera()->rotation()[0] > max_rot) getCamera()->rotation()[0] -= max_rot;
 
   //min and max Y rotation
-  if (GetCamera()->rotation()[1] < 0) GetCamera()->rotation()[1] = 0;
-  if (GetCamera()->rotation()[1] > max_rot) GetCamera()->rotation()[1] = 650;
+  if (getCamera()->rotation()[1] < 0) getCamera()->rotation()[1] = 0;
+  if (getCamera()->rotation()[1] > max_rot) getCamera()->rotation()[1] = 650;
 }
 
 void ROTOM::MeshLoaderScene::updateCamera() {
@@ -199,11 +199,11 @@ void ROTOM::MeshLoaderScene::updateCamera() {
   printf("%f %f %f %f\n", a[2], a[6], a[10], a[14]);
   printf("%f %f %f %f\n\n", a[3], a[7], a[11], a[15]);*/
   float view[3];
-  float p = sin(-GetCamera()->position()[1] / 200) * 220;
-  view[0] = -p*cos(GetCamera()->rotation()[0] / 100);
-  view[1] = -cos(-GetCamera()->rotation()[1] / 200) * 220;
-  view[2] = -p*sin(GetCamera()->rotation()[0] / 100);
+  float p = sin(-getCamera()->position()[1] / 200) * 220;
+  view[0] = -p*cos(getCamera()->rotation()[0] / 100);
+  view[1] = -cos(-getCamera()->rotation()[1] / 200) * 220;
+  view[2] = -p*sin(getCamera()->rotation()[0] / 100);
 
   //getCamera()->setPosition(camera_pos);
-  GetCamera()->setViewTarget(view);
+  getCamera()->setViewTarget(view);
 }

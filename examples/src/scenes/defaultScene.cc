@@ -12,8 +12,8 @@
 
 void ROTOM::DefaultScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
-  GetCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  GetCamera()->setPosition(0.0f, 0.0f, 0.0f);
+  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
@@ -27,7 +27,7 @@ void ROTOM::DefaultScene::init() {
 
   drawable1->setGeometry(geometry);
   drawable1->setMaterial(material1);
-  drawable1->setParent(GetRoot());
+  drawable1->setParent(getRoot());
   drawable1->setPositionZ(-5.0f);
   drawable2->setGeometry(geometry);
   drawable2->setMaterial(material2);
@@ -57,9 +57,9 @@ void ROTOM::DefaultScene::init() {
 
 void ROTOM::DefaultScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
-  GetRoot()->getChildAt(0)->moveX(sin_time);
-  GetRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
-  GetRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
+  getRoot()->getChildAt(0)->moveX(sin_time);
+  getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
+  getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
 }
 
 void ROTOM::DefaultScene::draw() {
@@ -76,9 +76,9 @@ void ROTOM::DefaultScene::draw() {
       }
     }*/
 
-    ImGui::DragFloat3("LightPosition", &GetLight().at(0).get()->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-    ImGui::DragFloat3("LightColor", &GetLight().at(0).get()->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat4("specularIntensity", &GetLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+    ImGui::DragFloat3("LightPosition", &getLight().at(0).get()->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
+    ImGui::DragFloat3("LightColor", &getLight().at(0).get()->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+    ImGui::DragFloat4("specularIntensity", &getLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     //ImGui::DragFloat("Shininess", &(((Drawable *)(root_.getChildAt(0)->getChildAt(0)))->material()->shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
     //ImGui::DragFloat4("specularMaterial", (((Drawable *)(root_.getChildAt(0)->getChildAt(0)))->material()->specularMaterial_), 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
   }
