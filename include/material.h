@@ -10,12 +10,7 @@
 #include "materialSettings.h"
 
 namespace ROTOM {
-  class Material {
-  public:
-    Material(const char *texturePath = "../../../../img/texture.png");
-    ~Material();
-
-    //Shader variables
+  struct ShaderData {
     unsigned int shaderProgram;
     unsigned int u_color;
     unsigned int u_model;
@@ -27,10 +22,20 @@ namespace ROTOM {
     unsigned int u_shininess;
     unsigned int u_specularIntensity;
     unsigned int u_specularMaterial;
+  };
 
-    //Material variables
+  struct MaterialData {
     float shininess_;
     float specularMaterial_[4];
+  };
+
+  class Material {
+  public:
+    Material(const char *texturePath = "../../../../img/texture.png");
+    ~Material();
+
+    ShaderData shaderData_;
+    MaterialData materialData_;
 
     void setShader(const char *vertexShaderSource, const char *fragmentShaderSource);
 
