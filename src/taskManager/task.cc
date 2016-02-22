@@ -9,7 +9,3 @@
 ROTOM::Task::Task() {}
 
 ROTOM::Task::~Task() {}
-
-void ROTOM::Task::clearTask() {
-  nextTaskList_.clear();
-}

@@ -52,7 +52,7 @@ void ROTOM::GeometryScene::update() {
 
 void ROTOM::GeometryScene::draw() {
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-  ImGui::Text("%d Objects = %d Points", amount, geometry->vertexCount() * amount);
+  ImGui::Text("%d Objects = %d Vertex", amount, geometry->vertexCount() * amount);
   
   ImGui::Begin("Input");
   {

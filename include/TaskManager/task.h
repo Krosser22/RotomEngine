@@ -29,10 +29,7 @@ namespace ROTOM {
 
     virtual void run() = 0;
 
-    void clearTask();
-
-    //void setNextTasks(int countTasks, std::vector<std::shared_ptr<Task>> nextTasksList);
-    //std::vector<std::shared_ptr<Task>> getNextTasksList();
+    //virtual void clearTask() = 0;
 
     std::vector<std::shared_ptr<Task>> nextTaskList_;
   };

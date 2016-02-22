@@ -14,12 +14,13 @@
 namespace ROTOM {
   struct CommandDrawObjectData {
     MaterialSettings materialSettings;
+    ShaderData shaderData;
     unsigned int geometry_VAO;
     unsigned int geometry_veterCount;
+    unsigned int material_texture;
+    float material_shininess;
+    float material_specularMaterial[4];
     float drawable_modelWorld[16];
-    ShaderData shaderData;
-    float material_shininess_;
-    float material_specularMaterial_[4];
   };
 
   class CommandDrawObject : public Command {
@@ -27,26 +28,20 @@ namespace ROTOM {
     CommandDrawObject();
     virtual ~CommandDrawObject();
 
-    std::vector<CommandDrawObjectData> commandDrawObjectData_;
-
     //It does what the command should do (it's called from the displayList class)
     void run();
 
     void setInput(Node *root, Light light, float projectionMatrix[16], float viewMatrix[16]);
 
   private:
-    Node *root_; -----------eliminar esta variable y utilizar en su lugar la variable dataaaa
+    std::vector<CommandDrawObjectData> commandDrawObjectData_;
     Light light_;
     float projectionMatrix_[16];
     float viewMatrix_[16];
 
-    void draw(Node *node);
+    void setData(Drawable *drawable);
 
-    void drawChilds(Node *node);
-
-    void setInput(Node *node);
-
-    void setInputChilds(Node *node);
+    void setInputChilds(Drawable *drawable);
   };
 }
 

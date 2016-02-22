@@ -48,6 +48,9 @@ static std::shared_ptr<ROTOM::Task> getNextTask() {
   std::shared_ptr<ROTOM::Task> task;
   taskManagerData.lock_taskList_->lock();
   if (taskManagerData.taskList_.size() > 0) {
+    /*if (taskManagerData.taskList_.size() > 1) {
+      printf("%d\n", taskManagerData.taskList_.size());
+    }*/
     task = taskManagerData.taskList_.at(taskManagerData.taskList_.size() - 1);
     taskManagerData.taskList_.pop_back();
   }
@@ -128,7 +131,14 @@ void ROTOM::TASKMANAGER::addTask(std::shared_ptr<Task> task) {
   //cv_.notify_all();
 }
 
-void ROTOM::TASKMANAGER::waitUntilFinish() {
+/*int ROTOM::TASKMANAGER::taskPendingCount() {
+  taskManagerData.lock_taskPending_->lock();
+  int pendingCount = taskManagerData.taskPending_;
+  taskManagerData.lock_taskPending_->unlock();
+  return pendingCount;
+}*/
+
+/*void ROTOM::TASKMANAGER::waitUntilFinish() {
   bool hasTaskManagerFinishTheFrame = false;
   while (!hasTaskManagerFinishTheFrame) {
     taskManagerData.lock_taskPending_->lock();
@@ -137,4 +147,4 @@ void ROTOM::TASKMANAGER::waitUntilFinish() {
     }
     taskManagerData.lock_taskPending_->unlock();
   }
-}
+}*/

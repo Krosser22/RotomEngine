@@ -24,6 +24,7 @@
 #include "drawable.h"
 #include "geometry.h"
 #include "light.h"
+#include "commandDrawObject.h"
 
 namespace ROTOM {
   namespace GRAPHICS {
@@ -35,7 +36,7 @@ namespace ROTOM {
 
     void releaseMaterial(unsigned int shaderProgram);
 
-    void drawMaterial(Drawable *drawable, Light light, float *projectionMatrix, float *viewMatrix);
+    void drawMaterial(CommandDrawObjectData *commandDrawObjectData, Light *light, float *projectionMatrix, float *viewMatrix);
 
     void clearScreen();
 

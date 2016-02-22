@@ -6,16 +6,14 @@
 
 #include "render/displayList.h"
 
-ROTOM::DisplayList::DisplayList() {}
+ROTOM::DisplayList::DisplayList() {
+  isValid_ = false;
+}
 
 ROTOM::DisplayList::~DisplayList() {}
 
 void ROTOM::DisplayList::addCommand(Command *command) {
   commandList_.push_back(command);
-}
-
-void ROTOM::DisplayList::clearCommandList() {
-  commandList_.clear();
 }
 
 void ROTOM::DisplayList::draw() {

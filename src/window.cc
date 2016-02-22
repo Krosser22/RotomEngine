@@ -447,6 +447,7 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
 
   taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
   taskRender_ = std::shared_ptr<TaskRender>(new TaskRender(TaskType_Render));
+  taskCalculateMatrix_->nextTaskList_.push_back(taskRender_);
   return true;
 }
 
@@ -477,23 +478,20 @@ bool WindowIsOpened() {
     scene_->update();
     scene_->draw();
 
-    ROTOM::TASKMANAGER::waitUntilFinish();
-
-    //TaskCalculateMatrix
-    taskCalculateMatrix_->clearTask();
     taskCalculateMatrix_->setInput(scene_->getRoot());
+    taskRender_->setInput(&displayList_);
     ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
 
-    //TaskRender
-    taskRender_->clearTask();
-    taskRender_->setInput(&displayList_);
-    //ROTOM::TASKMANAGER::addTask(taskRender_);
-
     //DisplayList
-    commandDrawObject_.setInput(scene_->getRoot().get(), *scene_->getLight().at(0).get(), scene_->getCamera()->projectionMatrix(), scene_->getCamera()->viewMatrix());
+    if (displayList_.isValid_) {
+      commandDrawObject_.setInput(scene_->getRoot().get(), *scene_->getLight().at(0).get(), scene_->getCamera()->projectionMatrix(), scene_->getCamera()->viewMatrix());
+      displayList_.isValid_ = false;
+      //printf("The TaskManager is faster\n");
+    } /*else {
+      printf("The TaskManager is slow\n");
+    }*/
     displayList_.addCommand(&commandDrawObject_);
     displayList_.draw();
-
     return true;
   } else {
     return false;

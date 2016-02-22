@@ -124,7 +124,7 @@ void ROTOM::MeshLoaderScene::update() {
 
 void ROTOM::MeshLoaderScene::draw() {
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-  ImGui::Text("1 Object = %d Points", geometry->vertexCount());
+  ImGui::Text("1 Object = %d Vertex", geometry->vertexCount());
 
   ImGui::Begin("Input");
   {
