@@ -17,6 +17,7 @@ namespace ROTOM {
   enum TaskType {
     TaskType_none = 0,
     TaskType_CalculateMatrix,
+    TaskType_Render,
   };
 
   class Task {
@@ -27,6 +28,8 @@ namespace ROTOM {
     TaskType taskType_ = TaskType_none;
 
     virtual void run() = 0;
+
+    void clearTask();
 
     //void setNextTasks(int countTasks, std::vector<std::shared_ptr<Task>> nextTasksList);
     //std::vector<std::shared_ptr<Task>> getNextTasksList();

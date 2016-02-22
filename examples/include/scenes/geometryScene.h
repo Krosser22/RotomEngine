@@ -4,18 +4,18 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __DEFAULT_SCENE_H__
-#define __DEFAULT_SCENE_H__
+#ifndef __GEOMETRY_SCENE_H__
+#define __GEOMETRY_SCENE_H__
 
 #include "scene.h"
 #include "drawable.h"
 #include <memory>
 
 namespace ROTOM {
-  class DefaultScene : public ROTOM::Scene {
+  class GeometryScene : public ROTOM::Scene {
   public:
-    DefaultScene() {};
-    ~DefaultScene() {};
+    GeometryScene() {};
+    ~GeometryScene() {};
 
     void init();
 
@@ -32,4 +32,4 @@ namespace ROTOM {
   };
 }
 
-#endif //__DEFAULT_SCENE_H__
+#endif //__GEOMETRY_SCENE_H__

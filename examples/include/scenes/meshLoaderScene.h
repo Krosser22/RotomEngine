@@ -26,11 +26,8 @@ namespace ROTOM {
     void draw();
 
     void destroy() {};
-
+    
     std::shared_ptr<Geometry> geometry;
-    std::shared_ptr<Material> material;
-    std::shared_ptr<Drawable> drawable;
-    std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data;
 
   private:
     void moveCamera(char key);

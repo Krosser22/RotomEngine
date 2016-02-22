@@ -15,15 +15,15 @@ void ROTOM::DefaultScene::init() {
   GetCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   GetCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
-  std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
+  geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material());
-
-  drawable1 = std::shared_ptr<Drawable>(new Drawable());
-  drawable2 = std::shared_ptr<Drawable>(new Drawable());
-  drawable3 = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Drawable> drawable[amount];
 
   drawable1->setGeometry(geometry);
   drawable1->setMaterial(material1);
@@ -64,7 +64,7 @@ void ROTOM::DefaultScene::update() {
 
 void ROTOM::DefaultScene::draw() {
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-  ImGui::Text("%d Cubes * 6 faces * 2 Triangles * 3 Points = %d Points", amount + 3, (amount + 3) * 6 * 2 * 3);
+  ImGui::Text("%d Objects = %d Points", amount + 3, geometry->vertexCount() * (amount + 3));
   
   ImGui::Begin("Input");
   {

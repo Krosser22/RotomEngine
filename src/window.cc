@@ -9,6 +9,7 @@
 #include "render/displayList.h"
 #include "render/graphics.h"
 #include "taskManager/taskCalculateMatrix.h"
+#include "taskManager/taskRender.h"
 #include "taskManager/taskManager.h"
 #include "imgui.h"
 #include "time.h"
@@ -48,6 +49,7 @@ static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
 static ROTOM::DisplayList displayList_;
 static ROTOM::CommandDrawObject commandDrawObject_;
 static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateMatrix_;
+static std::shared_ptr<ROTOM::TaskRender> taskRender_;
 static ROTOM::Camera camera_;
 static std::shared_ptr<ROTOM::Node> root_;
 static std::vector<std::shared_ptr<ROTOM::Light>> lights_;
@@ -449,6 +451,7 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
   root_ = std::shared_ptr<Node>(new Node());
   lights_.push_back(std::shared_ptr<ROTOM::Light>(new Light()));
   taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
+  taskRender_ = std::shared_ptr<TaskRender>(new TaskRender(TaskType_Render));
   commandDrawObject_.setRoot(root_.get());
   commandDrawObject_.setProjectionMatrix(camera_.projectionMatrix());
   commandDrawObject_.setViewMatrix(camera_.viewMatrix());
@@ -485,15 +488,19 @@ bool WindowIsOpened() {
 
     ROTOM::TASKMANAGER::waitUntilFinish();
 
-    //DisplayList
-    displayList_.addCommand(&commandDrawObject_);
-    displayList_.runAll();
-
-    //TaskManager
-    taskCalculateMatrix_->nextTaskList_.clear();
+    //TaskCalculateMatrix
     taskCalculateMatrix_->clearTask();
     taskCalculateMatrix_->setInput(root_);
     ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
+
+    //TaskRender
+    taskRender_->clearTask();
+    taskRender_->setInput(&displayList_);
+    //ROTOM::TASKMANAGER::addTask(taskRender_);
+
+    //DisplayList
+    displayList_.addCommand(&commandDrawObject_);
+    displayList_.draw();
 
     return true;
   } else {

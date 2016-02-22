@@ -53,8 +53,9 @@ void ROTOM::MeshLoaderScene::init() {
   GetCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
-  material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
-  drawable = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
+  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data;
 
   drawable->setGeometry(geometry);
   drawable->setMaterial(material);
@@ -62,14 +63,6 @@ void ROTOM::MeshLoaderScene::init() {
   drawable->setPosition(0.0f, 0.0f, -5.0f);
 
   obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
-
-  char finalPath[256];
-  strcpy(finalPath, base_path);
-  strcat(finalPath, name);
-
-  char newPath[256];
-  strcpy(newPath, base_path);
-  strcat(newPath, name);
 
   //ROTOM::MESHLOADER::Load_OBJ(finalPath, obj_data, false);
   ROTOM::MESHLOADER::Load_OBJ(base_path, name, obj_data);

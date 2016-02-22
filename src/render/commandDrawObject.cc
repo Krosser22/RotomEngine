@@ -34,7 +34,7 @@ void ROTOM::CommandDrawObject::setLight(Light *light) {
 }
 
 void ROTOM::CommandDrawObject::draw(Drawable *drawable) {
-  GRAPHICS::useMaterial(drawable, projectionMatrix_, viewMatrix_, light_);
+  GRAPHICS::drawMaterial(drawable, projectionMatrix_, viewMatrix_, light_);
   drawChilds(drawable);
 }
 

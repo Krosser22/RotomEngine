@@ -18,8 +18,6 @@ namespace ROTOM {
 
     virtual void run();
 
-    void clearTask();
-
     void setInput(std::shared_ptr<Node> root);
 
     void runOnNode(Node *node);

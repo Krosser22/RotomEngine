@@ -18,7 +18,7 @@ void ROTOM::DisplayList::clearCommandList() {
   commandList_.clear();
 }
 
-void ROTOM::DisplayList::runAll() {
+void ROTOM::DisplayList::draw() {
   while (commandList_.size() > 0) {
     commandList_.at(commandList_.size() - 1)->run();
     commandList_.pop_back();

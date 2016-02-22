@@ -8,7 +8,7 @@
 
 static struct TaskManagerData{
   int threardsCount_;
-  static const int threardsNotUsed_ = 2;
+  static const int threardsNotUsed_ = 3;
 
   //Task in progress or in the task list
   int taskPending_;

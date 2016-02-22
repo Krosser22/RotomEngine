@@ -84,16 +84,15 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
   glDeleteProgram(shaderProgram);
 }
 
-void ROTOM::GRAPHICS::useMaterial(Drawable *drawable, float *projectionMatrix, float *viewMatrix, Light *light) {
+void ROTOM::GRAPHICS::drawMaterial(Drawable *drawable, float *projectionMatrix, float *viewMatrix, Light *light) {
   Geometry* geometry = drawable->geometry().get();
   Material* material = drawable->material().get();
   MaterialSettings* materialSettings = drawable->materialSettings().get();
-
-  float *lightPosition = &light->lightPositionX;
-  float *lightColor = &light->lightColorX;
+  const float *lightPosition = &light->lightPositionX;
+  const float *lightColor = &light->lightColorX;
   const float *specularIntensity = &light->specularIntensityX;
-  //const float *color = material->color();
   const float *specularMaterial = material->specularMaterial_;
+  //const float *color = material->color();
 
   glUseProgram(material->shaderProgram);
 
@@ -105,11 +104,11 @@ void ROTOM::GRAPHICS::useMaterial(Drawable *drawable, float *projectionMatrix, f
   glUniformMatrix4fv(material->u_view, 1, GL_FALSE, viewMatrix);
   glUniformMatrix4fv(material->u_projection, 1, GL_FALSE, projectionMatrix);
   glUniform3f(material->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
-  //glUniform4f(u_color, color[0], color[1], color[2], color[3]);
   glUniform3f(material->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
   glUniform1f(material->u_shininess, material->shininess_);
   glUniform4f(material->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2], specularIntensity[3]);
   glUniform4f(material->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2], specularMaterial[3]);
+  //glUniform4f(material->u_color, color[0], color[1], color[2], color[3]);
 
   glBindVertexArray(geometry->VAO());
   glDrawElements(GL_TRIANGLES, geometry->vertexCount(), GL_UNSIGNED_INT, 0);

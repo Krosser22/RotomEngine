@@ -22,7 +22,7 @@ namespace ROTOM {
 
     void clearCommandList();
 
-    void runAll();
+    void draw();
   };
 }
 
