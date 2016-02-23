@@ -6,7 +6,7 @@
 
 #include "taskManager/taskManager.h"
 
-static struct TaskManagerData{
+struct TaskManagerData{
   int threardsCount;
   static const int threardsNotUsed = 3;
 
@@ -21,7 +21,7 @@ static struct TaskManagerData{
 
   bool isOff;
 
-  std::condition_variable cv;
+  //std::condition_variable cv;
 
 } taskManagerData;
 
@@ -40,7 +40,7 @@ static void addNextTasksOf(std::shared_ptr<ROTOM::Task> task) {
   }
   task = NULL;
   taskManagerData.lock_taskList.unlock();
-  taskManagerData.cv.notify_all();
+  //taskManagerData.cv.notify_all();
 }
 
 static std::shared_ptr<ROTOM::Task> getNextTask() {
@@ -59,8 +59,8 @@ static std::shared_ptr<ROTOM::Task> getNextTask() {
 
 static void threadLoop(int ID) {
   std::shared_ptr<ROTOM::Task> actualTask = NULL;
-  //std::unique_lock<std::mutex> lck(taskManagerData.lock_taskList);
-  //taskManagerData.cv.wait(lck);
+  //std::unique_lock<std::mutex> lock(taskManagerData.lock_taskList);
+  //taskManagerData.cv.wait(lock);
 
   while (!taskManagerData.isOff) {
     actualTask = getNextTask();
@@ -68,7 +68,7 @@ static void threadLoop(int ID) {
       actualTask->run();
       addNextTasksOf(actualTask);
     } /*else {
-      taskManagerData.cv.wait(lck);
+      taskManagerData.cv.wait(lock);
     }*/
   }
 }
@@ -117,7 +117,7 @@ void ROTOM::TASKMANAGER::addTask(std::shared_ptr<Task> task) {
   taskManagerData.lock_taskPending.lock();
   ++taskManagerData.taskPending;
   taskManagerData.lock_taskPending.unlock();
-  taskManagerData.cv.notify_all();
+  //taskManagerData.cv.notify_all();
 }
 
 /*int ROTOM::TASKMANAGER::taskPendingCount() {
