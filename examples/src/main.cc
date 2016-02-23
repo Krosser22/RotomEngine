@@ -30,8 +30,7 @@ int ROTOM::main(int argc, char** argv) {
 ---------
 ---ASK---
 ---------
-GetRoot() Donde???
-fileManager ??? Lo que mas tarda es la creación de la ventana, seguido del acceso a ficheros
+
 
 
 ----------
@@ -47,6 +46,7 @@ fileManager ??? Lo que mas tarda es la creación de la ventana, seguido del acces
 ----------
 ---TODO---
 ----------
++Make a fileManager
 +The threads of the taskManager must stop when they have no task to do.
 +The taskManager must start the render with a task.
 +Add LUA

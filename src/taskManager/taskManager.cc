@@ -7,144 +7,133 @@
 #include "taskManager/taskManager.h"
 
 static struct TaskManagerData{
-  int threardsCount_;
-  static const int threardsNotUsed_ = 3;
+  int threardsCount;
+  static const int threardsNotUsed = 3;
 
   //Task in progress or in the task list
-  int taskPending_;
-  std::shared_ptr<std::mutex> lock_taskPending_;
+  int taskPending;
+  std::mutex lock_taskPending;
 
-  std::vector<std::thread> threads_;
+  std::vector<std::thread> threads;
 
-  std::vector<std::shared_ptr<ROTOM::Task>> taskList_;
-  std::shared_ptr<std::mutex> lock_taskList_;
+  std::vector<std::shared_ptr<ROTOM::Task>> taskList;
+  std::mutex lock_taskList;
 
-  bool isOff_;
+  bool isOff;
 
-  //std::condition_variable cv_;
+  std::condition_variable cv;
 
-  //std::shared_ptr<std::lock_guard<std::mutex>> lk_;
 } taskManagerData;
 
 static void addNextTasksOf(std::shared_ptr<ROTOM::Task> task) {
-  taskManagerData.lock_taskPending_->lock();
-  --taskManagerData.taskPending_;
-  taskManagerData.lock_taskPending_->unlock();
+  taskManagerData.lock_taskPending.lock();
+  --taskManagerData.taskPending;
+  taskManagerData.lock_taskPending.unlock();
 
-  taskManagerData.lock_taskList_->lock();
+  taskManagerData.lock_taskList.lock();
   for (unsigned int i = 0; i < task->nextTaskList_.size(); ++i) {
-    taskManagerData.taskList_.push_back(task->nextTaskList_.at(i));
+    taskManagerData.taskList.push_back(task->nextTaskList_.at(i));
 
-    taskManagerData.lock_taskPending_->lock();
-    ++taskManagerData.taskPending_;
-    taskManagerData.lock_taskPending_->unlock();
+    taskManagerData.lock_taskPending.lock();
+    ++taskManagerData.taskPending;
+    taskManagerData.lock_taskPending.unlock();
   }
   task = NULL;
-  taskManagerData.lock_taskList_->unlock();
-  //cv_.notify_all();
+  taskManagerData.lock_taskList.unlock();
+  taskManagerData.cv.notify_all();
 }
 
 static std::shared_ptr<ROTOM::Task> getNextTask() {
   std::shared_ptr<ROTOM::Task> task;
-  taskManagerData.lock_taskList_->lock();
-  if (taskManagerData.taskList_.size() > 0) {
-    /*if (taskManagerData.taskList_.size() > 1) {
-      printf("%d\n", taskManagerData.taskList_.size());
+  taskManagerData.lock_taskList.lock();
+  if (taskManagerData.taskList.size() > 0) {
+    /*if (taskManagerData.taskList.size() > 1) {
+      printf("%d\n", taskManagerData.taskList.size());
     }*/
-    task = taskManagerData.taskList_.at(taskManagerData.taskList_.size() - 1);
-    taskManagerData.taskList_.pop_back();
+    task = taskManagerData.taskList.at(taskManagerData.taskList.size() - 1);
+    taskManagerData.taskList.pop_back();
   }
-  taskManagerData.lock_taskList_->unlock();
+  taskManagerData.lock_taskList.unlock();
   return task;
 }
 
 static void threadLoop(int ID) {
   std::shared_ptr<ROTOM::Task> actualTask = NULL;
-  //std::unique_lock<std::mutex> lck(taskManager->lock_taskList_);
-  //taskManager->cv_.wait(lck);
+  //std::unique_lock<std::mutex> lck(taskManagerData.lock_taskList);
+  //taskManagerData.cv.wait(lck);
 
-  while (!taskManagerData.isOff_) {
+  while (!taskManagerData.isOff) {
     actualTask = getNextTask();
     if (actualTask) {
       actualTask->run();
       addNextTasksOf(actualTask);
     } /*else {
-      taskManager->cv_.wait(lck);
-      }*/
+      taskManagerData.cv.wait(lck);
+    }*/
   }
 }
 
 void ROTOM::TASKMANAGER::init() {
-  taskManagerData.isOff_ = false;
-
-  taskManagerData.taskPending_ = 0;
-
-  taskManagerData.lock_taskPending_ = std::make_shared<std::mutex>();
-  taskManagerData.lock_taskList_ = std::make_shared<std::mutex>();
-
-  //std::shared_ptr<std::lock_guard<std::mutex>> lk(std::lock_guard<std::mutex>(lock_taskList_));
-  //lk_ = lk.get();
-
-  taskManagerData.threardsCount_ = std::thread::hardware_concurrency();
-  //printf("Task Manager Threads: [%d]\n", threardsCount_ - threardsNotUsed_);
-  //self_ = std::shared_ptr<TaskManagerData>(taskManagerData);
-  for (int i = 0; i < taskManagerData.threardsCount_ - taskManagerData.threardsNotUsed_; ++i) {
-    taskManagerData.threads_.push_back(std::thread(&threadLoop, i));
+  taskManagerData.isOff = false;
+  taskManagerData.taskPending = 0;
+  taskManagerData.threardsCount = std::thread::hardware_concurrency();
+  for (int i = 0; i < taskManagerData.threardsCount - taskManagerData.threardsNotUsed; ++i) {
+    taskManagerData.threads.push_back(std::thread(&threadLoop, i));
   }
 }
 
 void ROTOM::TASKMANAGER::destroy() {
   bool threadsWorking = true;
   while (threadsWorking) {
-    taskManagerData.lock_taskPending_->lock();
-    if (taskManagerData.taskPending_ <= 0) {
-      taskManagerData.lock_taskList_->lock();
-      if (taskManagerData.taskList_.size() <= 0) {
+    taskManagerData.lock_taskPending.lock();
+    if (taskManagerData.taskPending <= 0) {
+      taskManagerData.lock_taskList.lock();
+      if (taskManagerData.taskList.size() <= 0) {
         threadsWorking = false;
       }
-      taskManagerData.lock_taskList_->unlock();
+      taskManagerData.lock_taskList.unlock();
     }
-    taskManagerData.lock_taskPending_->unlock();
+    taskManagerData.lock_taskPending.unlock();
   }
 
-  taskManagerData.isOff_ = true;
+  taskManagerData.isOff = true;
 
-  for (unsigned int i = 0; i < taskManagerData.threads_.size(); ++i) {
-    if (taskManagerData.threads_.at(i).joinable()) {
-      taskManagerData.threads_.at(i).join();
+  for (unsigned int i = 0; i < taskManagerData.threads.size(); ++i) {
+    if (taskManagerData.threads.at(i).joinable()) {
+      taskManagerData.threads.at(i).join();
     }
   }
-  while (taskManagerData.threads_.size() > 0) {
-    taskManagerData.threads_.pop_back();
+  while (taskManagerData.threads.size() > 0) {
+    taskManagerData.threads.pop_back();
   }
-  taskManagerData.threads_.clear();
+  taskManagerData.threads.clear();
 }
 
 void ROTOM::TASKMANAGER::addTask(std::shared_ptr<Task> task) {
-  taskManagerData.lock_taskList_->lock();
-  taskManagerData.taskList_.push_back(task);
-  taskManagerData.lock_taskList_->unlock();
+  taskManagerData.lock_taskList.lock();
+  taskManagerData.taskList.push_back(task);
+  taskManagerData.lock_taskList.unlock();
 
-  taskManagerData.lock_taskPending_->lock();
-  ++taskManagerData.taskPending_;
-  taskManagerData.lock_taskPending_->unlock();
-  //cv_.notify_all();
+  taskManagerData.lock_taskPending.lock();
+  ++taskManagerData.taskPending;
+  taskManagerData.lock_taskPending.unlock();
+  taskManagerData.cv.notify_all();
 }
 
 /*int ROTOM::TASKMANAGER::taskPendingCount() {
-  taskManagerData.lock_taskPending_->lock();
-  int pendingCount = taskManagerData.taskPending_;
-  taskManagerData.lock_taskPending_->unlock();
+  taskManagerData.lock_taskPending.lock();
+  int pendingCount = taskManagerData.taskPending;
+  taskManagerData.lock_taskPending.unlock();
   return pendingCount;
 }*/
 
 /*void ROTOM::TASKMANAGER::waitUntilFinish() {
   bool hasTaskManagerFinishTheFrame = false;
   while (!hasTaskManagerFinishTheFrame) {
-    taskManagerData.lock_taskPending_->lock();
-    if (taskManagerData.taskPending_ <= 0) {
+    taskManagerData.lock_taskPending.lock();
+    if (taskManagerData.taskPending <= 0) {
       hasTaskManagerFinishTheFrame = true;
     }
-    taskManagerData.lock_taskPending_->unlock();
+    taskManagerData.lock_taskPending.unlock();
   }
 }*/
