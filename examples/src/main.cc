@@ -4,12 +4,12 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "window.h"
+#include "general/time.h"
+#include "general/window.h"
 #include "scenes/defaultScene.h"
 #include "scenes/geometryScene.h"
-#include "scenes/soundScene.h"
 #include "scenes/meshLoaderScene.h"
-#include "time.h"
+#include "scenes/soundScene.h"
 
 int ROTOM::main(int argc, char** argv) {
   TIME::Chronometer c;

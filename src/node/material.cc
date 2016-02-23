@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "material.h"
+#include "node/material.h"
 #include "render/graphics.h"
 #include "soil.h"
 

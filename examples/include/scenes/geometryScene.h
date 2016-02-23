@@ -7,8 +7,8 @@
 #ifndef __GEOMETRY_SCENE_H__
 #define __GEOMETRY_SCENE_H__
 
-#include "scene.h"
-#include "drawable.h"
+#include "general/scene.h"
+#include "node/drawable.h"
 #include <memory>
 
 namespace ROTOM {

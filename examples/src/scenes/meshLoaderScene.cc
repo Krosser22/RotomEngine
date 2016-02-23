@@ -4,14 +4,14 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "general/files.h"
+#include "general/scene.h"
+#include "general/time.h"
+#include "general/window.h"
+#include "node/drawable.h"
 #include "scenes/meshLoaderScene.h"
-#include "imgui.h"
-#include "drawable.h"
-#include "files.h"
-#include "window.h"
-#include "scene.h"
 #include "meshLoader.h"
-#include "time.h"
+#include "imgui.h"
 
 float cameraSpeed = 8.0f;
 double mx = 0;

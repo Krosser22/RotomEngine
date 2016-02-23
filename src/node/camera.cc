@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "camera.h"
+#include "node/camera.h"
 #include "glm/gtc/matrix_transform.hpp"
 
 ROTOM::Camera::Camera() {}

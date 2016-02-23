@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "geometry.h"
+#include "node/geometry.h"
 #include "render/graphics.h"
 
 //Default Square

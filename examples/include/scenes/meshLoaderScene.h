@@ -7,8 +7,8 @@
 #ifndef __MESH_LOADER_SCENE_H__
 #define __MESH_LOADER_SCENE_H__
 
-#include "scene.h"
-#include "drawable.h"
+#include "general/scene.h"
+#include "node/drawable.h"
 #include <memory>
 
 namespace ROTOM {

@@ -8,7 +8,7 @@
 #define __TASK_CALCULATE_MATRIX_H__
 
 #include "task.h"
-#include "node.h"
+#include "node/node.h"
 
 namespace ROTOM {
   class TaskCalculateMatrix : public Task {

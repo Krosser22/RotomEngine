@@ -4,11 +4,11 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "general/files.h"
+#include "general/time.h"
+#include "general/window.h"
 #include "scenes/defaultScene.h"
 #include "imgui.h"
-#include "files.h"
-#include "time.h"
-#include "window.h"
 
 void ROTOM::DefaultScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));

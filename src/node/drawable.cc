@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "drawable.h"
+#include "node/drawable.h"
 #include "render/graphics.h"
 
 ROTOM::Drawable::Drawable() {

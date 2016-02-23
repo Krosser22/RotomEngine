@@ -7,7 +7,7 @@
 #ifndef __SOUND_SCENE_H__
 #define __SOUND_SCENE_H__
 
-#include "Scene.h"
+#include "general/scene.h"
 
 namespace ROTOM {
   class SoundScene : public ROTOM::Scene {

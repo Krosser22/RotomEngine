@@ -7,7 +7,7 @@
 #ifndef __MESH_LOADER_H__
 #define __MESH_LOADER_H__
 
-#include "geometry.h"
+#include "node/geometry.h"
 
 namespace ROTOM {
   namespace MESHLOADER {

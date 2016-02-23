@@ -4,12 +4,12 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "general/files.h"
+#include "general/time.h"
+#include "general/window.h"
 #include "scenes/geometryScene.h"
 #include "meshLoader.h"
 #include "imgui.h"
-#include "files.h"
-#include "time.h"
-#include "window.h"
 
 void ROTOM::GeometryScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));

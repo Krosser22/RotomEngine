@@ -4,11 +4,11 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "window.h"
-#include "sound.h"
-#include "taskManager/taskManager.h"
+#include "general/sound.h"
+#include "general/time.h"
+#include "general/window.h"
 #include "render/renderManager.h"
-#include "time.h"
+#include "taskManager/taskManager.h"
 
 int main(int argc, char** argv) {
   ROTOM::TIME::Chronometer c;

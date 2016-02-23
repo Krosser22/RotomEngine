@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "scene.h"
+#include "general/scene.h"
 
 static ROTOM::Camera camera_;
 static std::shared_ptr<ROTOM::Node> root_;

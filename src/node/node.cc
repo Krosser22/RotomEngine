@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "node.h"
+#include "node/node.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
 

@@ -4,10 +4,10 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "sound.h"
+#include "general/sound.h"
+#include "general/time.h"
 #include "stb_vorbis.h"
 #include "AL\alext.h"
-#include "time.h"
 
 void sound::init() {
   int channels = -1, sample_rate = -1, size = -1;

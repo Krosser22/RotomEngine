@@ -7,9 +7,9 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
+#include "node/camera.h"
+#include "node/light.h"
 #include <memory>
-#include "camera.h"
-#include "light.h"
 
 namespace ROTOM {
   class Scene {

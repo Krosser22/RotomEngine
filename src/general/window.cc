@@ -4,7 +4,8 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "window.h"
+#include "general/time.h"
+#include "general/window.h"
 #include "render/commandDrawObject.h"
 #include "render/displayList.h"
 #include "render/graphics.h"
@@ -12,7 +13,6 @@
 #include "taskManager/taskRender.h"
 #include "taskManager/taskManager.h"
 #include "imgui.h"
-#include "time.h"
 
 #define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
 

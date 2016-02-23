@@ -21,9 +21,9 @@
 #include <GLFW/glfw3native.h>
 #endif
 
-#include "drawable.h"
-#include "geometry.h"
-#include "light.h"
+#include "node/drawable.h"
+#include "node/geometry.h"
+#include "node/light.h"
 #include "commandDrawObject.h"
 
 namespace ROTOM {

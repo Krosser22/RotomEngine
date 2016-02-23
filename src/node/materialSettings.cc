@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "materialSettings.h"
+#include "node/materialSettings.h"
 
 ROTOM::MaterialSettings::MaterialSettings() {
   setColor(1.0f, 1.0f, 1.0f, 1.0f);
