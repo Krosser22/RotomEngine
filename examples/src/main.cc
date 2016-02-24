@@ -30,7 +30,7 @@ int ROTOM::main(int argc, char** argv) {
 ---------
 ---ASK---
 ---------
-
+Arrays of structures
 
 
 ----------

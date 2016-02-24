@@ -36,7 +36,7 @@ const float *ROTOM::Camera::target() {
 }
 
 const float *ROTOM::Camera::forward() {
-  return glm::value_ptr(v_target_ - v_position_);
+  return glm::value_ptr(v_target_ - nodeData[id_].v_position_);
 }
 
 //void ROTOM::Camera::set_up_direction(const float pos[3]) {}
@@ -52,11 +52,11 @@ float *ROTOM::Camera::projectionMatrix() {
 }
 
 void ROTOM::Camera::setViewMatrix(const float data[16]) {
-  m_modelLocal_ = glm::mat4(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
+  nodeData[id_].m_modelLocal_ = glm::mat4(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
 }
 
 float *ROTOM::Camera::viewMatrix() {
-  return glm::value_ptr(m_modelLocal_);
+  return glm::value_ptr(nodeData[id_].m_modelLocal_);
 }
 
 //void ROTOM::Camera::doCull(const Node *root) {}

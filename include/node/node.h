@@ -7,15 +7,36 @@
 #ifndef __NODE_H__
 #define __NODE_H__
 
+#include "general/constants.h"
 #include "glm/gtc/type_ptr.hpp"
 #include <memory>
 #include <vector>
 
 namespace ROTOM {
+  struct NodeData {
+    bool b_dirtyModelLocal_;
+    bool b_dirtyModelWorld_;
+
+    glm::vec3 v_position_;
+    glm::vec3 v_rotation_;
+    glm::vec3 v_scale_;
+
+    glm::mat4 m_modelLocal_;
+    glm::mat4 m_modelWorld_;
+
+    unsigned int parent_;
+    std::vector<unsigned int > childs_;
+  };
+
+  static NodeData nodeData[ROTOM::kNodeDataAmount];
+  static unsigned int nextID = 0;
+
   class Node : public std::enable_shared_from_this<Node> {
   public:
     Node();
     virtual ~Node();
+
+    unsigned int ID();
 
     void move(const float movement[3]);
     void move(const float x, const float y, const float z);
@@ -61,27 +82,16 @@ namespace ROTOM {
     glm::mat4 *modelWorld();
     bool isDirtyModelWorld();
 
-    void setParent(std::shared_ptr<Node> parent);
-    std::shared_ptr<Node> parent();
+    void setParent(unsigned int parent);
+    unsigned int parent();
 
-    void addChild(std::shared_ptr<Node> child);
-    void removeChild(std::shared_ptr<Node> child);
-    std::shared_ptr<Node> getChildAt(unsigned int i);
+    void addChild(unsigned int  child);
+    void removeChild(unsigned int  child);
+    unsigned int getChildAt(unsigned int i);
     const unsigned int childCount();
 
   protected:
-    glm::vec3 v_position_;
-    glm::vec3 v_rotation_;
-    glm::vec3 v_scale_;
-
-    glm::mat4 m_modelLocal_;
-    glm::mat4 m_modelWorld_;
-
-    bool b_dirtyModelLocal_;
-    bool b_dirtyModelWorld_;
-
-    std::shared_ptr<Node> parent_;
-    std::vector<std::shared_ptr<Node>> childs_;
+    unsigned int ID_;
 
     void setModelLocalDirty();
 

@@ -17,4 +17,4 @@ namespace ROTOM {
     void Load_file(const char *path, std::shared_ptr<char[]> source);
   }
 }
-#endif __FILES_H__
+#endif //__FILES_H__

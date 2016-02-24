@@ -16,9 +16,6 @@ namespace ROTOM {
     void destroy();
 
     void addTask(std::shared_ptr<Task> task);
-
-    //int taskPendingCount();
-    //void waitUntilFinish();
   }
 }
 
