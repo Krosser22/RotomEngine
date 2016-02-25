@@ -8,7 +8,6 @@
 #define __DEFAULT_SCENE_H__
 
 #include "general/scene.h"
-#include "node/drawable.h"
 #include <memory>
 
 namespace ROTOM {

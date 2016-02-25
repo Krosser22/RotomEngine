@@ -8,12 +8,15 @@
 #include "render/graphics.h"
 
 ROTOM::Drawable::Drawable() {
-  geometry_ = NULL;
-  material_ = NULL;
+  drawableID_ = nextDrawableID++;
+  assert("ERROR: Too many Drawables created" && drawableID_ < kNodeDataAmount);
+
+  drawableData[drawableID_].geometry = NULL;
+  drawableData[drawableID_].material = NULL;
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
 }
 
-ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, std::shared_ptr<Node> parent) {
+ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, unsigned int parent) {
   setGeometry(geometry);
   setMaterial(material);
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
@@ -22,29 +25,33 @@ ROTOM::Drawable::Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Ma
 
 ROTOM::Drawable::~Drawable() {
   // Properly de-allocate all resources once they've outlived their purpose
-  GRAPHICS::releaseMaterial(material_->shaderData_.shaderProgram);
+  GRAPHICS::releaseMaterial(drawableData[drawableID_].material->shaderData_.shaderProgram);
+}
+
+unsigned int ROTOM::Drawable::drawableID() {
+  return drawableID_;
 }
 
 void ROTOM::Drawable::setGeometry(std::shared_ptr<Geometry> geometry) {
-  geometry_ = geometry;
+  drawableData[drawableID_].geometry = geometry;
 }
 
 std::shared_ptr<ROTOM::Geometry> ROTOM::Drawable::geometry() {
-  return geometry_;
+  return drawableData[drawableID_].geometry;
 }
 
 void ROTOM::Drawable::setMaterial(std::shared_ptr<Material> material) {
-  material_ = material;
+  drawableData[drawableID_].material = material;
 }
 
 std::shared_ptr<ROTOM::Material> ROTOM::Drawable::material() {
-  return material_;
+  return drawableData[drawableID_].material;
 }
 
 void ROTOM::Drawable::setMaterialSettings(std::shared_ptr<MaterialSettings> materialSettings) {
-  materialSettings_ = materialSettings;
+  drawableData[drawableID_].materialSettings = materialSettings;
 }
 
 std::shared_ptr<ROTOM::MaterialSettings> ROTOM::Drawable::materialSettings() {
-  return materialSettings_;
+  return drawableData[drawableID_].materialSettings;
 }

@@ -8,7 +8,7 @@
 #define __COMMAND_DRAW_OBJECT_H__
 
 #include "command.h"
-#include "node/drawable.h"
+#include "node/node.h"
 #include "node/light.h"
 
 namespace ROTOM {
@@ -28,10 +28,10 @@ namespace ROTOM {
     CommandDrawObject();
     virtual ~CommandDrawObject();
 
-    //It does what the command should do (it's called from the displayList class)
+    //It does what the command should do (it's called from the displayList)
     void run();
 
-    void setInput(Node *root, Light light, float projectionMatrix[16], float viewMatrix[16]);
+    void setInput(unsigned int root, Light light, float projectionMatrix[16], float viewMatrix[16]);
 
   private:
     std::vector<CommandDrawObjectData> commandDrawObjectData_;
@@ -39,9 +39,9 @@ namespace ROTOM {
     float projectionMatrix_[16];
     float viewMatrix_[16];
 
-    void setData(Drawable *drawable);
+    void setData(unsigned int node);
 
-    void setInputChilds(Drawable *drawable);
+    void setInputChilds(unsigned int node);
   };
 }
 

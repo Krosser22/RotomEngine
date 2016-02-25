@@ -21,7 +21,6 @@
 #include <GLFW/glfw3native.h>
 #endif
 
-#include "node/drawable.h"
 #include "node/geometry.h"
 #include "node/light.h"
 #include "commandDrawObject.h"

@@ -20,21 +20,21 @@ void ROTOM::DefaultScene::init() {
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material());
-  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable[amount];
+  std::shared_ptr<Node> node1 = std::shared_ptr<Node>(new Node());
+  std::shared_ptr<Node> node2 = std::shared_ptr<Node>(new Node());
+  std::shared_ptr<Node> node3 = std::shared_ptr<Node>(new Node());
+  std::shared_ptr<Node> node[amount];
 
-  drawable1->setGeometry(geometry);
-  drawable1->setMaterial(material1);
-  drawable1->setParent(getRoot());
-  drawable1->setPositionZ(-5.0f);
-  drawable2->setGeometry(geometry);
-  drawable2->setMaterial(material2);
-  drawable2->setParent(drawable1);
-  drawable3->setGeometry(geometry);
-  drawable3->setMaterial(material3);
-  drawable3->setParent(drawable2);
+  node1->setGeometry(geometry);
+  node1->setMaterial(material1);
+  node1->setParent(getRoot()->ID());
+  node1->setPositionZ(-5.0f);
+  node2->setGeometry(geometry);
+  node2->setMaterial(material2);
+  node2->setParent(node1->ID());
+  node3->setGeometry(geometry);
+  node3->setMaterial(material3);
+  node3->setParent(node2->ID());
 
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
@@ -47,19 +47,19 @@ void ROTOM::DefaultScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    drawable[i] = std::shared_ptr<Drawable>(new Drawable());
-    drawable[i]->setGeometry(geometry);
-    drawable[i]->setMaterial(material4);
-    drawable[i]->setParent(drawable1);
-    drawable[i]->setPosition(pos);
+    node[i] = std::shared_ptr<Node>(new Node());
+    node[i]->setGeometry(geometry);
+    node[i]->setMaterial(material4);
+    node[i]->setParent(node1->ID());
+    node[i]->setPosition(pos);
   }
 }
 
 void ROTOM::DefaultScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
-  getRoot()->getChildAt(0)->moveX(sin_time);
-  getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
-  getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
+  //getRoot()->getChildAt(0)->moveX(sin_time);
+  //getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
+  //getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
 }
 
 void ROTOM::DefaultScene::draw() {

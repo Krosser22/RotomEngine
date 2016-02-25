@@ -18,12 +18,12 @@ namespace ROTOM {
 
     virtual void run();
 
-    void setInput(std::shared_ptr<Node> root);
+    void setInput(unsigned int root);
 
-    void runOnNode(Node *node);
+    void runOnNode(unsigned int node);
 
   private:
-    std::shared_ptr<Node> root_;
+    unsigned int root_;
   };
 }
 

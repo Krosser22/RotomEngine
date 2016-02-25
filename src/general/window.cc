@@ -478,13 +478,13 @@ bool WindowIsOpened() {
     scene_->update();
     scene_->draw();
 
-    taskCalculateMatrix_->setInput(scene_->getRoot());
+    taskCalculateMatrix_->setInput(scene_->getRoot()->ID());
     taskRender_->setInput(&displayList_);
     ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
 
     //DisplayList
     if (displayList_.isValid_) {
-      commandDrawObject_.setInput(scene_->getRoot().get(), *scene_->getLight().at(0).get(), scene_->getCamera()->projectionMatrix(), scene_->getCamera()->viewMatrix());
+      commandDrawObject_.setInput(scene_->getRoot()->ID(), *scene_->getLight().at(0).get(), scene_->getCamera()->projectionMatrix(), scene_->getCamera()->viewMatrix());
       displayList_.isValid_ = false;
       //printf("The TaskManager is faster\n");
     } /*else {
@@ -503,7 +503,7 @@ void ROTOM::SetScene(Scene *scene) {
     scene_->destroy();
   }
   scene_ = scene;
-  scene_->setRoot(std::shared_ptr<Node>(new Node()));
+  scene_->setRoot(std::shared_ptr<ROTOM::Node>(new Node()));
   scene_->AddLight(std::shared_ptr<ROTOM::Light>(new Light()));
   scene_->init();
   while (WindowIsOpened()) {

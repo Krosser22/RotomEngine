@@ -45,9 +45,8 @@ namespace ROTOM {
     //void doRender();
 
   private:
-    glm::vec3 v_target_;
-
-    glm::mat4 m_projection_;
+    glm::vec3 target_;
+    glm::mat4 projection_;
   };
 }
 

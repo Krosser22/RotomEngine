@@ -8,7 +8,6 @@
 #include "general/scene.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "node/drawable.h"
 #include "scenes/meshLoaderScene.h"
 #include "meshLoader.h"
 #include "imgui.h"
@@ -58,13 +57,13 @@ void ROTOM::MeshLoaderScene::init() {
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
-  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Node> node = std::shared_ptr<Node>(new Node());
   std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data;
 
-  drawable->setGeometry(geometry);
-  drawable->setMaterial(material);
-  drawable->setParent(getRoot());
-  drawable->setPosition(0.0f, 0.0f, -5.0f);
+  node->setGeometry(geometry);
+  node->setMaterial(material);
+  node->setParent(getRoot()->ID());
+  node->setPosition(0.0f, 0.0f, -5.0f);
 
   obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
 
@@ -84,9 +83,9 @@ void ROTOM::MeshLoaderScene::init() {
   scale[0] = 1.0f;
   scale[1] = 1.0f;
   scale[2] = 1.0f;
-  getRoot()->getChildAt(0)->setPosition(position);
-  getRoot()->getChildAt(0)->setRotation(rotation);
-  getRoot()->getChildAt(0)->setScale(scale);
+  nodeData[getRoot()->getChildAt(0)].position = glm::vec3(position[0]);
+  nodeData[getRoot()->getChildAt(0)].rotation = glm::vec3(rotation[0]);
+  nodeData[getRoot()->getChildAt(0)].scale = glm::vec3(scale[0]);
 }
 
 void ROTOM::MeshLoaderScene::input() {
@@ -131,7 +130,7 @@ void ROTOM::MeshLoaderScene::draw() {
     ImGui::DragFloat3("LightPosition", &getLight().at(0).get()->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
     ImGui::DragFloat3("LightColor", &getLight().at(0).get()->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     ImGui::DragFloat4("specularIntensity", &getLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat("Shininess", &(((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+    /*ImGui::DragFloat("Shininess", &(((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
     ImGui::DragFloat4("specularMaterial", (((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.specularMaterial_), 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     if (ImGui::DragFloat3("Position", &position[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
       getRoot()->getChildAt(0)->setPosition(position);
@@ -141,7 +140,7 @@ void ROTOM::MeshLoaderScene::draw() {
     }
     if (ImGui::DragFloat3("Scale", &scale[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f)) {
       getRoot()->getChildAt(0)->setScale(scale);
-    }
+    }*/
   }
   ImGui::End();
 }

@@ -14,11 +14,22 @@
 #include <memory>
 
 namespace ROTOM {
+  struct DrawableData {
+    std::shared_ptr<Geometry> geometry;
+    std::shared_ptr<Material> material;
+    std::shared_ptr<MaterialSettings> materialSettings;
+  };
+
+  static DrawableData drawableData[ROTOM::kNodeDataAmount];
+  static unsigned int nextDrawableID = 0;
+
   class Drawable : public Node {
   public:
     Drawable();
-    Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, std::shared_ptr<Node> parent);
+    Drawable(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material, unsigned int parent);
     virtual ~Drawable();
+
+    unsigned int drawableID();
     
     void setGeometry(std::shared_ptr<Geometry> geometry);
     std::shared_ptr<Geometry> geometry();
@@ -30,9 +41,7 @@ namespace ROTOM {
     std::shared_ptr<MaterialSettings> materialSettings();
 
   private:
-    std::shared_ptr<Geometry> geometry_;
-    std::shared_ptr<Material> material_;
-    std::shared_ptr<MaterialSettings> materialSettings_;
+    unsigned int drawableID_;
   };
 }
 

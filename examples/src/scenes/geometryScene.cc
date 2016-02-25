@@ -19,7 +19,7 @@ void ROTOM::GeometryScene::init() {
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-  std::shared_ptr<Drawable> drawable[amount];
+  std::shared_ptr<Node> node[amount];
   
   const char *base_path = "../../../../obj/";
   const char *name = "Monkey";
@@ -37,11 +37,11 @@ void ROTOM::GeometryScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    drawable[i] = std::shared_ptr<Drawable>(new Drawable());
-    drawable[i]->setGeometry(geometry);
-    drawable[i]->setMaterial(material);
-    drawable[i]->setParent(getRoot());
-    drawable[i]->setPosition(pos);
+    node[i] = std::shared_ptr<Node>(new Node());
+    node[i]->setGeometry(geometry);
+    node[i]->setMaterial(material);
+    node[i]->setParent(getRoot()->ID());
+    node[i]->setPosition(pos);
   }
 }
 

@@ -17,38 +17,38 @@ void ROTOM::CommandDrawObject::run() {
   }
 }
 
-void ROTOM::CommandDrawObject::setInput(Node *root, Light light, float projectionMatrix[16], float viewMatrix[16]) {
+void ROTOM::CommandDrawObject::setInput(unsigned int root, Light light, float projectionMatrix[16], float viewMatrix[16]) {
   light_ = light;
   for (int i = 0; i < 16; ++i) {
     projectionMatrix_[i] = projectionMatrix[i];
     viewMatrix_[i] = viewMatrix[i];
   }
   commandDrawObjectData_.clear();
-  setInputChilds((Drawable *)root);
+  setInputChilds(root);
 }
 
-void ROTOM::CommandDrawObject::setData(Drawable *drawable) {
+void ROTOM::CommandDrawObject::setData(unsigned int node) {
   CommandDrawObjectData commandDrawObjectData;
-  commandDrawObjectData.materialSettings = *drawable->materialSettings().get();
-  commandDrawObjectData.shaderData = drawable->material()->shaderData_;
-  commandDrawObjectData.geometry_VAO = drawable->geometry()->VAO();
-  commandDrawObjectData.geometry_veterCount = drawable->geometry()->vertexCount();
-  commandDrawObjectData.material_texture = drawable->material()->texture();
-  commandDrawObjectData.material_shininess = drawable->material()->materialData_.shininess_;
-  commandDrawObjectData.material_specularMaterial[0] = drawable->material()->materialData_.specularMaterial_[0];
-  commandDrawObjectData.material_specularMaterial[1] = drawable->material()->materialData_.specularMaterial_[1];
-  commandDrawObjectData.material_specularMaterial[2] = drawable->material()->materialData_.specularMaterial_[2];
-  commandDrawObjectData.material_specularMaterial[3] = drawable->material()->materialData_.specularMaterial_[3];
-  float *modelWorld = glm::value_ptr(*drawable->modelWorld());
+  commandDrawObjectData.materialSettings = *nodeData[node].materialSettings.get();
+  commandDrawObjectData.shaderData = nodeData[node].material->shaderData_;
+  commandDrawObjectData.geometry_VAO = nodeData[node].geometry->VAO();
+  commandDrawObjectData.geometry_veterCount = nodeData[node].geometry->vertexCount();
+  commandDrawObjectData.material_texture = nodeData[node].material->texture();
+  commandDrawObjectData.material_shininess = nodeData[node].material->materialData_.shininess_;
+  commandDrawObjectData.material_specularMaterial[0] = nodeData[node].material->materialData_.specularMaterial_[0];
+  commandDrawObjectData.material_specularMaterial[1] = nodeData[node].material->materialData_.specularMaterial_[1];
+  commandDrawObjectData.material_specularMaterial[2] = nodeData[node].material->materialData_.specularMaterial_[2];
+  commandDrawObjectData.material_specularMaterial[3] = nodeData[node].material->materialData_.specularMaterial_[3];
+  float *modelWorld = glm::value_ptr(nodeData[node].modelWorld);
   for (int i = 0; i < 16; ++i) {
     commandDrawObjectData.drawable_modelWorld[i] = modelWorld[i];
   }
   commandDrawObjectData_.push_back(commandDrawObjectData);
-  setInputChilds(drawable);
+  setInputChilds(node);
 }
 
-void ROTOM::CommandDrawObject::setInputChilds(Drawable *drawable) {
-  for (unsigned int i = 0; i < drawable->childCount(); ++i) {
-    setData((Drawable *)drawable->getChildAt(i).get());
+void ROTOM::CommandDrawObject::setInputChilds(unsigned int node) {
+  for (unsigned int i = 0; i < nodeData[node].childs.size(); ++i) {
+    setData(nodeData[node].childs.at(i));
   }
 }
