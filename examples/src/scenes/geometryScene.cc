@@ -14,12 +14,12 @@
 void ROTOM::GeometryScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
+  //getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-  std::shared_ptr<Node> node[amount];
+  unsigned int node[amount];
   
   const char *base_path = "../../../../obj/";
   const char *name = "Monkey";
@@ -37,17 +37,17 @@ void ROTOM::GeometryScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    node[i] = std::shared_ptr<Node>(new Node());
-    node[i]->setGeometry(geometry);
-    node[i]->setMaterial(material);
-    node[i]->setParent(getRoot()->ID());
-    node[i]->setPosition(pos);
+    node[i] = Node::getNewNode();
+    Node::setGeometry(node[i], geometry);
+    Node::setMaterial(node[i], material);
+    Node::setParent(node[i], getRoot());
+    Node::setPosition(node[i], pos);
   }
 }
 
 void ROTOM::GeometryScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
-  getRoot()->move(sin_time, sin_time, sin_time);
+  Node::move(getRoot(), sin_time, sin_time, sin_time);
 }
 
 void ROTOM::GeometryScene::draw() {

@@ -47,6 +47,8 @@ namespace ROTOM {
   private:
     glm::vec3 target_;
     glm::mat4 projection_;
+
+    NodeData nodeData_;
   };
 }
 

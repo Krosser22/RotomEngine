@@ -27,9 +27,9 @@ namespace ROTOM {
 
     virtual void destroy() = 0;
 
-    std::shared_ptr<ROTOM::Node> getRoot();
+    unsigned int getRoot();
 
-    void setRoot(std::shared_ptr<ROTOM::Node> root);
+    void setRoot(unsigned int root);
 
     Camera *getCamera();
 

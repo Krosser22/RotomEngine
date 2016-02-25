@@ -13,28 +13,28 @@
 void ROTOM::DefaultScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
+  //getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material());
-  std::shared_ptr<Node> node1 = std::shared_ptr<Node>(new Node());
-  std::shared_ptr<Node> node2 = std::shared_ptr<Node>(new Node());
-  std::shared_ptr<Node> node3 = std::shared_ptr<Node>(new Node());
-  std::shared_ptr<Node> node[amount];
+  unsigned int node1 = Node::getNewNode();
+  unsigned int node2 = Node::getNewNode();
+  unsigned int node3 = Node::getNewNode();
+  unsigned int node[amount];
 
-  node1->setGeometry(geometry);
-  node1->setMaterial(material1);
-  node1->setParent(getRoot()->ID());
-  node1->setPositionZ(-5.0f);
-  node2->setGeometry(geometry);
-  node2->setMaterial(material2);
-  node2->setParent(node1->ID());
-  node3->setGeometry(geometry);
-  node3->setMaterial(material3);
-  node3->setParent(node2->ID());
+  Node::setGeometry(node1, geometry);
+  Node::setMaterial(node1, material1);
+  Node::setParent(node1, getRoot());
+  Node::setPositionZ(node1, -5.0f);
+  Node::setGeometry(node2, geometry);
+  Node::setMaterial(node2, material2);
+  Node::setParent(node2, node1);
+  Node::setGeometry(node3, geometry);
+  Node::setMaterial(node3, material3);
+  Node::setParent(node3, node2);
 
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
@@ -47,11 +47,11 @@ void ROTOM::DefaultScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    node[i] = std::shared_ptr<Node>(new Node());
-    node[i]->setGeometry(geometry);
-    node[i]->setMaterial(material4);
-    node[i]->setParent(node1->ID());
-    node[i]->setPosition(pos);
+    node[i] = Node::getNewNode();
+    Node::setGeometry(node[i], geometry);
+    Node::setMaterial(node[i], material4);
+    Node::setParent(node[i], node1);
+    Node::setPosition(node[i], pos);
   }
 }
 
