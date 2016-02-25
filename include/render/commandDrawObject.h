@@ -41,7 +41,7 @@ namespace ROTOM {
 
     void setData(Drawable *node);
 
-    void setInputChilds(Node *node);
+    void setInputChilds(Drawable *drawable);
   };
 }
 

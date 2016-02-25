@@ -503,7 +503,7 @@ void ROTOM::SetScene(Scene *scene) {
     scene_->destroy();
   }
   scene_ = scene;
-  scene_->setRoot(0);
+  scene_->setRoot(std::shared_ptr<Node>(new Node));
   scene_->AddLight(std::shared_ptr<ROTOM::Light>(new Light()));
   scene_->init();
   while (WindowIsOpened()) {
