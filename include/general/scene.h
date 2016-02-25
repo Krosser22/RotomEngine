@@ -7,6 +7,7 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
+#include "node/drawable.h"
 #include "node/camera.h"
 #include "node/light.h"
 #include <memory>
@@ -27,9 +28,9 @@ namespace ROTOM {
 
     virtual void destroy() = 0;
 
-    unsigned int getRoot();
+    std::shared_ptr<Node> getRoot();
 
-    void setRoot(unsigned int root);
+    void setRoot(std::shared_ptr<Node> root);
 
     Camera *getCamera();
 

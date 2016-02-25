@@ -13,17 +13,17 @@
 namespace ROTOM {
   class TaskCalculateMatrix : public Task {
   public:
-    TaskCalculateMatrix(TaskType taskType = TaskType_CalculateMatrix);
+    TaskCalculateMatrix();
     virtual ~TaskCalculateMatrix();
 
     virtual void run();
 
-    void setInput(unsigned int root);
+    void setInput(std::shared_ptr<Node> root);
 
-    void runOnNode(unsigned int node);
+    void runOnNode(std::shared_ptr<Node> node);
 
   private:
-    unsigned int root_;
+    std::shared_ptr<Node> root_;
   };
 }
 

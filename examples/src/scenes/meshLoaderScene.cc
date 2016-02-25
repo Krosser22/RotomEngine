@@ -57,13 +57,13 @@ void ROTOM::MeshLoaderScene::init() {
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
-  unsigned int node = Node::getNewNode();
+  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable);
   std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data;
 
-  Node::setGeometry(node, geometry);
-  Node::setMaterial(node, material);
-  Node::setParent(node, getRoot());
-  Node::setPosition(node, 0.0f, 0.0f, -5.0f);
+  drawable->setGeometry(geometry);
+  drawable->setMaterial(material);
+  drawable->setParent(getRoot());
+  drawable->setPosition(0.0f, 0.0f, -5.0f);
 
   obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
 
@@ -72,7 +72,7 @@ void ROTOM::MeshLoaderScene::init() {
 
   geometry->loadGeometry(&obj_data);
 
-  Node::setPosition(getRoot(), 0.0f, 0.0f, -5.0f);
+  getRoot()->setPosition(0.0f, 0.0f, -5.0f);
 
   position[0] = 0.0f;
   position[1] = 0.0f;
@@ -83,9 +83,9 @@ void ROTOM::MeshLoaderScene::init() {
   scale[0] = 1.0f;
   scale[1] = 1.0f;
   scale[2] = 1.0f;
-  nodeData[nodeData[getRoot()].childs.at(0)].position = glm::vec3(position[0]);
-  nodeData[nodeData[getRoot()].childs.at(0)].rotation = glm::vec3(rotation[0]);
-  nodeData[nodeData[getRoot()].childs.at(0)].scale = glm::vec3(scale[0]);
+  getRoot()->getChildAt(0)->setPosition(position);
+  getRoot()->getChildAt(0)->setRotation(rotation);
+  getRoot()->getChildAt(0)->setScale(scale);
 }
 
 void ROTOM::MeshLoaderScene::input() {

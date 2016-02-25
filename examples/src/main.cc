@@ -47,8 +47,6 @@ Arrays of structures
 ---TODO---
 ----------
 +Make a fileManager
-+The threads of the taskManager must stop when they have no task to do.
-+The taskManager must start the render with a task.
 +Add LUA
 +Use my render list with IMGUI
 */

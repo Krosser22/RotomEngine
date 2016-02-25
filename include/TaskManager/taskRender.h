@@ -13,7 +13,7 @@
 namespace ROTOM {
   class TaskRender : public Task {
   public:
-    TaskRender(TaskType taskType = TaskType_Render);
+    TaskRender();
     virtual ~TaskRender();
 
     virtual void run();

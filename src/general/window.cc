@@ -445,8 +445,8 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
 
   clear();
 
-  taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix(TaskType_CalculateMatrix));
-  taskRender_ = std::shared_ptr<TaskRender>(new TaskRender(TaskType_Render));
+  taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix());
+  taskRender_ = std::shared_ptr<TaskRender>(new TaskRender());
   taskCalculateMatrix_->nextTaskList_.push_back(taskRender_);
   return true;
 }

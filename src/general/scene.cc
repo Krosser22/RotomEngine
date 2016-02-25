@@ -7,14 +7,14 @@
 #include "general/scene.h"
 
 static ROTOM::Camera camera_;
-static unsigned int root_;
+static std::shared_ptr<ROTOM::Node> root_;
 static std::vector<std::shared_ptr<ROTOM::Light>> lights_;
 
-unsigned int ROTOM::Scene::getRoot() {
+std::shared_ptr<ROTOM::Node> ROTOM::Scene::getRoot() {
   return root_;
 }
 
-void ROTOM::Scene::setRoot(unsigned int root) {
+void ROTOM::Scene::setRoot(std::shared_ptr<Node> root) {
   root_ = root;
 }
 

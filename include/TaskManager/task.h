@@ -14,22 +14,12 @@
 #include <memory>
 
 namespace ROTOM {
-  enum TaskType {
-    TaskType_none = 0,
-    TaskType_CalculateMatrix,
-    TaskType_Render,
-  };
-
   class Task {
   public:
     Task();
     virtual ~Task();
-    
-    TaskType taskType_ = TaskType_none;
 
     virtual void run() = 0;
-
-    //virtual void clearTask() = 0;
 
     std::vector<std::shared_ptr<Task>> nextTaskList_;
   };

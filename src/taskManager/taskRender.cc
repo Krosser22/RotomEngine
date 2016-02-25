@@ -6,9 +6,7 @@
 
 #include "taskManager/taskRender.h"
 
-ROTOM::TaskRender::TaskRender(TaskType taskType) {
-  taskType_ = taskType;
-}
+ROTOM::TaskRender::TaskRender() {}
 
 ROTOM::TaskRender::~TaskRender() {}
 

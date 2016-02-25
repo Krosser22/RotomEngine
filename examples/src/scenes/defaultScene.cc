@@ -20,21 +20,23 @@ void ROTOM::DefaultScene::init() {
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material());
-  unsigned int node1 = Node::getNewNode();
-  unsigned int node2 = Node::getNewNode();
-  unsigned int node3 = Node::getNewNode();
-  unsigned int node[amount];
+  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable);
+  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable);
+  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable);
+  std::shared_ptr<Drawable> drawable[amount];
 
-  Node::setGeometry(node1, geometry);
-  Node::setMaterial(node1, material1);
-  Node::setParent(node1, getRoot());
-  Node::setPositionZ(node1, -5.0f);
-  Node::setGeometry(node2, geometry);
-  Node::setMaterial(node2, material2);
-  Node::setParent(node2, node1);
-  Node::setGeometry(node3, geometry);
-  Node::setMaterial(node3, material3);
-  Node::setParent(node3, node2);
+  drawable1->setGeometry(geometry);
+  drawable1->setMaterial(material1);
+  drawable1->setParent(getRoot());
+  drawable1->setPositionZ(-5.0f);
+
+  drawable2->setGeometry(geometry);
+  drawable2->setMaterial(material2);
+  drawable2->setParent(drawable1);
+
+  drawable3->setGeometry(geometry);
+  drawable3->setMaterial(material3);
+  drawable3->setParent(drawable2);
 
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
@@ -47,11 +49,11 @@ void ROTOM::DefaultScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    node[i] = Node::getNewNode();
-    Node::setGeometry(node[i], geometry);
-    Node::setMaterial(node[i], material4);
-    Node::setParent(node[i], node1);
-    Node::setPosition(node[i], pos);
+    drawable[i] = std::shared_ptr<Drawable>(new Drawable);
+    drawable[i]->setGeometry(geometry);
+    drawable[i]->setMaterial(material4);
+    drawable[i]->setParent(drawable1);
+    drawable[i]->setPosition(pos);
   }
 }
 
