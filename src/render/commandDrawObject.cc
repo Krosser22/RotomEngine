@@ -49,6 +49,6 @@ void ROTOM::CommandDrawObject::setData(Drawable *drawable) {
 
 void ROTOM::CommandDrawObject::setInputChilds(Drawable *drawable) {
   for (unsigned int i = 0; i < drawable->childCount(); ++i) {
-    setData((Drawable *)&drawable->getChildAt(i));
+    setData((Drawable *)drawable->getChildAt(i).get());
   }
 }

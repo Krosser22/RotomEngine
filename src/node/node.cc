@@ -166,7 +166,7 @@ float ROTOM::Node::scaleZ() {
 }
 
 void ROTOM::Node::setModelLocal(glm::mat4 modelLocal) {
-  modelLocal = modelLocal;
+  modelLocal_ = modelLocal;
   dirtyModelLocal_ = false;
   dirtyModelWorld_ = true;
 }
@@ -180,7 +180,7 @@ bool ROTOM::Node::isDirtyModelLocal() {
 }
 
 void ROTOM::Node::setModelWorld(glm::mat4 modelWorld) {
-  modelWorld = modelWorld;
+  modelWorld_ = modelWorld;
   dirtyModelWorld_ = false;
 }
 

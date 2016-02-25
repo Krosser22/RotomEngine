@@ -18,10 +18,10 @@ int ROTOM::main(int argc, char** argv) {
   WindowInit(1280, 720);
   printf("Time to create the windows: %f.\n\n\n", c.end());
 
-  //DefaultScene scene;
+  DefaultScene scene;
   //GeometryScene scene;
   //SoundScene scene;
-  MeshLoaderScene scene;
+  //MeshLoaderScene scene;
   SetScene(&scene);
   return 0;
 }
@@ -30,7 +30,6 @@ int ROTOM::main(int argc, char** argv) {
 ---------
 ---ASK---
 ---------
-Arrays of structures
 
 
 ----------

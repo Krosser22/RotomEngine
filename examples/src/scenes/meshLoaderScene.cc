@@ -56,23 +56,14 @@ void ROTOM::MeshLoaderScene::init() {
   //getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
+  std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
-  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable);
-  std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data;
+  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable());
 
-  drawable->setGeometry(geometry);
-  drawable->setMaterial(material);
-  drawable->setParent(getRoot());
-  drawable->setPosition(0.0f, 0.0f, -5.0f);
-
-  obj_data = std::shared_ptr<ROTOM::Geometry::GeometryData>(new ROTOM::Geometry::GeometryData);
-
-  //ROTOM::MESHLOADER::Load_OBJ(finalPath, obj_data, false);
-  ROTOM::MESHLOADER::Load_OBJ(base_path, name, obj_data);
+  //MESHLOADER::Load_OBJ(finalPath, obj_data, false);
+  MESHLOADER::Load_OBJ(base_path, name, obj_data);
 
   geometry->loadGeometry(&obj_data);
-
-  getRoot()->setPosition(0.0f, 0.0f, -5.0f);
 
   position[0] = 0.0f;
   position[1] = 0.0f;
@@ -83,9 +74,15 @@ void ROTOM::MeshLoaderScene::init() {
   scale[0] = 1.0f;
   scale[1] = 1.0f;
   scale[2] = 1.0f;
-  getRoot()->getChildAt(0)->setPosition(position);
-  getRoot()->getChildAt(0)->setRotation(rotation);
-  getRoot()->getChildAt(0)->setScale(scale);
+
+  getRoot()->setPosition(0.0f, 0.0f, -5.0f);
+
+  drawable->setGeometry(geometry);
+  drawable->setMaterial(material);
+  drawable->setParent(getRoot());
+  drawable->setPosition(position);
+  drawable->setRotation(rotation);
+  drawable->setScale(scale);
 }
 
 void ROTOM::MeshLoaderScene::input() {
@@ -116,8 +113,8 @@ void ROTOM::MeshLoaderScene::input() {
 }
 
 void ROTOM::MeshLoaderScene::update() {
-  float sin_time = sin(TIME::appTime()) * 20.22f;
-  //getRoot()->getChildAt(0)->setRotation(sin_time, sin_time, sin_time);
+  float sin_time = sin(TIME::appTime()) * 2.22f;
+  getRoot()->getChildAt(0)->setRotationY(sin_time);
   //updateCamera();
 }
 
@@ -130,7 +127,7 @@ void ROTOM::MeshLoaderScene::draw() {
     ImGui::DragFloat3("LightPosition", &getLight().at(0).get()->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
     ImGui::DragFloat3("LightColor", &getLight().at(0).get()->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     ImGui::DragFloat4("specularIntensity", &getLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    /*ImGui::DragFloat("Shininess", &(((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+    ImGui::DragFloat("Shininess", &(((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
     ImGui::DragFloat4("specularMaterial", (((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.specularMaterial_), 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     if (ImGui::DragFloat3("Position", &position[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
       getRoot()->getChildAt(0)->setPosition(position);
@@ -140,7 +137,7 @@ void ROTOM::MeshLoaderScene::draw() {
     }
     if (ImGui::DragFloat3("Scale", &scale[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f)) {
       getRoot()->getChildAt(0)->setScale(scale);
-    }*/
+    }
   }
   ImGui::End();
 }
