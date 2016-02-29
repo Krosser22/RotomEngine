@@ -85,7 +85,8 @@ const char* fragmentShaderSource_ = "#version 330\n"
 //"  finalColor.x = 1.0 - finalColor.x;\n"
 //"  finalColor.y = 1.0 - finalColor.y;\n"
 //"  finalColor.z = 1.0 - finalColor.z;\n"
-"  fragment = finalColor;\n"
+"  vec3 ambientLight = texture(u_texture, uvMaterial).xyz * 0.05;\n"
+"  fragment = finalColor + vec4(ambientLight, 1.0);\n"
 "};\0";
 
 ROTOM::Material::Material(const char *texturePath) {
