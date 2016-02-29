@@ -45,6 +45,9 @@ int ROTOM::main(int argc, char** argv) {
 ----------
 ---TODO---
 ----------
++Shadows --> Lo primero es sacar el depth buffer
++Shadows --> GPU gems 3 (Webpage) parte 2
++Shadows --> Real time shadows (Book)
 +Make a fileManager
 +Add LUA
 +Use my render list with IMGUI
