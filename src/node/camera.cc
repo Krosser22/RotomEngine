@@ -23,12 +23,6 @@ void ROTOM::Camera::setupFrustum(const float left, const float right, const floa
   projection_ = glm::frustum(left, right, bottom, top, znear, zfar);
 }
 
-void ROTOM::Camera::setPosition(const float x, const float y, const float z) {
-  position_.x = x;
-  position_.y = y;
-  position_.z = z;
-}
-
 //void ROTOM::Camera::set_view_direction(const float pos[3]) {}
 
 void ROTOM::Camera::setViewTarget(const float pos[3]) {

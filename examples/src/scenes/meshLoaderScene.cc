@@ -53,7 +53,7 @@ static const float max_rot = 628.32f; //[0-628.32]
 void ROTOM::MeshLoaderScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  //getCamera()->setPosition(0.0f, 0.0f, 0.0f);
+  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
@@ -85,37 +85,9 @@ void ROTOM::MeshLoaderScene::init() {
   drawable->setScale(scale);
 }
 
-void ROTOM::MeshLoaderScene::input() {
-  /*if (ESAT::MouseButtonPressed(1)) {
-  rotate_player();
-  } else {
-  //Player
-  if (ESAT::IsKeyPressed('W')) {
-  move_player('W');
-  updateCamera();
-  }
-
-  if (ESAT::IsKeyPressed('A')) {
-  move_player('A');
-  updateCamera();
-  }
-
-  if (ESAT::IsKeyPressed('S')) {
-  move_player('S');
-  updateCamera();
-  }
-
-  if (ESAT::IsKeyPressed('D')) {
-  move_player('D');
-  updateCamera();
-  }
-  }*/
-}
-
 void ROTOM::MeshLoaderScene::update() {
   float sin_time = sin(TIME::appTime()) * 2.22f;
   getRoot()->getChildAt(0)->setRotationY(sin_time);
-  //updateCamera();
 }
 
 void ROTOM::MeshLoaderScene::draw() {
@@ -140,70 +112,4 @@ void ROTOM::MeshLoaderScene::draw() {
     }
   }
   ImGui::End();
-}
-
-void ROTOM::MeshLoaderScene::moveCamera(char key) {
-  //printf("%c\n", key);
-  /*const float *temp_forward = getCamera()->forward();
-  float forward[3] = { temp_forward[0], temp_forward[1], temp_forward[2] };
-  float length = sqrt((forward[0] * forward[0]) + (forward[1] * forward[1]) + (forward[2] * forward[2]));
-  for (unsigned int i = 0; i < 3; ++i) {
-    forward[i] /= length;
-  }
-
-  float *cameraPos = &getCamera()->position()[0];
-  switch (key) {
-    case 'W':
-      cameraPos[0] += (forward[0] * cameraSpeed);
-      //camera_pos[1] += (forward[1] * cameraSpeed);
-      cameraPos[2] += (forward[2] * cameraSpeed);
-      break;
-    case 'A':
-      cameraPos[0] += (forward[2] * cameraSpeed);
-      cameraPos[2] -= (forward[0] * cameraSpeed);
-      break;
-    case 'S':
-      cameraPos[0] -= (forward[0] * cameraSpeed);
-      //cameraPos[1] -= (forward[1] * cameraSpeed);
-      cameraPos[2] -= (forward[2] * cameraSpeed);
-      break;
-    case 'D':
-      cameraPos[0] -= (forward[2] * cameraSpeed);
-      cameraPos[2] += (forward[0] * cameraSpeed);
-      break;
-  }*/
-}
-
-void ROTOM::MeshLoaderScene::rotateCamera() {
-  /*getCamera()->rotation()[0] += (float)((mx_last_frame - mx) * 0.4);
-  getCamera()->rotation()[1] -= (float)((my_last_frame - my));
-
-  //min and max X rotation
-  if (getCamera()->rotation()[0] < -max_rot) getCamera()->rotation()[0] += max_rot;
-  if (getCamera()->rotation()[0] > max_rot) getCamera()->rotation()[0] -= max_rot;
-
-  //min and max Y rotation
-  if (getCamera()->rotation()[1] < 0) getCamera()->rotation()[1] = 0;
-  if (getCamera()->rotation()[1] > max_rot) getCamera()->rotation()[1] = 650;*/
-}
-
-void ROTOM::MeshLoaderScene::updateCamera() {
-  /*mx_last_frame = mx;
-  my_last_frame = my;
-  //mx = ESAT::MousePositionX();
-  //my = ESAT::MousePositionY();
-
-  float *a = (float *)GameState.camera->view_matrix();
-  printf("%f %f %f %f\n", a[0], a[4], a[8], a[12]);
-  printf("%f %f %f %f\n", a[1], a[5], a[9], a[13]);
-  printf("%f %f %f %f\n", a[2], a[6], a[10], a[14]);
-  printf("%f %f %f %f\n\n", a[3], a[7], a[11], a[15]);
-  float view[3];
-  float p = sin(-getCamera()->position()[1] / 200) * 220;
-  view[0] = -p*cos(getCamera()->rotation()[0] / 100);
-  view[1] = -cos(-getCamera()->rotation()[1] / 200) * 220;
-  view[2] = -p*sin(getCamera()->rotation()[0] / 100);
-
-  //getCamera()->setPosition(camera_pos);
-  getCamera()->setViewTarget(view);*/
 }

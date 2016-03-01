@@ -22,8 +22,6 @@ namespace ROTOM {
 
     void setupFrustum(const float left, const float right, const float bottom, const float top, const float znear, const float zfar);
 
-    void setPosition(const float x, const float y, const float z);
-
     //void setViewDirection(const float pos[3]);
 
     void setViewTarget(const float pos[3]);

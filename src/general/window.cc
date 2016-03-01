@@ -35,6 +35,7 @@ IMGUI_API void ImGui_KeyCallback(GLFWwindow* window, int key, int scancode, int 
 IMGUI_API void ImGui_CharCallback(GLFWwindow* window, unsigned int c);
 
 IMGUI_API void ImGui_RenderDrawLists(ImDrawData* draw_data);
+
 // Data
 static GLFWwindow  *window = NULL;
 static double       g_Time = 0.0f;
@@ -48,9 +49,11 @@ static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
 
 static ROTOM::DisplayList displayList_;
 static ROTOM::CommandDrawObject commandDrawObject_;
-static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateMatrix_;
+static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateNodesMatrix_;
+static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateCameraMatrix_;
 static std::shared_ptr<ROTOM::TaskRender> taskRender_;
 static ROTOM::Scene *scene_;
+static std::shared_ptr<ROTOM::Node> cameraNode_;
 
 static void error_callback(int error, const char* description) {
   fputs(description, stderr);
@@ -170,6 +173,10 @@ void ImGui_KeyCallback(GLFWwindow* window, int key, int scancode, int action, in
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, GL_TRUE);
   }
+
+  /*if (action == GLFW_PRESS) {
+    printf("%c", key);
+  }*/
 
   (void)mods; // Modifiers are not reliable across systems
   io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
@@ -445,9 +452,13 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
 
   clear();
 
-  taskCalculateMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix());
+  taskCalculateNodesMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix());
+  taskCalculateCameraMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix());
   taskRender_ = std::shared_ptr<TaskRender>(new TaskRender());
-  taskCalculateMatrix_->nextTaskList_.push_back(taskRender_);
+  //taskCalculateCameraMatrix_->nextTaskList_.push_back(taskCalculateNodesMatrix_);
+  taskCalculateNodesMatrix_->nextTaskList_.push_back(taskRender_);
+
+  cameraNode_ = std::shared_ptr<ROTOM::Node>(scene_->getCamera());
   return true;
 }
 
@@ -478,9 +489,12 @@ bool WindowIsOpened() {
     scene_->update();
     scene_->draw();
 
-    taskCalculateMatrix_->setInput(scene_->getRoot());
+    //TaskManager
+    taskCalculateNodesMatrix_->setInput(scene_->getRoot());
+    taskCalculateCameraMatrix_->setInput(cameraNode_);
     taskRender_->setInput(&displayList_);
-    ROTOM::TASKMANAGER::addTask(taskCalculateMatrix_);
+    ROTOM::TASKMANAGER::addTask(taskCalculateCameraMatrix_);
+    ROTOM::TASKMANAGER::addTask(taskCalculateNodesMatrix_);
 
     //DisplayList
     if (displayList_.isValid_) {
