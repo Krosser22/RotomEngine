@@ -40,4 +40,4 @@ namespace ROTOM {
   };
 }
 
-#endif //__CAMERA_H__
+#endif //__SCENE_H__

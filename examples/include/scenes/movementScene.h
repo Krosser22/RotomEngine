@@ -26,10 +26,13 @@ namespace ROTOM {
 
     void destroy() {};
 
-    std::shared_ptr<Geometry> geometry;
+    std::shared_ptr<Geometry> geometry_;
 
+    float cameraSpeed_ = 0.05f;
+    float mxLastFrame_ = 0.0f, myLastFrame_ = 0.0f, mx_ = 0.0f, my_ = 0.0f;
+    float cameraPos_[3];
   private:
-    void moveCamera(char key);
+    void moveCamera(unsigned char key);
 
     void rotateCamera();
 

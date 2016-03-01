@@ -4,6 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
 #include "render/commandDrawObject.h"
@@ -484,10 +485,14 @@ bool WindowIsOpened() {
     glfwSwapBuffers(window);
     clear();
 
+    //Scene
     assert(scene_);
     scene_->input();
     scene_->update();
     scene_->draw();
+
+    //Input
+    ROTOM::INPUT::Update();
 
     //TaskManager
     taskCalculateNodesMatrix_->setInput(scene_->getRoot());

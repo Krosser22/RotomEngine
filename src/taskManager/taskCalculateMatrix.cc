@@ -26,6 +26,7 @@ void ROTOM::TaskCalculateMatrix::run() {
 
   //ModelWorld
   if (root_->isDirtyModelWorld()) {
+    //TODO - Check this next line
     glm::mat4 modelWorld = glm::mat4() * *root_->modelLocal();
     root_->setModelWorld(modelWorld);
   }

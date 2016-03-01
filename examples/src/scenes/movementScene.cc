@@ -5,6 +5,7 @@
 **/
 
 #include "general/files.h"
+#include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
 #include "scenes/movementScene.h"
@@ -15,7 +16,7 @@ void ROTOM::MovementScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
-  geometry = std::shared_ptr<Geometry>(new Geometry());
+  geometry_ = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
@@ -25,54 +26,55 @@ void ROTOM::MovementScene::init() {
   std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable());
   std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable());
 
-  drawable1->setGeometry(geometry);
+  drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material1);
   drawable1->setParent(getRoot());
   drawable1->setPositionZ(-5.0f);
 
-  drawable2->setGeometry(geometry);
+  drawable2->setGeometry(geometry_);
   drawable2->setMaterial(material2);
   drawable2->setParent(drawable1);
   drawable2->setPositionX(1.0f);
 
-  drawable3->setGeometry(geometry);
+  drawable3->setGeometry(geometry_);
   drawable3->setMaterial(material3);
   drawable3->setParent(drawable2);
   drawable3->setPositionX(1.0f);
 
-  drawable4->setGeometry(geometry);
+  drawable4->setGeometry(geometry_);
   drawable4->setMaterial(material4);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
+
+  for (unsigned int i = 0; i < 3; ++i) {
+    cameraPos_[i] = getCamera()->position()[i];
+  }
 }
 
 void ROTOM::MovementScene::input() {
-  ImGuiIO& io = ImGui::GetIO();
-  if (io.KeysDown['h']) printf("H");
-  /*if (ESAT::MouseButtonPressed(1)) {
-  rotate_player();
+  if (INPUT::IsMousePressed(1)) {
+    rotateCamera();
   } else {
-  //Player
-  if (ESAT::IsKeyPressed('W')) {
-  move_player('W');
-  updateCamera();
-  }
+    if (INPUT::IsKeyPressed('W')) {
+      moveCamera('W');
+      updateCamera();
+    }
 
-  if (ESAT::IsKeyPressed('A')) {
-  move_player('A');
-  updateCamera();
-  }
+    if (INPUT::IsKeyPressed('A')) {
+      moveCamera('A');
+      updateCamera();
+    }
 
-  if (ESAT::IsKeyPressed('S')) {
-  move_player('S');
-  updateCamera();
-  }
+    if (INPUT::IsKeyPressed('S')) {
+      moveCamera('S');
+      updateCamera();
+    }
 
-  if (ESAT::IsKeyPressed('D')) {
-  move_player('D');
-  updateCamera();
+    if (INPUT::IsKeyPressed('D')) {
+      moveCamera('D');
+      updateCamera();
+    }
   }
-  }*/
 }
 
 void ROTOM::MovementScene::update() {
@@ -81,12 +83,12 @@ void ROTOM::MovementScene::update() {
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);*/
 
-  //updateCamera();
+  updateCamera();
 }
 
 void ROTOM::MovementScene::draw() {
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-  ImGui::Text("%d Objects = %d Vertex", 4, geometry->vertexCount() * 4);
+  ImGui::Text("%d Objects = %d Vertex", 4, geometry_->vertexCount() * 4);
   
   ImGui::Begin("Input");
   {
@@ -107,36 +109,35 @@ void ROTOM::MovementScene::draw() {
   ImGui::End();
 }
 
-void ROTOM::MovementScene::moveCamera(char key) {
-  //printf("%c\n", key);
-  /*const float *temp_forward = getCamera()->forward();
+void ROTOM::MovementScene::moveCamera(unsigned char key) {
+  const float *temp_forward = getCamera()->forward();
   float forward[3] = { temp_forward[0], temp_forward[1], temp_forward[2] };
   float length = sqrt((forward[0] * forward[0]) + (forward[1] * forward[1]) + (forward[2] * forward[2]));
   for (unsigned int i = 0; i < 3; ++i) {
-  forward[i] /= length;
+    forward[i] /= length;
+    cameraPos_[i] = getCamera()->position()[i];
   }
 
-  float *cameraPos = &getCamera()->position()[0];
   switch (key) {
   case 'W':
-  cameraPos[0] += (forward[0] * cameraSpeed);
-  //camera_pos[1] += (forward[1] * cameraSpeed);
-  cameraPos[2] += (forward[2] * cameraSpeed);
+    cameraPos_[0] += (forward[0] * cameraSpeed_);
+    //camera_pos[1] += (forward[1] * cameraSpeed_);
+    cameraPos_[2] += (forward[2] * cameraSpeed_);
   break;
   case 'A':
-  cameraPos[0] += (forward[2] * cameraSpeed);
-  cameraPos[2] -= (forward[0] * cameraSpeed);
+    cameraPos_[0] += (forward[2] * cameraSpeed_);
+    cameraPos_[2] -= (forward[0] * cameraSpeed_);
   break;
   case 'S':
-  cameraPos[0] -= (forward[0] * cameraSpeed);
-  //cameraPos[1] -= (forward[1] * cameraSpeed);
-  cameraPos[2] -= (forward[2] * cameraSpeed);
+    cameraPos_[0] -= (forward[0] * cameraSpeed_);
+    //cameraPos_[1] -= (forward[1] * cameraSpeed_);
+    cameraPos_[2] -= (forward[2] * cameraSpeed_);
   break;
   case 'D':
-  cameraPos[0] -= (forward[2] * cameraSpeed);
-  cameraPos[2] += (forward[0] * cameraSpeed);
+    cameraPos_[0] -= (forward[2] * cameraSpeed_);
+    cameraPos_[2] += (forward[0] * cameraSpeed_);
   break;
-  }*/
+  }
 }
 
 void ROTOM::MovementScene::rotateCamera() {
@@ -153,22 +154,23 @@ void ROTOM::MovementScene::rotateCamera() {
 }
 
 void ROTOM::MovementScene::updateCamera() {
-  /*mx_last_frame = mx;
-  my_last_frame = my;
-  //mx = ESAT::MousePositionX();
-  //my = ESAT::MousePositionY();
+  mxLastFrame_ = mx_;
+  myLastFrame_ = my_;
+  mx_ = INPUT::MousePositionX();
+  my_ = INPUT::MousePositionY();
 
-  float *a = (float *)GameState.camera->view_matrix();
+  /*float *a = getCamera()->viewMatrix();
   printf("%f %f %f %f\n", a[0], a[4], a[8], a[12]);
   printf("%f %f %f %f\n", a[1], a[5], a[9], a[13]);
   printf("%f %f %f %f\n", a[2], a[6], a[10], a[14]);
-  printf("%f %f %f %f\n\n", a[3], a[7], a[11], a[15]);
+  printf("%f %f %f %f\n\n", a[3], a[7], a[11], a[15]);*/
+
   float view[3];
   float p = sin(-getCamera()->position()[1] / 200) * 220;
-  view[0] = -p*cos(getCamera()->rotation()[0] / 100);
+  view[0] = -p * cos(getCamera()->rotation()[0] / 100);
   view[1] = -cos(-getCamera()->rotation()[1] / 200) * 220;
-  view[2] = -p*sin(getCamera()->rotation()[0] / 100);
+  view[2] = -p * sin(getCamera()->rotation()[0] / 100);
 
-  //getCamera()->setPosition(camera_pos);
-  getCamera()->setViewTarget(view);*/
+  getCamera()->setPosition(cameraPos_);
+  getCamera()->setViewTarget(view);
 }
