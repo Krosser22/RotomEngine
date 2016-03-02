@@ -25,18 +25,28 @@ namespace ROTOM {
     void draw();
 
     void destroy() {};
-
+    
+  private:
     std::shared_ptr<Geometry> geometry_;
 
-    float cameraSpeed_ = 0.05f;
-    float mxLastFrame_ = 0.0f, myLastFrame_ = 0.0f, mx_ = 0.0f, my_ = 0.0f;
-    float cameraPos_[3];
-  private:
-    void moveCamera(unsigned char key);
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    float yaw = -90.0f;	// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right (due to how Eular angles work) so we initially rotate a bit to the left.
+    float pitch = 0.0f;
+    float lastX = 1280 / 2.0;
+    float lastY = 720 / 2.0;
+    float fov = 45.0f;
 
-    void rotateCamera();
+    float movementSpeed = 0.05f; // Change this value to your liking
+    float rotationSpeed = 0.5f;	// Change this value to your liking
+    float scrollSpeed = 0.05f; // Change this value to your liking
 
-    void updateCamera();
+    void movement();
+
+    void rotation();
+
+    void scroll();
   };
 }
 

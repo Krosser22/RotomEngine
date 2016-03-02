@@ -12,9 +12,10 @@
 
 namespace ROTOM {
   namespace FILES {
-    void read_file(const char *path, std::shared_ptr<std::string> source);
+    void ReadFile(const char *path, std::shared_ptr<char[]> source);
 
-    void Load_file(const char *path, std::shared_ptr<char[]> source);
+    void ReadFile(const char *path, std::shared_ptr<std::string> source);
   }
 }
+
 #endif //__FILES_H__

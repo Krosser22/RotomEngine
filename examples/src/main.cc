@@ -10,6 +10,7 @@
 #include "scenes/geometryScene.h"
 #include "scenes/movementScene.h"
 #include "scenes/meshLoaderScene.h"
+#include "scenes/shaderScene.h"
 #include "scenes/soundScene.h"
 
 int ROTOM::main(int argc, char** argv) {
@@ -22,7 +23,8 @@ int ROTOM::main(int argc, char** argv) {
   //DefaultScene scene;
   //GeometryScene scene;
   //MeshLoaderScene scene;
-  MovementScene scene;
+  //MovementScene scene;
+  ShaderScene scene;
   //SoundScene scene;
   SetScene(&scene);
   return 0;

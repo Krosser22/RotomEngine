@@ -1,0 +1,29 @@
+#version 330 core
+
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec3 normal;
+layout(location = 2) in vec2 uv;
+
+uniform mat4 u_model;
+uniform mat4 u_view;
+uniform mat4 u_projection;
+uniform vec3 u_lightPosition;
+
+out vec3 normalDirection;
+out vec2 uvMaterial;
+out vec3 lightDirection;
+
+void main() {
+	//General
+	mat4 modelView = u_view * u_model;
+	vec4 worldPosition = modelView * vec4(position, 1.0f);
+
+	//Light
+	vec4 lightPosition = u_view * vec4(u_lightPosition, 1.0f);
+	lightDirection = normalize(lightPosition - worldPosition).xyz;
+	normalDirection = normalize(modelView * vec4(normal, 0.0f)).xyz;
+	
+	//Material
+	uvMaterial = uv;
+	gl_Position = u_projection * worldPosition;
+};

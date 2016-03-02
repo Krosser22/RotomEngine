@@ -86,12 +86,12 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
 
 void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData, Light *light, float *projectionMatrix, float *viewMatrix) {
   ShaderData *shaderData = &commandDrawObjectData->shaderData;
-  //MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
+  MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
   const float *lightPosition = &light->lightPositionX;
   const float *lightColor = &light->lightColorX;
   const float *specularIntensity = &light->specularIntensityX;
   const float *specularMaterial = commandDrawObjectData->material_specularMaterial;
-  //const float *color = materialSettings->color();
+  const float *color = materialSettings->color();
 
   glUseProgram(shaderData->shaderProgram);
 
@@ -107,7 +107,7 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   glUniform1f(shaderData->u_shininess, commandDrawObjectData->material_shininess);
   glUniform4f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2], specularIntensity[3]);
   glUniform4f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2], specularMaterial[3]);
-  //glUniform4f(material->u_color, color[0], color[1], color[2], color[3]);
+  glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
 
   glBindVertexArray(commandDrawObjectData->geometry_VAO);
   glDrawElements(GL_TRIANGLES, commandDrawObjectData->geometry_veterCount, GL_UNSIGNED_INT, 0);
