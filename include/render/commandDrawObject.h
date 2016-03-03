@@ -30,12 +30,12 @@ namespace ROTOM {
 
     //It does what the command should do (it's called from the displayList)
     void run();
-
-    void setInput(std::shared_ptr<Node> root, Light light, float projectionMatrix[16], float viewMatrix[16]);
+    
+    void setInput(std::shared_ptr<Node> root, std::vector<Light> lights, float projectionMatrix[16], float viewMatrix[16]);
 
   private:
     std::vector<CommandDrawObjectData> commandDrawObjectData_;
-    Light light_;
+    std::vector<Light> lights_;
     float projectionMatrix_[16];
     float viewMatrix_[16];
 

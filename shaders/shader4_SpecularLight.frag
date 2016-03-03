@@ -24,8 +24,8 @@ void main() {
     vec3 diffuse = diff * u_lightColor;
 
 	//Specular Light
-    float specularStrength = 0.5f;
-	float shininess = 32;
+    float specularStrength = 5.0f;
+	float shininess = 500;
 	vec3 viewDirection = normalize(normalDirection - cameraPosition);
     vec3 reflectionDirection = reflect(-lightDirection, normalDirection);
     float spec = pow(max(dot(viewDirection, reflectionDirection), 0.0), shininess);

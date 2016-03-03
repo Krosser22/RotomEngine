@@ -18,7 +18,7 @@ namespace ROTOM {
 
     void init();
 
-    void input() {};
+    void input();
 
     void update();
 
@@ -26,8 +26,8 @@ namespace ROTOM {
 
     void destroy() {};
 
-    static const int amount = 1722;
-    std::shared_ptr<Geometry> geometry;
+    static const int amount_ = 1722;
+    std::shared_ptr<Geometry> geometry_;
   };
 }
 

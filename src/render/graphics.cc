@@ -84,12 +84,9 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
   glDeleteProgram(shaderProgram);
 }
 
-void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData, Light *light, float *projectionMatrix, float *viewMatrix) {
+void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<Light> *lights, float *projectionMatrix, float *viewMatrix) {
   ShaderData *shaderData = &commandDrawObjectData->shaderData;
   MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
-  const float *lightPosition = &light->lightPositionX;
-  const float *lightColor = &light->lightColorX;
-  const float *specularIntensity = &light->specularIntensityX;
   const float *specularMaterial = commandDrawObjectData->material_specularMaterial;
   const float *color = materialSettings->color();
 
@@ -98,16 +95,27 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   //Texture
   glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);
 
-  // Pass them to the shaders
+  //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
   glUniformMatrix4fv(shaderData->u_view, 1, GL_FALSE, viewMatrix);
   glUniformMatrix4fv(shaderData->u_projection, 1, GL_FALSE, projectionMatrix);
-  glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
-  glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
+
+  //Material
   glUniform1f(shaderData->u_shininess, commandDrawObjectData->material_shininess);
-  glUniform4f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2], specularIntensity[3]);
   glUniform4f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2], specularMaterial[3]);
+  
+  //Material Settings
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
+
+  //Light
+  for (unsigned int i = 0; i < lights->size(); ++i) {
+    const float *lightPosition = &lights->at(i).lightPositionX;
+    const float *lightColor = &lights->at(i).lightColorX;
+    const float *specularIntensity = &lights->at(i).specularIntensityX;
+    glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
+    glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
+    glUniform4f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2], specularIntensity[3]);
+  }
 
   glBindVertexArray(commandDrawObjectData->geometry_VAO);
   glDrawElements(GL_TRIANGLES, commandDrawObjectData->geometry_veterCount, GL_UNSIGNED_INT, 0);

@@ -9,9 +9,9 @@
 
 namespace ROTOM {
   struct Light {
-    float lightPositionX = 100.0f;
-    float lightPositionY = 100.0f;
-    float lightPositionZ = 100.0f;
+    float lightPositionX = 10.0f;
+    float lightPositionY = 10.0f;
+    float lightPositionZ = 10.0f;
 
     float lightColorX = 1.0f;
     float lightColorY = 1.0f;

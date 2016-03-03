@@ -475,6 +475,7 @@ bool WindowIsOpened() {
     scene->input();
     scene->update();
     scene->draw();
+    scene->drawHUD();
 
     //Input
     ROTOM::INPUT::Update();
@@ -488,7 +489,7 @@ bool WindowIsOpened() {
 
     //DisplayList
     if (displayList.isValid_) {
-      commandDrawObject.setInput(scene->getRoot(), *scene->getLight().at(0).get(), scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
+      commandDrawObject.setInput(scene->getRoot(), scene->getLight(), scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
       displayList.isValid_ = false;
     }
     displayList.addCommand(&commandDrawObject);
@@ -505,7 +506,6 @@ void ROTOM::SetScene(Scene *newScene) {
   }
   scene = newScene;
   scene->setRoot(std::shared_ptr<Node>(new Node));
-  scene->AddLight(std::shared_ptr<ROTOM::Light>(new Light()));
   scene->init();
   while (WindowIsOpened()) {
     ;

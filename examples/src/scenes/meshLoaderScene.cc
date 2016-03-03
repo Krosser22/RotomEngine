@@ -18,10 +18,6 @@ double my = 0;
 double mx_last_frame = 0;
 double my_last_frame = 0;
 
-float position[3];
-float rotation[3];
-float scale[3];
-
 #define OBJ_MONKEY
 //#define OBJ_BLONDE
 //#define OBJ_DEADPOOL
@@ -65,24 +61,11 @@ void ROTOM::MeshLoaderScene::init() {
 
   geometry->loadGeometry(&obj_data);
 
-  position[0] = 0.0f;
-  position[1] = 0.0f;
-  position[2] = 0.0f;
-  rotation[0] = 0.0f;
-  rotation[1] = 0.0f;
-  rotation[2] = 0.0f;
-  scale[0] = 1.0f;
-  scale[1] = 1.0f;
-  scale[2] = 1.0f;
-
   getRoot()->setPosition(0.0f, 0.0f, -5.0f);
 
   drawable->setGeometry(geometry);
   drawable->setMaterial(material);
   drawable->setParent(getRoot());
-  drawable->setPosition(position);
-  drawable->setRotation(rotation);
-  drawable->setScale(scale);
 }
 
 void ROTOM::MeshLoaderScene::update() {
@@ -91,22 +74,32 @@ void ROTOM::MeshLoaderScene::update() {
 }
 
 void ROTOM::MeshLoaderScene::draw() {
-  ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-  ImGui::Text("1 Object = %d Vertex", geometry->vertexCount());
+  if (getLight().size() > 0) {
+    ImGui::Begin("Light");
+    {
+      ImGui::DragFloat3("LightPosition", &getLight().at(0).lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
+      ImGui::DragFloat3("LightColor", &getLight().at(0).lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+      ImGui::DragFloat4("specularIntensity", &getLight().at(0).specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+    }
+    ImGui::End();
+  }
 
-  ImGui::Begin("Input");
+  ImGui::Begin("Material");
   {
-    ImGui::DragFloat3("LightPosition", &getLight().at(0).get()->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-    ImGui::DragFloat3("LightColor", &getLight().at(0).get()->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat4("specularIntensity", &getLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat("Shininess", &(((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.shininess_), 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
-    ImGui::DragFloat4("specularMaterial", (((Drawable *)(&getRoot()->getChildAt(0))->get())->material()->materialData_.specularMaterial_), 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+    ImGui::DragFloat("Shininess", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+    ImGui::DragFloat4("specularMaterial", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+
+    float *position = &getRoot()->getChildAt(0)->position()[0];
     if (ImGui::DragFloat3("Position", &position[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
       getRoot()->getChildAt(0)->setPosition(position);
     }
+
+    float *rotation = &getRoot()->getChildAt(0)->rotation()[0];
     if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 360.0f, "%.2f", 1.0f)) {
       getRoot()->getChildAt(0)->setRotation(rotation);
     }
+
+    float *scale = &getRoot()->getChildAt(0)->scale()[0];
     if (ImGui::DragFloat3("Scale", &scale[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f)) {
       getRoot()->getChildAt(0)->setScale(scale);
     }

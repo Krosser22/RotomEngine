@@ -13,12 +13,12 @@ ROTOM::CommandDrawObject::~CommandDrawObject() {}
 
 void ROTOM::CommandDrawObject::run() {
   for (unsigned int i = 0; i < commandDrawObjectData_.size(); ++i) {
-    GRAPHICS::drawMaterial(&commandDrawObjectData_.at(i), &light_, projectionMatrix_, viewMatrix_);
+    GRAPHICS::drawMaterial(&commandDrawObjectData_.at(i), &lights_, projectionMatrix_, viewMatrix_);
   }
 }
 
-void ROTOM::CommandDrawObject::setInput(std::shared_ptr<Node> root, Light light, float projectionMatrix[16], float viewMatrix[16]) {
-  light_ = light;
+void ROTOM::CommandDrawObject::setInput(std::shared_ptr<Node> root, std::vector<Light> lights, float projectionMatrix[16], float viewMatrix[16]) {
+  lights_ = lights;
   for (int i = 0; i < 16; ++i) {
     projectionMatrix_[i] = projectionMatrix[i];
     viewMatrix_[i] = viewMatrix[i];

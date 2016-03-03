@@ -5,6 +5,7 @@
 **/
 
 #include "general/files.h"
+#include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
 #include "scenes/defaultScene.h"
@@ -15,7 +16,7 @@ void ROTOM::DefaultScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
-  geometry = std::shared_ptr<Geometry>(new Geometry());
+  geometry_ = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
@@ -23,18 +24,18 @@ void ROTOM::DefaultScene::init() {
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable());
   std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable());
   std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable[amount];
+  std::shared_ptr<Drawable> drawable[amount_];
 
-  drawable1->setGeometry(geometry);
+  drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material1);
   drawable1->setParent(getRoot());
   drawable1->setPositionZ(-5.0f);
 
-  drawable2->setGeometry(geometry);
+  drawable2->setGeometry(geometry_);
   drawable2->setMaterial(material2);
   drawable2->setParent(drawable1);
 
-  drawable3->setGeometry(geometry);
+  drawable3->setGeometry(geometry_);
   drawable3->setMaterial(material3);
   drawable3->setParent(drawable2);
 
@@ -45,15 +46,28 @@ void ROTOM::DefaultScene::init() {
   const int rows = 15;
   const int cols = 15;
   float pos[3] = { 0.0f, 0.0f, 0.0f };
-  for (int i = 0; i < amount; ++i) {
+  for (int i = 0; i < amount_; ++i) {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
     drawable[i] = std::shared_ptr<Drawable>(new Drawable());
-    drawable[i]->setGeometry(geometry);
+    drawable[i]->setGeometry(geometry_);
     drawable[i]->setMaterial(material4);
     drawable[i]->setParent(drawable1);
     drawable[i]->setPosition(pos);
+  }
+}
+void ROTOM::DefaultScene::input() {
+  //Add Cube
+  if (INPUT::IsKeyPressed('R')) {
+    static float posX = -2.0f;
+    std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
+    std::shared_ptr<Drawable> drawableNew = std::shared_ptr<Drawable>(new Drawable());
+    drawableNew->setGeometry(geometry_);
+    drawableNew->setMaterial(material);
+    drawableNew->setParent(getRoot()->getChildAt(0));
+    drawableNew->setPositionX(posX);
+    posX -= 1.0f;
   }
 }
 
@@ -65,9 +79,6 @@ void ROTOM::DefaultScene::update() {
 }
 
 void ROTOM::DefaultScene::draw() {
-  ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-  ImGui::Text("%d Objects = %d Vertex", amount + 3, geometry->vertexCount() * (amount + 3));
-  
   ImGui::Begin("Input");
   {
     /*if (ImGui::Button("Detach")) {
@@ -77,10 +88,21 @@ void ROTOM::DefaultScene::draw() {
         root_.getChildAt(0)->getChildAt(0)->getChildAt(0)->setParent(root_.getChildAt(0)->getChildAt(0));
       }
     }*/
+  }
+  ImGui::End();
 
-    ImGui::DragFloat3("LightPosition", &getLight().at(0).get()->lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-    ImGui::DragFloat3("LightColor", &getLight().at(0).get()->lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat4("specularIntensity", &getLight().at(0).get()->specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+  if (getLight().size() > 0) {
+    ImGui::Begin("Light");
+    {
+      ImGui::DragFloat3("LightPosition", &getLight().at(0).lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
+      ImGui::DragFloat3("LightColor", &getLight().at(0).lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+      ImGui::DragFloat4("specularIntensity", &getLight().at(0).specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+    }
+    ImGui::End();
+  }
+
+  ImGui::Begin("Material");
+  {
     ImGui::DragFloat("Shininess", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
     ImGui::DragFloat4("specularMaterial", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
   }
