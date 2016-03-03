@@ -63,7 +63,6 @@ namespace ROTOM {
 
     void setModelWorld(glm::mat4 modelWorld);
     glm::mat4 *modelWorld();
-    bool isDirtyModelWorld();
 
     void setParent(std::shared_ptr<Node> parent);
     std::shared_ptr<Node> parent();
@@ -75,7 +74,6 @@ namespace ROTOM {
 
   protected:
     bool dirtyModelLocal_;
-    bool dirtyModelWorld_;
 
     glm::vec3 position_;
     glm::vec3 rotation_;
@@ -86,9 +84,6 @@ namespace ROTOM {
 
     std::shared_ptr<Node> parent_;
     std::vector<std::shared_ptr<Node>> childs_;
-
-    //Change the flag dirtyModelWorld of the children
-    void alertChildsModelWorldChanged();
   };
 }
 

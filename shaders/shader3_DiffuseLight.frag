@@ -15,7 +15,8 @@ void main() {
 	vec3 materialColor = texture(u_texture, uvMaterial).xyz * u_color.xyz;
 
     //Ambient Light
-    vec3 ambient = u_lightColor * 0.05f;
+    float ambientStrength = 0.05f;
+    vec3 ambient = u_lightColor * ambientStrength;
 
 	//Diffuse Light
     float diff = max(dot(normalDirection, lightDirection), 0.0);

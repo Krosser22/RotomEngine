@@ -20,10 +20,13 @@ namespace ROTOM {
 
     void setInput(Node *root);
 
-    void runOnNode(Node *node);
-
   private:
     Node *root_;
+
+    void calculateNode(Node *node);
+
+    //This will not ask if the World matrix must be calculated, it will just calculate the matrix without asking
+    void calculateNodeForSure(Node *node);
   };
 }
 

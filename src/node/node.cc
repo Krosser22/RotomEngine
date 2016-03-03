@@ -55,7 +55,7 @@ void ROTOM::Node::setPosition(const float x, const float y, const float z) {
   position_.x = x;
   position_.y = y;
   position_.z = z;
-  alertChildsModelWorldChanged();
+  dirtyModelLocal_ = true;
 }
 
 glm::vec3 ROTOM::Node::position() {
@@ -95,7 +95,7 @@ void ROTOM::Node::setRotation(const float x, const float y, const float z) {
   rotation_.x = x;
   rotation_.y = y;
   rotation_.z = z;
-  alertChildsModelWorldChanged();
+  dirtyModelLocal_ = true;
 }
 
 glm::vec3 ROTOM::Node::rotation() {
@@ -134,7 +134,7 @@ void ROTOM::Node::setScale(const float x, const float y, const float z) {
   scale_.x = x;
   scale_.y = y;
   scale_.z = z;
-  alertChildsModelWorldChanged();
+  dirtyModelLocal_ = true;
 }
 
 glm::vec3 ROTOM::Node::scale() {
@@ -168,7 +168,6 @@ float ROTOM::Node::scaleZ() {
 void ROTOM::Node::setModelLocal(glm::mat4 modelLocal) {
   modelLocal_ = modelLocal;
   dirtyModelLocal_ = false;
-  dirtyModelWorld_ = true;
 }
 
 glm::mat4 *ROTOM::Node::modelLocal() {
@@ -181,15 +180,10 @@ bool ROTOM::Node::isDirtyModelLocal() {
 
 void ROTOM::Node::setModelWorld(glm::mat4 modelWorld) {
   modelWorld_ = modelWorld;
-  dirtyModelWorld_ = false;
 }
 
 glm::mat4 *ROTOM::Node::modelWorld() {
   return &modelWorld_;
-}
-
-bool ROTOM::Node::isDirtyModelWorld() {
-  return dirtyModelWorld_;
 }
 
 void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
@@ -211,7 +205,7 @@ void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   parent_ = parent;
   parent_->addChild(shared_from_this());
 
-  dirtyModelWorld_ = true;
+  dirtyModelLocal_ = true;
 
   modelWorld_ = *parent->modelWorld() * modelLocal_;
 }
@@ -241,13 +235,4 @@ std::shared_ptr<ROTOM::Node> ROTOM::Node::getChildAt(unsigned int i) {
 
 const unsigned int ROTOM::Node::childCount() {
   return childs_.size();
-}
-
-void ROTOM::Node::alertChildsModelWorldChanged() {
-  if (!dirtyModelLocal_) {
-    dirtyModelLocal_ = true;
-    for (unsigned int i = 0; i < childs_.size(); ++i) {
-      childs_.at(i)->dirtyModelWorld_ = true;
-    }
-  }
 }

@@ -50,13 +50,13 @@ void ROTOM::ShaderScene::init() {
 
   //Material4: Color + Texture + DiffuseLight + SpecularLight
   std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
-  /*{
+  {
     std::shared_ptr<std::string> verterShaderSource4 = std::shared_ptr<std::string>(new std::string());
     std::shared_ptr<std::string> fragmentShaderSource4 = std::shared_ptr<std::string>(new std::string());
-    FILES::ReadFile("../../../../shaders/shader3_SpecularLight.vertx", verterShaderSource4);
-    FILES::ReadFile("../../../../shaders/shader3_SpecularLight.frag", fragmentShaderSource4);
+    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.vertx", verterShaderSource4);
+    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.frag", fragmentShaderSource4);
     material4->setShader(verterShaderSource4.get()->data(), fragmentShaderSource4.get()->data());
-  }*/
+  }
 
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable());
   std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable());
@@ -85,11 +85,9 @@ void ROTOM::ShaderScene::init() {
 }
 
 void ROTOM::ShaderScene::update() {
-  float sinTime = sin(TIME::appTime()) * 0.022f;
-
-  Node *node = getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0).get();
+  //float sinTime = sin(TIME::appTime()) * 0.022f;
+  Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
   node->setRotationX(node->rotation().x + 0.01f);
-
 }
 
 void ROTOM::ShaderScene::draw() {

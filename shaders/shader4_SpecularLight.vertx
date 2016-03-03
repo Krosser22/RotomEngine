@@ -12,11 +12,13 @@ uniform vec3 u_lightPosition;
 out vec3 normalDirection;
 out vec2 uvMaterial;
 out vec3 lightDirection;
+out vec3 cameraPosition;
 
 void main() {
 	//General
 	mat4 modelView = u_view * u_model;
 	vec4 worldPosition = modelView * vec4(position, 1.0f);
+	cameraPosition = u_view[3].xyz;
 
 	//Light
 	vec4 lightPosition = u_view * vec4(u_lightPosition, 1.0f);
