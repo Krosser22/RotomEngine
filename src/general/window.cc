@@ -48,13 +48,13 @@ static int          g_AttribLocationTex = 0, g_AttribLocationProjMtx = 0;
 static int          g_AttribLocationPosition = 0, g_AttribLocationUV = 0, g_AttribLocationColor = 0;
 static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
 
-static ROTOM::DisplayList displayList_;
-static ROTOM::CommandDrawObject commandDrawObject_;
-static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateNodesMatrix_;
-static std::shared_ptr<ROTOM::TaskCalculateMatrix> taskCalculateCameraMatrix_;
-static std::shared_ptr<ROTOM::TaskRender> taskRender_;
-static ROTOM::Scene *scene_;
-static std::shared_ptr<ROTOM::Node> cameraNode_;
+static ROTOM::CommandDrawObject commandDrawObject;
+static ROTOM::DisplayList displayList;
+ROTOM::Node cameraNode;
+ROTOM::TaskRender taskRender;
+ROTOM::TaskCalculateMatrix taskCalculateNodesMatrix;
+ROTOM::TaskCalculateMatrix taskCalculateCameraMatrix;
+static ROTOM::Scene *scene;
 
 static void error_callback(int error, const char* description) {
   fputs(description, stderr);
@@ -174,10 +174,6 @@ void ImGui_KeyCallback(GLFWwindow* window, int key, int scancode, int action, in
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, GL_TRUE);
   }
-
-  /*if (action == GLFW_PRESS) {
-    printf("%c", key);
-  }*/
 
   (void)mods; // Modifiers are not reliable across systems
   io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
@@ -343,13 +339,10 @@ bool ImGui_Init(GLFWwindow* window, bool install_callbacks) {
   io.ImeWindowHandle = glfwGetWin32Window(window);
 #endif
 
-  //if (install_callbacks)
-  //{
-    glfwSetMouseButtonCallback(window, ImGui_MouseButtonCallback);
-    glfwSetScrollCallback(window, ImGui_ScrollCallback);
-    glfwSetKeyCallback(window, ImGui_KeyCallback);
-    glfwSetCharCallback(window, ImGui_CharCallback);
-  //}
+  glfwSetMouseButtonCallback(window, ImGui_MouseButtonCallback);
+  glfwSetScrollCallback(window, ImGui_ScrollCallback);
+  glfwSetKeyCallback(window, ImGui_KeyCallback);
+  glfwSetCharCallback(window, ImGui_CharCallback);
 
   return true;
 }
@@ -450,22 +443,14 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
   ImGui_Init(window, true);
 
   glClearColor(0.1f, 0.5f, 0.6f, 1.0f);
-
   clear();
 
-  taskCalculateNodesMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix());
-  taskCalculateCameraMatrix_ = std::shared_ptr<TaskCalculateMatrix>(new TaskCalculateMatrix());
-  taskRender_ = std::shared_ptr<TaskRender>(new TaskRender());
-  //taskCalculateCameraMatrix_->nextTaskList_.push_back(taskCalculateNodesMatrix_);
-  taskCalculateNodesMatrix_->nextTaskList_.push_back(taskRender_);
+  taskCalculateNodesMatrix.nextTaskList_.push_back(&taskRender);
 
-  cameraNode_ = std::shared_ptr<ROTOM::Node>(scene_->getCamera());
   return true;
 }
 
 void ROTOM::WindowDestroy() {
-  commandDrawObject_.~CommandDrawObject();
-
   ImGui_InvalidateDeviceObjects();
   ImGui::Shutdown();
 
@@ -486,49 +471,46 @@ bool WindowIsOpened() {
     clear();
 
     //Scene
-    assert(scene_);
-    scene_->input();
-    scene_->update();
-    scene_->draw();
+    assert(scene);
+    scene->input();
+    scene->update();
+    scene->draw();
 
     //Input
     ROTOM::INPUT::Update();
 
     //TaskManager
-    taskCalculateNodesMatrix_->setInput(scene_->getRoot());
-    taskCalculateCameraMatrix_->setInput(cameraNode_);
-    taskRender_->setInput(&displayList_);
-    ROTOM::TASKMANAGER::addTask(taskCalculateCameraMatrix_);
-    ROTOM::TASKMANAGER::addTask(taskCalculateNodesMatrix_);
+    taskCalculateNodesMatrix.setInput(scene->getRoot().get());
+    taskCalculateCameraMatrix.setInput(&cameraNode);
+    taskRender.setInput(&displayList);
+    ROTOM::TASKMANAGER::addTask(&taskCalculateCameraMatrix);
+    ROTOM::TASKMANAGER::addTask(&taskCalculateNodesMatrix);
 
     //DisplayList
-    if (displayList_.isValid_) {
-      commandDrawObject_.setInput(scene_->getRoot(), *scene_->getLight().at(0).get(), scene_->getCamera()->projectionMatrix(), scene_->getCamera()->viewMatrix());
-      displayList_.isValid_ = false;
-      //printf("The TaskManager is faster\n");
-    } /*else {
-      printf("The TaskManager is slow\n");
-    }*/
-    displayList_.addCommand(&commandDrawObject_);
-    displayList_.draw();
+    if (displayList.isValid_) {
+      commandDrawObject.setInput(scene->getRoot(), *scene->getLight().at(0).get(), scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
+      displayList.isValid_ = false;
+    }
+    displayList.addCommand(&commandDrawObject);
+    displayList.draw();
     return true;
   } else {
     return false;
   }
 }
 
-void ROTOM::SetScene(Scene *scene) {
-  if (scene_ != NULL) {
-    scene_->destroy();
+void ROTOM::SetScene(Scene *newScene) {
+  if (scene != NULL) {
+    scene->destroy();
   }
-  scene_ = scene;
-  scene_->setRoot(std::shared_ptr<Node>(new Node));
-  scene_->AddLight(std::shared_ptr<ROTOM::Light>(new Light()));
-  scene_->init();
+  scene = newScene;
+  scene->setRoot(std::shared_ptr<Node>(new Node));
+  scene->AddLight(std::shared_ptr<ROTOM::Light>(new Light()));
+  scene->init();
   while (WindowIsOpened()) {
     ;
   }
-  scene_->destroy();
+  scene->destroy();
 }
 
 int ROTOM::WindowHeight() {

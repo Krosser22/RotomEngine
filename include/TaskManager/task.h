@@ -21,7 +21,7 @@ namespace ROTOM {
 
     virtual void run() = 0;
 
-    std::vector<std::shared_ptr<Task>> nextTaskList_;
+    std::vector<Task *> nextTaskList_;
   };
 }
 

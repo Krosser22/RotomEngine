@@ -17,7 +17,7 @@ struct TaskManagerData {
   std::vector<std::thread> threads;
   std::mutex lock_threads;
 
-  std::vector<std::shared_ptr<ROTOM::Task>> taskList;
+  std::vector<ROTOM::Task *> taskList;
   std::mutex lock_taskList;
 
   bool isOff;
@@ -26,7 +26,7 @@ struct TaskManagerData {
 
 } taskManagerData;
 
-void addNextTasksOf(std::shared_ptr<ROTOM::Task> task) {
+void addNextTasksOf(ROTOM::Task *task) {
   taskManagerData.lock_taskPending.lock();
   taskManagerData.lock_taskList.lock();
 
@@ -43,8 +43,8 @@ void addNextTasksOf(std::shared_ptr<ROTOM::Task> task) {
   //taskManagerData.cv.notify_all();
 }
 
-std::shared_ptr<ROTOM::Task> getNextTask() {
-  std::shared_ptr<ROTOM::Task> task;
+ROTOM::Task *getNextTask() {
+  ROTOM::Task *task = NULL;
   taskManagerData.lock_taskList.lock();
   if (taskManagerData.taskList.size() > 0) {
     task = taskManagerData.taskList.at(taskManagerData.taskList.size() - 1);
@@ -55,7 +55,7 @@ std::shared_ptr<ROTOM::Task> getNextTask() {
 }
 
 void threadLoop(int ID) {
-  std::shared_ptr<ROTOM::Task> actualTask = NULL;
+  ROTOM::Task *actualTask = NULL;
   //std::unique_lock<std::mutex> lock(taskManagerData.lock_threads);
   //taskManagerData.cv.wait(lock);
 
@@ -100,7 +100,7 @@ void ROTOM::TASKMANAGER::destroy() {
   }
 }
 
-void ROTOM::TASKMANAGER::addTask(std::shared_ptr<Task> task) {
+void ROTOM::TASKMANAGER::addTask(Task *task) {
   taskManagerData.lock_taskList.lock();
   taskManagerData.taskList.push_back(task);
   taskManagerData.lock_taskList.unlock();

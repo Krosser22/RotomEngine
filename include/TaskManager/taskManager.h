@@ -15,7 +15,7 @@ namespace ROTOM {
 
     void destroy();
 
-    void addTask(std::shared_ptr<Task> task);
+    void addTask(Task *task);
   }
 }
 

@@ -17,7 +17,7 @@ namespace ROTOM {
   void WindowDestroy();
 
   //Sets the scene that is going to be used
-  void SetScene(Scene *scene);
+  void SetScene(Scene *newScene);
 
   //Returns if the window is opened
   //bool WindowIsOpened();

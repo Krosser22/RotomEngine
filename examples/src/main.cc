@@ -21,10 +21,10 @@ int ROTOM::main(int argc, char** argv) {
   printf("Time to create the windows: %f.\n\n\n", c.end());
 
   //DefaultScene scene;
-  //GeometryScene scene;
+  GeometryScene scene;
   //MeshLoaderScene scene;
   //MovementScene scene;
-  ShaderScene scene;
+  //ShaderScene scene;
   //SoundScene scene;
   SetScene(&scene);
   return 0;

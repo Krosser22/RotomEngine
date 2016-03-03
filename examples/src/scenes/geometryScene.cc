@@ -37,6 +37,7 @@ void ROTOM::GeometryScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
+    drawable[i] = std::shared_ptr<Drawable>(new Drawable());
     drawable[i]->setGeometry(geometry);
     drawable[i]->setMaterial(material);
     drawable[i]->setParent(getRoot());

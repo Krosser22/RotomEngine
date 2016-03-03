@@ -86,10 +86,9 @@ void ROTOM::ShaderScene::init() {
 
 void ROTOM::ShaderScene::update() {
   float sinTime = sin(TIME::appTime()) * 0.022f;
-  getRoot()->getChildAt(0)->getChildAt(0)->setRotation(0.0f, getRoot()->getChildAt(0)->getChildAt(0)->rotation().y + 0.01f, 0.0f);
-  getRoot()->getChildAt(0)->moveX(sinTime);
-  getRoot()->getChildAt(0)->getChildAt(0)->moveY(sinTime);
-  getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sinTime);
+
+  Node *node = getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0).get();
+  node->setRotationX(node->rotation().x + 0.01f);
 
 }
 

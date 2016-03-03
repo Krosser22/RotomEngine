@@ -32,38 +32,15 @@ void ROTOM::TaskCalculateMatrix::run() {
   }
 
   for (unsigned int i = 0; i < root_->childCount(); ++i) {
-    runOnNode(root_->getChildAt(i));
+    runOnNode(root_->getChildAt(i).get());
   }
 }
 
-void ROTOM::TaskCalculateMatrix::setInput(std::shared_ptr<Node> root) {
+void ROTOM::TaskCalculateMatrix::setInput(Node *root) {
   root_ = root;
 }
 
-/*void ROTOM::TaskCalculateMatrix::setMyCamera(std::shared_ptr<Camera> camera) {
-  camera_ = camera;
-}
-
-void ROTOM::TaskCalculateMatrix::runOnCamera() {
-  //ModelLocal
-  if ((*camera_)->isDirtyModelLocal()) {
-    glm::mat4 modelLocal;
-    modelLocal = glm::scale(glm::mat4(), (*camera_)->scale());
-    modelLocal = glm::rotate(modelLocal, (*camera_)->rotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
-    modelLocal = glm::rotate(modelLocal, (*camera_)->rotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
-    modelLocal = glm::rotate(modelLocal, (*camera_)->rotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
-    modelLocal = glm::translate(modelLocal, (*camera_)->position());
-    (*camera_)->setModelLocal(modelLocal);
-  }
-
-  //ModelWorld
-  if ((*camera_)->isDirtyModelWorld()) {
-    glm::mat4 modelWorld = (*(*camera_)->parent()->modelWorld()) * (*(*camera_)->modelLocal());
-    (*camera_)->setModelWorld(modelWorld);
-  }
-}*/
-
-void ROTOM::TaskCalculateMatrix::runOnNode(std::shared_ptr<Node> node) {
+void ROTOM::TaskCalculateMatrix::runOnNode(Node *node) {
   //ModelLocal
   if (node->isDirtyModelLocal()) {
     glm::mat4 modelLocal;
@@ -82,6 +59,6 @@ void ROTOM::TaskCalculateMatrix::runOnNode(std::shared_ptr<Node> node) {
   }
 
   for (unsigned int i = 0; i < node->childCount(); ++i) {
-    runOnNode(node->getChildAt(i));
+    runOnNode(node->getChildAt(i).get());
   }
 }
