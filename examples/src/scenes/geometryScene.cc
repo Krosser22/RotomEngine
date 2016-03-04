@@ -52,13 +52,13 @@ void ROTOM::GeometryScene::update() {
 
 void ROTOM::GeometryScene::draw() {
   if (getLight().size() > 0) {
-    ImGui::Begin("Light");
+    /*ImGui::Begin("Light");
     {
       ImGui::DragFloat3("LightPosition", &getLight().at(0).lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
       ImGui::DragFloat3("LightColor", &getLight().at(0).lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
       ImGui::DragFloat4("specularIntensity", &getLight().at(0).specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     }
-    ImGui::End();
+    ImGui::End();*/
   }
 
   ImGui::Begin("Material");

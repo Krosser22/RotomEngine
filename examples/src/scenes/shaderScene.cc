@@ -82,33 +82,27 @@ void ROTOM::ShaderScene::init() {
   drawable4->setMaterial(material4);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
+
+  drawableLight_ = std::shared_ptr<Drawable>(new Drawable());
+  drawableLight_->setGeometry(geometry_);
+  drawableLight_->setMaterial(material1);
+  drawableLight_->setParent(getRoot());
+
+  std::shared_ptr<Light> light1 = std::shared_ptr<Light>(new Light());
+  AddLight(light1);
+
+  std::shared_ptr<Light> light2 = std::shared_ptr<Light>(new Light());
+  AddLight(light2);
 }
 
 void ROTOM::ShaderScene::update() {
   //float sinTime = sin(TIME::appTime()) * 0.022f;
   Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
   node->setRotationX(node->rotation().x + 0.01f);
+
+  drawableLight_->setPosition(getLight().at(0)->lightPosition[0], getLight().at(0)->lightPosition[1], getLight().at(0)->lightPosition[2]);
 }
 
 void ROTOM::ShaderScene::draw() {
-  if (getLight().size() > 0) {
-    ImGui::Begin("Light");
-    {
-      ImGui::DragFloat3("LightPosition", &getLight().at(0).lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-      ImGui::DragFloat3("LightColor", &getLight().at(0).lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-      ImGui::DragFloat4("specularIntensity", &getLight().at(0).specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    }
-    ImGui::End();
-  }
 
-  ImGui::Begin("Material");
-  {
-    float *shininess = &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_;
-    if (ImGui::DragFloat("Shininess", shininess, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f)) {
-      ((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_ = *shininess;
-    }
-    
-    ImGui::DragFloat4("specularMaterial", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-  }
-  ImGui::End();
 }

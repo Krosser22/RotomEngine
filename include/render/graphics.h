@@ -35,7 +35,7 @@ namespace ROTOM {
 
     void releaseMaterial(unsigned int shaderProgram);
 
-    void drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<Light> *lights, float *projectionMatrix, float *viewMatrix);
+    void drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix);
 
     void clearScreen();
 

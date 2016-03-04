@@ -28,6 +28,7 @@ namespace ROTOM {
     
   private:
     std::shared_ptr<Geometry> geometry_;
+    std::shared_ptr<Drawable> drawableLight_;
   };
 }
 

@@ -4,6 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "general/hud.h"
 #include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
@@ -475,7 +476,7 @@ bool WindowIsOpened() {
     scene->input();
     scene->update();
     scene->draw();
-    scene->drawHUD();
+    ROTOM::HUD::Draw(scene->getRoot(), scene->getLight(), scene->getCamera());
 
     //Input
     ROTOM::INPUT::Update();

@@ -23,8 +23,8 @@ int ROTOM::main(int argc, char** argv) {
   //DefaultScene scene;
   //GeometryScene scene;
   //MeshLoaderScene scene;
-  MovementScene scene;
-  //ShaderScene scene;
+  //MovementScene scene;
+  ShaderScene scene;
   //SoundScene scene;
   SetScene(&scene);
   return 0;

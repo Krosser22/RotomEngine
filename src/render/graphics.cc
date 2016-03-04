@@ -84,7 +84,7 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
   glDeleteProgram(shaderProgram);
 }
 
-void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<Light> *lights, float *projectionMatrix, float *viewMatrix) {
+void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix) {
   ShaderData *shaderData = &commandDrawObjectData->shaderData;
   MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
   const float *specularMaterial = commandDrawObjectData->material_specularMaterial;
@@ -109,9 +109,9 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
 
   //Light
   for (unsigned int i = 0; i < lights->size(); ++i) {
-    const float *lightPosition = &lights->at(i).lightPositionX;
-    const float *lightColor = &lights->at(i).lightColorX;
-    const float *specularIntensity = &lights->at(i).specularIntensityX;
+    const float *lightPosition = &lights->at(i)->lightPosition[0];
+    const float *lightColor = lights->at(i)->lightColor;
+    const float *specularIntensity = lights->at(i)->specularIntensity;
     glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
     glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
     glUniform4f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2], specularIntensity[3]);

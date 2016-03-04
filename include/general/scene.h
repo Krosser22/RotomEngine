@@ -28,23 +28,19 @@ namespace ROTOM {
 
     virtual void destroy() = 0;
 
-    void drawHUD();
-
     std::shared_ptr<Node> getRoot();
 
     void setRoot(std::shared_ptr<Node> root);
 
     Camera *getCamera();
 
-    std::vector<Light> getLight();
+    std::vector<std::shared_ptr<Light>> getLight();
 
-    void AddLight(Light light);
+    void AddLight(std::shared_ptr<Light> light);
 
   private:
     int nodes_ = 0;
     int vertexCount_ = 0;
-
-    void updateInfo();
   };
 }
 

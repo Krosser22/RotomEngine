@@ -17,7 +17,7 @@ void ROTOM::CommandDrawObject::run() {
   }
 }
 
-void ROTOM::CommandDrawObject::setInput(std::shared_ptr<Node> root, std::vector<Light> lights, float projectionMatrix[16], float viewMatrix[16]) {
+void ROTOM::CommandDrawObject::setInput(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, float projectionMatrix[16], float viewMatrix[16]) {
   lights_ = lights;
   for (int i = 0; i < 16; ++i) {
     projectionMatrix_[i] = projectionMatrix[i];

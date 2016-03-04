@@ -152,6 +152,9 @@ void ROTOM::MovementScene::update() {
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);*/
 
+  Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
+  node->setRotationX(node->rotation().x + 0.01f);
+
   // Camera/View transformation
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
