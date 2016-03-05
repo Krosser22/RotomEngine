@@ -19,7 +19,10 @@ namespace ROTOM {
   class Node : public std::enable_shared_from_this<Node> {
   public:
     Node();
+    Node(char *name);
     virtual ~Node();
+
+    std::string name_;
 
     void move(const float movement[3]);
     void move(const float x, const float y, const float z);

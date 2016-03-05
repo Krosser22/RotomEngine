@@ -29,10 +29,10 @@ void ROTOM::MovementScene::init() {
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
-  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
+  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
+  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
+  std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("4"));
 
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material1);

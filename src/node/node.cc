@@ -10,6 +10,15 @@
 #include "glm/gtx/matrix_decompose.hpp"
 
 ROTOM::Node::Node() {
+  name_ = "no_name";
+  setPosition(0.0f, 0.0f, 0.0f);
+  setRotation(0.0f, 0.0f, 0.0f);
+  setScale(1.0f, 1.0f, 1.0f);
+  parent_ = NULL;
+}
+
+ROTOM::Node::Node(char *name) {
+  name_ = name;
   setPosition(0.0f, 0.0f, 0.0f);
   setRotation(0.0f, 0.0f, 0.0f);
   setScale(1.0f, 1.0f, 1.0f);

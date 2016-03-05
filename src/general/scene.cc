@@ -8,7 +8,7 @@
 #include "general/window.h"
 #include "imgui.h"
 
-ROTOM::Camera camera_;
+ROTOM::Camera camera_("Camera");
 std::shared_ptr<ROTOM::Node> root_;
 std::vector<std::shared_ptr<ROTOM::Light>> lights_;
 

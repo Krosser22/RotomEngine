@@ -7,7 +7,8 @@
 #include "node/drawable.h"
 #include "render/graphics.h"
 
-ROTOM::Drawable::Drawable() {
+ROTOM::Drawable::Drawable(char *name) {
+  name_ = name;
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
 }
 

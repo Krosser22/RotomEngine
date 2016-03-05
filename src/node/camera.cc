@@ -7,7 +7,9 @@
 #include "node/camera.h"
 #include "glm/gtc/matrix_transform.hpp"
 
-ROTOM::Camera::Camera() {}
+ROTOM::Camera::Camera(char *name) {
+  name_ = name;
+}
 
 ROTOM::Camera::~Camera() {}
 

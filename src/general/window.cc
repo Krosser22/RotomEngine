@@ -51,7 +51,7 @@ static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
 
 static ROTOM::CommandDrawObject commandDrawObject;
 static ROTOM::DisplayList displayList;
-ROTOM::Node cameraNode;
+ROTOM::Node cameraNode("CameraNode");
 ROTOM::TaskRender taskRender;
 ROTOM::TaskCalculateMatrix taskCalculateNodesMatrix;
 ROTOM::TaskCalculateMatrix taskCalculateCameraMatrix;
@@ -476,7 +476,7 @@ bool WindowIsOpened() {
     scene->input();
     scene->update();
     scene->draw();
-    ROTOM::HUD::Draw(scene->getRoot(), scene->getLight(), scene->getCamera());
+    ROTOM::HUD::Draw();
 
     //Input
     ROTOM::INPUT::Update();
@@ -506,8 +506,9 @@ void ROTOM::SetScene(Scene *newScene) {
     scene->destroy();
   }
   scene = newScene;
-  scene->setRoot(std::shared_ptr<Node>(new Node));
+  scene->setRoot(std::shared_ptr<Node>(new Node("Root")));
   scene->init();
+  HUD::Init(scene->getRoot(), scene->getLight(), scene->getCamera());
   while (WindowIsOpened()) {
     ;
   }

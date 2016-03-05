@@ -21,9 +21,9 @@ void ROTOM::DefaultScene::init() {
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
   std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
   std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material());
-  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
+  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
+  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
   std::shared_ptr<Drawable> drawable[amount_];
 
   drawable1->setGeometry(geometry_);
@@ -50,7 +50,7 @@ void ROTOM::DefaultScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    drawable[i] = std::shared_ptr<Drawable>(new Drawable());
+    drawable[i] = std::shared_ptr<Drawable>(new Drawable("i"));
     drawable[i]->setGeometry(geometry_);
     drawable[i]->setMaterial(material4);
     drawable[i]->setParent(drawable1);
@@ -62,7 +62,7 @@ void ROTOM::DefaultScene::input() {
   if (INPUT::IsKeyPressed('R')) {
     static float posX = -2.0f;
     std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-    std::shared_ptr<Drawable> drawableNew = std::shared_ptr<Drawable>(new Drawable());
+    std::shared_ptr<Drawable> drawableNew = std::shared_ptr<Drawable>(new Drawable("input"));
     drawableNew->setGeometry(geometry_);
     drawableNew->setMaterial(material);
     drawableNew->setParent(getRoot()->getChildAt(0));

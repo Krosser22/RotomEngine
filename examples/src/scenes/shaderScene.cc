@@ -58,10 +58,10 @@ void ROTOM::ShaderScene::init() {
     material4->setShader(verterShaderSource4.get()->data(), fragmentShaderSource4.get()->data());
   }
 
-  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable());
-  std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
+  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
+  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
+  std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("4"));
 
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material1);
@@ -83,7 +83,7 @@ void ROTOM::ShaderScene::init() {
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
 
-  drawableLight_ = std::shared_ptr<Drawable>(new Drawable());
+  drawableLight_ = std::shared_ptr<Drawable>(new Drawable("light"));
   drawableLight_->setGeometry(geometry_);
   drawableLight_->setMaterial(material1);
   drawableLight_->setParent(getRoot());

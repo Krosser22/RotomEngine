@@ -54,7 +54,7 @@ void ROTOM::MeshLoaderScene::init() {
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
-  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable());
+  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable("drawable"));
 
   //MESHLOADER::Load_OBJ(finalPath, obj_data, false);
   MESHLOADER::Load_OBJ(base_path, name, obj_data);

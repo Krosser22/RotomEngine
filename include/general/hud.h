@@ -14,7 +14,21 @@
 
 namespace ROTOM {
   namespace HUD {
-    void Draw(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, Camera *camera);
+    void Init(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, Camera *camera);
+
+    void Draw();
+
+    void DrawMenu();
+
+    void DrawSceneTree();
+
+    void DrawDetails();
+
+    void DrawContent();
+
+    void DrawSceneRender();
+
+    void DrawNodes(Node *node, float offsetX);
 
     void DrawNode(Node *node);
 

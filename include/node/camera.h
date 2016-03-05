@@ -13,7 +13,7 @@
 namespace ROTOM {
   class Camera : public Node {
   public:
-    Camera();
+    Camera(char *name);
     ~Camera();
 
     void setupPerspective(const float fovy, const float aspect, const float znear, const float zfar);
