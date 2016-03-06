@@ -3,6 +3,7 @@
 uniform vec4 u_color;
 uniform sampler2D u_texture;
 uniform vec3 u_lightColor;
+uniform float u_ambientStrength;
 
 in vec3 normalDirection;
 in vec2 uvMaterial;
@@ -15,8 +16,7 @@ void main() {
 	vec3 materialColor = texture(u_texture, uvMaterial).xyz * u_color.xyz;
 
     //Ambient Light
-    float ambientStrength = 0.05f;
-    vec3 ambient = u_lightColor * ambientStrength;
+    vec3 ambient = u_lightColor * u_ambientStrength;
 
 	//Diffuse Light
     float diff = max(dot(normalDirection, lightDirection), 0.0);

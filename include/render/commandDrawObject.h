@@ -20,6 +20,7 @@ namespace ROTOM {
     unsigned int material_texture;
     float material_shininess;
     float material_specularMaterial[4];
+    float material_ambientStrength;
     float drawable_modelWorld[16];
   };
 

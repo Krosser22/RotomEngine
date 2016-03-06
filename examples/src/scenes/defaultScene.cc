@@ -77,34 +77,3 @@ void ROTOM::DefaultScene::update() {
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
 }
-
-void ROTOM::DefaultScene::draw() {
-  ImGui::Begin("Input");
-  {
-    /*if (ImGui::Button("Detach")) {
-      if (root_.getChildAt(0)->getChildAt(0)->getChildAt(0)->parent() == root_.getChildAt(0)->getChildAt(0)) {
-        root_.getChildAt(0)->getChildAt(0)->getChildAt(0)->setParent(root_.getChildAt(0));
-      } else {
-        root_.getChildAt(0)->getChildAt(0)->getChildAt(0)->setParent(root_.getChildAt(0)->getChildAt(0));
-      }
-    }*/
-  }
-  ImGui::End();
-
-  if (getLight().size() > 0) {
-    /*ImGui::Begin("Light");
-    {
-      ImGui::DragFloat3("LightPosition", &getLight().at(0).lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-      ImGui::DragFloat3("LightColor", &getLight().at(0).lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-      ImGui::DragFloat4("specularIntensity", &getLight().at(0).specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    }
-    ImGui::End();*/
-  }
-
-  ImGui::Begin("Material");
-  {
-    ImGui::DragFloat("Shininess", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
-    ImGui::DragFloat4("specularMaterial", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-  }
-  ImGui::End();
-}

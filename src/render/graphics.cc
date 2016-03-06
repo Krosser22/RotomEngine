@@ -61,6 +61,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_shininess = glGetUniformLocation(shaderData->shaderProgram, "u_shininess");
   shaderData->u_specularIntensity = glGetUniformLocation(shaderData->shaderProgram, "u_specularIntensity");
   shaderData->u_specularMaterial = glGetUniformLocation(shaderData->shaderProgram, "u_specularMaterial");
+  shaderData->u_ambientStrength = glGetUniformLocation(shaderData->shaderProgram, "u_ambientStrength");
 }
 
 void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
@@ -103,6 +104,7 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   //Material
   glUniform1f(shaderData->u_shininess, commandDrawObjectData->material_shininess);
   glUniform4f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2], specularMaterial[3]);
+  glUniform1f(shaderData->u_ambientStrength, commandDrawObjectData->material_ambientStrength);
   
   //Material Settings
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);

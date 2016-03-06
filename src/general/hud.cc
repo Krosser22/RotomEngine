@@ -331,13 +331,13 @@ void ROTOM::HUD::DrawGeometry(Geometry *geometry) {
 void ROTOM::HUD::DrawMaterial(Material *material) {
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Shininess:");
   ImGui::PushID(hud.nextPushID++);
-  ImGui::DragFloat("", &material->materialData_.shininess_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+  ImGui::DragFloat("", &material->materialData_.shininess, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
   ImGui::PopID();
 
   ImGui::Separator();
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularLight:");
   ImGui::PushID(hud.nextPushID++);
-  ImGui::DragFloat4("", &material->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+  ImGui::DragFloat4("", &material->materialData_.specularMaterial[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
   ImGui::PopID();
 
   ImGui::Separator();

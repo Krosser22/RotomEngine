@@ -22,7 +22,7 @@ namespace ROTOM {
 
     void update();
 
-    void draw();
+    void draw() {};
 
     void destroy() {};
 

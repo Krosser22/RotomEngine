@@ -22,11 +22,13 @@ namespace ROTOM {
     unsigned int u_shininess;
     unsigned int u_specularIntensity;
     unsigned int u_specularMaterial;
+    unsigned int u_ambientStrength;
   };
 
   struct MaterialData {
-    float shininess_;
-    float specularMaterial_[4];
+    float shininess;
+    float specularMaterial[4];
+    float ambientStrength;
   };
 
   class Material {

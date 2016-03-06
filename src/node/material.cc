@@ -58,13 +58,15 @@ const static char* fragmentShaderSource = "#version 330 core\n"
 "};\0";
 
 ROTOM::Material::Material(const char *texturePath) {
-  materialData_.shininess_ = 500.0f;
+  materialData_.shininess = 500.0f;
 
-  materialData_.specularMaterial_[0] = 0.0f;
-  materialData_.specularMaterial_[1] = 0.0f;
-  materialData_.specularMaterial_[2] = 0.0f;
-  materialData_.specularMaterial_[3] = 0.0f;
+  materialData_.specularMaterial[0] = 0.0f;
+  materialData_.specularMaterial[1] = 0.0f;
+  materialData_.specularMaterial[2] = 0.0f;
+  materialData_.specularMaterial[3] = 0.0f;
 
+  materialData_.ambientStrength = 0.05f;
+  
   setTexture(texturePath);
   setShader(vertexShaderSource, fragmentShaderSource);
 }
