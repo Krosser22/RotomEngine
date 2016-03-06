@@ -8,6 +8,13 @@
 #define __CONSTANTS_H__
 
 namespace ROTOM {
-  const int kNodeDataAmount = 22222; //TODO - Use allow or ref_prt array or something like that
+  enum NodeType {
+    kNodeType_Node,
+    kNodeType_Drawable,
+    kNodeType_Camera,
+    kNodeType_Light,
+  };
+
+  //const int kMaxNodeNameSize = 10;
 }
 #endif //__CONSTANTS_H__

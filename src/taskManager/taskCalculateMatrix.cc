@@ -23,10 +23,14 @@ void ROTOM::TaskCalculateMatrix::run() {
     root_->setModelLocal(modelLocal);
 
     root_->setModelWorld(glm::mat4() * *root_->modelLocal());
-  }
 
-  for (unsigned int i = 0; i < root_->childCount(); ++i) {
-    calculateNode(root_->getChildAt(i).get());
+    for (unsigned int i = 0; i < root_->childCount(); ++i) {
+      calculateNodeForSure(root_->getChildAt(i).get());
+    }
+  } else {
+    for (unsigned int i = 0; i < root_->childCount(); ++i) {
+      calculateNode(root_->getChildAt(i).get());
+    }
   }
 }
 

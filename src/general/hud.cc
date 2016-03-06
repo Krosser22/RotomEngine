@@ -5,151 +5,209 @@
 **/
 
 #include "general/hud.h"
+#include "general/input.h"
 #include "general/window.h"
 #include "imgui.h"
 
-std::shared_ptr<ROTOM::Node> root;
-std::vector<std::shared_ptr<ROTOM::Light>> lights;
-ROTOM::Camera *camera;
-ROTOM::Node *selected;
+struct HUDData {
+  std::shared_ptr<ROTOM::Node> root;
+  std::vector<std::shared_ptr<ROTOM::Light>> lights;
+  ROTOM::Camera *camera;
+  ROTOM::Node *selected;
 
-ImGuiWindowFlags window_flags = 0;
+  ImGuiWindowFlags window_flags = 0;
 
-bool opened = true;
+  bool opened = true;
 
-float windowWidth = 0.0f;
-float windowHeight = 0.0f;
+  int nextPushID = 0;
 
-float alpha = 0.0f;
+  float windowWidth = 0.0f;
+  float windowHeight = 0.0f;
 
-float leftColumnWidth = 0.0f;
-float rightColumnWidth = 0.0f;
+  float alpha = 0.0f;
 
-float menuWidth = 0.0f;
-float menuHeight = 0.0f;
-float menuPositionX = 0.0f;
-float menuPositionY = 0.0f;
+  float leftColumnWidth = 0.0f;
+  float rightColumnWidth = 0.0f;
 
-float sceneTreeWidth = 0.0f;
-float sceneTreeHeight = 0.0f;
-float sceneTreePositionX = 0.0f;
-float sceneTreePositionY = 0.0f;
+  float menuWidth = 0.0f;
+  float menuHeight = 0.0f;
+  float menuPositionX = 0.0f;
+  float menuPositionY = 0.0f;
 
-float detailsWidth = 0.0f;
-float detailsHeight = 0.0f;
-float detailsPositionX = 0.0f;
-float detailsPositionY = 0.0f;
+  float sceneTreeWidth = 0.0f;
+  float sceneTreeHeight = 0.0f;
+  float sceneTreePositionX = 0.0f;
+  float sceneTreePositionY = 0.0f;
 
-float contentWidth = 0.0f;
-float contentHeight = 0.0f;
-float contentPositionX = 0.0f;
-float contentPositionY = 0.0f;
+  float detailsWidth = 0.0f;
+  float detailsHeight = 0.0f;
+  float detailsPositionX = 0.0f;
+  float detailsPositionY = 0.0f;
 
-float sceneRenderWidth = 0.0f;
-float sceneRenderHeight = 0.0f;
-float sceneRenderPositionX = 0.0f;
-float sceneRenderPositionY = 0.0f;
+  float contentWidth = 0.0f;
+  float contentHeight = 0.0f;
+  float contentPositionX = 0.0f;
+  float contentPositionY = 0.0f;
 
-float offsetXAmountPerChild = 10.0f;
+  float sceneRenderWidth = 0.0f;
+  float sceneRenderHeight = 0.0f;
+  float sceneRenderPositionX = 0.0f;
+  float sceneRenderPositionY = 0.0f;
+
+  float offsetXAmountPerChild = 10.0f;
+
+  std::string fps;
+
+  char detailsChildCount[8];
+  float *detailsPosition;
+  float *detailsRotation;
+  float *detailsScale;
+  char detailsVertexCount[8];
+} hud;
 
 void ROTOM::HUD::Init(std::shared_ptr<Node> r, std::vector<std::shared_ptr<Light>> l, Camera *c) {
-  root = r;
-  lights = l;
-  camera = c;
+  hud.root = r;
+  hud.lights = l;
+  hud.camera = c;
 
-  window_flags |= ImGuiWindowFlags_ShowBorders;
-  window_flags |= ImGuiWindowFlags_NoResize;
-  window_flags |= ImGuiWindowFlags_NoMove;
-  window_flags |= ImGuiWindowFlags_NoCollapse;
-  //window_flags |= ImGuiWindowFlags_NoTitleBar;
-  //window_flags |= ImGuiWindowFlags_NoScrollbar;
-  //window_flags |= ImGuiWindowFlags_MenuBar;
+  hud.window_flags |= ImGuiWindowFlags_ShowBorders;
+  hud.window_flags |= ImGuiWindowFlags_NoResize;
+  hud.window_flags |= ImGuiWindowFlags_NoMove;
+  hud.window_flags |= ImGuiWindowFlags_NoCollapse;
+  //hud.window_flags |= ImGuiWindowFlags_NoTitleBar;
+  //hud.window_flags |= ImGuiWindowFlags_NoScrollbar;
+  //hud.window_flags |= ImGuiWindowFlags_MenuBar;
 
-  windowWidth = (float)WindowWidth();
-  windowHeight = (float)WindowHeight();
+  hud.windowWidth = (float)WindowWidth();
+  hud.windowHeight = (float)WindowHeight();
 
-  alpha = 1.0f;
+  hud.alpha = 1.0f;
 
-  leftColumnWidth = 0.2f;
-  rightColumnWidth = 0.25f;
+  hud.leftColumnWidth = 0.1f;
+  hud.rightColumnWidth = 0.15f;
 
-  menuWidth = windowWidth;
-  menuHeight = 20.0f;
-  menuPositionX = 0.0f;
-  menuPositionY = 0.0f;
+  hud.menuWidth = hud.windowWidth;
+  hud.menuHeight = 19.0f;
+  hud.menuPositionX = 0.0f;
+  hud.menuPositionY = 0.0f;
 
-  sceneTreeWidth = windowWidth * leftColumnWidth;
-  sceneTreeHeight = windowHeight - menuHeight;
-  sceneTreePositionX = 0.0f;
-  sceneTreePositionY = menuHeight;
+  hud.sceneTreeWidth = hud.windowWidth * hud.leftColumnWidth;
+  hud.sceneTreeHeight = hud.windowHeight - hud.menuHeight;
+  hud.sceneTreePositionX = 0.0f;
+  hud.sceneTreePositionY = hud.menuHeight;
+  
+  hud.detailsWidth = hud.windowWidth * hud.rightColumnWidth;
+  hud.detailsHeight = hud.windowHeight * 0.5f - hud.menuHeight;
+  hud.detailsPositionX = hud.windowWidth - hud.detailsWidth;
+  hud.detailsPositionY = hud.menuHeight;
+  
+  hud.contentWidth = hud.windowWidth * hud.rightColumnWidth;
+  hud.contentHeight = hud.windowHeight * 0.5f;
+  hud.contentPositionX = hud.windowWidth - hud.contentWidth;
+  hud.contentPositionY = hud.detailsPositionY + hud.detailsHeight;
+  
+  hud.sceneRenderWidth = hud.windowWidth - hud.sceneTreeWidth - hud.detailsWidth;
+  hud.sceneRenderHeight = hud.windowHeight - hud.menuHeight;
+  hud.sceneRenderPositionX = hud.sceneTreeWidth;
+  hud.sceneRenderPositionY = hud.menuHeight;
 
-  detailsWidth = windowWidth * rightColumnWidth;
-  detailsHeight = windowHeight * 0.5f - menuHeight;
-  detailsPositionX = windowWidth - detailsWidth;
-  detailsPositionY = menuHeight;
 
-  contentWidth = windowWidth * rightColumnWidth;
-  contentHeight = windowHeight * 0.5f;
-  contentPositionX = windowWidth - contentWidth;
-  contentPositionY = detailsPositionY + detailsHeight;
+  ImGuiStyle& style = ImGui::GetStyle();
+  style.WindowRounding = 0.0f;
+  style.ChildWindowRounding = 0.0f;
+  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.09f, 0.20f, 1.00f);
+  style.Colors[ImGuiCol_TitleBg] = ImVec4(0.20f, 0.32f, 0.80f, 1.00f);
+  style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.09f, 0.09f, 0.09f, 1.00f);
 
-  sceneRenderWidth = windowWidth - sceneTreeWidth - detailsWidth;
-  sceneRenderHeight = windowHeight - menuHeight;
-  sceneRenderPositionX = sceneTreeWidth;
-  sceneRenderPositionY = menuHeight;
+
 }
 
 void ROTOM::HUD::Draw() {
-  ImGui::ShowTestWindow();
+  if (INPUT::IsKeyPressed('P')) {
+    hud.opened = !hud.opened;
+  }
 
   DrawMenu();
-  DrawSceneTree();
-  DrawDetails();
-  DrawContent();
-  //DrawSceneRender();
+
+  if (hud.opened) {
+    //ImGui::ShowTestWindow();
+
+    DrawSceneTree();
+    DrawDetails();
+    DrawContent();
+    //DrawSceneRender();
+    hud.nextPushID = 0;
+  }
 }
 
 void ROTOM::HUD::DrawMenu() {
+  ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+  if (ImGui::BeginMainMenuBar())
+  {
+    /*if (ImGui::BeginMenu("File"))
+    {
+      if (ImGui::MenuItem("New", "CTRL+N")) {
+      }
+      ImGui::EndMenu();
+      }
+      ImGui::EndMainMenuBar();*/
 
+char fps[256];
+sprintf(fps, "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+hud.fps = fps;
+ImGui::BeginMenu(hud.fps.c_str());
+ImGui::EndMainMenuBar();
+  }
 }
 
 void ROTOM::HUD::DrawSceneTree() {
-  ImGui::SetNextWindowPos(ImVec2(sceneTreePositionX, sceneTreePositionY));
-  ImGui::Begin("SceneTree", &opened, ImVec2(sceneTreeWidth, sceneTreeHeight), alpha, window_flags);
+  ImGui::SetNextWindowPos(ImVec2(hud.sceneTreePositionX, hud.sceneTreePositionY));
+  ImGui::Begin("SceneTree", &hud.opened, ImVec2(hud.sceneTreeWidth, hud.sceneTreeHeight), hud.alpha, hud.window_flags);
   {
-    DrawNodes(root.get(), 0);
+    DrawNodes(hud.root.get(), 0);
 
-    for (unsigned int i = 0; i < lights.size(); ++i) {
-      DrawLight(lights.at(i).get());
-    }
+    /*for (unsigned int i = 0; i < hud.lights.size(); ++i) {
+      DrawLight(hud.lights.at(i).get());
+    }*/
   }
   ImGui::End();
 }
 
 void ROTOM::HUD::DrawDetails() {
-  ImGui::SetNextWindowPos(ImVec2(detailsPositionX, detailsPositionY));
-  ImGui::Begin("Details", &opened, ImVec2(detailsWidth, detailsHeight), alpha, window_flags);
+  ImGui::SetNextWindowPos(ImVec2(hud.detailsPositionX, hud.detailsPositionY));
+  ImGui::Begin("Details", &hud.opened, ImVec2(hud.detailsWidth, hud.detailsHeight), hud.alpha, hud.window_flags);
   {
-    if (selected) {
-      DrawDrawable((Drawable *)selected);
-      /*ImGui::Begin("Material");
-      {
-      float *shininess = &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_;
-      if (ImGui::DragFloat("Shininess", shininess, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f)) {
-      ((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_ = *shininess;
+    if (hud.selected) {
+      switch (hud.selected->type()) {
+        case kNodeType_Drawable: {
+          DrawDrawable((Drawable *)hud.selected);
+          break;
+        }
+        case kNodeType_Camera: {
+          DrawCamera((Camera *)hud.selected);
+          break;
+        }
+        case kNodeType_Light: {
+          DrawLight((Light *)hud.selected);
+          break;
+        }
+        case kNodeType_Node: {
+          DrawNode(hud.selected);
+          break;
+        }
+        default: {
+          assert("hud.cc > DrawDetails() > selected->type()" && false);
+          break;
+        }
       }
-
-      ImGui::DragFloat4("specularMaterial", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-      }
-      ImGui::End();*/
     }
   }
   ImGui::End();
 }
 
 void ROTOM::HUD::DrawContent() {
-  ImGui::SetNextWindowPos(ImVec2(contentPositionX, contentPositionY));
-  ImGui::Begin("Content", &opened, ImVec2(contentWidth, contentHeight), alpha, window_flags);
+  ImGui::SetNextWindowPos(ImVec2(hud.contentPositionX, hud.contentPositionY));
+  ImGui::Begin("Content Browser", &hud.opened, ImVec2(hud.contentWidth, hud.contentHeight), hud.alpha, hud.window_flags);
   {
 
   }
@@ -157,8 +215,8 @@ void ROTOM::HUD::DrawContent() {
 }
 
 void ROTOM::HUD::DrawSceneRender() {
-  ImGui::SetNextWindowPos(ImVec2(sceneRenderPositionX, sceneRenderPositionY));
-  ImGui::Begin("Render", &opened, ImVec2(sceneRenderWidth, sceneRenderHeight), alpha, window_flags);
+  ImGui::SetNextWindowPos(ImVec2(hud.sceneRenderPositionX, hud.sceneRenderPositionY));
+  ImGui::Begin("Render", &hud.opened, ImVec2(hud.sceneRenderWidth, hud.sceneRenderHeight), hud.alpha, hud.window_flags);
   {
 
   }
@@ -166,34 +224,95 @@ void ROTOM::HUD::DrawSceneRender() {
 }
 
 void ROTOM::HUD::DrawNodes(Node *node, float offsetX) {
-  if (ImGui::Selectable(node->name_.c_str(), selected == node)) {
-    selected = node;
+  if (ImGui::Selectable(node->name(), hud.selected == node)) {
+    hud.selected = node;
   }
 
   for (unsigned int i = 0; i < node->childCount(); ++i) {
-    DrawNodes(node->getChildAt(i).get(), offsetX + offsetXAmountPerChild);
+    DrawNodes(node->getChildAt(i).get(), offsetX + hud.offsetXAmountPerChild);
   }
 }
 
 void ROTOM::HUD::DrawNode(Node *node) {
-  node->childCount();
-  node->position();
-  node->rotation();
-  node->scale();
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Node:");
+  ImGui::SameLine();
+  ImGui::Text(node->name());
+
+  ImGui::Separator();
+
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Childs:");
+  ImGui::SameLine();
+  sprintf(hud.detailsChildCount, "%d", node->childCount());
+  ImGui::Text(hud.detailsChildCount);
+
+  ImGui::Separator();
+
+  hud.detailsPosition = &node->position()[0];
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Position:");
+  ImGui::PushID(hud.nextPushID++);
+  if (ImGui::DragFloat3("", hud.detailsPosition, 0.2f, -100.0f, 100.0f, "%.2f", 1.0f)) {
+    node->setPosition(hud.detailsPosition);
+  }
+  ImGui::PopID();
+
+  ImGui::Separator();
+
+  hud.detailsRotation = &node->rotation()[0];
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Rotation:");
+  ImGui::PushID(hud.nextPushID++);
+  if (ImGui::DragFloat3("", hud.detailsRotation, 0.2f, -100.0f, 100.0f, "%.2f", 1.0f)) {
+    node->setRotation(hud.detailsRotation);
+  }
+  ImGui::PopID();
+
+  ImGui::Separator();
+
+  hud.detailsScale = &node->scale()[0];
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Scale:");
+  ImGui::PushID(hud.nextPushID++);
+  if (ImGui::DragFloat3("", hud.detailsScale, 0.2f, -100.0f, 100.0f, "%.2f", 1.0f)) {
+    node->setScale(hud.detailsScale);
+  }
+  ImGui::PopID();
+
+  ImGui::Separator();
 }
 
 void ROTOM::HUD::DrawDrawable(Drawable *drawable) {
-  ImGui::Text(drawable->name_.c_str());
+  ImGui::TextColored(ImVec4(0.4f, 0.4f, 0.4f, 1.0f), "Drawable");
+
+  ImGui::Separator();
+  ImGui::Separator();
+
+  DrawNode(drawable);
+
+  ImGui::Separator();
+
+  if (drawable->geometry()) {
+    DrawGeometry(drawable->geometry().get());
+  }
+
+  ImGui::Separator();
+
+  if (drawable->material()) {
+    DrawMaterial(drawable->material().get());
+  }
+
+  ImGui::Separator();
 }
 
 void ROTOM::HUD::DrawCamera(Camera *camera) {
+  ImGui::TextColored(ImVec4(0.4f, 0.4f, 0.4f, 1.0f), "Camera");
 
+  ImGui::Separator();
+
+  DrawNode(camera);
 }
 
 void ROTOM::HUD::DrawLight(Light *light) {
   ImGui::Begin("Light");
   {
-    ImGui::DragFloat3("LightPosition", light->lightPosition, 1.0f, -100.0f, 100.0f, "%.2f", 1.0f);
+    ImGui::DragFloat3("LightPosition", light->lightPosition, 0.2f, -100.0f, 100.0f, "%.2f", 1.0f);
     ImGui::DragFloat3("LightColor", light->lightColor, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
     ImGui::DragFloat4("specularIntensity", light->specularIntensity, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
   }
@@ -201,11 +320,27 @@ void ROTOM::HUD::DrawLight(Light *light) {
 }
 
 void ROTOM::HUD::DrawGeometry(Geometry *geometry) {
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "VertexCount:");
+  ImGui::SameLine();
+  sprintf(hud.detailsVertexCount, "%d", geometry->vertexCount());
+  ImGui::Text(hud.detailsVertexCount);
 
+  ImGui::Separator();
 }
 
 void ROTOM::HUD::DrawMaterial(Material *material) {
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Shininess:");
+  ImGui::PushID(hud.nextPushID++);
+  ImGui::DragFloat("", &material->materialData_.shininess_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+  ImGui::PopID();
 
+  ImGui::Separator();
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularLight:");
+  ImGui::PushID(hud.nextPushID++);
+  ImGui::DragFloat4("", &material->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+  ImGui::PopID();
+
+  ImGui::Separator();
 }
 
 #ifdef THIS_WAS_FOR_TESTING

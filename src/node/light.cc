@@ -5,3 +5,5 @@
 **/
 
 #include "node/light.h"
+
+//type_ = kNodeType_Light;

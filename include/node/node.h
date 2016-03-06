@@ -22,7 +22,10 @@ namespace ROTOM {
     Node(char *name);
     virtual ~Node();
 
-    std::string name_;
+    NodeType type();
+
+    void setName(char *name);
+    const char *name();
 
     void move(const float movement[3]);
     void move(const float x, const float y, const float z);
@@ -76,11 +79,14 @@ namespace ROTOM {
     const unsigned int childCount();
 
   protected:
-    bool dirtyModelLocal_;
+    NodeType type_;
+
+    std::string name_;
 
     glm::vec3 position_;
     glm::vec3 rotation_;
     glm::vec3 scale_;
+    bool dirtyModelLocal_;
 
     glm::mat4 modelLocal_;
     glm::mat4 modelWorld_;

@@ -8,6 +8,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 ROTOM::Camera::Camera(char *name) {
+  type_ = kNodeType_Camera;
   name_ = name;
 }
 
