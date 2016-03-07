@@ -111,7 +111,7 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
 
   //Light
   for (unsigned int i = 0; i < lights->size(); ++i) {
-    const float *lightPosition = &lights->at(i)->lightPosition[0];
+    const float *lightPosition = &lights->at(i)->position()[0];
     const float *lightColor = lights->at(i)->lightColor;
     const float *specularIntensity = lights->at(i)->specularIntensity;
     glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);

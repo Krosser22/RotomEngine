@@ -58,10 +58,12 @@ void ROTOM::ShaderScene::init() {
     material4->setShader(verterShaderSource4.get()->data(), fragmentShaderSource4.get()->data());
   }
 
-  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
-  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
-  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
-  std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("4"));
+  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("Drawable_1"));
+  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("Drawable_2_Natsu"));
+  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("Drawable_3_Grey"));
+  std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("Drawable_4_Plue"));
+
+  getRoot()->setPositionX(-2.0f);
 
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material1);
@@ -83,16 +85,12 @@ void ROTOM::ShaderScene::init() {
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
 
-  drawableLight_ = std::shared_ptr<Drawable>(new Drawable("light"));
-  drawableLight_->setGeometry(geometry_);
-  drawableLight_->setMaterial(material1);
-  drawableLight_->setParent(getRoot());
+  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  light->setGeometry(geometry_);
+  light->setMaterial(material1);
+  light->setParent(getRoot());
 
-  std::shared_ptr<Light> light1 = std::shared_ptr<Light>(new Light());
-  AddLight(light1);
-
-  std::shared_ptr<Light> light2 = std::shared_ptr<Light>(new Light());
-  AddLight(light2);
+  AddLight(light);
 }
 
 void ROTOM::ShaderScene::update() {
@@ -100,9 +98,5 @@ void ROTOM::ShaderScene::update() {
   Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
   node->setRotationX(node->rotation().x + 0.01f);
 
-  drawableLight_->setPosition(getLight().at(0)->lightPosition[0], getLight().at(0)->lightPosition[1], getLight().at(0)->lightPosition[2]);
-}
-
-void ROTOM::ShaderScene::draw() {
-
+  //drawableLight_->setPosition(getLight().at(0)->lightPosition[0], getLight().at(0)->lightPosition[1], getLight().at(0)->lightPosition[2]);
 }

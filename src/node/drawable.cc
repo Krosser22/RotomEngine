@@ -7,6 +7,11 @@
 #include "node/drawable.h"
 #include "render/graphics.h"
 
+ROTOM::Drawable::Drawable() {
+  type_ = kNodeType_Drawable;
+  setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
+}
+
 ROTOM::Drawable::Drawable(char *name) {
   type_ = kNodeType_Drawable;
   name_ = name;

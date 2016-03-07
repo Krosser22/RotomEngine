@@ -310,13 +310,28 @@ void ROTOM::HUD::DrawCamera(Camera *camera) {
 }
 
 void ROTOM::HUD::DrawLight(Light *light) {
-  ImGui::Begin("Light");
-  {
-    ImGui::DragFloat3("LightPosition", light->lightPosition, 0.2f, -100.0f, 100.0f, "%.2f", 1.0f);
-    ImGui::DragFloat3("LightColor", light->lightColor, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    ImGui::DragFloat4("specularIntensity", light->specularIntensity, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-  }
-  ImGui::End();
+  ImGui::TextColored(ImVec4(0.4f, 0.4f, 0.4f, 1.0f), "Light");
+
+  ImGui::Separator();
+  ImGui::Separator();
+
+  DrawNode(light);
+
+  ImGui::Separator();
+
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Color:");
+  ImGui::PushID(hud.nextPushID++);
+  ImGui::DragFloat4("", light->lightColor, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+  ImGui::PopID();
+
+  ImGui::Separator();
+
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularIntensity:");
+  ImGui::PushID(hud.nextPushID++);
+  ImGui::DragFloat4("", light->specularIntensity, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+  ImGui::PopID();
+
+  ImGui::Separator();
 }
 
 void ROTOM::HUD::DrawGeometry(Geometry *geometry) {
@@ -335,6 +350,7 @@ void ROTOM::HUD::DrawMaterial(Material *material) {
   ImGui::PopID();
 
   ImGui::Separator();
+
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularLight:");
   ImGui::PushID(hud.nextPushID++);
   ImGui::DragFloat4("", &material->materialData_.specularMaterial[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);

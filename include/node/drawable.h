@@ -16,6 +16,7 @@
 namespace ROTOM {
   class Drawable : public Node {
   public:
+    Drawable();
     Drawable(char *name);
     virtual ~Drawable();
     

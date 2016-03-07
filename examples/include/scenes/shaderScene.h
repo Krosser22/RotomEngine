@@ -22,13 +22,12 @@ namespace ROTOM {
 
     void update();
 
-    void draw();
+    void draw() {};
 
     void destroy() {};
     
   private:
     std::shared_ptr<Geometry> geometry_;
-    std::shared_ptr<Drawable> drawableLight_;
   };
 }
 
