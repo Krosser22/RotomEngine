@@ -7,7 +7,7 @@
 //#include "general/sound.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "render/renderManager.h"
+//#include "render/renderManager.h"
 #include "taskManager/taskManager.h"
 
 int main(int argc, char** argv) {
@@ -18,13 +18,13 @@ int main(int argc, char** argv) {
   ROTOM::TASKMANAGER::init();
   {
     //////////////////////////////////
-    ROTOM::RENDERMANAGER::init();
-    {
+    //ROTOM::RENDERMANAGER::init();
+    //{
       //ROTOM::SOUND::init();
       printf("Time to start the managers: %f.\n\n\n", c.end());
       ROTOM::main(argc, argv);
-    }
-    ROTOM::RENDERMANAGER::destroy();
+    //}
+    //ROTOM::RENDERMANAGER::destroy();
     //////////////////////////////////
   }
   ROTOM::TASKMANAGER::destroy();

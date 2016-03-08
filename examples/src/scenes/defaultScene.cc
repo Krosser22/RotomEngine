@@ -39,6 +39,14 @@ void ROTOM::DefaultScene::init() {
   drawable3->setMaterial(material3);
   drawable3->setParent(drawable2);
 
+  //Light
+  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  light->setGeometry(std::shared_ptr<Geometry>(new Geometry()));
+  light->setMaterial(material4);
+  light->setParent(getRoot());
+  light->setScale(0.1f, 0.1f, 0.1f);
+  AddLight(light);
+
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
   const float pos_y_started = 7.0f;
@@ -76,4 +84,14 @@ void ROTOM::DefaultScene::update() {
   getRoot()->getChildAt(0)->moveX(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
+}
+
+void ROTOM::DefaultScene::draw() {
+  /*ImGui::Begin("Render");
+  {
+  char faces[256];
+  sprintf(faces, "Faces: %d", geometry->vertexCount() * amount);
+  ImGui::Text(faces);
+  }
+  ImGui::End();*/
 }

@@ -26,6 +26,14 @@ void ROTOM::GeometryScene::init() {
   ROTOM::MESHLOADER::Load_OBJ(base_path, name, obj_data);
   geometry->loadGeometry(&obj_data);
 
+  //Light
+  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  light->setGeometry(std::shared_ptr<Geometry>(new Geometry()));
+  light->setMaterial(material);
+  light->setParent(getRoot());
+  light->setScale(0.1f, 0.1f, 0.1f);
+  AddLight(light);
+
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
   const float pos_y_started = 7.0f;
@@ -43,17 +51,19 @@ void ROTOM::GeometryScene::init() {
     drawable[i]->setParent(getRoot());
     drawable[i]->setPosition(pos);
   }
-
-  //Light
-  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
-  light->setGeometry(std::shared_ptr<Geometry>(new Geometry()));
-  light->setMaterial(material);
-  light->setParent(getRoot());
-  light->setScale(0.1f, 0.1f, 0.1f);
-  AddLight(light);
 }
 
 void ROTOM::GeometryScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
   getRoot()->move(sin_time, sin_time, sin_time);
+}
+
+void ROTOM::GeometryScene::draw() {
+  /*ImGui::Begin("Render");
+  {
+    char faces[256];
+    sprintf(faces, "Faces: %d", geometry->vertexCount() * amount);
+    ImGui::Text(faces);
+  }
+  ImGui::End();*/
 }

@@ -20,9 +20,9 @@ int ROTOM::main(int argc, char** argv) {
   WindowInit(1280, 720);
   //printf("Time to create the windows: %f.\n\n\n", c.end());
 
-  //DefaultScene scene;
+  DefaultScene scene;
   //GeometryScene scene;
-  MeshLoaderScene scene;
+  //MeshLoaderScene scene;
   //MovementScene scene;
   //ShaderScene scene;
   //SoundScene scene;
@@ -49,10 +49,10 @@ int ROTOM::main(int argc, char** argv) {
 ----------
 ---TODO---
 ----------
++Make a task (to load files from behind)
 +Shadows --> Lo primero es sacar el depth buffer
 +Shadows --> GPU gems 3 (Webpage) parte 2
 +Shadows --> Real time shadows (Book)
-+Make a fileManager
 +Add LUA
 +Use my render list with IMGUI
 */

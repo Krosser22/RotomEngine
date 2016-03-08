@@ -20,7 +20,7 @@ struct HUDData {
 
   ImGuiWindowFlags window_flags = 0;
 
-  bool opened = true;
+  bool opened = false;
 
   int nextPushID = 0;
 
@@ -160,11 +160,11 @@ void ROTOM::HUD::DrawMenu() {
       }
       ImGui::EndMainMenuBar();*/
 
-char fps[256];
-sprintf(fps, "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-hud.fps = fps;
-ImGui::BeginMenu(hud.fps.c_str());
-ImGui::EndMainMenuBar();
+    char fps[256];
+    sprintf(fps, "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    hud.fps = fps;
+    ImGui::BeginMenu(hud.fps.c_str());
+    ImGui::EndMainMenuBar();
   }
 }
 
@@ -219,7 +219,7 @@ void ROTOM::HUD::DrawContent() {
   {
     switch (hud.content) {
       case kContent_Geometry: {
-        for (int i = 0; i < hud.contentListName.size(); ++i) {
+        for (unsigned int i = 0; i < hud.contentListName.size(); ++i) {
           if (ImGui::Selectable(hud.contentListName.at(i).c_str(), false)) {
             std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
             std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
@@ -410,7 +410,7 @@ void ROTOM::HUD::DrawGeometry(Geometry *geometry) {
       }
 
       hud.contentListName.clear();
-      for (int i = 0; i < hud.contentListPath.size(); ++i) {
+      for (unsigned int i = 0; i < hud.contentListPath.size(); ++i) {
         std::string path = hud.contentListPath.at(i);
         std::string name = path.substr(path.find("\\obj\\") + 5);
         name = name.substr(0, name.find(".obj"));

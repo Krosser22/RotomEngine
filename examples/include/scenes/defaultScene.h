@@ -22,11 +22,11 @@ namespace ROTOM {
 
     void update();
 
-    void draw() {};
+    void draw();
 
     void destroy() {};
 
-    static const int amount_ = 1722;
+    static const int amount_ = 2722;
     std::shared_ptr<Geometry> geometry_;
   };
 }

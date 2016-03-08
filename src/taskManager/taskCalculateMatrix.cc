@@ -6,7 +6,13 @@
 
 #include "taskManager/taskCalculateMatrix.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+
+glm::mat4 modelLocal;
+glm::vec3 rotX = glm::vec3(1.0f, 0.0f, 0.0f);
+glm::vec3 rotY = glm::vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 rotZ = glm::vec3(0.0f, 0.0f, 1.0f);
 
 ROTOM::TaskCalculateMatrix::TaskCalculateMatrix() {}
 
@@ -14,15 +20,13 @@ ROTOM::TaskCalculateMatrix::~TaskCalculateMatrix() {}
 
 void ROTOM::TaskCalculateMatrix::run() {
   if (root_->isDirtyModelLocal()) {
-    glm::mat4 modelLocal;
     modelLocal = glm::scale(glm::mat4(), root_->scale());
-    modelLocal = glm::rotate(modelLocal, root_->rotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
-    modelLocal = glm::rotate(modelLocal, root_->rotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
-    modelLocal = glm::rotate(modelLocal, root_->rotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
+    modelLocal = glm::rotate(modelLocal, root_->rotation().x, rotX);
+    modelLocal = glm::rotate(modelLocal, root_->rotation().y, rotY);
+    modelLocal = glm::rotate(modelLocal, root_->rotation().z, rotZ);
     modelLocal = glm::translate(modelLocal, root_->position());
     root_->setModelLocal(modelLocal);
-
-    root_->setModelWorld(glm::mat4() * *root_->modelLocal());
+    root_->setModelWorld(modelLocal);
 
     for (unsigned int i = 0; i < root_->childCount(); ++i) {
       calculateNodeForSure(root_->getChildAt(i).get());
@@ -40,11 +44,10 @@ void ROTOM::TaskCalculateMatrix::setInput(Node *root) {
 
 void ROTOM::TaskCalculateMatrix::calculateNode(Node *node) {
   if (node->isDirtyModelLocal()) {
-    glm::mat4 modelLocal;
     modelLocal = glm::scale(glm::mat4(), node->scale());
-    modelLocal = glm::rotate(modelLocal, node->rotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
-    modelLocal = glm::rotate(modelLocal, node->rotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
-    modelLocal = glm::rotate(modelLocal, node->rotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
+    modelLocal = glm::rotate(modelLocal, node->rotation().x, rotX);
+    modelLocal = glm::rotate(modelLocal, node->rotation().y, rotY);
+    modelLocal = glm::rotate(modelLocal, node->rotation().z, rotZ);
     modelLocal = glm::translate(modelLocal, node->position());
     node->setModelLocal(modelLocal);
 
@@ -62,11 +65,10 @@ void ROTOM::TaskCalculateMatrix::calculateNode(Node *node) {
 
 void ROTOM::TaskCalculateMatrix::calculateNodeForSure(Node *node) {
   if (node->isDirtyModelLocal()) {
-    glm::mat4 modelLocal;
     modelLocal = glm::scale(glm::mat4(), node->scale());
-    modelLocal = glm::rotate(modelLocal, node->rotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
-    modelLocal = glm::rotate(modelLocal, node->rotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
-    modelLocal = glm::rotate(modelLocal, node->rotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
+    modelLocal = glm::rotate(modelLocal, node->rotation().x, rotX);
+    modelLocal = glm::rotate(modelLocal, node->rotation().y, rotY);
+    modelLocal = glm::rotate(modelLocal, node->rotation().z, rotZ);
     modelLocal = glm::translate(modelLocal, node->position());
     node->setModelLocal(modelLocal);
   }

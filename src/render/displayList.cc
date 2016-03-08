@@ -17,10 +17,7 @@ void ROTOM::DisplayList::addCommand(Command *command) {
 }
 
 void ROTOM::DisplayList::draw() {
-  if (commandList_.size() > 1) {
-    printf("%d\n", commandList_.size());
-  }
-  for (int i = 0; i < commandList_.size(); i++) {
+  for (unsigned int i = 0; i < commandList_.size(); ++i) {
     commandList_.at(i)->run();
   }
   commandList_.clear();

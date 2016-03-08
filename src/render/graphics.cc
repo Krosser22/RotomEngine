@@ -88,7 +88,7 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
 void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix) {
   ShaderData *shaderData = &commandDrawObjectData->shaderData;
   MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
-  const float *specularMaterial = commandDrawObjectData->material_specularMaterial;
+  const float *specularMaterial = commandDrawObjectData->materialData.specularMaterial;
   const float *color = materialSettings->color_;
 
   glUseProgram(shaderData->shaderProgram);
@@ -102,9 +102,9 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   glUniformMatrix4fv(shaderData->u_projection, 1, GL_FALSE, projectionMatrix);
 
   //Material
-  glUniform1f(shaderData->u_shininess, commandDrawObjectData->material_shininess);
+  glUniform1f(shaderData->u_shininess, commandDrawObjectData->materialData.shininess);
   glUniform4f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2], specularMaterial[3]);
-  glUniform1f(shaderData->u_ambientStrength, commandDrawObjectData->material_ambientStrength);
+  glUniform1f(shaderData->u_ambientStrength, commandDrawObjectData->materialData.ambientStrength);
   
   //Material Settings
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
