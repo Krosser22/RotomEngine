@@ -1,7 +1,6 @@
 #version 330 core
 
 uniform vec4 u_color;
-uniform sampler2D u_texture;
 uniform vec3 u_lightPosition;
 uniform vec3 u_lightColor;
 uniform float u_ambientStrength;
@@ -18,17 +17,14 @@ void main() {
 	//vec4 lightPosition = u_view * vec4(u_lightPosition, 1.0f);
 	vec3 lightDirection = normalize(u_lightPosition - worldPosition);
 
-	//Material Color
-	vec3 materialColor = texture(u_texture, uvMaterial).xyz * u_color.xyz;
-
     //Ambient Light
     vec3 ambient = u_lightColor * u_ambientStrength;
 
 	//Diffuse Light
     float diff = max(dot(normalize(normalDirection), lightDirection), 0.0f);
-    vec3 diffuse = diff * u_lightColor;
+    vec3 diffuse = u_lightColor * diff;
 
-    vec3 finalColor = materialColor * (ambient + diffuse);
+    vec3 finalColor = u_color.xyz * (ambient + diffuse);
 
 	fragment = vec4(finalColor, 1.0f);
 };

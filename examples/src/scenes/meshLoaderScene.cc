@@ -5,6 +5,7 @@
 **/
 
 #include "general/files.h"
+#include "general/input.h"
 #include "general/scene.h"
 #include "general/time.h"
 #include "general/window.h"
@@ -51,7 +52,7 @@ void ROTOM::MeshLoaderScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //Geometry
-  geometry = std::shared_ptr<Geometry>(new Geometry());
+  std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
   //MESHLOADER::Load_OBJ(finalPath, obj_data, false);
   MESHLOADER::Load_OBJ(basePath, name, obj_data);
@@ -62,8 +63,10 @@ void ROTOM::MeshLoaderScene::init() {
   {
     std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
     std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
-    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.vertx", verterShaderSource);
-    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.frag", fragmentShaderSource);
+    FILES::ReadFile("../../../../shaders/shader3_DiffuseLight.vertx", verterShaderSource);
+    FILES::ReadFile("../../../../shaders/shader3_DiffuseLight.frag", fragmentShaderSource);
+    //FILES::ReadFile("../../../../shaders/shader4_SpecularLight.vertx", verterShaderSource);
+    //FILES::ReadFile("../../../../shaders/shader4_SpecularLight.frag", fragmentShaderSource);
     material->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
   }
 
@@ -83,6 +86,14 @@ void ROTOM::MeshLoaderScene::init() {
   AddLight(light);
 }
 
+void ROTOM::MeshLoaderScene::input() {
+  if (INPUT::IsKeyPressed('Q')) {
+    rotating_ = !rotating_;
+  }
+}
+
 void ROTOM::MeshLoaderScene::update() {
-  getRoot()->getChildAt(0)->setRotationY(getRoot()->getChildAt(0)->rotation().y + 0.01f);
+  if (rotating_) {
+    getRoot()->getChildAt(0)->setRotationY(getRoot()->getChildAt(0)->rotation().y + 0.01f);
+  }
 }

@@ -18,15 +18,16 @@ namespace ROTOM {
 
     void init();
 
-    void input() {};
+    void input();
 
     void update();
 
     void draw() {};
 
     void destroy() {};
-    
-    std::shared_ptr<Geometry> geometry;
+
+  private:
+    bool rotating_;
   };
 }
 
