@@ -223,10 +223,17 @@ void ROTOM::HUD::DrawContent() {
           if (ImGui::Selectable(hud.contentListName.at(i).c_str(), false)) {
             std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
             std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
-            MESHLOADER::Load_OBJ("../../../../obj/Cube.obj", obj_data, false);
+            std::string path = "../../../../obj/";
+            path.append(hud.contentListName.at(i).c_str());
+
+            //if (hud.contentListName.at(i).find("\\") != -1) {
+              MESHLOADER::Load_OBJ(path.c_str(), obj_data);
+            /*} else {
+              MESHLOADER::Load_OBJ("../../../../obj/", hud.contentListName.at(i).c_str(), obj_data);
+            }*/
 
             if (obj_data->data.size() <= 0) {
-              printf("H");
+              assert("hud.cc > DrawContent() > obj_data->data.size()" && false);
             }
             ((Drawable *)hud.selected)->geometry()->loadGeometry(&obj_data);
           }
@@ -406,6 +413,7 @@ void ROTOM::HUD::DrawGeometry(Geometry *geometry) {
       for (int i = 0; i < hud.contentListPath.size(); ++i) {
         std::string path = hud.contentListPath.at(i);
         std::string name = path.substr(path.find("\\obj\\") + 5);
+        name = name.substr(0, name.find(".obj"));
         hud.contentListName.push_back(name);
       }
     }
