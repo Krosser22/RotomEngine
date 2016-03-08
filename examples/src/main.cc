@@ -11,7 +11,7 @@
 #include "scenes/movementScene.h"
 #include "scenes/meshLoaderScene.h"
 #include "scenes/shaderScene.h"
-#include "scenes/soundScene.h"
+//#include "scenes/soundScene.h"
 
 int ROTOM::main(int argc, char** argv) {
   TIME::Chronometer c;
@@ -22,9 +22,9 @@ int ROTOM::main(int argc, char** argv) {
 
   //DefaultScene scene;
   //GeometryScene scene;
-  //MeshLoaderScene scene;
+  MeshLoaderScene scene;
   //MovementScene scene;
-  ShaderScene scene;
+  //ShaderScene scene;
   //SoundScene scene;
   SetScene(&scene);
   return 0;

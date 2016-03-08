@@ -10,11 +10,11 @@
 #include "general/window.h"
 #include "scenes/shaderScene.h"
 #include "imgui.h"
+#include "meshLoader.h"
 
 void ROTOM::ShaderScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
 
@@ -89,7 +89,7 @@ void ROTOM::ShaderScene::init() {
   light->setGeometry(geometry_);
   light->setMaterial(material1);
   light->setParent(getRoot());
-
+  light->setPosition(0.60f, 2.0f, -3.20f);
   AddLight(light);
 }
 

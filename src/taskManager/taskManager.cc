@@ -22,7 +22,7 @@ struct TaskManagerData {
 
   bool isOff;
 
-  //std::condition_variable cv;
+  std::condition_variable cv;
 
 } taskManagerData;
 
@@ -40,7 +40,7 @@ void addNextTasksOf(ROTOM::Task *task) {
   taskManagerData.lock_taskPending.unlock();
   taskManagerData.lock_taskList.unlock();
 
-  //taskManagerData.cv.notify_all();
+  taskManagerData.cv.notify_all();
 }
 
 ROTOM::Task *getNextTask() {
@@ -56,8 +56,8 @@ ROTOM::Task *getNextTask() {
 
 void threadLoop(int ID) {
   ROTOM::Task *actualTask = NULL;
-  //std::unique_lock<std::mutex> lock(taskManagerData.lock_threads);
-  //taskManagerData.cv.wait(lock);
+  std::unique_lock<std::mutex> lock(taskManagerData.lock_threads);
+  taskManagerData.cv.wait(lock);
 
   while (!taskManagerData.isOff) {
     actualTask = getNextTask();
@@ -65,7 +65,7 @@ void threadLoop(int ID) {
       actualTask->run();
       addNextTasksOf(actualTask);
     } else {
-      //taskManagerData.cv.wait(lock);
+      taskManagerData.cv.wait(lock);
     }
   }
 }
@@ -94,7 +94,7 @@ void ROTOM::TASKMANAGER::destroy() {
     taskManagerData.lock_taskPending.unlock();
   }
 
-  //taskManagerData.cv.notify_all();
+  taskManagerData.cv.notify_all();
   for (unsigned int i = 0; i < taskManagerData.threads.size(); ++i) {
     taskManagerData.threads.at(i).join();
   }
@@ -108,5 +108,5 @@ void ROTOM::TASKMANAGER::addTask(Task *task) {
   taskManagerData.lock_taskPending.lock();
   ++taskManagerData.taskPending;
   taskManagerData.lock_taskPending.unlock();
-  //taskManagerData.cv.notify_all();
+  taskManagerData.cv.notify_all();
 }

@@ -3,15 +3,22 @@
 uniform vec4 u_color;
 uniform sampler2D u_texture;
 uniform vec3 u_lightColor;
+uniform vec3 u_lightPosition;
+uniform float u_ambientStrength;
+uniform mat4 u_view;
 
 in vec3 normalDirection;
 in vec2 uvMaterial;
-in vec3 lightDirection;
+in vec3 worldPosition;
 in vec3 cameraPosition;
 
 out vec4 fragment;
 
 void main() {
+	//Light
+	vec4 lightPosition = u_view * vec4(u_lightPosition, 1.0f);
+	vec3 lightDirection = normalize(lightPosition.xyz - worldPosition);
+
 	//Material Color
 	vec3 materialColor = texture(u_texture, uvMaterial).xyz * u_color.xyz;
 

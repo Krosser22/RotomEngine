@@ -7,25 +7,20 @@ layout(location = 2) in vec2 uv;
 uniform mat4 u_model;
 uniform mat4 u_view;
 uniform mat4 u_projection;
-uniform vec3 u_lightPosition;
 
 out vec3 normalDirection;
 out vec2 uvMaterial;
-out vec3 lightDirection;
+out vec3 worldPosition;
 out vec3 cameraPosition;
 
 void main() {
-	//General
+	//Position
 	mat4 modelView = u_view * u_model;
-	vec4 worldPosition = modelView * vec4(position, 1.0f);
+	worldPosition = (modelView * vec4(position, 1.0f)).xyz;
+	normalDirection = (modelView * vec4(normal, 0.0f)).xyz; //Normal = mat3(transpose(inverse(model))) * normal;
 	cameraPosition = u_view[3].xyz;
-
-	//Light
-	vec4 lightPosition = u_view * vec4(u_lightPosition, 1.0f);
-	lightDirection = normalize(lightPosition - worldPosition).xyz;
-	normalDirection = normalize(modelView * vec4(normal, 0.0f)).xyz;
+	gl_Position = u_projection * vec4(worldPosition, 1.0f);
 	
 	//Material
 	uvMaterial = uv;
-	gl_Position = u_projection * worldPosition;
 };

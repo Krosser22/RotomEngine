@@ -4,7 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/sound.h"
+//#include "general/sound.h"
 #include "general/time.h"
 #include "general/window.h"
 #include "render/renderManager.h"
@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     //////////////////////////////////
     ROTOM::RENDERMANAGER::init();
     {
-      ROTOM::SOUND::init();
+      //ROTOM::SOUND::init();
       printf("Time to start the managers: %f.\n\n\n", c.end());
       ROTOM::main(argc, argv);
     }

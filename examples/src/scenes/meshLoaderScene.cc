@@ -12,12 +12,6 @@
 #include "meshLoader.h"
 #include "imgui.h"
 
-float cameraSpeed = 8.0f;
-double mx = 0;
-double my = 0;
-double mx_last_frame = 0;
-double my_last_frame = 0;
-
 #define OBJ_MONKEY
 //#define OBJ_BLONDE
 //#define OBJ_DEADPOOL
@@ -26,49 +20,69 @@ double my_last_frame = 0;
 //#define OBJ_SIRIUS_5_COLONIAL_CITY
 
 #ifdef OBJ_MONKEY
-const char *base_path = "../../../../obj/";
+const char *basePath = "../../../../obj/";
 const char *name = "Monkey";
+const char *finalPath = "../../../../obj/Monkey";
 #elif defined OBJ_BLONDE
-const char *base_path = "../../../../obj/Blonde/";
+const char *basePath = "../../../../obj/Blonde/";
 const char *name = "Blonde";
+const char *finalPath = "../../../../obj/Blonde/Blonde";
 #elif defined OBJ_DEADPOOL
-const char *base_path = "../../../../obj/Deadpool/";
+const char *basePath = "../../../../obj/Deadpool/";
 const char *name = "Deadpool";
+const char *finalPath = "../../../../obj/Deadpool/Deadpool";
 #elif defined OBJ_IRONMAN
-const char *base_path = "../../../../obj/Blonde/";
+const char *basePath = "../../../../obj/Blonde/";
 const char *name = "Blonde";
+const char *finalPath = "../../../../obj/Blonde/Blonde";
 #elif defined OBJ_DRAGON
-const char *base_path = "../../../../obj/";
+const char *basePath = "../../../../obj/";
 const char *name = "dragon2";
+const char *finalPath = "../../../../obj/dragon2";
 #elif defined OBJ_SIRIUS_5_COLONIAL_CITY
-const char *base_path = "../../../../obj/Sirus5ColonialCity/";
+const char *basePath = "../../../../obj/Sirus5ColonialCity/";
 const char *name = "sirus_city";
+const char *finalPath = "../../../../obj/Sirus5ColonialCity/sirus_city";
 #endif
-static const float max_rot = 628.32f; //[0-628.32]
 
 void ROTOM::MeshLoaderScene::init() {
+  //Camera
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
+  //Geometry
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
-  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
-  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable("drawable"));
-
   //MESHLOADER::Load_OBJ(finalPath, obj_data, false);
-  MESHLOADER::Load_OBJ(base_path, name, obj_data);
-
+  MESHLOADER::Load_OBJ(basePath, name, obj_data);
   geometry->loadGeometry(&obj_data);
 
-  getRoot()->setPosition(0.0f, 0.0f, -5.0f);
+  //Material
+  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
+  {
+    std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
+    std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
+    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.vertx", verterShaderSource);
+    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.frag", fragmentShaderSource);
+    material->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
+  }
 
+  //Drawable
+  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable("drawable"));
+  getRoot()->setPosition(0.0f, 0.0f, -5.0f);
   drawable->setGeometry(geometry);
   drawable->setMaterial(material);
   drawable->setParent(getRoot());
+
+  //Light
+  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  light->setGeometry(std::shared_ptr<Geometry>(new Geometry()));
+  light->setMaterial(material);
+  light->setParent(getRoot());
+  light->setScale(0.1f, 0.1f, 0.1f);
+  AddLight(light);
 }
 
 void ROTOM::MeshLoaderScene::update() {
-  float sin_time = sin(TIME::appTime()) * 2.22f;
-  getRoot()->getChildAt(0)->setRotationY(sin_time);
+  getRoot()->getChildAt(0)->setRotationY(getRoot()->getChildAt(0)->rotation().y + 0.01f);
 }
