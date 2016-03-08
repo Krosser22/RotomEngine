@@ -43,6 +43,14 @@ void ROTOM::GeometryScene::init() {
     drawable[i]->setParent(getRoot());
     drawable[i]->setPosition(pos);
   }
+
+  //Light
+  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  light->setGeometry(std::shared_ptr<Geometry>(new Geometry()));
+  light->setMaterial(material);
+  light->setParent(getRoot());
+  light->setScale(0.1f, 0.1f, 0.1f);
+  AddLight(light);
 }
 
 void ROTOM::GeometryScene::update() {

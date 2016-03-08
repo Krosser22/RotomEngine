@@ -15,6 +15,13 @@ namespace ROTOM {
     kNodeType_Light,
   };
 
+  enum Content {
+    kContent_None,
+    kContent_Geometry,
+    kContent_Shaders,
+    kContent_Texture,
+  };
+
   //const int kMaxNodeNameSize = 10;
 }
 #endif //__CONSTANTS_H__

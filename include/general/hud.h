@@ -41,6 +41,8 @@ namespace ROTOM {
     void DrawGeometry(Geometry *geometry);
 
     void DrawMaterial(Material *material);
+
+    void DrawMaterialSettings(MaterialSettings *materialSettings);
   }
 }
 

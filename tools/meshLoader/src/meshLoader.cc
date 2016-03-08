@@ -97,7 +97,6 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, std::shar
     FILE *file = fopen(finalPath, "r");
     if (file == NULL){
       assert(printf("ERROR: File doesn't found\n"));
-      //return false;
     } else {
       while (true) {
         char lineHeader[128];

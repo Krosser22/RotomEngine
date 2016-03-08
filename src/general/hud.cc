@@ -4,6 +4,9 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "meshLoader.h"
+#include "general/constants.h"
+#include "general/files.h"
 #include "general/hud.h"
 #include "general/input.h"
 #include "general/window.h"
@@ -63,6 +66,12 @@ struct HUDData {
   float *detailsRotation;
   float *detailsScale;
   char detailsVertexCount[8];
+
+  ROTOM::Content content;
+
+  std::vector<std::string> contentListPath;
+  std::vector<std::string> contentListName;
+
 } hud;
 
 void ROTOM::HUD::Init(std::shared_ptr<Node> r, std::vector<std::shared_ptr<Light>> l, Camera *c) {
@@ -111,6 +120,7 @@ void ROTOM::HUD::Init(std::shared_ptr<Node> r, std::vector<std::shared_ptr<Light
   hud.sceneRenderPositionX = hud.sceneTreeWidth;
   hud.sceneRenderPositionY = hud.menuHeight;
 
+  hud.content = kContent_None;
 
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 0.0f;
@@ -118,8 +128,6 @@ void ROTOM::HUD::Init(std::shared_ptr<Node> r, std::vector<std::shared_ptr<Light
   style.Colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.09f, 0.20f, 1.00f);
   style.Colors[ImGuiCol_TitleBg] = ImVec4(0.20f, 0.32f, 0.80f, 1.00f);
   style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.09f, 0.09f, 0.09f, 1.00f);
-
-
 }
 
 void ROTOM::HUD::Draw() {
@@ -209,7 +217,32 @@ void ROTOM::HUD::DrawContent() {
   ImGui::SetNextWindowPos(ImVec2(hud.contentPositionX, hud.contentPositionY));
   ImGui::Begin("Content Browser", &hud.opened, ImVec2(hud.contentWidth, hud.contentHeight), hud.alpha, hud.window_flags);
   {
+    switch (hud.content) {
+      case kContent_Geometry: {
+        for (int i = 0; i < hud.contentListName.size(); ++i) {
+          if (ImGui::Selectable(hud.contentListName.at(i).c_str(), false)) {
+            std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
+            std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
+            MESHLOADER::Load_OBJ("../../../../obj/Cube.obj", obj_data, false);
 
+            if (obj_data->data.size() <= 0) {
+              printf("H");
+            }
+            ((Drawable *)hud.selected)->geometry()->loadGeometry(&obj_data);
+          }
+        }
+        break;
+      }
+      case kContent_Shaders: {
+        break;
+      }
+      case kContent_Texture: {
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   }
   ImGui::End();
 }
@@ -299,6 +332,10 @@ void ROTOM::HUD::DrawDrawable(Drawable *drawable) {
   }
 
   ImGui::Separator();
+
+  DrawMaterialSettings(drawable->materialSettings().get());
+
+  ImGui::Separator();
 }
 
 void ROTOM::HUD::DrawCamera(Camera *camera) {
@@ -341,6 +378,38 @@ void ROTOM::HUD::DrawGeometry(Geometry *geometry) {
   ImGui::Text(hud.detailsVertexCount);
 
   ImGui::Separator();
+
+  if (ImGui::Button("Change Geometry")) {
+    hud.content = kContent_Geometry;
+    system("dir /b/s ..\\..\\..\\..\\obj\\*.obj > list_obj.txt");
+    std::shared_ptr<std::string> file = std::shared_ptr<std::string>(new std::string());
+    FILES::ReadFile("list_obj.txt", file);
+
+    hud.contentListPath.clear();
+
+    char *separator = "\r\n";
+    int stringEnd = file->find(separator);
+    std::string path = file->substr(0, stringEnd);
+    std::string nextPath = file->substr(stringEnd + 2);
+    
+    if (path.size() > 0) {
+      hud.contentListPath.push_back(path);
+      stringEnd = nextPath.find(separator);
+      while (stringEnd != -1) {
+        path = nextPath.substr(0, stringEnd);
+        nextPath = nextPath.substr(stringEnd + 2);
+        hud.contentListPath.push_back(path);
+        stringEnd = nextPath.find(separator);
+      }
+
+      hud.contentListName.clear();
+      for (int i = 0; i < hud.contentListPath.size(); ++i) {
+        std::string path = hud.contentListPath.at(i);
+        std::string name = path.substr(path.find("\\obj\\") + 5);
+        hud.contentListName.push_back(name);
+      }
+    }
+  }
 }
 
 void ROTOM::HUD::DrawMaterial(Material *material) {
@@ -354,6 +423,15 @@ void ROTOM::HUD::DrawMaterial(Material *material) {
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularLight:");
   ImGui::PushID(hud.nextPushID++);
   ImGui::DragFloat4("", &material->materialData_.specularMaterial[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+  ImGui::PopID();
+
+  ImGui::Separator();
+}
+
+void ROTOM::HUD::DrawMaterialSettings(MaterialSettings *materialSettings) {
+  ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Color:");
+  ImGui::PushID(hud.nextPushID++);
+  ImGui::DragFloat4("", materialSettings->color_, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
   ImGui::PopID();
 
   ImGui::Separator();

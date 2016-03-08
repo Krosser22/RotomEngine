@@ -89,7 +89,7 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   ShaderData *shaderData = &commandDrawObjectData->shaderData;
   MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
   const float *specularMaterial = commandDrawObjectData->material_specularMaterial;
-  const float *color = materialSettings->color();
+  const float *color = materialSettings->color_;
 
   glUseProgram(shaderData->shaderProgram);
 

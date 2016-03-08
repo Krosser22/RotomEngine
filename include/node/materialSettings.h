@@ -13,10 +13,6 @@ namespace ROTOM {
     MaterialSettings();
     ~MaterialSettings();
 
-    //Set the color of the object (0.0f - 1.0f)
-    void setColor(const float r, const float g, const float b, const float a = 1.0f);
-    const float *color();
-
     float color_[4];
   };
 }
