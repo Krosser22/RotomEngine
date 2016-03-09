@@ -5,7 +5,11 @@
 **/
 
 #include "node/geometry.h"
+#include "render/commandSetGeometry.h"
 #include "render/graphics.h"
+#include "general/window.h"
+
+ROTOM::CommandSetGeometry commandSetGeometry;
 
 //Default Square
 float vertex[192] = {
@@ -93,17 +97,29 @@ void ROTOM::Geometry::loadGeometry(float *vertex, int *index, const int vertexCo
   GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float) * numberOfElementsPerVertex_, vertexCount_, vertex, index);
 }
 
-void ROTOM::Geometry::loadGeometry(std::shared_ptr<ROTOM::Geometry::GeometryData> *geometryData) {
-  GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
-  loadGeometry(&geometryData->get()->data[0], &geometryData->get()->index[0], geometryData->get()->data.size() / 8);
+void ROTOM::Geometry::loadGeometry(std::shared_ptr<Geometry::GeometryData> geometryData) {
+  commandSetGeometry.setInput(geometryData, this);
+  GetActualDisplayList()->addCommand(&commandSetGeometry);
 }
 
 const unsigned int ROTOM::Geometry::vertexCount() {
   return vertexCount_;
 }
 
-const unsigned int ROTOM::Geometry::VAO() {
+unsigned int ROTOM::Geometry::VAO() {
   return VAO_;
+}
+
+unsigned int ROTOM::Geometry::EBO() {
+  return EBO_;
+}
+
+unsigned int ROTOM::Geometry::VBO() {
+  return VBO_;
+}
+
+unsigned int ROTOM::Geometry::numberOfElementsPerVertex() {
+  return numberOfElementsPerVertex_;
 }
 
 //const struct aiScene* scene = NULL;

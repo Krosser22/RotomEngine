@@ -8,6 +8,8 @@
 #include "general/constants.h"
 #include "general/time.h"
 #include "meshLoader.h"
+#include "render/commandSetGeometry.h"
+#include "render/displayList.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "tiny_obj_loader.h"

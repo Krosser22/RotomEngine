@@ -9,7 +9,6 @@
 #include "general/time.h"
 #include "general/window.h"
 #include "render/commandDrawObject.h"
-#include "render/displayList.h"
 #include "render/graphics.h"
 #include "taskManager/taskCalculateMatrix.h"
 #include "taskManager/taskRender.h"
@@ -525,4 +524,8 @@ int ROTOM::WindowWidth() {
   int width = 0, height = 0;
   glfwGetFramebufferSize(window, &width, &height);
   return width;
+}
+
+ROTOM::DisplayList *ROTOM::GetActualDisplayList() {
+  return &displayList;
 }

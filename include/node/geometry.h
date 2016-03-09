@@ -24,11 +24,19 @@ namespace ROTOM {
     //Vertex = p, p, p, n, n, n, uv, uv, ... and again till end
     void loadGeometry(float *vertex, int *index, const int vertexCount);
 
-    void loadGeometry(std::shared_ptr<Geometry::GeometryData> *geometryData);
+    void loadGeometry(std::shared_ptr<Geometry::GeometryData> geometryData);
+
+    void setVertexCount(unsigned int vertexCount);
     
     const unsigned int vertexCount();
 
-    const unsigned int VAO();
+    unsigned int VAO();
+
+    unsigned int EBO();
+
+    unsigned int VBO();
+
+    unsigned int numberOfElementsPerVertex();
 
     void getBoundingBox(struct aiVector3D* min, struct aiVector3D* max);
 

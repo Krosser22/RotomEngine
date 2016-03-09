@@ -27,7 +27,6 @@ namespace ROTOM {
     CommandDrawObject();
     virtual ~CommandDrawObject();
 
-    //It does what the command should do (it's called from the displayList)
     void run();
     
     void setInput(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, float projectionMatrix[16], float viewMatrix[16]);

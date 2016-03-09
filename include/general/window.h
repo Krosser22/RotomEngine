@@ -8,6 +8,7 @@
 #define __WINDOW_H__
 
 #include "scene.h"
+#include "render/displayList.h"
 
 namespace ROTOM {
   //Initializes the window
@@ -18,9 +19,6 @@ namespace ROTOM {
 
   //Sets the scene that is going to be used
   void SetScene(Scene *newScene);
-
-  //Returns if the window is opened
-  //bool WindowIsOpened();
   
   //Returns the height of the window
   int WindowHeight();
@@ -30,6 +28,9 @@ namespace ROTOM {
   
   //Must be declared by the user in order to use this library
   int main(int argc, char **argv);
+
+  //TODO - Move this to the renderer (It will return the actual displayList
+  DisplayList *GetActualDisplayList();
 }
 
 #endif //__WINDOW_H__
