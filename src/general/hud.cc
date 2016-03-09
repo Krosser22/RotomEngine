@@ -135,7 +135,7 @@ void ROTOM::HUD::Draw() {
     hud.opened = !hud.opened;
   }
 
-  DrawMenu();
+  //DrawMenu();
 
   if (hud.opened) {
     //ImGui::ShowTestWindow();

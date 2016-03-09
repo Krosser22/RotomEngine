@@ -427,7 +427,7 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
   }
 
   glfwMakeContextCurrent(window);
-  //glfwSwapInterval(1); //TODO - Ask what is this for???
+  glfwSwapInterval(1); //TODO - Ask what is this for???
 
   // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
   glewExperimental = GL_TRUE;
