@@ -333,7 +333,7 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, Geometry 
   //printf("%f seconds.\n", t_load_ROTOM.end());
   //printf(".................................\n");
 
-  geometry->loadGeometry(&obj_data);
+  geometry->loadGeometry(obj_data);
 }
 
 void ROTOM::MESHLOADER::Load_OBJ(const char* path, const char* nameWithoutExtension, Geometry *geometry, bool reloadFile) {
@@ -423,7 +423,7 @@ void ROTOM::MESHLOADER::Load_OBJ(const char* path, const char* nameWithoutExtens
   //printf("%f seconds.\n", t_load_ROTOM.end());
   //printf(".................................\n");
 
-  geometry->loadGeometry(&obj_data);
+  geometry->loadGeometry(obj_data);
 }
 
 void ROTOM::MESHLOADER::Load_ROTOM_OBJ(const char *path, std::shared_ptr<Geometry::GeometryData> obj_data) {

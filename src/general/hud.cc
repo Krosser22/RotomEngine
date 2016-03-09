@@ -221,15 +221,7 @@ void ROTOM::HUD::DrawContent() {
       case kContent_Geometry: {
         for (unsigned int i = 0; i < hud.contentListName.size(); ++i) {
           if (ImGui::Selectable(hud.contentListName.at(i).c_str(), false)) {
-            Geometry *geometry = ((Drawable *)hud.selected)->geometry().get();
-            std::string path = kPath_objFiles;
-            path.append(hud.contentListName.at(i).c_str());
-
-            //if (hud.contentListName.at(i).find("\\") != -1) {
-              MESHLOADER::Load_OBJ(path.c_str(), geometry);
-            /*} else {
-              MESHLOADER::Load_OBJ(kPath_objFiles, hud.contentListName.at(i).c_str(), geometry);
-            }*/
+            ((Drawable *)hud.selected)->geometry()->loadGeometry(hud.contentListName.at(i).c_str());
           }
         }
         break;

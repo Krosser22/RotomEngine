@@ -26,15 +26,17 @@ namespace ROTOM {
 
     void loadGeometry(std::shared_ptr<Geometry::GeometryData> geometryData);
 
+    void loadGeometry(const char *nameWithoutExtension);
+
     void setVertexCount(unsigned int vertexCount);
     
     const unsigned int vertexCount();
 
-    unsigned int VAO();
+    unsigned int *VAO();
 
-    unsigned int EBO();
+    unsigned int *EBO();
 
-    unsigned int VBO();
+    unsigned int *VBO();
 
     unsigned int numberOfElementsPerVertex();
 

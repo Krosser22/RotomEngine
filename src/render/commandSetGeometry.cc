@@ -12,11 +12,9 @@ ROTOM::CommandSetGeometry::CommandSetGeometry() {}
 ROTOM::CommandSetGeometry::~CommandSetGeometry() {}
 
 void ROTOM::CommandSetGeometry::run() {
-  GRAPHICS::releaseGeometry(geometry_->VAO(), geometry_->EBO(), geometry_->VBO());
+  GRAPHICS::releaseGeometry(*geometry_->VAO(), *geometry_->EBO(), *geometry_->VBO());
   geometry_->setVertexCount(geometryData_->data.size() / 8);
-  //loadGeometry(&geometryData_->get()->data[0], &geometryData->get()->index[0], geometryData->get()->data.size() / 8);
-
-  GRAPHICS::loadGeometry(&geometry_->VAO(), &geometry_->EBO(), &geometry_->VBO(), sizeof(float) * numberOfElementsPerVertex_, vertexCount_, vertex, index);
+  GRAPHICS::loadGeometry(geometry_->VAO(), geometry_->EBO(), geometry_->VBO(), sizeof(float) * geometry_->numberOfElementsPerVertex(), geometry_->vertexCount(), &geometryData_->data[0], &geometryData_->index[0]);
 }
 
 void ROTOM::CommandSetGeometry::setInput(std::shared_ptr<Geometry::GeometryData> geometryData, Geometry *geometry) {

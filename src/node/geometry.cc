@@ -4,11 +4,15 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "general/window.h"
 #include "node/geometry.h"
 #include "render/commandSetGeometry.h"
 #include "render/graphics.h"
-#include "general/window.h"
+#include "taskManager/taskSetGeometry.h"
+#include "taskManager/taskManager.h"
+#include "meshLoader.h"
 
+ROTOM::TaskSetGeometry taskSetGeometry;
 ROTOM::CommandSetGeometry commandSetGeometry;
 
 //Default Square
@@ -97,25 +101,56 @@ void ROTOM::Geometry::loadGeometry(float *vertex, int *index, const int vertexCo
   GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float) * numberOfElementsPerVertex_, vertexCount_, vertex, index);
 }
 
-void ROTOM::Geometry::loadGeometry(std::shared_ptr<Geometry::GeometryData> geometryData) {
+/*void ROTOM::Geometry::loadGeometry(float *vertex, int *index, const int vertexCount) {
+  std::shared_ptr<GeometryData> geometryData = std::shared_ptr<GeometryData> (new GeometryData());
+  for (unsigned int i = 0; i < vertexCount; ++i) {
+    geometryData->index.push_back(index[i]);
+    geometryData->data.push_back(vertex[(i * numberOfElementsPerVertex_) + 0]);
+    geometryData->data.push_back(vertex[(i * numberOfElementsPerVertex_) + 1]);
+    geometryData->data.push_back(vertex[(i * numberOfElementsPerVertex_) + 2]);
+    geometryData->data.push_back(vertex[(i * numberOfElementsPerVertex_) + 3]);
+    geometryData->data.push_back(vertex[(i * numberOfElementsPerVertex_) + 4]);
+    geometryData->data.push_back(vertex[(i * numberOfElementsPerVertex_) + 5]);
+    geometryData->data.push_back(vertex[(i * numberOfElementsPerVertex_) + 6]);
+    geometryData->data.push_back(vertex[(i * numberOfElementsPerVertex_) + 7]);
+  }
   commandSetGeometry.setInput(geometryData, this);
   GetActualDisplayList()->addCommand(&commandSetGeometry);
+}*/
+
+void ROTOM::Geometry::loadGeometry(std::shared_ptr<GeometryData> geometryData) {
+  commandSetGeometry.setInput(geometryData, this);
+  GetActualDisplayList()->addCommand(&commandSetGeometry);
+}
+
+void ROTOM::Geometry::loadGeometry(const char *nameWithoutExtension) {
+  taskSetGeometry.setInput(nameWithoutExtension, this);
+  TASKMANAGER::addTask(&taskSetGeometry);
+  //if (hud.contentListName.at(i).find("\\") != -1) {
+  //MESHLOADER::Load_OBJ(path, this);
+  /*} else {
+  MESHLOADER::Load_OBJ(kPath_objFiles, hud.contentListName.at(i).c_str(), geometry);
+  }*/
+}
+
+void ROTOM::Geometry::setVertexCount(unsigned int vertexCount) {
+  vertexCount_ = vertexCount;
 }
 
 const unsigned int ROTOM::Geometry::vertexCount() {
   return vertexCount_;
 }
 
-unsigned int ROTOM::Geometry::VAO() {
-  return VAO_;
+unsigned int *ROTOM::Geometry::VAO() {
+  return &VAO_;
 }
 
-unsigned int ROTOM::Geometry::EBO() {
-  return EBO_;
+unsigned int *ROTOM::Geometry::EBO() {
+  return &EBO_;
 }
 
-unsigned int ROTOM::Geometry::VBO() {
-  return VBO_;
+unsigned int *ROTOM::Geometry::VBO() {
+  return &VBO_;
 }
 
 unsigned int ROTOM::Geometry::numberOfElementsPerVertex() {

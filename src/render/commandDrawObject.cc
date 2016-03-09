@@ -33,7 +33,7 @@ void ROTOM::CommandDrawObject::setData(Drawable *drawable) {
   Geometry *geometry = drawable->geometry().get();
   commandDrawObjectData.materialSettings = *drawable->materialSettings().get();
   commandDrawObjectData.shaderData = material->shaderData_;
-  commandDrawObjectData.geometry_VAO = geometry->VAO();
+  commandDrawObjectData.geometry_VAO = *geometry->VAO();
   commandDrawObjectData.geometry_veterCount = geometry->vertexCount();
   commandDrawObjectData.material_texture = material->texture();
   commandDrawObjectData.materialData = material->materialData_;
