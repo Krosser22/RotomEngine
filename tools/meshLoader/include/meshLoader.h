@@ -12,14 +12,14 @@
 namespace ROTOM {
   namespace MESHLOADER {
     //Use this just for testing because it load faster the obj file but it will not be optimized
-    void Load_OBJ(const char *pathWithoutExtensionFile, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile = true);
-
+    void Load_OBJ(const char *pathWithoutExtensionFile, Geometry *geometry, bool reloadFile = true);
+    
     //Recomended
-    void Load_OBJ(const char* basePath, const char* nameWithoutExtension, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile = true);
+    void Load_OBJ(const char* path, const char* nameWithoutExtension, Geometry *geometry, bool reloadFile = true);
 
-    void Load_ROTOM_OBJ(const char *path, std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data);
+    void Load_ROTOM_OBJ(const char *path, std::shared_ptr<Geometry::GeometryData> obj_data);
 
-    void Save_ROTOM_OBJ(const char *path, ROTOM::Geometry::GeometryData *obj_data);
+    void Save_ROTOM_OBJ(const char *path, std::shared_ptr<Geometry::GeometryData> obj_data);
   }
 }
 

@@ -22,6 +22,8 @@ namespace ROTOM {
     kContent_Texture,
   };
 
-  //const int kMaxNodeNameSize = 10;
+  static const char *kPath_objFiles = "../../../../obj/";
+  static const char *kPath_imgFiles = "../../../../img/";
+  static const char *kPath_shaderFiles = "../../../../shader/";
 }
 #endif //__CONSTANTS_H__

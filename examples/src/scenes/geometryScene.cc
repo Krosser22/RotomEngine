@@ -17,14 +17,13 @@ void ROTOM::GeometryScene::init() {
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry = std::shared_ptr<Geometry>(new Geometry());
-  std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
   std::shared_ptr<Drawable> drawable[amount];
   
-  const char *base_path = "../../../../obj/";
+  const char *base_path = kPath_objFiles;
   const char *name = "Monkey";
-  ROTOM::MESHLOADER::Load_OBJ(base_path, name, obj_data);
-  geometry->loadGeometry(&obj_data);
+
+  ROTOM::MESHLOADER::Load_OBJ(base_path, name, geometry.get());
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));

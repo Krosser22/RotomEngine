@@ -4,6 +4,8 @@
 *** ////////////////////////////////////////////
 **/
 
+
+#include "general/constants.h"
 #include "general/time.h"
 #include "meshLoader.h"
 #include "glm/gtc/matrix_transform.hpp"
@@ -58,26 +60,31 @@ void PrintInfo(const std::vector<tinyobj::shape_t>& shapes, const std::vector<ti
   }*/
 }
 
-void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile) {
-  printf(".................................\n");
-  ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
+void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, Geometry *geometry, bool reloadFile) {
+  //printf(".................................\n");
+  //ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
+  char basePath[256];
   char finalPath[256];
   char newPath[256];
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
+  std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData());
 
   obj_data->data.clear();
   obj_data->index.clear();
 
-  strcpy(finalPath, pathWithoutExtensionFile);
+  strcpy(basePath, kPath_objFiles);
+  strcat(basePath, pathWithoutExtensionFile);
+
+  strcpy(finalPath, basePath);
   strcat(finalPath, old_ext);
 
-  strcpy(newPath, pathWithoutExtensionFile);
+  strcpy(newPath, basePath);
   strcat(newPath, new_ext);
 
   if (reloadFile) {
-    printf(".Loading OBJ  : ");
-    t_load_OBJ.start();
+    //printf(".Loading OBJ  : ");
+    //t_load_OBJ.start();
 
     float aux_value_x = 0.0f;
     float aux_value_y = 0.0f;
@@ -96,7 +103,7 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, std::shar
 
     FILE *file = fopen(finalPath, "r");
     if (file == NULL){
-      assert(printf("ERROR: File doesn't found\n"));
+      assert("ERROR: File doesn't found\n" && false);
     } else {
       while (true) {
         char lineHeader[128];
@@ -280,10 +287,9 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, std::shar
 
       ////////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////////
-      //Debug
-      //Print log
+      //Debug log
       bool debug = false;
-      if (debug) {
+      if (false) {
         //Vertex
         for (unsigned int i = 0; i < out_vertex.size(); ++i) {
           int index = i * vertexSize;
@@ -311,37 +317,38 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, std::shar
       aux_value_z = 0;
       aux_init = false;
     }
-    printf("%f seconds.\n", t_load_OBJ.end());
+    //printf("%f seconds.\n", t_load_OBJ.end());
 
-    printf(".OBJ to ROTOM : ");
-    t_save_from_OBJ_to_ROTOM.start();
-    Save_ROTOM_OBJ(newPath, obj_data.get());
-    printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
-
-    printf(".Loading ROTOM: ");
-    t_load_ROTOM.start();
-    Load_ROTOM_OBJ(newPath, obj_data);
-    printf("%f seconds.\n", t_load_ROTOM.end());
-    printf(".................................\n");
-  } else {
-    printf(".Loading ROTOM: ");
-    t_load_ROTOM.start();
-    Load_ROTOM_OBJ(newPath, obj_data);
-    printf("%f seconds.\n", t_load_ROTOM.end());
-    printf(".................................\n");
+    //printf(".OBJ to ROTOM : ");
+    //t_save_from_OBJ_to_ROTOM.start();
+    Save_ROTOM_OBJ(newPath, obj_data);
+    //printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
   }
+
+  //printf(".Loading ROTOM: ");
+  //t_load_ROTOM.start();
+  Load_ROTOM_OBJ(newPath, obj_data);
+  //printf("%f seconds.\n", t_load_ROTOM.end());
+  //printf(".................................\n");
+
+  geometry->loadGeometry(&obj_data);
 }
 
-void ROTOM::MESHLOADER::Load_OBJ(const char* basePath, const char* nameWithoutExtension, std::shared_ptr<Geometry::GeometryData> obj_data, bool reloadFile) {
-  printf(".................................\n");
-  ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
+void ROTOM::MESHLOADER::Load_OBJ(const char* path, const char* nameWithoutExtension, Geometry *geometry, bool reloadFile) {
+  //printf(".................................\n");
+  //ROTOM::TIME::Chronometer t_load_OBJ, t_save_from_OBJ_to_ROTOM, t_load_ROTOM;
+  char basePath[256];
   char finalPath[256];
   char newPath[256];
   const char *old_ext = ".obj";
   const char *new_ext = ".rotom";
+  std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData());
 
   obj_data->data.clear();
   obj_data->index.clear();
+
+  strcpy(basePath, kPath_objFiles);
+  strcat(basePath, path);
 
   strcpy(finalPath, basePath);
   strcat(finalPath, nameWithoutExtension);
@@ -352,14 +359,14 @@ void ROTOM::MESHLOADER::Load_OBJ(const char* basePath, const char* nameWithoutEx
   strcat(newPath, new_ext);
 
   if (reloadFile) {
-    printf(".Loading OBJ  : ");
-    t_load_OBJ.start();
+    //printf(".Loading OBJ  : ");
+    //t_load_OBJ.start();
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string err = tinyobj::LoadObj(shapes, materials, finalPath, basePath);
 
     if (!err.empty()) {
-      printf("ERROR [files.cc]: loading OBJ\n");
+      printf("ERROR [meshLoader.cc] > Load_OBJ()\n\n");
       std::cerr << err << std::endl;
       system("pause");
     } else {
@@ -400,28 +407,24 @@ void ROTOM::MESHLOADER::Load_OBJ(const char* basePath, const char* nameWithoutEx
         }
       }
     }
-    printf("%f seconds.\n", t_load_OBJ.end());
+    //printf("%f seconds.\n", t_load_OBJ.end());
 
-    printf(".OBJ to ROTOM : ");
-    t_save_from_OBJ_to_ROTOM.start();
-    Save_ROTOM_OBJ(newPath, obj_data.get());
-    printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
-
-    printf(".Loading ROTOM: ");
-    t_load_ROTOM.start();
-    Load_ROTOM_OBJ(newPath, obj_data);
-    printf("%f seconds.\n", t_load_ROTOM.end());
-    printf(".................................\n");
-  } else {
-    printf(".Loading ROTOM: ");
-    t_load_ROTOM.start();
-    Load_ROTOM_OBJ(newPath, obj_data);
-    printf("%f seconds.\n", t_load_ROTOM.end());
-    printf(".................................\n");
+    //printf(".OBJ to ROTOM : ");
+    //t_save_from_OBJ_to_ROTOM.start();
+    Save_ROTOM_OBJ(newPath, obj_data);
+    //printf("%f seconds.\n", t_save_from_OBJ_to_ROTOM.end());
   }
+
+  //printf(".Loading ROTOM: ");
+  //t_load_ROTOM.start();
+  Load_ROTOM_OBJ(newPath, obj_data);
+  //printf("%f seconds.\n", t_load_ROTOM.end());
+  //printf(".................................\n");
+
+  geometry->loadGeometry(&obj_data);
 }
 
-void ROTOM::MESHLOADER::Load_ROTOM_OBJ(const char *path, std::shared_ptr<ROTOM::Geometry::GeometryData> obj_data) {
+void ROTOM::MESHLOADER::Load_ROTOM_OBJ(const char *path, std::shared_ptr<Geometry::GeometryData> obj_data) {
   obj_data->data.clear();
   obj_data->index.clear();
 
@@ -452,7 +455,7 @@ void ROTOM::MESHLOADER::Load_ROTOM_OBJ(const char *path, std::shared_ptr<ROTOM::
   }
 }
 
-void ROTOM::MESHLOADER::Save_ROTOM_OBJ(const char *path, ROTOM::Geometry::GeometryData *obj_data) {
+void ROTOM::MESHLOADER::Save_ROTOM_OBJ(const char *path, std::shared_ptr<Geometry::GeometryData> obj_data) {
   FILE *file = fopen(path, "wb");
   if (file) {
     int indexCount = obj_data->index.size();

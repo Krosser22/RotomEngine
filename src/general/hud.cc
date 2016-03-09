@@ -221,21 +221,15 @@ void ROTOM::HUD::DrawContent() {
       case kContent_Geometry: {
         for (unsigned int i = 0; i < hud.contentListName.size(); ++i) {
           if (ImGui::Selectable(hud.contentListName.at(i).c_str(), false)) {
-            std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
-            std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
-            std::string path = "../../../../obj/";
+            Geometry *geometry = ((Drawable *)hud.selected)->geometry().get();
+            std::string path = kPath_objFiles;
             path.append(hud.contentListName.at(i).c_str());
 
             //if (hud.contentListName.at(i).find("\\") != -1) {
-              MESHLOADER::Load_OBJ(path.c_str(), obj_data);
+              MESHLOADER::Load_OBJ(path.c_str(), geometry);
             /*} else {
-              MESHLOADER::Load_OBJ("../../../../obj/", hud.contentListName.at(i).c_str(), obj_data);
+              MESHLOADER::Load_OBJ(kPath_objFiles, hud.contentListName.at(i).c_str(), geometry);
             }*/
-
-            if (obj_data->data.size() <= 0) {
-              assert("hud.cc > DrawContent() > obj_data->data.size()" && false);
-            }
-            ((Drawable *)hud.selected)->geometry()->loadGeometry(&obj_data);
           }
         }
         break;
@@ -264,9 +258,11 @@ void ROTOM::HUD::DrawSceneRender() {
 }
 
 void ROTOM::HUD::DrawNodes(Node *node, float offsetX) {
+  ImGui::PushID(hud.nextPushID++);
   if (ImGui::Selectable(node->name(), hud.selected == node)) {
     hud.selected = node;
   }
+  ImGui::PopID();
 
   for (unsigned int i = 0; i < node->childCount(); ++i) {
     DrawNodes(node->getChildAt(i).get(), offsetX + hud.offsetXAmountPerChild);

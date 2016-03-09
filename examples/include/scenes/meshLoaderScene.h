@@ -8,6 +8,8 @@
 #define __MESH_LOADER_SCENE_H__
 
 #include "general/scene.h"
+#include "taskManager/taskSetGeometry.h"
+#include "taskManager/taskManager.h"
 #include <memory>
 
 namespace ROTOM {
@@ -28,6 +30,7 @@ namespace ROTOM {
 
   private:
     bool rotating_;
+    TaskSetGeometry taskSetGeometry_;
   };
 }
 

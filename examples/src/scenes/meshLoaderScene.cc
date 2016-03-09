@@ -4,6 +4,7 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "general/constants.h"
 #include "general/files.h"
 #include "general/input.h"
 #include "general/scene.h"
@@ -21,42 +22,41 @@
 //#define OBJ_SIRIUS_5_COLONIAL_CITY
 
 #ifdef OBJ_MONKEY
-const char *basePath = "../../../../obj/";
+const char *basePath = "";
 const char *name = "Monkey";
-const char *finalPath = "../../../../obj/Monkey";
-#elif defined OBJ_BLONDE
-const char *basePath = "../../../../obj/Blonde/";
-const char *name = "Blonde";
-const char *finalPath = "../../../../obj/Blonde/Blonde";
-#elif defined OBJ_DEADPOOL
-const char *basePath = "../../../../obj/Deadpool/";
-const char *name = "Deadpool";
-const char *finalPath = "../../../../obj/Deadpool/Deadpool";
-#elif defined OBJ_IRONMAN
-const char *basePath = "../../../../obj/Blonde/";
-const char *name = "Blonde";
-const char *finalPath = "../../../../obj/Blonde/Blonde";
+const char *finalPath = "Monkey";
 #elif defined OBJ_DRAGON
-const char *basePath = "../../../../obj/";
+const char *basePath = "";
 const char *name = "dragon2";
-const char *finalPath = "../../../../obj/dragon2";
+const char *finalPath = "dragon2";
+#elif defined OBJ_BLONDE
+const char *basePath = "Blonde/";
+const char *name = "Blonde";
+const char *finalPath = "Blonde/Blonde";
+#elif defined OBJ_DEADPOOL
+const char *basePath = "Deadpool/";
+const char *name = "Deadpool";
+const char *finalPath = "Deadpool/Deadpool";
+#elif defined OBJ_IRONMAN
+const char *basePath = "Blonde/";
+const char *name = "Blonde";
+const char *finalPath = "Blonde/Blonde";
 #elif defined OBJ_SIRIUS_5_COLONIAL_CITY
-const char *basePath = "../../../../obj/Sirus5ColonialCity/";
+const char *basePath = "Sirus5ColonialCity/";
 const char *name = "sirus_city";
-const char *finalPath = "../../../../obj/Sirus5ColonialCity/sirus_city";
+const char *finalPath = "Sirus5ColonialCity/sirus_city";
 #endif
 
 void ROTOM::MeshLoaderScene::init() {
   //Camera
-  //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //Geometry
   std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
-  std::shared_ptr<Geometry::GeometryData> obj_data = std::shared_ptr<Geometry::GeometryData>(new Geometry::GeometryData);
+  taskSetGeometry_.setInput(finalPath, geometry.get());
+  TASKMANAGER::addTask(&taskSetGeometry_);
   //MESHLOADER::Load_OBJ(finalPath, obj_data, false);
-  MESHLOADER::Load_OBJ(basePath, name, obj_data);
-  geometry->loadGeometry(&obj_data);
+  //MESHLOADER::Load_OBJ(basePath, name, geometry.get());
 
   //Material
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));

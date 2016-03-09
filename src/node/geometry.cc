@@ -88,11 +88,13 @@ ROTOM::Geometry::~Geometry() {
 }
 
 void ROTOM::Geometry::loadGeometry(float *vertex, int *index, const int vertexCount) {
+  GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
   vertexCount_ = vertexCount;
   GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float) * numberOfElementsPerVertex_, vertexCount_, vertex, index);
 }
 
 void ROTOM::Geometry::loadGeometry(std::shared_ptr<ROTOM::Geometry::GeometryData> *geometryData) {
+  GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
   loadGeometry(&geometryData->get()->data[0], &geometryData->get()->index[0], geometryData->get()->data.size() / 8);
 }
 
