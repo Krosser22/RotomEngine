@@ -23,39 +23,46 @@ void ROTOM::MovementScene::init() {
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
-  std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
-  std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
-  std::shared_ptr<Material> material3 = std::shared_ptr<Material>(new Material("../../../../img/texture3.png"));
-  std::shared_ptr<Material> material4 = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
+  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
+  {
+    std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
+    std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
+    //FILES::ReadFile("../../../../shaders/shader3_DiffuseLight.vertx", verterShaderSource);
+    //FILES::ReadFile("../../../../shaders/shader3_DiffuseLight.frag", fragmentShaderSource);
+    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.vertx", verterShaderSource);
+    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.frag", fragmentShaderSource);
+    material->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
+  }
+
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
   std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
   std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
   std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("4"));
 
   drawable1->setGeometry(geometry_);
-  drawable1->setMaterial(material1);
+  drawable1->setMaterial(material);
   drawable1->setParent(getRoot());
   //drawable1->setPositionZ(-5.0f);
 
   drawable2->setGeometry(geometry_);
-  drawable2->setMaterial(material2);
+  drawable2->setMaterial(material);
   drawable2->setParent(drawable1);
   drawable2->setPositionX(1.0f);
 
   drawable3->setGeometry(geometry_);
-  drawable3->setMaterial(material3);
+  drawable3->setMaterial(material);
   drawable3->setParent(drawable2);
   drawable3->setPositionX(1.0f);
 
   drawable4->setGeometry(geometry_);
-  drawable4->setMaterial(material4);
+  drawable4->setMaterial(material);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setGeometry(geometry_);
-  light->setMaterial(material1);
+  light->setMaterial(material);
   light->setParent(getRoot());
   light->setPosition(0.60f, 2.0f, -3.20f);
   AddLight(light);

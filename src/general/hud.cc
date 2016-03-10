@@ -377,7 +377,7 @@ void ROTOM::HUD::DrawGeometry(Geometry *geometry) {
 
   if (ImGui::Button("Change Geometry")) {
     hud.content = kContent_Geometry;
-    system("dir /b/s ..\\..\\..\\..\\obj\\*.obj > list_obj.txt");
+    system("dir /b/s ..\\..\\..\\..\\obj\\*.ROTOM > list_obj.txt");
     std::shared_ptr<std::string> file = std::shared_ptr<std::string>(new std::string());
     FILES::ReadFile("list_obj.txt", file);
 
@@ -402,7 +402,7 @@ void ROTOM::HUD::DrawGeometry(Geometry *geometry) {
       for (unsigned int i = 0; i < hud.contentListPath.size(); ++i) {
         std::string path = hud.contentListPath.at(i);
         std::string name = path.substr(path.find("\\obj\\") + 5);
-        name = name.substr(0, name.find(".obj"));
+        name = name.substr(0, name.find(".rotom"));
         hud.contentListName.push_back(name);
       }
     }

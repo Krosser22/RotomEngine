@@ -56,19 +56,14 @@ ROTOM::Task *getNextTask() {
 
 void threadLoop(int ID) {
   ROTOM::Task *actualTask = NULL;
-  //std::unique_lock<std::mutex> lock(taskManagerData.lock_threads);
-  //taskManagerData.cv.wait(lock);
-
   while (!taskManagerData.isOff) {
     actualTask = getNextTask();
-    //printf("%d", ID);
     if (actualTask) {
-      //printf("+\n", ID);
       actualTask->run();
       addNextTasksOf(actualTask);
     } else {
-      //printf("-", ID);
-      //taskManagerData.cv.wait(lock);
+      std::unique_lock<std::mutex> lock(taskManagerData.lock_threads);
+      taskManagerData.cv.wait(lock);
     }
   }
 }
@@ -116,5 +111,5 @@ void ROTOM::TASKMANAGER::addTask(Task *task) {
   ++taskManagerData.taskPending;
   taskManagerData.lock_taskPending.unlock();
 
-  taskManagerData.cv.notify_all();
+  taskManagerData.cv.notify_one();
 }
