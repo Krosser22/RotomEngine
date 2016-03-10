@@ -126,11 +126,6 @@ void ROTOM::Geometry::loadGeometry(std::shared_ptr<GeometryData> geometryData) {
 void ROTOM::Geometry::loadGeometry(const char *nameWithoutExtension) {
   taskSetGeometry.setInput(nameWithoutExtension, this);
   TASKMANAGER::addTask(&taskSetGeometry);
-  //if (hud.contentListName.at(i).find("\\") != -1) {
-  //MESHLOADER::Load_OBJ(path, this);
-  /*} else {
-  MESHLOADER::Load_OBJ(kPath_objFiles, hud.contentListName.at(i).c_str(), geometry);
-  }*/
 }
 
 void ROTOM::Geometry::setVertexCount(unsigned int vertexCount) {

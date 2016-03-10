@@ -511,6 +511,7 @@ void ROTOM::SetScene(Scene *newScene) {
   while (WindowIsOpened()) {
     ;
   }
+  WindowDestroy();
   scene->destroy();
 }
 

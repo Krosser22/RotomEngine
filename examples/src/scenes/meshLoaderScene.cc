@@ -14,49 +14,12 @@
 #include "meshLoader.h"
 #include "imgui.h"
 
-#define OBJ_MONKEY
-//#define OBJ_BLONDE
-//#define OBJ_DEADPOOL
-//#define OBJ_IRONMAN
-//#define OBJ_DRAGON
-//#define OBJ_SIRIUS_5_COLONIAL_CITY
-
-#ifdef OBJ_MONKEY
-const char *basePath = "";
-const char *name = "Monkey";
-const char *finalPath = "Monkey";
-#elif defined OBJ_DRAGON
-const char *basePath = "";
-const char *name = "dragon2";
-const char *finalPath = "dragon2";
-#elif defined OBJ_BLONDE
-const char *basePath = "Blonde/";
-const char *name = "Blonde";
-const char *finalPath = "Blonde/Blonde";
-#elif defined OBJ_DEADPOOL
-const char *basePath = "Deadpool/";
-const char *name = "Deadpool";
-const char *finalPath = "Deadpool/Deadpool";
-#elif defined OBJ_IRONMAN
-const char *basePath = "Blonde/";
-const char *name = "Blonde";
-const char *finalPath = "Blonde/Blonde";
-#elif defined OBJ_SIRIUS_5_COLONIAL_CITY
-const char *basePath = "Sirus5ColonialCity/";
-const char *name = "sirus_city";
-const char *finalPath = "Sirus5ColonialCity/sirus_city";
-#endif
-
 void ROTOM::MeshLoaderScene::init() {
   //Camera
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //Geometry
   std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
-  taskSetGeometry_.setInput(finalPath, geometry.get());
-  TASKMANAGER::addTask(&taskSetGeometry_);
-  //MESHLOADER::Load_OBJ(finalPath, obj_data, false);
-  //MESHLOADER::Load_OBJ(basePath, name, geometry.get());
 
   //Material
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
@@ -72,7 +35,7 @@ void ROTOM::MeshLoaderScene::init() {
 
   //Drawable
   std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable("drawable"));
-  getRoot()->setPosition(0.0f, 0.0f, -5.0f);
+  getRoot()->setPosition(0.0f, 1.0f, -5.0f);
   drawable->setGeometry(geometry);
   drawable->setMaterial(material);
   drawable->setParent(getRoot());

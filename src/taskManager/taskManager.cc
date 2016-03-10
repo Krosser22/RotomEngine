@@ -8,7 +8,7 @@
 
 struct TaskManagerData {
   int threardsCount;
-  const int threardsNotUsed = 3;
+  const int threardsNotUsed = 0;
 
   //Task in progress or in the task list
   int taskPending;
@@ -56,16 +56,19 @@ ROTOM::Task *getNextTask() {
 
 void threadLoop(int ID) {
   ROTOM::Task *actualTask = NULL;
-  std::unique_lock<std::mutex> lock(taskManagerData.lock_threads);
-  taskManagerData.cv.wait(lock);
+  //std::unique_lock<std::mutex> lock(taskManagerData.lock_threads);
+  //taskManagerData.cv.wait(lock);
 
   while (!taskManagerData.isOff) {
     actualTask = getNextTask();
+    //printf("%d", ID);
     if (actualTask) {
+      //printf("+\n", ID);
       actualTask->run();
       addNextTasksOf(actualTask);
     } else {
-      taskManagerData.cv.wait(lock);
+      //printf("-", ID);
+      //taskManagerData.cv.wait(lock);
     }
   }
 }
@@ -81,10 +84,14 @@ void ROTOM::TASKMANAGER::init() {
 
 void ROTOM::TASKMANAGER::destroy() {
   taskManagerData.isOff = true;
-  taskManagerData.lock_taskList.lock();
-  taskManagerData.taskList.clear();
-  taskManagerData.lock_taskList.unlock();
 
+  taskManagerData.lock_taskList.lock();
+  taskManagerData.lock_taskPending.lock();
+  taskManagerData.taskPending -= taskManagerData.taskList.size();
+  taskManagerData.taskList.clear();
+  taskManagerData.lock_taskPending.unlock();
+  taskManagerData.lock_taskList.unlock();
+  
   bool threadsWorking = true;
   while (threadsWorking) {
     taskManagerData.lock_taskPending.lock();
@@ -108,5 +115,6 @@ void ROTOM::TASKMANAGER::addTask(Task *task) {
   taskManagerData.lock_taskPending.lock();
   ++taskManagerData.taskPending;
   taskManagerData.lock_taskPending.unlock();
+
   taskManagerData.cv.notify_all();
 }

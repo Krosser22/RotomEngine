@@ -22,8 +22,6 @@ void ROTOM::MovementScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
-  AddLight(light_);
-
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
   std::shared_ptr<Material> material2 = std::shared_ptr<Material>(new Material("../../../../img/texture2.png"));
@@ -53,6 +51,14 @@ void ROTOM::MovementScene::init() {
   drawable4->setMaterial(material4);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
+
+  //Light
+  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  light->setGeometry(geometry_);
+  light->setMaterial(material1);
+  light->setParent(getRoot());
+  light->setPosition(0.60f, 2.0f, -3.20f);
+  AddLight(light);
 }
 
 void ROTOM::MovementScene::input() {

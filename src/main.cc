@@ -14,22 +14,14 @@ int main(int argc, char** argv) {
   ROTOM::TIME::Chronometer c;
   printf("Starting the managers.\n");
   c.start();
-  ////////////////////////////////////////////
+
   ROTOM::TASKMANAGER::init();
   {
-    //////////////////////////////////
-    //ROTOM::RENDERMANAGER::init();
-    //{
-      //ROTOM::SOUND::init();
-      printf("Time to start the managers: %f.\n\n\n", c.end());
-      ROTOM::main(argc, argv);
-    //}
-    //ROTOM::RENDERMANAGER::destroy();
-    //////////////////////////////////
+    //ROTOM::SOUND::init();
+    printf("Time to start the managers: %0.2f.\n\n", c.end());
+    ROTOM::main(argc, argv);
   }
   ROTOM::TASKMANAGER::destroy();
-  ////////////////////////////////////////////
 
-  ROTOM::WindowDestroy();
   return 0;
 }

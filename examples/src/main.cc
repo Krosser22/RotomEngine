@@ -15,14 +15,14 @@
 
 int ROTOM::main(int argc, char** argv) {
   TIME::Chronometer c;
-  printf("Creating window.\n");
+  printf("Creating the window.\n");
   c.start();
   WindowInit(1280, 720);
-  //printf("Time to create the windows: %f.\n\n\n", c.end());
+  printf("Time to create the windows: %0.2f.\n\n", c.end());
 
   //DefaultScene scene;
-  //GeometryScene scene;
-  MeshLoaderScene scene;
+  GeometryScene scene;
+  //MeshLoaderScene scene;
   //MovementScene scene;
   //ShaderScene scene;
   //SoundScene scene;
@@ -34,7 +34,8 @@ int ROTOM::main(int argc, char** argv) {
 ---------
 ---ASK---
 ---------
-
++Threads are not working as I want
++
 
 ----------
 ---DONE---
@@ -44,12 +45,12 @@ int ROTOM::main(int argc, char** argv) {
 -----------
 ---DOING---
 -----------
++Make a task (to load files from behind)
 
 
 ----------
 ---TODO---
 ----------
-+Make a task (to load files from behind)
 +Shadows --> Lo primero es sacar el depth buffer
 +Shadows --> GPU gems 3 (Webpage) parte 2
 +Shadows --> Real time shadows (Book)

@@ -22,7 +22,7 @@ namespace ROTOM {
     void setInput(const char *path, Geometry *geometry);
 
   private:
-    char *nameWithoutExtension_;
+    char *path_;
     Geometry *geometry_;
   };
 }

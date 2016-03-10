@@ -12,7 +12,7 @@
 #include "general/window.h"
 #include "imgui.h"
 
-struct HUDData {
+struct HUDDatatrue {
   std::shared_ptr<ROTOM::Node> root;
   std::vector<std::shared_ptr<ROTOM::Light>> lights;
   ROTOM::Camera *camera;
@@ -135,7 +135,7 @@ void ROTOM::HUD::Draw() {
     hud.opened = !hud.opened;
   }
 
-  //DrawMenu();
+  DrawMenu();
 
   if (hud.opened) {
     //ImGui::ShowTestWindow();
@@ -222,6 +222,7 @@ void ROTOM::HUD::DrawContent() {
         for (unsigned int i = 0; i < hud.contentListName.size(); ++i) {
           if (ImGui::Selectable(hud.contentListName.at(i).c_str(), false)) {
             ((Drawable *)hud.selected)->geometry()->loadGeometry(hud.contentListName.at(i).c_str());
+            hud.content = kContent_None;
           }
         }
         break;

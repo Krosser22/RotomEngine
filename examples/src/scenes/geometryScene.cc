@@ -19,11 +19,7 @@ void ROTOM::GeometryScene::init() {
   geometry = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
   std::shared_ptr<Drawable> drawable[amount];
-  
-  const char *base_path = kPath_objFiles;
-  const char *name = "Monkey";
-
-  ROTOM::MESHLOADER::Load_OBJ(base_path, name, geometry.get());
+  geometry->loadGeometry("Monkey/Monkey");
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -31,6 +27,7 @@ void ROTOM::GeometryScene::init() {
   light->setMaterial(material);
   light->setParent(getRoot());
   light->setScale(0.1f, 0.1f, 0.1f);
+  light->setPosition(0.0f, 10.0f, 0.0f);
   AddLight(light);
 
   const float separation = -2.2f;
