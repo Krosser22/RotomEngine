@@ -8,5 +8,9 @@ in vec2 uvMaterial;
 out vec4 fragment;
 
 void main() {
-	fragment = vec4(texture(u_texture, uvMaterial).xyz * u_color.xyz, 1.0f);
+  //Texture
+  vec4 materialColor = texture(u_texture, uvMaterial) * u_color;
+
+  //Final
+  fragment = materialColor;
 };

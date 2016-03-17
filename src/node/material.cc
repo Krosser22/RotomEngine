@@ -80,7 +80,7 @@ void ROTOM::Material::setShader(const char *vertexShaderSource, const char *frag
 
 void ROTOM::Material::setTexture(const char *path) {
   //Load and generate the texture and the mipmaps
-  unsigned char *image = SOIL_load_image(path, &textureWidth_, &textureHeight_, 0, SOIL_LOAD_RGB); //Line 1425 of SOIL.c
+  unsigned char *image = SOIL_load_image(path, &textureWidth_, &textureHeight_, 0, SOIL_LOAD_RGBA); //Line 1425 of SOIL.c
   if (!image) {
     printf("ERROR AL ABRIR: [%s]\n", path);
   }

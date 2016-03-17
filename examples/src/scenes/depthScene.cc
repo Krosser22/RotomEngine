@@ -35,11 +35,17 @@ void ROTOM::DepthScene::init() {
     material->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
   }
 
+  drawableBase_ = std::shared_ptr<Drawable>(new Drawable("DrawableBase"));
+  drawableBase_->setGeometry(geometry_);
+  drawableBase_->setMaterial(material);
+  drawableBase_->setParent(getRoot());
+  drawableBase_->setPosition(-1.0f, -1.0f, 0.0f);
+
   std::shared_ptr<Drawable> drawable[amount];
-  const float separation = -2.2f;
-  const float pos_x_started = 15.0f;
+  const float separation = -2.0f;
+  const float pos_x_started = 8.0f;
   const float pos_y_started = 0.0f;
-  const float pos_z_started = -5.0f;
+  const float pos_z_started = 0.0f;
   const int rows = 10;
   const int cols = 10;
   float pos[3] = { 0.0f, 0.0f, 0.0f };
@@ -50,7 +56,7 @@ void ROTOM::DepthScene::init() {
     drawable[i] = std::shared_ptr<Drawable>(new Drawable("i"));
     drawable[i]->setGeometry(geometry_);
     drawable[i]->setMaterial(material);
-    drawable[i]->setParent(getRoot());
+    drawable[i]->setParent(drawableBase_);
     drawable[i]->setPosition(pos);
   }
 
@@ -67,10 +73,23 @@ void ROTOM::DepthScene::init() {
   light->setGeometry(geometry_);
   light->setMaterial(lightMaterial);
   light->setParent(getRoot());
-  light->setPosition(1.00f, 0.0f, 3.50f);
+  light->setPosition(5.0f, 4.0f, 2.0f);
   AddLight(light);
 
-  getRoot()->setPosition(-5.0f, -1.0f, -1.0f);
+  //Window
+  std::shared_ptr<Drawable> drawableWindow = std::shared_ptr<Drawable>(new Drawable("Window"));
+  std::shared_ptr<Material> TransparentMaterial = std::shared_ptr<Material>(new Material("../../../../img/window.png"));
+  {
+    std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
+    std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
+    FILES::ReadFile("../../../../shaders/basics/2_Texture.vertx", verterShaderSource);
+    FILES::ReadFile("../../../../shaders/basics/2_Texture.frag", fragmentShaderSource);
+    TransparentMaterial->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
+  }
+  drawableWindow->setGeometry(geometry_);
+  drawableWindow->setMaterial(TransparentMaterial);
+  drawableWindow->setParent(getRoot());
+  drawableWindow->setPositionX(-1.0f);
 }
 
 void ROTOM::DepthScene::input() {
@@ -165,7 +184,7 @@ void ROTOM::DepthScene::scroll() {
 }
 
 void ROTOM::DepthScene::update() {
-  getRoot()->moveZ(sin(TIME::appTime()) * 0.2);
+  drawableBase_->moveZ(sin(TIME::appTime()) * 0.2);
 
   // Camera/View transformation
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);

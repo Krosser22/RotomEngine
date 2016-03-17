@@ -18,7 +18,7 @@ out vec4 fragment;
 
 void main() {
   //Texture
-  vec3 materialColor = texture(u_texture, uvMaterial).xyz * u_color.xyz;
+  vec4 materialColor = texture(u_texture, uvMaterial) * u_color;
 
   //Normalize on every fragment
   vec3 lightDirectionNormalized = normalize(lightDirection);
@@ -38,5 +38,5 @@ void main() {
   vec3 specular = u_lightColor * spec * u_specularIntensity * u_specularMaterial;
 
   //Final
-  fragment = vec4(materialColor * (ambient + diffuse + specular), 1.0f);
+  fragment = materialColor * vec4((ambient + diffuse + specular), 1.0f);
 };

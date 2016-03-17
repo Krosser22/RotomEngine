@@ -13,7 +13,7 @@ out vec4 fragment;
 
 void main() {
 	//Texture
-  vec3 materialColor = texture(u_texture, uvMaterial).xyz * u_color.xyz;
+  vec4 materialColor = texture(u_texture, uvMaterial) * u_color;
 
   //Ambient Light
   vec3 ambient = u_lightColor * u_ambientStrength;
@@ -22,5 +22,5 @@ void main() {
   vec3 diffuse = u_lightColor * max(dot(normalize(normalDirection), normalize(lightDirection)), 0.0f);
 
   //Final
-  fragment = vec4(materialColor * (ambient + diffuse), 1.0f);
+  fragment = materialColor * vec4((ambient + diffuse), 1.0f);
 };

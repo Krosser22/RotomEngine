@@ -31,6 +31,7 @@ namespace ROTOM {
   private:
     static const int amount = 100;
     std::shared_ptr<Geometry> geometry_;
+    std::shared_ptr<Drawable> drawableBase_;
 
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
