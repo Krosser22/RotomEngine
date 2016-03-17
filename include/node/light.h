@@ -1,6 +1,8 @@
 /**
 *** ////////////////////////////////////////////
 *** /////Autor: Juan Daniel Laserna Condado/////
+*** /////Email: lasernaco@esat-alumni.com  /////
+*** /////            2015-2016             /////
 *** ////////////////////////////////////////////
 **/
 
@@ -15,8 +17,8 @@ namespace ROTOM {
     Light(char *name);
     virtual ~Light();
 
-    float lightColor[4];
-    float specularIntensity[4];
+    //float lightColor[3];
+    float specularIntensity[3];
   };
 }
 

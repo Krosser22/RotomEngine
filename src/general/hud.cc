@@ -1,6 +1,8 @@
 /**
 *** ////////////////////////////////////////////
 *** /////Autor: Juan Daniel Laserna Condado/////
+*** /////Email: lasernaco@esat-alumni.com  /////
+*** /////            2015-2016             /////
 *** ////////////////////////////////////////////
 **/
 
@@ -354,14 +356,14 @@ void ROTOM::HUD::DrawLight(Light *light) {
 
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Color:");
   ImGui::PushID(hud.nextPushID++);
-  ImGui::DragFloat4("", light->lightColor, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+  ImGui::DragFloat3("", light->materialSettings()->color_, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
   ImGui::PopID();
 
   ImGui::Separator();
 
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularIntensity:");
   ImGui::PushID(hud.nextPushID++);
-  ImGui::DragFloat4("", light->specularIntensity, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+  ImGui::DragFloat3("", light->specularIntensity, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
   ImGui::PopID();
 
   ImGui::Separator();
@@ -419,7 +421,7 @@ void ROTOM::HUD::DrawMaterial(Material *material) {
 
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularLight:");
   ImGui::PushID(hud.nextPushID++);
-  ImGui::DragFloat4("", &material->materialData_.specularMaterial[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
+  ImGui::DragFloat3("", &material->materialData_.specularMaterial[0], 0.01f, 0.0f, 1000.0f, "%.2f", 1.0f);
   ImGui::PopID();
 
   ImGui::Separator();

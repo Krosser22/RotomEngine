@@ -1,6 +1,8 @@
 /**
 *** ////////////////////////////////////////////
 *** /////Autor: Juan Daniel Laserna Condado/////
+*** /////Email: lasernaco@esat-alumni.com  /////
+*** /////            2015-2016             /////
 *** ////////////////////////////////////////////
 **/
 
@@ -11,15 +13,9 @@ ROTOM::Light::Light(char *name) {
 
   name_ = name;
 
-  lightColor[0] = 1.0f;
-  lightColor[1] = 1.0f;
-  lightColor[2] = 1.0f;
-  lightColor[3] = 1.0f;
-
-  specularIntensity[0] = 0.0f;
-  specularIntensity[1] = 0.0f;
-  specularIntensity[2] = 0.0f;
-  specularIntensity[3] = 0.0f;
+  specularIntensity[0] = 5.0f;
+  specularIntensity[1] = 5.0f;
+  specularIntensity[2] = 5.0f;
 }
 
 ROTOM::Light::~Light() {}

@@ -1,6 +1,8 @@
 /**
 *** ////////////////////////////////////////////
 *** /////Autor: Juan Daniel Laserna Condado/////
+*** /////Email: lasernaco@esat-alumni.com  /////
+*** /////            2015-2016             /////
 *** ////////////////////////////////////////////
 **/
 
@@ -61,10 +63,18 @@ void ROTOM::MovementScene::init() {
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  std::shared_ptr<Material> lightMaterial = std::shared_ptr<Material>(new Material());
+  {
+    std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
+    std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
+    FILES::ReadFile("../../../../shaders/shader1_Basic.vertx", verterShaderSource);
+    FILES::ReadFile("../../../../shaders/shader1_Basic.frag", fragmentShaderSource);
+    lightMaterial->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
+  }
   light->setGeometry(geometry_);
-  light->setMaterial(material);
+  light->setMaterial(lightMaterial);
   light->setParent(getRoot());
-  light->setPosition(0.60f, 2.0f, -3.20f);
+  light->setPosition(1.00f, 0.0f, 3.50f);
   AddLight(light);
 }
 

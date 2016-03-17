@@ -1,3 +1,11 @@
+--
+-- ////////////////////////////////////////////
+-- /////Autor: Juan Daniel Laserna Condado/////
+-- /////Email: lasernaco@esat-alumni.com  /////
+-- /////            2015-2016             /////
+-- ////////////////////////////////////////////
+--
+
 -- Define the project. Put the release configuration first so it will be the
 -- default when folks build using the makefile. That way they don't have to
 -- worry about the /scripts argument and all that.

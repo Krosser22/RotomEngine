@@ -1,9 +1,10 @@
 /**
 *** ////////////////////////////////////////////
 *** /////Autor: Juan Daniel Laserna Condado/////
+*** /////Email: lasernaco@esat-alumni.com  /////
+*** /////            2015-2016             /////
 *** ////////////////////////////////////////////
 **/
-
 
 #include "general/constants.h"
 #include "general/time.h"

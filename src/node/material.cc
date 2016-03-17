@@ -1,6 +1,8 @@
 /**
 *** ////////////////////////////////////////////
 *** /////Autor: Juan Daniel Laserna Condado/////
+*** /////Email: lasernaco@esat-alumni.com  /////
+*** /////            2015-2016             /////
 *** ////////////////////////////////////////////
 **/
 
@@ -58,12 +60,11 @@ const static char* fragmentShaderSource = "#version 330 core\n"
 "};\0";
 
 ROTOM::Material::Material(const char *texturePath) {
-  materialData_.shininess = 500.0f;
+  materialData_.shininess = 32.0f;
 
-  materialData_.specularMaterial[0] = 0.0f;
-  materialData_.specularMaterial[1] = 0.0f;
-  materialData_.specularMaterial[2] = 0.0f;
-  materialData_.specularMaterial[3] = 0.0f;
+  materialData_.specularMaterial[0] = 5.0f;
+  materialData_.specularMaterial[1] = 5.0f;
+  materialData_.specularMaterial[2] = 5.0f;
 
   materialData_.ambientStrength = 0.05f;
   

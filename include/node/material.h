@@ -1,6 +1,8 @@
 /**
 *** ////////////////////////////////////////////
 *** /////Autor: Juan Daniel Laserna Condado/////
+*** /////Email: lasernaco@esat-alumni.com  /////
+*** /////            2015-2016             /////
 *** ////////////////////////////////////////////
 **/
 
@@ -27,7 +29,7 @@ namespace ROTOM {
 
   struct MaterialData {
     float shininess;
-    float specularMaterial[4];
+    float specularMaterial[3];
     float ambientStrength;
   };
 

@@ -1,6 +1,8 @@
 /**
 *** ////////////////////////////////////////////
 *** /////Autor: Juan Daniel Laserna Condado/////
+*** /////Email: lasernaco@esat-alumni.com  /////
+*** /////            2015-2016             /////
 *** ////////////////////////////////////////////
 **/
 
@@ -103,7 +105,7 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
 
   //Material
   glUniform1f(shaderData->u_shininess, commandDrawObjectData->materialData.shininess);
-  glUniform4f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2], specularMaterial[3]);
+  glUniform3f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2]);
   glUniform1f(shaderData->u_ambientStrength, commandDrawObjectData->materialData.ambientStrength);
   
   //Material Settings
@@ -112,11 +114,11 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   //Light
   for (unsigned int i = 0; i < lights->size(); ++i) {
     const float *lightPosition = &lights->at(i)->position()[0];
-    const float *lightColor = lights->at(i)->lightColor;
+    const float *lightColor = lights->at(i)->materialSettings()->color_;
     const float *specularIntensity = lights->at(i)->specularIntensity;
     glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
     glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
-    glUniform4f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2], specularIntensity[3]);
+    glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);
   }
 
   glBindVertexArray(commandDrawObjectData->geometry_VAO);
