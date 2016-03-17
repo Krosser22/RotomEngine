@@ -28,10 +28,10 @@ void ROTOM::MeshLoaderScene::init() {
   {
     std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
     std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
-    //FILES::ReadFile("../../../../shaders/shader3_DiffuseLight.vertx", verterShaderSource);
-    //FILES::ReadFile("../../../../shaders/shader3_DiffuseLight.frag", fragmentShaderSource);
-    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.vertx", verterShaderSource);
-    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.frag", fragmentShaderSource);
+    //FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.vertx", verterShaderSource);
+    //FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.frag", fragmentShaderSource);
+    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.vertx", verterShaderSource);
+    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.frag", fragmentShaderSource);
     material->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
   }
 

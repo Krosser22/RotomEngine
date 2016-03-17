@@ -9,6 +9,7 @@
 #include "general/time.h"
 #include "general/window.h"
 #include "scenes/defaultScene.h"
+#include "scenes/depthScene.h"
 #include "scenes/geometryScene.h"
 #include "scenes/movementScene.h"
 #include "scenes/meshLoaderScene.h"
@@ -23,9 +24,10 @@ int ROTOM::main(int argc, char** argv) {
   printf("Time to create the windows: %0.2f.\n\n", c.end());
 
   //DefaultScene scene;
+  DepthScene scene;
   //GeometryScene scene;
   //MeshLoaderScene scene;
-  MovementScene scene;
+  //MovementScene scene;
   //ShaderScene scene;
   //SoundScene scene;
   SetScene(&scene);
@@ -36,8 +38,7 @@ int ROTOM::main(int argc, char** argv) {
 ---------
 ---ASK---
 ---------
-+Threads are not working as I want
-+
+
 
 ----------
 ---DONE---
@@ -47,13 +48,13 @@ int ROTOM::main(int argc, char** argv) {
 -----------
 ---DOING---
 -----------
-+Make a task (to load files from behind)
++Shadows --> Lo primero es sacar el depth buffer
 
 
 ----------
 ---TODO---
 ----------
-+Shadows --> Lo primero es sacar el depth buffer
++Load a obj with more than one texture
 +Shadows --> GPU gems 3 (Webpage) parte 2
 +Shadows --> Real time shadows (Book)
 +Add LUA

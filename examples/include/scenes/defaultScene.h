@@ -13,7 +13,7 @@
 #include <memory>
 
 namespace ROTOM {
-  class DefaultScene : public ROTOM::Scene {
+  class DefaultScene : public Scene {
   public:
     DefaultScene() {};
     ~DefaultScene() {};

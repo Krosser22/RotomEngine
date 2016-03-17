@@ -13,7 +13,7 @@
 #include <memory>
 
 namespace ROTOM {
-  class GeometryScene : public ROTOM::Scene {
+  class GeometryScene : public Scene {
   public:
     GeometryScene() {};
     ~GeometryScene() {};

@@ -6,17 +6,17 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __MOVEMENT_SCENE_H__
-#define __MOVEMENT_SCENE_H__
+#ifndef __DEPTH_SCENE_H__
+#define __DEPTH_SCENE_H__
 
 #include "general/scene.h"
 #include <memory>
 
 namespace ROTOM {
-  class MovementScene : public Scene {
+  class DepthScene : public Scene {
   public:
-    MovementScene() {};
-    ~MovementScene() {};
+    DepthScene() {};
+    ~DepthScene() {};
 
     void init();
 
@@ -24,11 +24,12 @@ namespace ROTOM {
 
     void update();
 
-    void draw();
+    void draw() {};
 
     void destroy() {};
     
   private:
+    static const int amount = 100;
     std::shared_ptr<Geometry> geometry_;
 
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -40,9 +41,9 @@ namespace ROTOM {
     float lastY = 720 / 2.0;
     float fov = 45.0f;
 
-    float movementSpeed = 0.05f; // Change this value to your liking
-    float rotationSpeed = 0.5f;	// Change this value to your liking
-    float scrollSpeed = 0.05f; // Change this value to your liking
+    float movementSpeed = 0.05f;
+    float rotationSpeed = 0.5f;
+    float scrollSpeed = 0.05f;
 
     void movement();
 
@@ -52,4 +53,4 @@ namespace ROTOM {
   };
 }
 
-#endif //__MOVEMENT_SCENE_H__
+#endif //__DEPTH_SCENE_H__

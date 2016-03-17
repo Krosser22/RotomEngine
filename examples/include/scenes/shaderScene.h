@@ -13,7 +13,7 @@
 #include <memory>
 
 namespace ROTOM {
-  class ShaderScene : public ROTOM::Scene {
+  class ShaderScene : public Scene {
   public:
     ShaderScene() {};
     ~ShaderScene() {};

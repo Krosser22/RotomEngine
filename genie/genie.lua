@@ -74,8 +74,9 @@ project "ROTOM_testing"
   }
   
   files {
-    "../img/*.*",
-    "../shaders/*.*",
+    "../img/**.*",
+    "../obj/**.*",
+    "../shaders/**.*",
     "../include/**.h",
     "../examples/**.*",
     "../deps/imgui/*.cpp",
@@ -156,9 +157,9 @@ project "ROTOM_tool_meshLoader"
   }
   
   files {
-    "../img/*.*",
-    "../shaders/*.*",
-    "../obj/*.*",
+    "../img/**.*",
+    "../obj/**.*",
+    "../shaders/**.*",
     "../include/**.h",
     "../tools/meshLoader/include/**.h",
     "../tools/meshLoader/src/**.cc",

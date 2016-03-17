@@ -25,8 +25,8 @@ void ROTOM::ShaderScene::init() {
   {
     std::shared_ptr<std::string> verterShaderSource1 = std::shared_ptr<std::string>(new std::string());
     std::shared_ptr<std::string> fragmentShaderSource1 = std::shared_ptr<std::string>(new std::string());
-    FILES::ReadFile("../../../../shaders/shader1_Basic.vertx", verterShaderSource1);
-    FILES::ReadFile("../../../../shaders/shader1_Basic.frag", fragmentShaderSource1);
+    FILES::ReadFile("../../../../shaders/basics/1_Basic.vertx", verterShaderSource1);
+    FILES::ReadFile("../../../../shaders/basics/1_Basic.frag", fragmentShaderSource1);
     material1->setShader(verterShaderSource1.get()->data(), fragmentShaderSource1.get()->data());
   }
 
@@ -35,8 +35,8 @@ void ROTOM::ShaderScene::init() {
   {
     std::shared_ptr<std::string> verterShaderSource2 = std::shared_ptr<std::string>(new std::string());
     std::shared_ptr<std::string> fragmentShaderSource2 = std::shared_ptr<std::string>(new std::string());
-    FILES::ReadFile("../../../../shaders/shader2_Texture.vertx", verterShaderSource2);
-    FILES::ReadFile("../../../../shaders/shader2_Texture.frag", fragmentShaderSource2);
+    FILES::ReadFile("../../../../shaders/basics/2_Texture.vertx", verterShaderSource2);
+    FILES::ReadFile("../../../../shaders/basics/2_Texture.frag", fragmentShaderSource2);
     material2->setShader(verterShaderSource2.get()->data(), fragmentShaderSource2.get()->data());
   }
 
@@ -45,8 +45,8 @@ void ROTOM::ShaderScene::init() {
   {
     std::shared_ptr<std::string> verterShaderSource3 = std::shared_ptr<std::string>(new std::string());
     std::shared_ptr<std::string> fragmentShaderSource3 = std::shared_ptr<std::string>(new std::string());
-    FILES::ReadFile("../../../../shaders/shader3_DiffuseLight.vertx", verterShaderSource3);
-    FILES::ReadFile("../../../../shaders/shader3_DiffuseLight.frag", fragmentShaderSource3);
+    FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.vertx", verterShaderSource3);
+    FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.frag", fragmentShaderSource3);
     material3->setShader(verterShaderSource3.get()->data(), fragmentShaderSource3.get()->data());
   }
 
@@ -55,8 +55,8 @@ void ROTOM::ShaderScene::init() {
   {
     std::shared_ptr<std::string> verterShaderSource4 = std::shared_ptr<std::string>(new std::string());
     std::shared_ptr<std::string> fragmentShaderSource4 = std::shared_ptr<std::string>(new std::string());
-    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.vertx", verterShaderSource4);
-    FILES::ReadFile("../../../../shaders/shader4_SpecularLight.frag", fragmentShaderSource4);
+    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.vertx", verterShaderSource4);
+    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.frag", fragmentShaderSource4);
     material4->setShader(verterShaderSource4.get()->data(), fragmentShaderSource4.get()->data());
   }
 

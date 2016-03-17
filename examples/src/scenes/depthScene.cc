@@ -11,7 +11,7 @@
 #include "general/time.h"
 #include "general/window.h"
 #include "meshLoader.h"
-#include "scenes/movementScene.h"
+#include "scenes/depthScene.h"
 #include "imgui.h"
 
 // GLM Mathematics
@@ -19,47 +19,40 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-void ROTOM::MovementScene::init() {
+void ROTOM::DepthScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
-  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
+
+  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
   {
     std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
     std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
-    //FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.vertx", verterShaderSource);
-    //FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.frag", fragmentShaderSource);
-    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.vertx", verterShaderSource);
-    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.frag", fragmentShaderSource);
+    FILES::ReadFile("../../../../shaders/depth_buffer.vertx", verterShaderSource);
+    FILES::ReadFile("../../../../shaders/depth_buffer.frag", fragmentShaderSource);
     material->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
   }
 
-  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
-  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
-  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
-  std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("4"));
-
-  drawable1->setGeometry(geometry_);
-  drawable1->setMaterial(material);
-  drawable1->setParent(getRoot());
-  //drawable1->setPositionZ(-5.0f);
-
-  drawable2->setGeometry(geometry_);
-  drawable2->setMaterial(material);
-  drawable2->setParent(drawable1);
-  drawable2->setPositionX(1.0f);
-
-  drawable3->setGeometry(geometry_);
-  drawable3->setMaterial(material);
-  drawable3->setParent(drawable2);
-  drawable3->setPositionX(1.0f);
-
-  drawable4->setGeometry(geometry_);
-  drawable4->setMaterial(material);
-  drawable4->setParent(drawable3);
-  drawable4->setPositionX(1.0f);
+  std::shared_ptr<Drawable> drawable[amount];
+  const float separation = -2.2f;
+  const float pos_x_started = 15.0f;
+  const float pos_y_started = 0.0f;
+  const float pos_z_started = -5.0f;
+  const int rows = 10;
+  const int cols = 10;
+  float pos[3] = { 0.0f, 0.0f, 0.0f };
+  for (int i = 0; i < amount; ++i) {
+    pos[0] = ((i % cols) * separation) + pos_x_started;
+    pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
+    pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
+    drawable[i] = std::shared_ptr<Drawable>(new Drawable("i"));
+    drawable[i]->setGeometry(geometry_);
+    drawable[i]->setMaterial(material);
+    drawable[i]->setParent(getRoot());
+    drawable[i]->setPosition(pos);
+  }
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -76,9 +69,11 @@ void ROTOM::MovementScene::init() {
   light->setParent(getRoot());
   light->setPosition(1.00f, 0.0f, 3.50f);
   AddLight(light);
+
+  getRoot()->setPosition(-5.0f, -1.0f, -1.0f);
 }
 
-void ROTOM::MovementScene::input() {
+void ROTOM::DepthScene::input() {
   if (INPUT::IsMousePressed(1)) {
     lastX = INPUT::MousePositionX();
     lastY = INPUT::MousePositionY();
@@ -94,7 +89,7 @@ void ROTOM::MovementScene::input() {
   }
 }
 
-void ROTOM::MovementScene::movement() {
+void ROTOM::DepthScene::movement() {
   //Forward
   if (INPUT::IsKeyDown('W')) {
     cameraPos += movementSpeed * cameraFront;
@@ -126,7 +121,7 @@ void ROTOM::MovementScene::movement() {
   }
 }
 
-void ROTOM::MovementScene::rotation() {
+void ROTOM::DepthScene::rotation() {
   float xoffset = INPUT::MousePositionX() - lastX;
   float yoffset = lastY - INPUT::MousePositionY(); // Reversed since y-coordinates go from bottom to left
   lastX = INPUT::MousePositionX();
@@ -154,7 +149,7 @@ void ROTOM::MovementScene::rotation() {
   cameraFront = glm::normalize(front);
 }
 
-void ROTOM::MovementScene::scroll() {
+void ROTOM::DepthScene::scroll() {
   if (fov >= 1.0f && fov <= 45.0f) {
     fov -= INPUT::MouseWheel() * scrollSpeed;
   }
@@ -169,54 +164,10 @@ void ROTOM::MovementScene::scroll() {
   printf("FOV: %f\n", fov);
 }
 
-void ROTOM::MovementScene::update() {
-  /*float sin_time = sin(TIME::appTime()) * 0.022f;
-  getRoot()->getChildAt(0)->moveX(sin_time);
-  getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
-  getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);*/
-
-  Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
-  node->setRotationX(node->rotation().x + 0.01f);
+void ROTOM::DepthScene::update() {
+  getRoot()->moveZ(sin(TIME::appTime()) * 0.2);
 
   // Camera/View transformation
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
-}
-
-void ROTOM::MovementScene::draw() {
-  /*if (getLight().size() > 0) {
-    ImGui::Begin("Light");
-    {
-      ImGui::DragFloat3("LightPosition", &getLight().at(0).lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-      ImGui::DragFloat3("LightColor", &getLight().at(0).lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-      ImGui::DragFloat4("specularIntensity", &getLight().at(0).specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    }
-    ImGui::End();
-  }
-
-  ImGui::Begin("Material");
-  {
-    float *shininess = &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_;
-    if (ImGui::DragFloat("Shininess", shininess, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f)) {
-      ((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_ = *shininess;
-    }
-
-    ImGui::DragFloat4("specularMaterial", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-
-    float *position = &getRoot()->getChildAt(0)->position()[0];
-    if (ImGui::DragFloat3("Position", &position[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
-      getRoot()->getChildAt(0)->setPosition(position);
-    }
-
-    float *rotation = &getRoot()->getChildAt(0)->rotation()[0];
-    if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 360.0f, "%.2f", 1.0f)) {
-      getRoot()->getChildAt(0)->setRotation(rotation);
-    }
-
-    float *scale = &getRoot()->getChildAt(0)->scale()[0];
-    if (ImGui::DragFloat3("Scale", &scale[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f)) {
-      getRoot()->getChildAt(0)->setScale(scale);
-    }
-  }
-  ImGui::End();*/
 }

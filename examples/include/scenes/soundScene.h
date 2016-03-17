@@ -12,7 +12,7 @@
 #include "general/scene.h"
 
 namespace ROTOM {
-  class SoundScene : public ROTOM::Scene {
+  class SoundScene : public Scene {
   public:
     SoundScene() {};
     ~SoundScene() {};

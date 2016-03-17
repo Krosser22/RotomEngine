@@ -15,7 +15,7 @@
 #include <memory>
 
 namespace ROTOM {
-  class MeshLoaderScene : public ROTOM::Scene {
+  class MeshLoaderScene : public Scene {
   public:
     MeshLoaderScene() {};
     ~MeshLoaderScene() {};

@@ -440,7 +440,7 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
 
   glDepthRange(0, 1);
   glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
+  glDepthFunc(GL_LESS);
   
   ImGui_Init(window, true);
 
