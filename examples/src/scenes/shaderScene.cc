@@ -15,7 +15,6 @@
 #include "meshLoader.h"
 
 void ROTOM::ShaderScene::init() {
-  //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());

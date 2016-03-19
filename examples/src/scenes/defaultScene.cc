@@ -14,9 +14,7 @@
 #include "imgui.h"
 
 void ROTOM::DefaultScene::init() {
-  //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
@@ -86,14 +84,4 @@ void ROTOM::DefaultScene::update() {
   getRoot()->getChildAt(0)->moveX(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
-}
-
-void ROTOM::DefaultScene::draw() {
-  /*ImGui::Begin("Render");
-  {
-  char faces[256];
-  sprintf(faces, "Faces: %d", geometry->vertexCount() * amount);
-  ImGui::Text(faces);
-  }
-  ImGui::End();*/
 }

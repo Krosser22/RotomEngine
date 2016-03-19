@@ -18,9 +18,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 void ROTOM::MovementScene::init() {
-  //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(0.0f, 0.0f, 0.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
@@ -156,53 +154,10 @@ void ROTOM::MovementScene::scroll() {
 }
 
 void ROTOM::MovementScene::update() {
-  /*float sin_time = sin(TIME::appTime()) * 0.022f;
-  getRoot()->getChildAt(0)->moveX(sin_time);
-  getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
-  getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);*/
-
   Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
   node->setRotationX(node->rotation().x + 0.01f);
 
   // Camera/View transformation
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
-}
-
-void ROTOM::MovementScene::draw() {
-  /*if (getLight().size() > 0) {
-    ImGui::Begin("Light");
-    {
-      ImGui::DragFloat3("LightPosition", &getLight().at(0).lightPositionX, 10.0f, -10000.0f, 10000.0f, "%.2f", 1.0f);
-      ImGui::DragFloat3("LightColor", &getLight().at(0).lightColorX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-      ImGui::DragFloat4("specularIntensity", &getLight().at(0).specularIntensityX, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-    }
-    ImGui::End();
-  }
-
-  ImGui::Begin("Material");
-  {
-    float *shininess = &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_;
-    if (ImGui::DragFloat("Shininess", shininess, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f)) {
-      ((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.shininess_ = *shininess;
-    }
-
-    ImGui::DragFloat4("specularMaterial", &((Drawable *)(getRoot()->getChildAt(0)->getChildAt(0).get()))->material()->materialData_.specularMaterial_[0], 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
-
-    float *position = &getRoot()->getChildAt(0)->position()[0];
-    if (ImGui::DragFloat3("Position", &position[0], 1.0f, -1000.0f, 1000.0f, "%.2f", 1.0f)) {
-      getRoot()->getChildAt(0)->setPosition(position);
-    }
-
-    float *rotation = &getRoot()->getChildAt(0)->rotation()[0];
-    if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 360.0f, "%.2f", 1.0f)) {
-      getRoot()->getChildAt(0)->setRotation(rotation);
-    }
-
-    float *scale = &getRoot()->getChildAt(0)->scale()[0];
-    if (ImGui::DragFloat3("Scale", &scale[0], 0.01f, 0.1f, 2.2f, "%.2f", 1.0f)) {
-      getRoot()->getChildAt(0)->setScale(scale);
-    }
-  }
-  ImGui::End();*/
 }

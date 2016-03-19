@@ -26,6 +26,8 @@
 #include "node/geometry.h"
 #include "node/light.h"
 #include "commandDrawObject.h"
+#include "node/camera.h"
+#include "node/material.h"
 
 namespace ROTOM {
   namespace GRAPHICS {
@@ -34,6 +36,8 @@ namespace ROTOM {
     void setShader(ShaderData *shaderData, const char *vertexShaderSource, const char *fragmentShaderSource);
 
     void setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight);
+
+    void setRenderTexture(Camera *camera, Material *material);
 
     void releaseMaterial(unsigned int shaderProgram);
 

@@ -13,6 +13,7 @@
 #include "scenes/geometryScene.h"
 #include "scenes/movementScene.h"
 #include "scenes/meshLoaderScene.h"
+#include "scenes/renderToTextureScene.h"
 #include "scenes/shaderScene.h"
 //#include "scenes/soundScene.h"
 
@@ -27,7 +28,8 @@ int ROTOM::main(int argc, char** argv) {
   //DepthScene scene;
   //GeometryScene scene;
   //MeshLoaderScene scene;
-  MovementScene scene;
+  //MovementScene scene;
+  RenderToTextureScene scene;
   //ShaderScene scene;
   //SoundScene scene;
   SetScene(&scene);

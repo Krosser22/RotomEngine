@@ -8,6 +8,7 @@
 
 #include "node/camera.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "render/graphics.h"
 
 ROTOM::Camera::Camera(char *name) {
   type_ = kNodeType_Camera;
@@ -64,10 +65,10 @@ float *ROTOM::Camera::viewMatrix() {
   return glm::value_ptr(modelLocal_);
 }
 
-void ROTOM::Camera::renderToTexture(Material material) {
-
-}
-
 //void ROTOM::Camera::doCull(const Node *root) {}
 
 //void ROTOM::Camera::doRender(const Node *root) {}
+
+void ROTOM::Camera::renderToTexture(Material *material) {
+  GRAPHICS::setRenderTexture(this, material);
+}

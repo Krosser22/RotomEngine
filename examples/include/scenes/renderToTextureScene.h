@@ -6,17 +6,17 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __MOVEMENT_SCENE_H__
-#define __MOVEMENT_SCENE_H__
+#ifndef __RENDER_TO_TEXTURE_SCENE_H__
+#define __RENDER_TO_TEXTURE_SCENE_H__
 
 #include "general/scene.h"
 #include <memory>
 
 namespace ROTOM {
-  class MovementScene : public Scene {
+  class RenderToTextureScene : public Scene {
   public:
-    MovementScene() {};
-    ~MovementScene() {};
+    RenderToTextureScene() {};
+    ~RenderToTextureScene() {};
 
     void init();
 
@@ -52,4 +52,4 @@ namespace ROTOM {
   };
 }
 
-#endif //__MOVEMENT_SCENE_H__
+#endif //__RENDER_TO_TEXTURE_SCENE_H__

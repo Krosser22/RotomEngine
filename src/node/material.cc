@@ -69,7 +69,7 @@ ROTOM::Material::Material(const char *texturePath) {
 
   materialData_.ambientStrength = 0.05f;
   
-  setTexture(texturePath);
+  setTextureFromPath(texturePath);
   setShader(vertexShaderSource, fragmentShaderSource);
 }
 
@@ -92,13 +92,18 @@ void ROTOM::Material::setShaderFromPath(const char *vertexShaderPath, const char
   setShader(vertexShaderSource.data(), fragmentShaderSource.data());
 }
 
-void ROTOM::Material::setTexture(const char *path) {
+void ROTOM::Material::setTexture(unsigned char *texture) {
+  GRAPHICS::setTexture(&texture_, texture, &textureWidth_, &textureHeight_);
+}
+
+void ROTOM::Material::setTextureFromPath(const char *path) {
   //Load and generate the texture and the mipmaps
-  unsigned char *image = SOIL_load_image(path, &textureWidth_, &textureHeight_, 0, SOIL_LOAD_RGBA); //Line 1425 of SOIL.c
+  unsigned char *image = SOIL_load_image(path, &textureWidth_, &textureHeight_, 0, SOIL_LOAD_RGBA);
   if (!image) {
     printf("ERROR AL ABRIR: [%s]\n", path);
+    system("pause");
   }
-  GRAPHICS::setTexture(&texture_, image, &textureWidth_, &textureHeight_);
+  setTexture(image);
   SOIL_free_image_data(image);
 }
 

@@ -63,27 +63,6 @@ static void error_callback(int error, const char* description) {
 }
 
 void ImGui_RenderDrawLists(ImDrawData* draw_data) {
-  // Backup GL state
-  GLint last_program; glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-  GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-  GLint last_array_buffer; glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &last_array_buffer);
-  GLint last_element_array_buffer; glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &last_element_array_buffer);
-  GLint last_vertex_array; glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &last_vertex_array);
-  GLint last_blend_src; glGetIntegerv(GL_BLEND_SRC, &last_blend_src);
-  GLint last_blend_dst; glGetIntegerv(GL_BLEND_DST, &last_blend_dst);
-  GLint last_blend_equation_rgb; glGetIntegerv(GL_BLEND_EQUATION_RGB, &last_blend_equation_rgb);
-  GLint last_blend_equation_alpha; glGetIntegerv(GL_BLEND_EQUATION_ALPHA, &last_blend_equation_alpha);
-  GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
-  GLboolean last_enable_blend = glIsEnabled(GL_BLEND);
-  GLboolean last_enable_cull_face = glIsEnabled(GL_CULL_FACE);
-  GLboolean last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
-  GLboolean last_enable_scissor_test = glIsEnabled(GL_SCISSOR_TEST);
-
-  // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
-  glEnable(GL_BLEND);
-  glBlendEquation(GL_FUNC_ADD);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glDisable(GL_CULL_FACE);
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_SCISSOR_TEST);
   glActiveTexture(GL_TEXTURE0);
@@ -94,7 +73,7 @@ void ImGui_RenderDrawLists(ImDrawData* draw_data) {
   draw_data->ScaleClipRects(io.DisplayFramebufferScale);
 
   // Setup viewport, orthographic projection matrix
-  glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
+  //glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
   const float ortho_projection[4][4] =
   {
     { 2.0f / io.DisplaySize.x, 0.0f, 0.0f, 0.0f },
@@ -130,18 +109,8 @@ void ImGui_RenderDrawLists(ImDrawData* draw_data) {
   }
 
   // Restore modified GL state
-  glUseProgram(last_program);
-  glBindTexture(GL_TEXTURE_2D, last_texture);
-  glBindBuffer(GL_ARRAY_BUFFER, last_array_buffer);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, last_element_array_buffer);
-  glBindVertexArray(last_vertex_array);
-  glBlendEquationSeparate(last_blend_equation_rgb, last_blend_equation_alpha);
-  glBlendFunc(last_blend_src, last_blend_dst);
-  if (last_enable_blend) glEnable(GL_BLEND); else glDisable(GL_BLEND);
-  if (last_enable_cull_face) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
-  if (last_enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
-  if (last_enable_scissor_test) glEnable(GL_SCISSOR_TEST); else glDisable(GL_SCISSOR_TEST);
-  glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
+  glEnable(GL_DEPTH_TEST);
+  glDisable(GL_SCISSOR_TEST);
 }
 
 static const char* ImGui_GetClipboardText() {
@@ -398,7 +367,7 @@ void ImGui_NewFrame() {
 }
 
 void clear() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //TODO - This is repeated
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //TODO - Use the command
   g_MousePressed[0] = false;
   g_MousePressed[1] = false;
   g_MousePressed[2] = false;
@@ -428,7 +397,7 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
   }
 
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(1); //TODO - Ask what is this for???
+  glfwSwapInterval(1); //TODO - Check this
 
   // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
   glewExperimental = GL_TRUE;
@@ -439,17 +408,17 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
   glViewport(0, 0, width, height);
 
   glDepthRange(0, 1);
+  glDisable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
 
   glEnable(GL_BLEND);
-  //glBlendEquation(GL_FUNC_ADD);
+  glBlendEquation(GL_FUNC_ADD);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
   ImGui_Init(window, true);
 
   glClearColor(0.1f, 0.5f, 0.6f, 1.0f);
-  clear();
 
   taskCalculateNodesMatrix.nextTaskList_.push_back(&taskRender);
 
@@ -467,24 +436,9 @@ void ROTOM::WindowDestroy() {
 }
 
 bool WindowIsOpened() {
+  bool isOpened = true;
   if (!glfwWindowShouldClose(window)) {
-    // Swap the buffers
-    ImGui::Render();
-    glDepthRange(0, 1);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    glfwSwapBuffers(window);
     clear();
-
-    //Scene
-    assert(scene);
-    scene->input();
-    scene->update();
-    scene->draw();
-    ROTOM::HUD::Draw();
-
-    //Input
-    ROTOM::INPUT::Update();
 
     //TaskManager
     taskCalculateNodesMatrix.setInput(scene->getRoot().get());
@@ -500,10 +454,25 @@ bool WindowIsOpened() {
     }
     displayList.addCommand(&commandDrawObject);
     displayList.draw();
-    return true;
+
+    //HUD
+    ROTOM::HUD::Draw();
+
+    //ImGui
+    ImGui::Render();
+
+    //Scene
+    assert(scene);
+    ROTOM::INPUT::Update();
+    scene->input();
+    scene->update();
+    scene->draw();
+
+    glfwSwapBuffers(window);
   } else {
-    return false;
+    isOpened = false;
   }
+  return isOpened;
 }
 
 void ROTOM::SetScene(Scene *newScene) {

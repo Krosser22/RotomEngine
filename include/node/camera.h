@@ -46,7 +46,7 @@ namespace ROTOM {
     //Renders all visible (not culled) objects
     //void doRender();
 
-    void renderToTexture(Material material);
+    void renderToTexture(Material *material);
 
   private:
     glm::vec3 target_;
