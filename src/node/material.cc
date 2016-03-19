@@ -9,6 +9,7 @@
 #include "node/material.h"
 #include "render/graphics.h"
 #include "soil.h"
+#include "general/files.h"
 
 const static char* vertexShaderSource = "#version 330 core\n"
 "layout(location = 0) in vec3 position;\n"
@@ -76,6 +77,19 @@ ROTOM::Material::~Material() {}
 
 void ROTOM::Material::setShader(const char *vertexShaderSource, const char *fragmentShaderSource) {
   GRAPHICS::setShader(&shaderData_, vertexShaderSource, fragmentShaderSource);
+}
+
+void ROTOM::Material::setShaderFromPath(const char *vertexShaderPath, const char *fragmentShaderPath) {
+  std::string vertexPath = kPath_shaderFiles;
+  std::string fragmentPath = kPath_shaderFiles;
+
+  vertexPath.append(vertexShaderPath);
+  fragmentPath.append(fragmentShaderPath);
+
+  std::string vertexShaderSource = FILES::ReadFile(vertexPath.data());
+  std::string fragmentShaderSource = FILES::ReadFile(fragmentPath.data());
+
+  setShader(vertexShaderSource.data(), fragmentShaderSource.data());
 }
 
 void ROTOM::Material::setTexture(const char *path) {

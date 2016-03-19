@@ -26,6 +26,6 @@ namespace ROTOM {
 
   static const char *kPath_objFiles = "../../../../obj/";
   static const char *kPath_imgFiles = "../../../../img/";
-  static const char *kPath_shaderFiles = "../../../../shader/";
+  static const char *kPath_shaderFiles = "../../../../shaders/";
 }
 #endif //__CONSTANTS_H__

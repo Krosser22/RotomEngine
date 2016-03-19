@@ -17,6 +17,8 @@ namespace ROTOM {
     void ReadFile(const char *path, std::shared_ptr<char[]> source);
 
     void ReadFile(const char *path, std::shared_ptr<std::string> source);
+
+    std::string ReadFile(const char *path);
   }
 }
 

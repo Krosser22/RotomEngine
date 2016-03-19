@@ -8,6 +8,18 @@
 
 #include "render/graphics.h"
 
+//Vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+const GLfloat quadVertices[24] = {
+  //Positions   //TexCoords
+  -1.0f,  1.0f, 0.0f, 1.0f,
+  -1.0f, -1.0f, 0.0f, 0.0f,
+   1.0f, -1.0f, 1.0f, 0.0f,
+
+  -1.0f,  1.0f, 0.0f, 1.0f,
+   1.0f, -1.0f, 1.0f, 0.0f,
+   1.0f,  1.0f, 1.0f, 1.0f
+};
+
 float ROTOM::GRAPHICS::getTime() {
   return (float)glfwGetTime();
 }

@@ -6,12 +6,9 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/files.h"
 #include "general/time.h"
 #include "general/window.h"
 #include "scenes/geometryScene.h"
-#include "meshLoader.h"
-#include "imgui.h"
 
 void ROTOM::GeometryScene::init() {
   //GetCamera()->setViewMatrix(glm::value_ptr(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f))));
@@ -25,11 +22,8 @@ void ROTOM::GeometryScene::init() {
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
-  light->setGeometry(std::shared_ptr<Geometry>(new Geometry()));
-  light->setMaterial(material);
   light->setParent(getRoot());
-  light->setScale(0.1f, 0.1f, 0.1f);
-  light->setPosition(0.0f, 10.0f, 0.0f);
+  light->setPosition(0.0f, 0.0f, -10.0f);
   AddLight(light);
 
   const float separation = -2.2f;
@@ -54,14 +48,4 @@ void ROTOM::GeometryScene::init() {
 void ROTOM::GeometryScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
   getRoot()->move(sin_time, sin_time, sin_time);
-}
-
-void ROTOM::GeometryScene::draw() {
-  /*ImGui::Begin("Render");
-  {
-    char faces[256];
-    sprintf(faces, "Faces: %d", geometry->vertexCount() * amount);
-    ImGui::Text(faces);
-  }
-  ImGui::End();*/
 }

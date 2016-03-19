@@ -43,6 +43,8 @@ namespace ROTOM {
 
     void setShader(const char *vertexShaderSource, const char *fragmentShaderSource);
 
+    void setShaderFromPath(const char *vertexShaderPath, const char *fragmentShaderPath);
+
     //Set the texture of the object
     void setTexture(const char *path);
     const unsigned int texture();

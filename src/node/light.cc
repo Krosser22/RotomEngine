@@ -13,9 +13,14 @@ ROTOM::Light::Light(char *name) {
 
   name_ = name;
 
-  specularIntensity[0] = 5.0f;
-  specularIntensity[1] = 5.0f;
-  specularIntensity[2] = 5.0f;
+  specularIntensity[0] = 0.1f;
+  specularIntensity[1] = 0.1f;
+  specularIntensity[2] = 0.1f;
+
+  std::shared_ptr<Material> lightMaterial = std::shared_ptr<Material>(new Material());
+  lightMaterial->setShaderFromPath("basics/1_Basic.vertx", "basics/1_Basic.frag");
+  setGeometry(std::shared_ptr<Geometry>(new Geometry()));
+  setMaterial(lightMaterial);
 }
 
 ROTOM::Light::~Light() {}

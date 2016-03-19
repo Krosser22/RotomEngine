@@ -6,15 +6,10 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/constants.h"
-#include "general/files.h"
 #include "general/input.h"
-#include "general/scene.h"
 #include "general/time.h"
 #include "general/window.h"
 #include "scenes/meshLoaderScene.h"
-#include "meshLoader.h"
-#include "imgui.h"
 
 void ROTOM::MeshLoaderScene::init() {
   //Camera
@@ -25,15 +20,7 @@ void ROTOM::MeshLoaderScene::init() {
 
   //Material
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../obj/Sirus5ColonialCity/Maps/1ab2.jpg"));
-  {
-    std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
-    std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
-    //FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.vertx", verterShaderSource);
-    //FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.frag", fragmentShaderSource);
-    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.vertx", verterShaderSource);
-    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.frag", fragmentShaderSource);
-    material->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
-  }
+  material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
 
   //Drawable
   std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable("drawable"));
@@ -44,8 +31,6 @@ void ROTOM::MeshLoaderScene::init() {
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
-  light->setGeometry(std::shared_ptr<Geometry>(new Geometry()));
-  light->setMaterial(material);
   light->setParent(getRoot());
   light->setScale(0.1f, 0.1f, 0.1f);
   light->setPositionZ(10.0f);

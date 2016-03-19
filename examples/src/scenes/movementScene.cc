@@ -10,9 +10,7 @@
 #include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "meshLoader.h"
 #include "scenes/movementScene.h"
-#include "imgui.h"
 
 // GLM Mathematics
 #include <glm/glm.hpp>
@@ -26,15 +24,7 @@ void ROTOM::MovementScene::init() {
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
-  {
-    std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
-    std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
-    //FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.vertx", verterShaderSource);
-    //FILES::ReadFile("../../../../shaders/basics/3_DiffuseLight.frag", fragmentShaderSource);
-    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.vertx", verterShaderSource);
-    FILES::ReadFile("../../../../shaders/basics/4_SpecularLight.frag", fragmentShaderSource);
-    material->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
-  }
+  material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
 
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
   std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
@@ -63,18 +53,14 @@ void ROTOM::MovementScene::init() {
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
-  std::shared_ptr<Material> lightMaterial = std::shared_ptr<Material>(new Material());
-  {
-    std::shared_ptr<std::string> verterShaderSource = std::shared_ptr<std::string>(new std::string());
-    std::shared_ptr<std::string> fragmentShaderSource = std::shared_ptr<std::string>(new std::string());
-    FILES::ReadFile("../../../../shaders/basics/1_Basic.vertx", verterShaderSource);
-    FILES::ReadFile("../../../../shaders/basics/1_Basic.frag", fragmentShaderSource);
-    lightMaterial->setShader(verterShaderSource.get()->data(), fragmentShaderSource.get()->data());
-  }
-  light->setGeometry(geometry_);
-  light->setMaterial(lightMaterial);
   light->setParent(getRoot());
   light->setPosition(1.00f, 0.0f, 3.50f);
+  light->materialSettings()->color_[0] = 0.8f;
+  light->materialSettings()->color_[1] = 0.6f;
+  light->materialSettings()->color_[2] = 0.4f;
+  light->specularIntensity[0] = 1.0f;
+  light->specularIntensity[1] = 1.0f;
+  light->specularIntensity[2] = 1.0f;
   AddLight(light);
 }
 

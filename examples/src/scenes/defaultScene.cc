@@ -43,10 +43,10 @@ void ROTOM::DefaultScene::init() {
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
-  light->setGeometry(std::shared_ptr<Geometry>(new Geometry()));
-  light->setMaterial(material4);
   light->setParent(getRoot());
-  light->setScale(0.1f, 0.1f, 0.1f);
+  light->specularIntensity[0] = 0.1f;
+  light->specularIntensity[1] = 0.1f;
+  light->specularIntensity[2] = 0.1f;
   AddLight(light);
 
   const float separation = -2.2f;
