@@ -11,6 +11,7 @@
 #include "general/time.h"
 #include "general/window.h"
 #include "render/commandDrawObject.h"
+#include "render/displayList.h"
 #include "render/graphics.h"
 #include "taskManager/taskCalculateMatrix.h"
 #include "taskManager/taskRender.h"

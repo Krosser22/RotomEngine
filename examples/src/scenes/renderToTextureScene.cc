@@ -169,4 +169,7 @@ void ROTOM::RenderToTextureScene::update() {
   // Camera/View transformation
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
+
+  //Update the renderTexture
+  getCamera()->doRender();
 }

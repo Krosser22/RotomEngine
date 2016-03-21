@@ -95,8 +95,44 @@ void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, in
   glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 }
 
+GLuint quadVAO, quadVBO;
+GLuint textureColorbuffer;
+void ROTOM::GRAPHICS::renderTexture() {
+  glBindVertexArray(quadVAO);
+  glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+  glBindVertexArray(0);
+}
+
+GLsizei screenWidth = 1280, screenHeight = 720;
+GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
+  // What enum to use?
+  GLenum attachment_type;
+  if (!depth && !stencil) {
+    attachment_type = GL_RGB;
+  } else if (depth && !stencil) {
+    attachment_type = GL_DEPTH_COMPONENT;
+  } else if (!depth && stencil) {
+    attachment_type = GL_STENCIL_INDEX;
+  }
+
+  //Generate texture ID and load texture data 
+  GLuint textureID;
+  glGenTextures(1, &textureID);
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  if (!depth && !stencil) {
+    glTexImage2D(GL_TEXTURE_2D, 0, attachment_type, screenWidth, screenHeight, 0, attachment_type, GL_UNSIGNED_BYTE, NULL);
+  } else { // Using both a stencil and depth test, needs special format arguments
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, screenWidth, screenHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+  }
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  return textureID;
+}
+
 void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
-  /*GLuint quadVAO, quadVBO;
   glGenVertexArrays(1, &quadVAO);
   glGenBuffers(1, &quadVBO);
   glBindVertexArray(quadVAO);
@@ -113,7 +149,7 @@ void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
   glGenFramebuffers(1, &framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
   // Create a color attachment texture
-  GLuint textureColorbuffer = generateAttachmentTexture(false, false);
+  textureColorbuffer = generateAttachmentTexture(false, false);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
   // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
   GLuint rbo;
@@ -123,11 +159,13 @@ void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
   glBindRenderbuffer(GL_RENDERBUFFER, 0);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
   // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-  cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
+  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+    printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+    system("pause");
+  }
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  //material->setTexture();
+  material->texture_ = textureColorbuffer;
 }
 
 void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
@@ -137,8 +175,8 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
 void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix) {
   ShaderData *shaderData = &commandDrawObjectData->shaderData;
   MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
-  const float *specularMaterial = commandDrawObjectData->materialData.specularMaterial;
-  const float *color = materialSettings->color_;
+  float *specularMaterial = commandDrawObjectData->materialData.specularMaterial;
+  float *color = materialSettings->color_;
 
   glUseProgram(shaderData->shaderProgram);
 
@@ -159,10 +197,13 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
 
   //Light
+  Light *light = NULL;
+  float *lightPosition = NULL, *lightColor = NULL, *specularIntensity = NULL;
   for (unsigned int i = 0; i < lights->size(); ++i) {
-    const float *lightPosition = &lights->at(i)->position()[0];
-    const float *lightColor = lights->at(i)->materialSettings()->color_;
-    const float *specularIntensity = lights->at(i)->specularIntensity;
+    light = lights->at(i).get();
+    lightPosition = &light->position()[0];
+    lightColor = light->materialSettings()->color_;
+    specularIntensity = light->specularIntensity;
     glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
     glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
     glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);

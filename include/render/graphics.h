@@ -37,6 +37,8 @@ namespace ROTOM {
 
     void setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight);
 
+    void renderTexture();
+
     void setRenderTexture(Camera *camera, Material *material);
 
     void releaseMaterial(unsigned int shaderProgram);

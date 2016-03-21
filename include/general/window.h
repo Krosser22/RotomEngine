@@ -31,7 +31,7 @@ namespace ROTOM {
   //Must be declared by the user in order to use this library
   int main(int argc, char **argv);
 
-  //TODO - Move this to the renderer (It will return the actual displayList
+  //It will return the actual displayList
   DisplayList *GetActualDisplayList();
 }
 
