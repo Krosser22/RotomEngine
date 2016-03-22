@@ -99,8 +99,8 @@ GLuint quadVAO, quadVBO;
 GLuint textureColorbuffer;
 GLuint framebuffer;
 void ROTOM::GRAPHICS::renderTexture() {
-  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+  //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   glBindVertexArray(quadVAO);
   glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
