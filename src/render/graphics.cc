@@ -97,7 +97,9 @@ void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, in
 
 GLuint quadVAO, quadVBO;
 GLuint textureColorbuffer;
+GLuint framebuffer;
 void ROTOM::GRAPHICS::renderTexture() {
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   glBindVertexArray(quadVAO);
@@ -147,7 +149,6 @@ void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
   glBindVertexArray(0);
 
   // Framebuffers
-  GLuint framebuffer;
   glGenFramebuffers(1, &framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
   // Create a color attachment texture
