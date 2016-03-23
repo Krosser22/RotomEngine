@@ -426,16 +426,6 @@ bool ROTOM::WindowInit(unsigned int width, unsigned int height) {
   return true;
 }
 
-void ROTOM::WindowDestroy() {
-  ImGui_InvalidateDeviceObjects();
-  ImGui::Shutdown();
-
-  glfwDestroyWindow(window);
-
-  glfwTerminate();
-  //exit(EXIT_SUCCESS);
-}
-
 bool WindowIsOpened() {
   bool isOpened = true;
   if (!glfwWindowShouldClose(window)) {
@@ -459,7 +449,7 @@ bool WindowIsOpened() {
     //RenderTexture
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // Clear all relevant buffers
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
     //glDisable(GL_DEPTH_TEST); // We don't care about depth information when rendering a single quad
 
     //Scene
@@ -480,6 +470,16 @@ bool WindowIsOpened() {
     isOpened = false;
   }
   return isOpened;
+}
+
+void ROTOM::WindowDestroy() {
+  ImGui_InvalidateDeviceObjects();
+  ImGui::Shutdown();
+
+  glfwDestroyWindow(window);
+
+  glfwTerminate();
+  //exit(EXIT_SUCCESS);
 }
 
 void ROTOM::SetScene(Scene *newScene) {

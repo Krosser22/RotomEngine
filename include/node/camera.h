@@ -44,7 +44,7 @@ namespace ROTOM {
     //void doCull(const Node *root);
 
     //Renders all visible (not culled) objects
-    void doRender();
+    //void doRender();
 
     void renderToTexture(Material *material);
 

@@ -15,7 +15,7 @@
 namespace ROTOM {
   //Initializes the window
   bool WindowInit(const unsigned int width, const unsigned int height);
-  
+
   //Destroys the window
   void WindowDestroy();
 

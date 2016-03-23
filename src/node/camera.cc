@@ -70,12 +70,10 @@ float *ROTOM::Camera::viewMatrix() {
 
 //void ROTOM::Camera::doCull(const Node *root) {}
 
-void ROTOM::Camera::doRender() {
-  GRAPHICS::renderTexture();
-}
+//void ROTOM::Camera::doRender() {}
 
 void ROTOM::Camera::renderToTexture(Material *material) {
-  GRAPHICS::setRenderTexture(this, material);
+  GRAPHICS::setRenderTexture(material);
   //commandSetGeometry.setInput(geometryData, this);
   //GetActualDisplayList()->addCommand(&commandSetGeometry);
 }

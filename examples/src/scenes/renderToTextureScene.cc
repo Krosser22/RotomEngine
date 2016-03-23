@@ -30,7 +30,7 @@ void ROTOM::RenderToTextureScene::init() {
 
   //Material renderToTexture
   materialRenderToTexture_ = std::shared_ptr<Material>(new Material());
-  materialRenderToTexture_->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
+  //materialRenderToTexture_->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
   
   //Drawables
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
@@ -84,6 +84,10 @@ void ROTOM::RenderToTextureScene::input() {
     movement();
     rotation();
   }
+
+  if (INPUT::IsKeyDown('R')) {
+    getCamera()->renderToTexture(materialRenderToTexture_.get());
+  }
 }
 
 void ROTOM::RenderToTextureScene::movement() {
@@ -115,10 +119,6 @@ void ROTOM::RenderToTextureScene::movement() {
   //Down
   if (INPUT::IsKeyDown('Q')) {
     cameraPos -= glm::normalize(cameraUp) * movementSpeed;
-  }
-
-  if (INPUT::IsKeyDown('R')) {
-    getCamera()->renderToTexture(materialRenderToTexture_.get());
   }
 }
 
@@ -166,13 +166,15 @@ void ROTOM::RenderToTextureScene::scroll() {
 }
 
 void ROTOM::RenderToTextureScene::update() {
-  Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
-  node->setRotationX(node->rotation().x + 0.01f);
+  if (INPUT::IsKeyDown('Q')) {
+    Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
+    node->setRotationX(node->rotation().x + 0.01f);
+  }
 
   // Camera/View transformation
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
 
   //Update the renderTexture
-  getCamera()->doRender();
+  //getCamera()->doRender();
 }
