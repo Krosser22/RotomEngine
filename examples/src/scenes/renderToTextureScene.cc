@@ -29,9 +29,8 @@ void ROTOM::RenderToTextureScene::init() {
   material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
 
   //Material renderToTexture
-  std::shared_ptr<Material> materialRenderToTexture = std::shared_ptr<Material>(new Material());
-  materialRenderToTexture->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
-  getCamera()->renderToTexture(materialRenderToTexture.get());
+  materialRenderToTexture_ = std::shared_ptr<Material>(new Material());
+  materialRenderToTexture_->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
   
   //Drawables
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
@@ -54,7 +53,7 @@ void ROTOM::RenderToTextureScene::init() {
   drawable3->setPositionX(1.0f);
 
   drawable4->setGeometry(geometry_);
-  drawable4->setMaterial(materialRenderToTexture);
+  drawable4->setMaterial(materialRenderToTexture_);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
 
@@ -116,6 +115,10 @@ void ROTOM::RenderToTextureScene::movement() {
   //Down
   if (INPUT::IsKeyDown('Q')) {
     cameraPos -= glm::normalize(cameraUp) * movementSpeed;
+  }
+
+  if (INPUT::IsKeyDown('R')) {
+    getCamera()->renderToTexture(materialRenderToTexture_.get());
   }
 }
 

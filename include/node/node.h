@@ -89,7 +89,7 @@ namespace ROTOM {
     glm::vec3 rotation_;
     glm::vec3 scale_;
     bool dirtyModelLocal_;
-
+    
     glm::mat4 modelLocal_;
     glm::mat4 modelWorld_;
 

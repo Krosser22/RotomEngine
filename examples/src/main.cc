@@ -50,12 +50,14 @@ int ROTOM::main(int argc, char** argv) {
 -----------
 ---DOING---
 -----------
-+Shadows --> Lo primero es sacar el depth buffer
+FrameBuffer
 
 
 ----------
 ---TODO---
 ----------
+glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //TODO - Editable
++Shadows --> Lo primero es sacar el depth buffer
 +Load a obj with more than one texture
 +Shadows --> GPU gems 3 (Webpage) parte 2
 +Shadows --> Real time shadows (Book)

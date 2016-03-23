@@ -30,6 +30,7 @@ namespace ROTOM {
     
   private:
     std::shared_ptr<Geometry> geometry_;
+    std::shared_ptr<Material> materialRenderToTexture_;
 
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);

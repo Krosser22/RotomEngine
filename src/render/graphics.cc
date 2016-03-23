@@ -102,10 +102,10 @@ void ROTOM::GRAPHICS::renderTexture() {
   //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
   //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  glBindVertexArray(quadVAO);
-  glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
-  glDrawArrays(GL_TRIANGLES, 0, 6);
-  glBindVertexArray(0);
+  //glBindVertexArray(quadVAO);
+  //glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
+  //glDrawArrays(GL_TRIANGLES, 0, 6);
+  //glBindVertexArray(0);
 }
 
 GLsizei screenWidth = 1280, screenHeight = 720;
@@ -137,7 +137,7 @@ GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
 }
 
 void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
-  glGenVertexArrays(1, &quadVAO);
+  /*glGenVertexArrays(1, &quadVAO);
   glGenBuffers(1, &quadVBO);
   glBindVertexArray(quadVAO);
   glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
@@ -146,14 +146,16 @@ void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
-  glBindVertexArray(0);
+  glBindVertexArray(0);*/
 
   // Framebuffers
   glGenFramebuffers(1, &framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+  
   // Create a color attachment texture
   textureColorbuffer = generateAttachmentTexture(false, false);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+  
   // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
   GLuint rbo;
   glGenRenderbuffers(1, &rbo);
@@ -161,6 +163,7 @@ void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight); // Use a single renderbuffer object for both a depth AND stencil buffer.
   glBindRenderbuffer(GL_RENDERBUFFER, 0);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
+  
   // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
     printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
@@ -169,6 +172,8 @@ void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   material->texture_ = textureColorbuffer;
+
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 }
 
 void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {
