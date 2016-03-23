@@ -368,7 +368,7 @@ void ImGui_NewFrame() {
 }
 
 void clear() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //TODO - Use the command
+  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //TODO - Use the command
   g_MousePressed[0] = false;
   g_MousePressed[1] = false;
   g_MousePressed[2] = false;

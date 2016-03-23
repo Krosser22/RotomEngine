@@ -136,7 +136,7 @@ GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
   return textureID;
 }
 
-void ROTOM::GRAPHICS::setRenderTexture(Camera *camera, Material *material) {
+void ROTOM::GRAPHICS::setRenderTexture(Material *material) {
   /*glGenVertexArrays(1, &quadVAO);
   glGenBuffers(1, &quadVBO);
   glBindVertexArray(quadVAO);

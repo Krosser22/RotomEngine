@@ -14,6 +14,7 @@ ROTOM::CommandDrawObject::CommandDrawObject() {}
 ROTOM::CommandDrawObject::~CommandDrawObject() {}
 
 void ROTOM::CommandDrawObject::run() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   for (unsigned int i = 0; i < commandDrawObjectData_.size(); ++i) {
     GRAPHICS::drawMaterial(&commandDrawObjectData_.at(i), &lights_, projectionMatrix_, viewMatrix_);
   }

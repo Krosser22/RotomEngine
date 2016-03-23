@@ -51,12 +51,21 @@ int ROTOM::main(int argc, char** argv) {
 ---DOING---
 -----------
 FrameBuffer
+La clase general/window tendrá una displayList con las siguientes variables:
+-Drawables
+-Lights
+-Cameras
+-Root
+
+Por cada una de las cameras se pintará toda la escena para dicha camera haciendo una pasada por todos los drawables (partiendo desde el root) y todas las lights.
+También será necesario hacer una pasada por cada una de las luces para crear las sombras.
 
 
 ----------
 ---TODO---
 ----------
-glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //TODO - Editable
++Investigate if glm::fvec4 is faster that glm:vec4 and etc
++glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //TODO - Editable
 +Shadows --> Lo primero es sacar el depth buffer
 +Load a obj with more than one texture
 +Shadows --> GPU gems 3 (Webpage) parte 2
