@@ -13,7 +13,6 @@
 #include "material.h"
 #include "materialSettings.h"
 #include "node.h"
-#include <memory>
 
 namespace ROTOM {
   class Drawable : public Node {
