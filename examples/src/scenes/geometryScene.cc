@@ -47,3 +47,8 @@ void ROTOM::GeometryScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
   getRoot()->move(sin_time, sin_time, sin_time);
 }
+
+void ROTOM::GeometryScene::draw() {
+  RenderScene(getCamera());
+  RenderImGui();
+}

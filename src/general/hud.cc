@@ -22,7 +22,7 @@ struct HUDDatatrue {
 
   ImGuiWindowFlags window_flags = 0;
 
-  bool opened = false;
+  bool opened = true;
 
   int nextPushID = 0;
 

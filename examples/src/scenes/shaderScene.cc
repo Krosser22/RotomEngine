@@ -79,3 +79,8 @@ void ROTOM::ShaderScene::update() {
 
   //drawableLight_->setPosition(getLight().at(0)->lightPosition[0], getLight().at(0)->lightPosition[1], getLight().at(0)->lightPosition[2]);
 }
+
+void ROTOM::ShaderScene::draw() {
+  RenderScene(getCamera());
+  RenderImGui();
+}

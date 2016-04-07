@@ -48,3 +48,8 @@ void ROTOM::MeshLoaderScene::update() {
     getRoot()->getChildAt(0)->setRotationY(getRoot()->getChildAt(0)->rotation().y + 0.01f);
   }
 }
+
+void ROTOM::MeshLoaderScene::draw() {
+  RenderScene(getCamera());
+  RenderImGui();
+}

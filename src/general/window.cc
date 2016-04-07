@@ -438,20 +438,6 @@ bool WindowIsOpened() {
     ROTOM::TASKMANAGER::addTask(&taskCalculateCameraMatrix);
     ROTOM::TASKMANAGER::addTask(&taskCalculateNodesMatrix);
 
-    //DisplayList
-    if (displayList.isValid_) {
-      commandDrawObject.setInput(scene->getRoot(), scene->getLight(), scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
-      displayList.isValid_ = false;
-    }
-    displayList.addCommand(&commandDrawObject);
-    displayList.draw();
-
-    //RenderTexture
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    // Clear all relevant buffers
-    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
-    //glDisable(GL_DEPTH_TEST); // We don't care about depth information when rendering a single quad
-
     //Scene
     assert(scene);
     ROTOM::INPUT::Update();
@@ -459,12 +445,7 @@ bool WindowIsOpened() {
     scene->update();
     scene->draw();
 
-    //HUD
-    ROTOM::HUD::Draw();
-
-    //ImGui
-    ImGui::Render();
-
+    //SwapBuffers
     glfwSwapBuffers(window);
   } else {
     isOpened = false;
@@ -482,6 +463,18 @@ void ROTOM::WindowDestroy() {
   //exit(EXIT_SUCCESS);
 }
 
+int ROTOM::WindowHeight() {
+  int width = 0, height = 0;
+  glfwGetFramebufferSize(window, &width, &height);
+  return height;
+}
+
+int ROTOM::WindowWidth() {
+  int width = 0, height = 0;
+  glfwGetFramebufferSize(window, &width, &height);
+  return width;
+}
+
 void ROTOM::SetScene(Scene *newScene) {
   if (scene != NULL) {
     scene->destroy();
@@ -497,16 +490,28 @@ void ROTOM::SetScene(Scene *newScene) {
   scene->destroy();
 }
 
-int ROTOM::WindowHeight() {
-  int width = 0, height = 0;
-  glfwGetFramebufferSize(window, &width, &height);
-  return height;
+void ROTOM::RenderScene(Camera *camera) {
+  //DisplayList
+  if (displayList.isValid_) {
+    commandDrawObject.setInput(scene->getRoot(), scene->getLight(), scene->getCamera()->projectionMatrix(), camera->viewMatrix());
+    displayList.isValid_ = false;
+  }
+  displayList.addCommand(&commandDrawObject);
+  displayList.draw();
+
+  //RenderTexture
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  // Clear all relevant buffers
+  //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+  //glDisable(GL_DEPTH_TEST); // We don't care about depth information when rendering a single quad
 }
 
-int ROTOM::WindowWidth() {
-  int width = 0, height = 0;
-  glfwGetFramebufferSize(window, &width, &height);
-  return width;
+void ROTOM::RenderImGui() {
+  //HUD
+  ROTOM::HUD::Draw();
+
+  //ImGui
+  ImGui::Render();
 }
 
 ROTOM::DisplayList *ROTOM::GetActualDisplayList() {

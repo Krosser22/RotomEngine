@@ -60,7 +60,7 @@ void ROTOM::RenderToTextureScene::init() {
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->setPosition(1.00f, 0.0f, 3.50f);
+  light->setPosition(1.0f, 2.5f, 2.2f);
   light->materialSettings()->color_[0] = 0.8f;
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;
@@ -83,10 +83,6 @@ void ROTOM::RenderToTextureScene::input() {
   if (INPUT::IsMouseDown(1)) {
     movement();
     rotation();
-  }
-
-  if (INPUT::IsKeyDown('R')) {
-    getCamera()->renderToTexture(materialRenderToTexture_.get());
   }
 }
 
@@ -177,4 +173,19 @@ void ROTOM::RenderToTextureScene::update() {
 
   //Update the renderTexture
   //getCamera()->doRender();
+}
+
+void ROTOM::RenderToTextureScene::draw() {
+  static bool doTheRender = false;
+
+  if (INPUT::IsKeyReleased('R')) {
+    doTheRender = !doTheRender;
+  }
+
+  if (doTheRender) {
+    getCamera()->renderToTexture(materialRenderToTexture_.get());
+  }
+
+  RenderScene(getCamera());
+  RenderImGui();
 }

@@ -18,21 +18,27 @@ namespace ROTOM {
 
   //Destroys the window
   void WindowDestroy();
-
-  //Sets the scene that is going to be used
-  void SetScene(Scene *newScene);
   
   //Returns the height of the window
   int WindowHeight();
   
   //Returns the width of the window
   int WindowWidth();
-  
-  //Must be declared by the user in order to use this library
-  int main(int argc, char **argv);
+
+  //Sets the scene that is going to be used
+  void SetScene(Scene *newScene);
+
+  //Render the scene from the perspective of a camera
+  void RenderScene(Camera *camera);
+
+  //Render ImGui
+  void RenderImGui();
 
   //It will return the actual displayList
   DisplayList *GetActualDisplayList();
+
+  //Must be declared by the user in order to use this library
+  int main(int argc, char **argv);
 }
 
 #endif //__WINDOW_H__

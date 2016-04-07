@@ -166,3 +166,8 @@ void ROTOM::DepthScene::update() {
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
 }
+
+void ROTOM::DepthScene::draw() {
+  RenderScene(getCamera());
+  RenderImGui();
+}

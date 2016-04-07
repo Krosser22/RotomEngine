@@ -161,3 +161,8 @@ void ROTOM::MovementScene::update() {
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
 }
+
+void ROTOM::MovementScene::draw() {
+  RenderScene(getCamera());
+  RenderImGui();
+}
