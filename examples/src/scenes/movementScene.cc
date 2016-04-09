@@ -163,6 +163,5 @@ void ROTOM::MovementScene::update() {
 }
 
 void ROTOM::MovementScene::draw() {
-  RenderScene(getCamera());
   RenderImGui();
 }

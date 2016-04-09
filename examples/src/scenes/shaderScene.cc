@@ -81,6 +81,5 @@ void ROTOM::ShaderScene::update() {
 }
 
 void ROTOM::ShaderScene::draw() {
-  RenderScene(getCamera());
   RenderImGui();
 }

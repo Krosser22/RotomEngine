@@ -88,6 +88,5 @@ void ROTOM::DefaultScene::update() {
 }
 
 void ROTOM::DefaultScene::draw() {
-  RenderScene(getCamera());
   RenderImGui();
 }

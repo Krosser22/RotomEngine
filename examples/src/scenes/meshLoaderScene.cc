@@ -50,6 +50,5 @@ void ROTOM::MeshLoaderScene::update() {
 }
 
 void ROTOM::MeshLoaderScene::draw() {
-  RenderScene(getCamera());
   RenderImGui();
 }

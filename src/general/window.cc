@@ -440,10 +440,12 @@ bool WindowIsOpened() {
 
     //Scene
     assert(scene);
-    ROTOM::INPUT::Update();
     scene->input();
     scene->update();
+    RenderScene(scene->getCamera());
     scene->draw();
+
+    ROTOM::INPUT::Update();
 
     //SwapBuffers
     glfwSwapBuffers(window);
@@ -498,12 +500,6 @@ void ROTOM::RenderScene(Camera *camera) {
   }
   displayList.addCommand(&commandDrawObject);
   displayList.draw();
-
-  //RenderTexture
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  // Clear all relevant buffers
-  //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
-  //glDisable(GL_DEPTH_TEST); // We don't care about depth information when rendering a single quad
 }
 
 void ROTOM::RenderImGui() {

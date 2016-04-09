@@ -49,6 +49,5 @@ void ROTOM::GeometryScene::update() {
 }
 
 void ROTOM::GeometryScene::draw() {
-  RenderScene(getCamera());
   RenderImGui();
 }

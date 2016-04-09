@@ -68,6 +68,8 @@ void ROTOM::RenderToTextureScene::init() {
   light->specularIntensity[1] = 1.0f;
   light->specularIntensity[2] = 1.0f;
   AddLight(light);
+
+  getCamera()->renderToTexture(materialRenderToTexture_.get());
 }
 
 void ROTOM::RenderToTextureScene::input() {
@@ -170,22 +172,12 @@ void ROTOM::RenderToTextureScene::update() {
   // Camera/View transformation
   glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
-
-  //Update the renderTexture
-  //getCamera()->doRender();
 }
 
 void ROTOM::RenderToTextureScene::draw() {
-  static bool doTheRender = false;
-
-  if (INPUT::IsKeyReleased('R')) {
-    doTheRender = !doTheRender;
-  }
-
-  if (doTheRender) {
-    getCamera()->renderToTexture(materialRenderToTexture_.get());
-  }
-
+  getCamera()->beginRenderToTexture();
   RenderScene(getCamera());
+  getCamera()->endRenderToTexture();
+
   RenderImGui();
 }

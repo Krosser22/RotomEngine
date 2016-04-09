@@ -24,12 +24,6 @@ bool ROTOM::INPUT::IsKeyDown(unsigned char key) {
 bool ROTOM::INPUT::IsKeyPressed(unsigned char key) {
   bool before = ioFrameBefore.KeysDown[(unsigned int)key];
   bool now = io.KeysDown[(unsigned int)key];
-
-  if (!before && !now) printf("0");
-  if (before && !now) printf("1");
-  if (!before && now) printf("2");
-  if (before && now) printf("3");
-
   return (!before && now);
 }
 

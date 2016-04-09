@@ -168,6 +168,5 @@ void ROTOM::DepthScene::update() {
 }
 
 void ROTOM::DepthScene::draw() {
-  RenderScene(getCamera());
   RenderImGui();
 }

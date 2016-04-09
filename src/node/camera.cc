@@ -12,6 +12,9 @@
 #include "render/graphics.h"
 
 //ROTOM::CommandRenderTexture commandRenderTexture;
+unsigned int textureColorbuffer;
+unsigned int framebuffer;
+ROTOM::Material *matToRenderTexture;
 
 ROTOM::Camera::Camera(char *name) {
   type_ = kNodeType_Camera;
@@ -73,7 +76,15 @@ float *ROTOM::Camera::viewMatrix() {
 //void ROTOM::Camera::doRender() {}
 
 void ROTOM::Camera::renderToTexture(Material *material) {
-  GRAPHICS::setRenderTexture(material);
-  //commandSetGeometry.setInput(geometryData, this);
-  //GetActualDisplayList()->addCommand(&commandSetGeometry);
+  GRAPHICS::setRenderTexture(material, &textureColorbuffer, &framebuffer);
+  matToRenderTexture = material;
+}
+
+void ROTOM::Camera::beginRenderToTexture() {
+  matToRenderTexture->texture_ = textureColorbuffer;
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+}
+
+void ROTOM::Camera::endRenderToTexture() {
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

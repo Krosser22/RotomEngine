@@ -8,18 +8,6 @@
 
 #include "render/graphics.h"
 
-//Vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-const GLfloat quadVertices[24] = {
-  //Positions   //TexCoords
-  -1.0f,  1.0f, 0.0f, 1.0f,
-  -1.0f, -1.0f, 0.0f, 0.0f,
-   1.0f, -1.0f, 1.0f, 0.0f,
-
-  -1.0f,  1.0f, 0.0f, 1.0f,
-   1.0f, -1.0f, 1.0f, 0.0f,
-   1.0f,  1.0f, 1.0f, 1.0f
-};
-
 float ROTOM::GRAPHICS::getTime() {
   return (float)glfwGetTime();
 }
@@ -79,6 +67,9 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
 }
 
 void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
+  if (texture > 0) {
+    glDeleteTextures(1, texture);
+  }
   glGenTextures(1, texture);
   glBindTexture(GL_TEXTURE_2D, *texture); // All upcoming GL_TEXTURE_2D operations now have effect on this texture object
 
@@ -93,19 +84,6 @@ void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, in
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *textureWidth, *textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
   glGenerateMipmap(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
-}
-
-GLuint quadVAO, quadVBO;
-GLuint textureColorbuffer;
-GLuint framebuffer;
-void ROTOM::GRAPHICS::renderTexture() {
-  //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-  //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  //glBindVertexArray(quadVAO);
-  //glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
-  //glDrawArrays(GL_TRIANGLES, 0, 6);
-  //glBindVertexArray(0);
 }
 
 GLsizei screenWidth = 1280, screenHeight = 720;
@@ -136,25 +114,20 @@ GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
   return textureID;
 }
 
-void ROTOM::GRAPHICS::setRenderTexture(Material *material) {
-  /*glGenVertexArrays(1, &quadVAO);
-  glGenBuffers(1, &quadVBO);
-  glBindVertexArray(quadVAO);
-  glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
-  glBindVertexArray(0);*/
-
+void ROTOM::GRAPHICS::setRenderTexture(Material *material, unsigned int *textureColorbuffer, unsigned int *framebuffer) {
   // Framebuffers
-  glGenFramebuffers(1, &framebuffer);
-  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+  if (framebuffer > 0) {
+    glDeleteFramebuffers(1, framebuffer);
+  }
+  glGenFramebuffers(1, framebuffer);
+  glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
   
   // Create a color attachment texture
-  textureColorbuffer = generateAttachmentTexture(false, false);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+  if (textureColorbuffer > 0) {
+    glDeleteTextures(1, textureColorbuffer);
+  }
+  *textureColorbuffer = generateAttachmentTexture(false, false);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *textureColorbuffer, 0);
   
   // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
   GLuint rbo;
@@ -169,11 +142,10 @@ void ROTOM::GRAPHICS::setRenderTexture(Material *material) {
     printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
     system("pause");
   }
+
+  material->texture_ = *textureColorbuffer;
+
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  material->texture_ = textureColorbuffer;
-
-  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 }
 
 void ROTOM::GRAPHICS::releaseMaterial(unsigned int shaderProgram) {

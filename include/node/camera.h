@@ -48,6 +48,10 @@ namespace ROTOM {
 
     void renderToTexture(Material *material);
 
+    void beginRenderToTexture();
+
+    void endRenderToTexture();
+
   private:
     glm::vec3 target_;
     glm::mat4 projection_;
