@@ -137,7 +137,7 @@ void ROTOM::DepthScene::rotation() {
     pitch = -89.0f;
   }
 
-  glm::vec3 front;
+  glm::fvec3 front;
   front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
   front.y = sin(glm::radians(pitch));
   front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -163,7 +163,7 @@ void ROTOM::DepthScene::update() {
   drawableBase_->moveZ(sin(TIME::appTime()) * 0.2f);
 
   // Camera/View transformation
-  glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+  glm::fmat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
 }
 

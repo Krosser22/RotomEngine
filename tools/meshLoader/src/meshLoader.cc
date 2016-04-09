@@ -101,8 +101,8 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, Geometry 
     bool aux_init = false;
 
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-    std::vector<glm::vec3> temp_vertices, temp_normals;
-    std::vector<glm::vec2> temp_uvs;
+    std::vector<glm::fvec3> temp_vertices, temp_normals;
+    std::vector<glm::fvec2> temp_uvs;
 
     FILE *file = fopen(finalPath, "r");
     if (file == NULL){
@@ -117,7 +117,7 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, Geometry 
         // else : parse lineHeader
 
         if (strcmp(lineHeader, "v") == 0){
-          glm::vec3 vertex;
+          glm::fvec3 vertex;
           int matches = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
           if (matches < 3) {
             printf("ERROR: v[%d]\n", matches);
@@ -136,14 +136,14 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, Geometry 
           vertex.z *= size_z;
           temp_vertices.push_back(vertex);
         } else if (strcmp(lineHeader, "vt") == 0){
-          glm::vec2 uv;
+          glm::fvec2 uv;
           int matches = fscanf(file, "%f %f\n", &uv.x, &uv.y);
           if (matches < 2) {
             printf("ERROR: vt[%d]\n", matches);
           }
           temp_uvs.push_back(uv);
         } else if (strcmp(lineHeader, "vn") == 0){
-          glm::vec3 normal;
+          glm::fvec3 normal;
           int matches = fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
           if (matches < 3) {
             printf("ERROR: uv[%d]\n", matches);
@@ -216,12 +216,12 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, Geometry 
       ////////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////////
       //Transform Input
-      glm::vec3 vertex;
-      glm::vec3 normales;
-      glm::vec2 uv;
-      std::vector<glm::vec3> out_vertex;
-      std::vector<glm::vec2> out_uv;
-      std::vector<glm::vec3> out_normal;
+      glm::fvec3 vertex;
+      glm::fvec3 normales;
+      glm::fvec2 uv;
+      std::vector<glm::fvec3> out_vertex;
+      std::vector<glm::fvec2> out_uv;
+      std::vector<glm::fvec3> out_normal;
       for (unsigned int i = 0; i < vertexIndices.size(); ++i){
         //Position
         vertex = temp_vertices[vertexIndices[i] - 1];

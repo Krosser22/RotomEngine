@@ -83,7 +83,7 @@ void ROTOM::Node::setPosition(const float x, const float y, const float z) {
   dirtyModelLocal_ = true;
 }
 
-glm::vec3 ROTOM::Node::position() {
+glm::fvec3 ROTOM::Node::position() {
   return position_;
 }
 
@@ -123,7 +123,7 @@ void ROTOM::Node::setRotation(const float x, const float y, const float z) {
   dirtyModelLocal_ = true;
 }
 
-glm::vec3 ROTOM::Node::rotation() {
+glm::fvec3 ROTOM::Node::rotation() {
   return rotation_;
 }
 
@@ -162,7 +162,7 @@ void ROTOM::Node::setScale(const float x, const float y, const float z) {
   dirtyModelLocal_ = true;
 }
 
-glm::vec3 ROTOM::Node::scale() {
+glm::fvec3 ROTOM::Node::scale() {
   return scale_;
 }
 
@@ -190,12 +190,12 @@ float ROTOM::Node::scaleZ() {
   return scale_.z;
 }
 
-void ROTOM::Node::setModelLocal(glm::mat4 modelLocal) {
+void ROTOM::Node::setModelLocal(glm::fmat4 modelLocal) {
   modelLocal_ = modelLocal;
   dirtyModelLocal_ = false;
 }
 
-glm::mat4 *ROTOM::Node::modelLocal() {
+glm::fmat4 *ROTOM::Node::modelLocal() {
   return &modelLocal_;
 }
 
@@ -203,11 +203,11 @@ bool ROTOM::Node::isDirtyModelLocal() {
   return dirtyModelLocal_;
 }
 
-void ROTOM::Node::setModelWorld(glm::mat4 modelWorld) {
+void ROTOM::Node::setModelWorld(glm::fmat4 modelWorld) {
   modelWorld_ = modelWorld;
 }
 
-glm::mat4 *ROTOM::Node::modelWorld() {
+glm::fmat4 *ROTOM::Node::modelWorld() {
   return &modelWorld_;
 }
 
@@ -216,10 +216,10 @@ void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   modelLocal_ = glm::inverse(*parent->modelWorld()) * modelWorld_;
 
   glm::quat rotation;
-  glm::vec3 skew;
-  glm::vec4 perspective;
+  glm::fvec3 skew;
+  glm::fvec4 perspective;
   glm::decompose(modelLocal_, scale_, rotation, position_, skew, perspective);
-  rotation_ = glm::vec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
+  rotation_ = glm::fvec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
   rotation_.x = glm::degrees(rotation_.x);
   rotation_.y = glm::degrees(rotation_.y);
   rotation_.z = glm::degrees(rotation_.z);

@@ -26,8 +26,8 @@ int ROTOM::main(int argc, char** argv) {
 
   //DefaultScene scene;
   //DepthScene scene;
-  //GeometryScene scene;
-  MeshLoaderScene scene;
+  GeometryScene scene;
+  //MeshLoaderScene scene;
   //MovementScene scene;
   //RenderToTextureScene scene;
   //ShaderScene scene;
@@ -57,11 +57,11 @@ También será necesario hacer una pasada por cada una de las luces para crear las
 ----------
 ---TODO---
 ----------
-+Investigate if glm::fvec4 is faster that glm:vec4 and etc
-
-+glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //TODO - Editable
++glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //TODO - Make this an option to choose
 
 +Load a obj with more than one texture
+
++Investigate Geometry shaders to make the procedural scene
 
 +Shadows --> Lo primero es sacar el depth buffer
 +Shadows --> GPU gems 3 (Webpage) parte 2

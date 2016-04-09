@@ -38,8 +38,8 @@ void ROTOM::Camera::setupFrustum(const float left, const float right, const floa
 //void ROTOM::Camera::set_view_direction(const float pos[3]) {}
 
 void ROTOM::Camera::setViewTarget(const float pos[3]) {
-  glm::vec3 cameraDirection;
-  glm::vec3 p = glm::vec3(*pos);
+  glm::fvec3 cameraDirection;
+  glm::fvec3 p = glm::fvec3(*pos);
   cameraDirection = glm::normalize(p - target_);
 }
 
@@ -56,7 +56,7 @@ const float *ROTOM::Camera::forward() {
 //const float *ROTOM::Camera::up_direction() {}
 
 void ROTOM::Camera::setProjectionMatrix(const float data[16]) {
-  projection_ = glm::mat4(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
+  projection_ = glm::fmat4(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
 }
 
 float *ROTOM::Camera::projectionMatrix() {
@@ -64,7 +64,7 @@ float *ROTOM::Camera::projectionMatrix() {
 }
 
 void ROTOM::Camera::setViewMatrix(const float data[16]) {
-  modelLocal_ = glm::mat4(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
+  modelLocal_ = glm::fmat4(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
 }
 
 float *ROTOM::Camera::viewMatrix() {

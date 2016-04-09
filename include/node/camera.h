@@ -53,8 +53,8 @@ namespace ROTOM {
     void endRenderToTexture();
 
   private:
-    glm::vec3 target_;
-    glm::mat4 projection_;
+    glm::fvec3 target_;
+    glm::fmat4 projection_;
   };
 }
 

@@ -11,11 +11,11 @@
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-glm::mat4 identity = glm::mat4();
-glm::mat4 modelLocal = glm::mat4();
-glm::vec3 rotX = glm::vec3(1.0f, 0.0f, 0.0f);
-glm::vec3 rotY = glm::vec3(0.0f, 1.0f, 0.0f);
-glm::vec3 rotZ = glm::vec3(0.0f, 0.0f, 1.0f);
+glm::fmat4 identity = glm::fmat4();
+glm::fmat4 modelLocal = glm::fmat4();
+glm::fvec3 rotX = glm::fvec3(1.0f, 0.0f, 0.0f);
+glm::fvec3 rotY = glm::fvec3(0.0f, 1.0f, 0.0f);
+glm::fvec3 rotZ = glm::fvec3(0.0f, 0.0f, 1.0f);
 
 ROTOM::TaskCalculateMatrix::TaskCalculateMatrix() {}
 
