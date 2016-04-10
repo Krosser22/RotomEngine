@@ -50,6 +50,9 @@ int ROTOM::main(int argc, char** argv) {
 -----------
 ---DOING---
 -----------
++Shadows --> Lo primero es sacar el depth buffer
++Shadows --> GPU gems 3 (Webpage) parte 2
++Shadows --> Real time shadows (Book)
 Por cada una de las cameras se pintará toda la escena para dicha camera haciendo una pasada por todos los drawables (partiendo desde el root) y todas las lights.
 También será necesario hacer una pasada por cada una de las luces para crear las sombras.
 
@@ -62,10 +65,6 @@ También será necesario hacer una pasada por cada una de las luces para crear las
 +Load a obj with more than one texture
 
 +Investigate Geometry shaders to make the procedural scene
-
-+Shadows --> Lo primero es sacar el depth buffer
-+Shadows --> GPU gems 3 (Webpage) parte 2
-+Shadows --> Real time shadows (Book)
 
 +Add LUA
 

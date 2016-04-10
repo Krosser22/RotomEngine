@@ -12,7 +12,7 @@ in vec3 lightDirection;
 out vec4 fragment;
 
 void main() {
-	//Texture
+  //Texture
   vec4 materialColor = texture(u_texture, uvMaterial) * u_color;
 
   //Ambient Light

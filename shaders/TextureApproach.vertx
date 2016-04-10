@@ -26,7 +26,6 @@ void main() {
   //Material
   uv_material = vertex_uv;
   
-
   vec4 pos = u_projection_matrix * mv_matrix * vec4(vertex_position, 1.0);
   float angle = u_time / 500;
   

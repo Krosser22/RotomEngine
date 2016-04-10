@@ -1,0 +1,60 @@
+#version 330 core
+
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec3 normal;
+layout(location = 2) in vec2 uv;
+
+uniform mat4 u_model;
+uniform mat4 u_view;
+uniform mat4 u_projection;
+uniform vec3 u_lightPosition;
+
+out vec3 normalDirection;
+out vec2 uvMaterial;
+out vec3 lightDirection;
+out vec3 worldPosition;
+out vec3 cameraPosition;
+
+void main() {
+	//Position
+	mat4 modelView = u_view * u_model;
+	vec3 worldPosition = (modelView * vec4(position, 1.0f)).xyz;
+	gl_Position = u_projection * vec4(worldPosition, 1.0f);
+
+	//Normal
+	normalDirection = (modelView * vec4(normal, 0.0f)).xyz;
+
+	//Texture
+	uvMaterial = uv;
+
+	//Light
+	lightDirection = (u_view * vec4(u_lightPosition, 1.0f)).xyz - worldPosition;
+	
+	//Camera
+	cameraPosition = u_view[3].xyz;
+};
+
+////////////////////////////////////////////
+
+#version 330 core
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 normal;
+layout (location = 2) in vec2 texCoords;
+
+// Declare an interface block; see 'Advanced GLSL' for what these are.
+out VS_OUT {
+    vec3 FragPos;
+    vec3 Normal;
+    vec2 TexCoords;
+} vs_out;
+
+uniform mat4 projection;
+uniform mat4 view;
+
+void main()
+{
+    gl_Position = projection * view * vec4(position, 1.0f);
+    vs_out.FragPos = position;
+    vs_out.Normal = normal;
+    vs_out.TexCoords = texCoords;
+}
