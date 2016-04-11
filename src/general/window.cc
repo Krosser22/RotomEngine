@@ -18,6 +18,20 @@
 #include "taskManager/taskManager.h"
 #include "imgui.h"
 
+// GLEW
+#define GLEW_STATIC
+#include <GL/glew.h>
+
+// GLFW
+#define GLFW_INCLUDE_GLU
+#include <GLFW/glfw3.h>
+#ifdef _MSC_VER
+#undef APIENTRY
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#include <GLFW/glfw3native.h>
+#endif
+
 #define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
 
 struct GLFWwindow;
@@ -441,6 +455,9 @@ bool WindowIsOpened() {
     assert(scene);
     scene->input();
     scene->update();
+    for (unsigned int i = 0; i < scene->getLight().size(); ++i) {
+      updateDepthFromLight(scene->getLight().at(i).get());
+    }
     RenderScene(scene->getCamera());
     scene->draw();
 
@@ -489,6 +506,10 @@ void ROTOM::SetScene(Scene *newScene) {
   }
   WindowDestroy();
   scene->destroy();
+}
+
+void updateDepthFromLight(ROTOM::Light *light) {
+
 }
 
 void ROTOM::RenderScene(Camera *camera) {

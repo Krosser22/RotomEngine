@@ -8,6 +8,20 @@
 
 #include "render/graphics.h"
 
+// GLEW
+#define GLEW_STATIC
+#include <GL/glew.h>
+
+// GLFW
+#define GLFW_INCLUDE_GLU
+#include <GLFW/glfw3.h>
+#ifdef _MSC_VER
+#undef APIENTRY
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#include <GLFW/glfw3native.h>
+#endif
+
 float ROTOM::GRAPHICS::getTime() {
   return (float)glfwGetTime();
 }
@@ -245,4 +259,12 @@ void ROTOM::GRAPHICS::releaseGeometry(unsigned int VAO, unsigned int VBO, unsign
   if (VBO > 0) {
     glDeleteBuffers(1, &VBO);
   }
+}
+
+void ROTOM::GRAPHICS::beginFramebuffer(unsigned int framebuffer) {
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+}
+
+void ROTOM::GRAPHICS::endFramebuffer() {
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

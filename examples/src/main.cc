@@ -25,8 +25,8 @@ int ROTOM::main(int argc, char** argv) {
   printf("Time to create the windows: %0.2f.\n\n", c.end());
 
   //DefaultScene scene;
-  //DepthScene scene;
-  GeometryScene scene;
+  DepthScene scene;
+  //GeometryScene scene;
   //MeshLoaderScene scene;
   //MovementScene scene;
   //RenderToTextureScene scene;
@@ -60,6 +60,8 @@ También será necesario hacer una pasada por cada una de las luces para crear las
 ----------
 ---TODO---
 ----------
++Cambiar el glBindTexture por glSetActiveTexture
+
 +glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //TODO - Make this an option to choose
 
 +Load a obj with more than one texture

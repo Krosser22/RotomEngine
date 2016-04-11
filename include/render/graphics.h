@@ -9,20 +9,6 @@
 #ifndef __GRAPHICS_H__
 #define __GRAPHICS_H__
 
-// GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-// GLFW
-#define GLFW_INCLUDE_GLU
-#include <GLFW/glfw3.h>
-#ifdef _MSC_VER
-#undef APIENTRY
-#define GLFW_EXPOSE_NATIVE_WIN32
-#define GLFW_EXPOSE_NATIVE_WGL
-#include <GLFW/glfw3native.h>
-#endif
-
 #include "node/geometry.h"
 #include "node/light.h"
 #include "commandDrawObject.h"
@@ -48,6 +34,10 @@ namespace ROTOM {
     void loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index);
 
     void releaseGeometry(unsigned int VAO, unsigned int VBO, unsigned int EBO);
+
+    void beginFramebuffer(unsigned int framebuffer);
+
+    void endFramebuffer();
   }
 }
 

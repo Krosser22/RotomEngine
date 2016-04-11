@@ -82,9 +82,9 @@ void ROTOM::Camera::renderToTexture(Material *material) {
 
 void ROTOM::Camera::beginRenderToTexture() {
   matToRenderTexture->texture_ = textureColorbuffer;
-  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+  GRAPHICS::beginFramebuffer(framebuffer);
 }
 
 void ROTOM::Camera::endRenderToTexture() {
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  GRAPHICS::endFramebuffer();
 }

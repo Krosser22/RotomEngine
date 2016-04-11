@@ -188,11 +188,11 @@ unsigned int ROTOM::Geometry::numberOfElementsPerVertex() {
   *trafo = prev;
 }*/
 
-void ROTOM::Geometry::getBoundingBox(struct aiVector3D* min, struct aiVector3D* max) {
-  /*struct aiMatrix4x4 trafo;
+/*void ROTOM::Geometry::getBoundingBox(struct aiVector3D* min, struct aiVector3D* max) {
+  struct aiMatrix4x4 trafo;
   aiIdentityMatrix4(&trafo);
 
   min->x = min->y = min->z = 1e10f;
   max->x = max->y = max->z = -1e10f;
-  get_bounding_box_for_node(scene->mRootNode, min, max, &trafo);*/
-}
+  get_bounding_box_for_node(scene->mRootNode, min, max, &trafo);
+}*/
