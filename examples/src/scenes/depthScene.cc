@@ -25,7 +25,7 @@ void ROTOM::DepthScene::init() {
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
 
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-  material->setShaderFromPath("depth_buffer.vertx", "depth_buffer.frag");
+  material->setShaderFromPath("depthBuffer.vertx", "depthBuffer.frag");
 
   drawableBase_ = std::shared_ptr<Drawable>(new Drawable("DrawableBase"));
   drawableBase_->setGeometry(geometry_);
