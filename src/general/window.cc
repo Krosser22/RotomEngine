@@ -455,9 +455,9 @@ bool WindowIsOpened() {
     assert(scene);
     scene->input();
     scene->update();
-    for (unsigned int i = 0; i < scene->getLight().size(); ++i) {
+    /*for (unsigned int i = 0; i < scene->getLight().size(); ++i) {
       updateDepthFromLight(scene->getLight().at(i).get());
-    }
+    }*/
     RenderScene(scene->getCamera());
     scene->draw();
 

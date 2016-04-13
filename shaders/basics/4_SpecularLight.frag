@@ -34,7 +34,7 @@ void main() {
   //vec3 viewDirection = normalize(cameraPosition - worldPosition);
   vec3 viewDirection = normalize(normalDirection - cameraPosition);
   vec3 reflectionDirection = reflect(-lightDirectionNormalized, normalDirectionNormalized);
-  float spec = pow(max(dot(viewDirection, reflectionDirection), 0.0), u_shininess);
+  float spec = pow(max(dot(viewDirection, reflectionDirection), 0.0f), u_shininess);
   vec3 specular = u_lightColor * spec * u_specularIntensity * u_specularMaterial;
 
   //Final
