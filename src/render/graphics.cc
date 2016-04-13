@@ -193,16 +193,9 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   //Material Settings
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
 
-  static bool blinn = true;
-
-  if (INPUT::IsKeyPressed('A')) {
-    blinn = !blinn;
-    printf("H");
-  }
-
   //Camera
   glUniform3f(shaderData->u_viewPosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
-  glUniform1i(shaderData->u_blinn, blinn);
+  glUniform1i(shaderData->u_blinn, false);
 
   //Light
   Light *light = NULL;
