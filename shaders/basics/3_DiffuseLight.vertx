@@ -7,16 +7,15 @@ layout(location = 2) in vec2 uv;
 uniform mat4 u_model;
 uniform mat4 u_view;
 uniform mat4 u_projection;
-uniform vec3 u_lightPosition;
 
+out vec3 worldPosition;
 out vec3 normalDirection;
 out vec2 uvMaterial;
-out vec3 lightDirection;
 
 void main() {
 	//Position
 	mat4 modelView = u_view * u_model;
-	vec3 worldPosition = (modelView * vec4(position, 1.0f)).xyz;
+	worldPosition = (modelView * vec4(position, 1.0f)).xyz;
 	gl_Position = u_projection * vec4(worldPosition, 1.0f);
 
 	//Normal
@@ -24,7 +23,4 @@ void main() {
 
 	//Texture
 	uvMaterial = uv;
-
-	//Light
-	lightDirection = (u_view * vec4(u_lightPosition, 1.0f)).xyz - worldPosition;
 };

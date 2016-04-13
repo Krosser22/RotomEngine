@@ -79,8 +79,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_specularIntensity = glGetUniformLocation(shaderData->shaderProgram, "u_specularIntensity");
   shaderData->u_specularMaterial = glGetUniformLocation(shaderData->shaderProgram, "u_specularMaterial");
   shaderData->u_ambientStrength = glGetUniformLocation(shaderData->shaderProgram, "u_ambientStrength");
-  shaderData->u_viewPosition = glGetUniformLocation(shaderData->shaderProgram, "u_viewPosition");
-  shaderData->u_blinn = glGetUniformLocation(shaderData->shaderProgram, "u_blinn");
+  shaderData->u_eyePosition = glGetUniformLocation(shaderData->shaderProgram, "u_eyePosition");
 }
 
 void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
@@ -194,8 +193,7 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
 
   //Camera
-  glUniform3f(shaderData->u_viewPosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
-  glUniform1i(shaderData->u_blinn, false);
+  glUniform3f(shaderData->u_eyePosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
 
   //Light
   Light *light = NULL;

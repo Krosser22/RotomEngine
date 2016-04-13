@@ -1,27 +1,27 @@
 #version 330 core
 
-uniform vec4 u_color;
-uniform vec3 u_lightColor;
-uniform float u_ambientStrength;
 uniform sampler2D u_texture;
+uniform vec4 u_color;
+uniform vec3 u_lightPosition;
+uniform float u_ambientStrength;
+uniform vec3 u_lightColor;
 uniform float u_shininess;
 uniform vec3 u_specularIntensity;
 uniform vec3 u_specularMaterial;
+uniform vec3 u_eyePosition;
 
+in vec3 worldPosition;
 in vec3 normalDirection;
 in vec2 uvMaterial;
-in vec3 lightDirection;
-in vec3 worldPosition;
-in vec3 cameraPosition;
 
 out vec4 fragment;
 
 void main() {
   //Texture
   vec4 materialColor = texture(u_texture, uvMaterial) * u_color;
-
+  
   //Normalize on every fragment
-  vec3 lightDirectionNormalized = normalize(lightDirection);
+  vec3 lightDirectionNormalized = normalize(u_lightPosition - worldPosition);
   vec3 normalDirectionNormalized = normalize(normalDirection);
 
   //Ambient Light
@@ -31,10 +31,9 @@ void main() {
   vec3 diffuse = u_lightColor * max(dot(normalDirectionNormalized, lightDirectionNormalized), 0.0f);
 
   //Specular Light
-  //vec3 viewDirection = normalize(cameraPosition - worldPosition);
-  vec3 viewDirection = normalize(normalDirection - cameraPosition);
+  vec3 viewDirectionNormalized = normalize(u_eyePosition - worldPosition);
   vec3 reflectionDirection = reflect(-lightDirectionNormalized, normalDirectionNormalized);
-  float spec = pow(max(dot(viewDirection, reflectionDirection), 0.0f), u_shininess);
+  float spec = pow(max(dot(viewDirectionNormalized, reflectionDirection), 0.0f), u_shininess);
   vec3 specular = u_lightColor * spec * u_specularIntensity * u_specularMaterial;
 
   //Final

@@ -45,7 +45,7 @@ void ROTOM::ShaderScene::init() {
   std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("Drawable_4"));
   std::shared_ptr<Drawable> drawable5 = std::shared_ptr<Drawable>(new Drawable("Drawable_5"));
 
-  getRoot()->setPositionX(-2.0f);
+  getRoot()->setPositionX(-2.9f);
 
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material1);
