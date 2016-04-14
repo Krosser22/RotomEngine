@@ -9,11 +9,11 @@
 #include "render/graphics.h"
 #include "general/input.h"
 
-// GLEW
+//GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-// GLFW
+//GLFW
 #define GLFW_INCLUDE_GLU
 #include <GLFW/glfw3.h>
 #ifdef _MSC_VER
@@ -31,32 +31,32 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   GLint success;
   GLchar infoLog[512];
 
-  // Vertex shader
+  //Vertex shader
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
   glCompileShader(vertexShader);
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);// Check for compile time errors
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);//Check for compile time errors
   if (!success) {
     glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
     printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s\n", infoLog);
   }
 
-  // Fragment shader
+  //Fragment shader
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
   glCompileShader(fragmentShader);
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);// Check for compile time errors
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);//Check for compile time errors
   if (!success) {
     glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
     printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s\n", infoLog);
   }
 
-  // Link shaders
+  //Link shaders
   shaderData->shaderProgram = glCreateProgram();
   glAttachShader(shaderData->shaderProgram, vertexShader);
   glAttachShader(shaderData->shaderProgram, fragmentShader);
   glLinkProgram(shaderData->shaderProgram);
-  glGetProgramiv(shaderData->shaderProgram, GL_LINK_STATUS, &success);// Check for linking errors
+  glGetProgramiv(shaderData->shaderProgram, GL_LINK_STATUS, &success);//Check for linking errors
   if (!success) {
     glGetProgramInfoLog(shaderData->shaderProgram, 512, NULL, infoLog);
     printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s\n", infoLog);
@@ -67,7 +67,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
 
   glUseProgram(shaderData->shaderProgram);
 
-  // Get their uniform location
+  //Get their uniform location
   shaderData->u_color = glGetUniformLocation(shaderData->shaderProgram, "u_color");
   shaderData->u_model = glGetUniformLocation(shaderData->shaderProgram, "u_model");
   shaderData->u_view = glGetUniformLocation(shaderData->shaderProgram, "u_view");
@@ -87,24 +87,24 @@ void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, in
     glDeleteTextures(1, texture);
   }
   glGenTextures(1, texture);
-  glBindTexture(GL_TEXTURE_2D, *texture); // All upcoming GL_TEXTURE_2D operations now have effect on this texture object
+  glBindTexture(GL_TEXTURE_2D, *texture); //All upcoming GL_TEXTURE_2D operations now have effect on this texture object
 
-  // Set the texture wrapping/filtering options (on the currently bound texture object)
-  // Set the texture wrapping parameters
+  //Set the texture wrapping/filtering options (on the currently bound texture object)
+  //Set the texture wrapping parameters
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  // Set texture filtering parameters
+  //Set texture filtering parameters
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *textureWidth, *textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
   glGenerateMipmap(GL_TEXTURE_2D);
-  glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
+  glBindTexture(GL_TEXTURE_2D, 0); //Unbind texture when done, so we won't accidentily mess up our texture.
 }
 
 GLsizei screenWidth = 1280, screenHeight = 720;
 GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
-  // What enum to use?
+  //What enum to use?
   GLenum attachment_type;
   if (!depth && !stencil) {
     attachment_type = GL_RGB;
@@ -120,7 +120,7 @@ GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
   glBindTexture(GL_TEXTURE_2D, textureID);
   if (!depth && !stencil) {
     glTexImage2D(GL_TEXTURE_2D, 0, attachment_type, screenWidth, screenHeight, 0, attachment_type, GL_UNSIGNED_BYTE, NULL);
-  } else { // Using both a stencil and depth test, needs special format arguments
+  } else { //Using both a stencil and depth test, needs special format arguments
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, screenWidth, screenHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
   }
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -130,36 +130,72 @@ GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
   return textureID;
 }
 
-void ROTOM::GRAPHICS::setRenderTexture(Material *material, unsigned int *textureColorbuffer, unsigned int *framebuffer) {
-  // Framebuffers
+void ROTOM::GRAPHICS::setRenderColorTexture(Material *material, unsigned int *textureColorbuffer, unsigned int *framebuffer) {
+  //Framebuffers
   if (framebuffer > 0) {
     glDeleteFramebuffers(1, framebuffer);
   }
   glGenFramebuffers(1, framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
-  
-  // Create a color attachment texture
+
+  //Create a color attachment texture
   if (textureColorbuffer > 0) {
     glDeleteTextures(1, textureColorbuffer);
   }
   *textureColorbuffer = generateAttachmentTexture(false, false);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *textureColorbuffer, 0);
-  
-  // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+
+  //Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
   GLuint rbo;
   glGenRenderbuffers(1, &rbo);
   glBindRenderbuffer(GL_RENDERBUFFER, rbo);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight); // Use a single renderbuffer object for both a depth AND stencil buffer.
   glBindRenderbuffer(GL_RENDERBUFFER, 0);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
-  
-  // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+
+  //Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
     printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
     system("pause");
   }
 
   material->texture_ = *textureColorbuffer;
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+void ROTOM::GRAPHICS::setRenderDepthTexture(Material *material, unsigned int *textureDepthbuffer, unsigned int *framebuffer) {
+  //Framebuffers
+  if (framebuffer > 0) {
+    glDeleteFramebuffers(1, framebuffer);
+  }
+  glGenFramebuffers(1, framebuffer);
+  glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
+
+  //Create depth texture
+  glGenTextures(1, textureDepthbuffer);
+  glBindTexture(GL_TEXTURE_2D, *textureDepthbuffer);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *textureDepthbuffer, 0);
+  glDrawBuffer(GL_NONE);
+  glReadBuffer(GL_NONE);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+    printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+    system("pause");
+  }
+
+  material->texture_ = *textureDepthbuffer;
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -202,7 +238,7 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
     light = lights->at(i).get();
     lightPosition = &light->position()[0];
     lightColor = light->materialSettings()->color_;
-    specularIntensity = light->specularIntensity;
+    specularIntensity = light->specularIntensity_;
     glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
     glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
     glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);

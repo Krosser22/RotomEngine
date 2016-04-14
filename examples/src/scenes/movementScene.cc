@@ -32,7 +32,6 @@ void ROTOM::MovementScene::init() {
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material);
   drawable1->setParent(getRoot());
-  //drawable1->setPositionZ(-5.0f);
 
   drawable2->setGeometry(geometry_);
   drawable2->setMaterial(material);
@@ -56,9 +55,9 @@ void ROTOM::MovementScene::init() {
   light->materialSettings()->color_[0] = 0.8f;
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;
-  light->specularIntensity[0] = 1.0f;
-  light->specularIntensity[1] = 1.0f;
-  light->specularIntensity[2] = 1.0f;
+  light->specularIntensity_[0] = 1.0f;
+  light->specularIntensity_[1] = 1.0f;
+  light->specularIntensity_[2] = 1.0f;
   AddLight(light);
 }
 

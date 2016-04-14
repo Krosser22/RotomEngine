@@ -29,7 +29,7 @@ namespace ROTOM {
   void SetScene(Scene *newScene);
 
   //Render the scene from the perspective of a camera
-  void RenderScene(Camera *camera);
+  void RenderScene(float *projectionMatrix, float *viewMatrix);
 
   //Render ImGui
   void RenderImGui();

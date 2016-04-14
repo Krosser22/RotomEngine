@@ -33,11 +33,11 @@ void main() {
   //Specular Light
   vec3 viewDirectionNormalized = normalize(u_eyePosition - worldPosition);
 
-  //Normal Specular
+  //Normal Specular Light
   //vec3 reflectionDirection = reflect(-lightDirectionNormalized, normalDirectionNormalized);
   //float spec = pow(max(dot(viewDirectionNormalized, reflectionDirection), 0.0f), u_shininess);
 
-  //Blinn-Phong Specular
+  //Blinn-Phong Specular Light
   vec3 halfwayDir = normalize(lightDirectionNormalized + viewDirectionNormalized);  
   float spec = pow(max(dot(normalDirectionNormalized, halfwayDir), 0.0f), u_shininess);
 

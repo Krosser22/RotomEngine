@@ -11,9 +11,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "render/graphics.h"
 
-//ROTOM::CommandRenderTexture commandRenderTexture;
 unsigned int textureColorbuffer;
-unsigned int framebuffer;
+unsigned int colorFramebuffer;
 ROTOM::Material *matToRenderTexture;
 
 ROTOM::Camera::Camera(char *name) {
@@ -75,16 +74,16 @@ float *ROTOM::Camera::viewMatrix() {
 
 //void ROTOM::Camera::doRender() {}
 
-void ROTOM::Camera::renderToTexture(Material *material) {
-  GRAPHICS::setRenderTexture(material, &textureColorbuffer, &framebuffer);
+void ROTOM::Camera::renderColorToTexture(Material *material) {
+  GRAPHICS::setRenderColorTexture(material, &textureColorbuffer, &colorFramebuffer);
   matToRenderTexture = material;
 }
 
-void ROTOM::Camera::beginRenderToTexture() {
+void ROTOM::Camera::beginRenderColorToTexture() {
   matToRenderTexture->texture_ = textureColorbuffer;
-  GRAPHICS::beginFramebuffer(framebuffer);
+  GRAPHICS::beginFramebuffer(colorFramebuffer);
 }
 
-void ROTOM::Camera::endRenderToTexture() {
+void ROTOM::Camera::endRenderColorToTexture() {
   GRAPHICS::endFramebuffer();
 }

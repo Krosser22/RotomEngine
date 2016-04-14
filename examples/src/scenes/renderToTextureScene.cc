@@ -28,9 +28,12 @@ void ROTOM::RenderToTextureScene::init() {
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
   material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
 
-  //Material renderToTexture
-  materialRenderToTexture_ = std::shared_ptr<Material>(new Material());
-  //materialRenderToTexture_->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
+  //Material renderColorToTexture
+  materialRenderColorToTexture_ = std::shared_ptr<Material>(new Material());
+  //materialRenderColorToTexture_->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
+
+  //Material renderDepthToTexture
+  materialRenderDepthToTexture_ = std::shared_ptr<Material>(new Material());
   
   //Drawables
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
@@ -48,12 +51,12 @@ void ROTOM::RenderToTextureScene::init() {
   drawable2->setPositionX(1.0f);
 
   drawable3->setGeometry(geometry_);
-  drawable3->setMaterial(material);
+  drawable3->setMaterial(materialRenderDepthToTexture_);
   drawable3->setParent(drawable2);
   drawable3->setPositionX(1.0f);
 
   drawable4->setGeometry(geometry_);
-  drawable4->setMaterial(materialRenderToTexture_);
+  drawable4->setMaterial(materialRenderColorToTexture_);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
 
@@ -64,12 +67,13 @@ void ROTOM::RenderToTextureScene::init() {
   light->materialSettings()->color_[0] = 0.8f;
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;
-  light->specularIntensity[0] = 1.0f;
-  light->specularIntensity[1] = 1.0f;
-  light->specularIntensity[2] = 1.0f;
+  light->specularIntensity_[0] = 1.0f;
+  light->specularIntensity_[1] = 1.0f;
+  light->specularIntensity_[2] = 1.0f;
   AddLight(light);
 
-  getCamera()->renderToTexture(materialRenderToTexture_.get());
+  getCamera()->renderColorToTexture(materialRenderColorToTexture_.get());
+  getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture_.get());
 }
 
 void ROTOM::RenderToTextureScene::input() {
@@ -175,9 +179,14 @@ void ROTOM::RenderToTextureScene::update() {
 }
 
 void ROTOM::RenderToTextureScene::draw() {
-  getCamera()->beginRenderToTexture();
-  RenderScene(getCamera());
-  getCamera()->endRenderToTexture();
+  getLight().begin()->get()->beginRenderDepthToTexture();
+  //RenderScene(glm::value_ptr(*getLight().begin()->get()->modelWorld()));
+  RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+  getLight().begin()->get()->endRenderDepthToTexture();
+
+  getCamera()->beginRenderColorToTexture();
+  RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+  getCamera()->endRenderColorToTexture();
 
   RenderImGui();
 }

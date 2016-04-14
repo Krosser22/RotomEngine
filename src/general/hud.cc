@@ -410,7 +410,7 @@ void ROTOM::HUD::DrawLight(Light *light) {
 
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularIntensity:");
   ImGui::PushID(hud.nextPushID++);
-  ImGui::DragFloat3("", light->specularIntensity, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+  ImGui::DragFloat3("", light->specularIntensity_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
   ImGui::PopID();
 
   ImGui::Separator();

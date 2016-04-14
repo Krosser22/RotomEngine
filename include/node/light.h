@@ -17,8 +17,20 @@ namespace ROTOM {
     Light(char *name);
     virtual ~Light();
 
-    //float lightColor[3];
-    float specularIntensity[3];
+    float specularIntensity_[3];
+
+    void setupOrtho(const float left, const float right, const float bottom, const float top, const float znear, const float zfar);
+
+    float *viewMatrix();
+
+    void renderDepthToTexture(Material *material);
+
+    void beginRenderDepthToTexture();
+
+    void endRenderDepthToTexture();
+
+  private:
+    glm::fmat4 projection_;
   };
 }
 
