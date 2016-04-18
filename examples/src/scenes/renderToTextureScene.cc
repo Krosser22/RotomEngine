@@ -29,17 +29,26 @@ void ROTOM::RenderToTextureScene::init() {
   material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
 
   //Material renderColorToTexture
-  materialRenderColorToTexture_ = std::shared_ptr<Material>(new Material());
-  //materialRenderColorToTexture_->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
+  std::shared_ptr<Material> materialRenderColorToTexture;
+  materialRenderColorToTexture = std::shared_ptr<Material>(new Material());
+  materialRenderColorToTexture->setShaderFromPath("basics/2_Texture.vertx", "basics/2_Texture.frag");
 
   //Material renderDepthToTexture
-  materialRenderDepthToTexture_ = std::shared_ptr<Material>(new Material());
+  std::shared_ptr<Material> materialRenderDepthToTexture;
+  materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
+  materialRenderDepthToTexture->setShaderFromPath("renderToDepth.vertx", "renderToDepth.frag");
+
+  //Material renderDepthToTexture
+  std::shared_ptr<Material> materialWithShadows;
+  materialWithShadows = std::shared_ptr<Material>(new Material());
+  materialWithShadows->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
   
   //Drawables
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
   std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
   std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
   std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("4"));
+  std::shared_ptr<Drawable> drawable5 = std::shared_ptr<Drawable>(new Drawable("5"));
 
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material);
@@ -51,14 +60,19 @@ void ROTOM::RenderToTextureScene::init() {
   drawable2->setPositionX(1.0f);
 
   drawable3->setGeometry(geometry_);
-  drawable3->setMaterial(materialRenderDepthToTexture_);
+  drawable3->setMaterial(materialRenderColorToTexture);
   drawable3->setParent(drawable2);
   drawable3->setPositionX(1.0f);
 
   drawable4->setGeometry(geometry_);
-  drawable4->setMaterial(materialRenderColorToTexture_);
+  drawable4->setMaterial(materialRenderDepthToTexture);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
+
+  drawable5->setGeometry(geometry_);
+  drawable5->setMaterial(materialWithShadows);
+  drawable5->setParent(drawable4);
+  drawable5->setPositionX(1.0f);
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -72,8 +86,8 @@ void ROTOM::RenderToTextureScene::init() {
   light->specularIntensity_[2] = 1.0f;
   AddLight(light);
 
-  getCamera()->renderColorToTexture(materialRenderColorToTexture_.get());
-  getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture_.get());
+  getCamera()->renderColorToTexture(materialRenderColorToTexture.get());
+  getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture.get());
 }
 
 void ROTOM::RenderToTextureScene::input() {
@@ -180,7 +194,6 @@ void ROTOM::RenderToTextureScene::update() {
 
 void ROTOM::RenderToTextureScene::draw() {
   getLight().begin()->get()->beginRenderDepthToTexture();
-  //RenderScene(glm::value_ptr(*getLight().begin()->get()->modelWorld()));
   RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
   getLight().begin()->get()->endRenderDepthToTexture();
 

@@ -13,8 +13,13 @@ uniform vec3 u_eyePosition;
 in vec3 worldPosition;
 in vec3 normalDirection;
 in vec2 uvMaterial;
+in vec4 FragPosLightSpace;
 
 out vec4 fragment;
+
+float ShadowCalculation(vec4 fragPosLightSpace) {
+  return 1.0f;
+}
 
 void main() {
   //Texture
@@ -29,14 +34,17 @@ void main() {
 
   //Diffuse Light
   vec3 diffuse = u_lightColor * max(dot(normalDirectionNormalized, lightDirectionNormalized), 0.0f);
-
-  //Specular Light
+  
+  //Blinn-Phong Specular Light
   vec3 viewDirectionNormalized = normalize(u_eyePosition - worldPosition);
-  vec3 reflectionDirection = reflect(-lightDirectionNormalized, normalDirectionNormalized);
-  float spec = pow(max(dot(viewDirectionNormalized, reflectionDirection), 0.0f), u_shininess);
+  vec3 halfwayDir = normalize(lightDirectionNormalized + viewDirectionNormalized);  
+  float spec = pow(max(dot(normalDirectionNormalized, halfwayDir), 0.0f), u_shininess);
   vec3 specular = u_lightColor * spec * u_specularIntensity * u_specularMaterial;
+  
+  //Shadow
+  float shadow = ShadowCalculation(FragPosLightSpace);
+  fragment = vec4((ambient + (1.0 - shadow) * (diffuse + specular)) * u_color, 1.0f);
 
   //Final
-  fragment = materialColor * vec4((ambient + diffuse + specular), 1.0f);
-  //fragment = vec4(1.0f, 1.0f, 0.0f, 1.0f);
+  //fragment = materialColor * vec4((ambient + diffuse + specular), 1.0f);
 };

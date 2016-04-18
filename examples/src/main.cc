@@ -21,7 +21,7 @@ int ROTOM::main(int argc, char** argv) {
   TIME::Chronometer c;
   printf("Creating the window.\n");
   c.start();
-  WindowInit(1280, 720);
+  WindowInit(1024, 512);
   printf("Time to create the windows: %0.2f.\n\n", c.end());
 
   //DefaultScene scene;

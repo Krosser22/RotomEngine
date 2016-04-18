@@ -29,14 +29,20 @@ void main() {
 
   //Diffuse Light
   vec3 diffuse = u_lightColor * max(dot(normalDirectionNormalized, lightDirectionNormalized), 0.0f);
-
+  
   //Specular Light
   vec3 viewDirectionNormalized = normalize(u_eyePosition - worldPosition);
-  vec3 reflectionDirection = reflect(-lightDirectionNormalized, normalDirectionNormalized);
-  float spec = pow(max(dot(viewDirectionNormalized, reflectionDirection), 0.0f), u_shininess);
+
+  //Normal Specular Light
+  //vec3 reflectionDirection = reflect(-lightDirectionNormalized, normalDirectionNormalized);
+  //float spec = pow(max(dot(viewDirectionNormalized, reflectionDirection), 0.0f), u_shininess);
+
+  //Blinn-Phong Specular Light
+  vec3 halfwayDir = normalize(lightDirectionNormalized + viewDirectionNormalized);  
+  float spec = pow(max(dot(normalDirectionNormalized, halfwayDir), 0.0f), u_shininess);
+
   vec3 specular = u_lightColor * spec * u_specularIntensity * u_specularMaterial;
 
   //Final
   fragment = materialColor * vec4((ambient + diffuse + specular), 1.0f);
-  //fragment = vec4(1.0f, 1.0f, 0.0f, 1.0f);
 };

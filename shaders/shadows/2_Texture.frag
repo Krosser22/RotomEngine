@@ -1,5 +1,6 @@
 #version 330 core
 
+uniform vec4 u_color;
 uniform sampler2D u_texture;
 
 in vec2 uvMaterial;
@@ -8,8 +9,8 @@ out vec4 fragment;
 
 void main() {
   //Texture
-  float depthValue = texture(u_texture, uvMaterial).r;
+  vec4 materialColor = texture(u_texture, uvMaterial) * u_color;
 
   //Final
-  fragment = vec4(vec3(depthValue), 1.0f);
-}
+  fragment = materialColor;
+};

@@ -164,7 +164,7 @@ void ROTOM::GRAPHICS::setRenderColorTexture(Material *material, unsigned int *te
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 512;
 void ROTOM::GRAPHICS::setRenderDepthTexture(Material *material, unsigned int *textureDepthbuffer, unsigned int *framebuffer) {
   //Framebuffers
   if (framebuffer > 0) {
@@ -195,6 +195,9 @@ void ROTOM::GRAPHICS::setRenderDepthTexture(Material *material, unsigned int *te
     system("pause");
   }
 
+  if (material->texture_ > 0) {
+    glDeleteTextures(1, &material->texture_);
+  }
   material->texture_ = *textureDepthbuffer;
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -304,6 +307,7 @@ void ROTOM::GRAPHICS::releaseGeometry(unsigned int VAO, unsigned int VBO, unsign
 
 void ROTOM::GRAPHICS::beginFramebuffer(unsigned int framebuffer) {
   glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+  clearScreen();
 }
 
 void ROTOM::GRAPHICS::endFramebuffer() {

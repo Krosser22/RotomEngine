@@ -21,6 +21,8 @@ namespace ROTOM {
 
     void setupOrtho(const float left, const float right, const float bottom, const float top, const float znear, const float zfar);
 
+    float *projectionMatrix();
+
     float *viewMatrix();
 
     void renderDepthToTexture(Material *material);

@@ -30,12 +30,17 @@ ROTOM::Light::Light(char *name) {
   setGeometry(std::shared_ptr<Geometry>(new Geometry()));
   setMaterial(lightMaterial);
 
+  setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
 }
 
 ROTOM::Light::~Light() {}
 
 void ROTOM::Light::setupOrtho(const float left, const float right, const float bottom, const float top, const float znear, const float zfar) {
   projection_ = glm::ortho(left, right, bottom, top, znear, zfar);
+}
+
+float *ROTOM::Light::projectionMatrix() {
+  return glm::value_ptr(projection_);
 }
 
 float *ROTOM::Light::viewMatrix() {
