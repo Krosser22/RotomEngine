@@ -53,6 +53,7 @@ void ROTOM::RenderToTextureScene::init() {
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material);
   drawable1->setParent(getRoot());
+  drawable1->setPosition(-2.0f, 0.0f, -2.0f);
 
   drawable2->setGeometry(geometry_);
   drawable2->setMaterial(material);
@@ -193,13 +194,13 @@ void ROTOM::RenderToTextureScene::update() {
 }
 
 void ROTOM::RenderToTextureScene::draw() {
-  getLight().begin()->get()->beginRenderDepthToTexture();
-  RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
-  getLight().begin()->get()->endRenderDepthToTexture();
-
   getCamera()->beginRenderColorToTexture();
   RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
   getCamera()->endRenderColorToTexture();
+
+  getLight().begin()->get()->beginRenderDepthToTexture();
+  RenderScene(getLight().begin()->get()->projectionMatrix(), getCamera()->viewMatrix());
+  getLight().begin()->get()->endRenderDepthToTexture();
 
   RenderImGui();
 }

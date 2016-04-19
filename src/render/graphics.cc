@@ -220,8 +220,11 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
 
   //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
+
+  //Camera
   glUniformMatrix4fv(shaderData->u_view, 1, GL_FALSE, viewMatrix);
   glUniformMatrix4fv(shaderData->u_projection, 1, GL_FALSE, projectionMatrix);
+  glUniform3f(shaderData->u_eyePosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
 
   //Material
   glUniform1f(shaderData->u_shininess, commandDrawObjectData->materialData.shininess);
@@ -230,9 +233,6 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   
   //Material Settings
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
-
-  //Camera
-  glUniform3f(shaderData->u_eyePosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
 
   //Light
   Light *light = NULL;
