@@ -80,6 +80,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_specularMaterial = glGetUniformLocation(shaderData->shaderProgram, "u_specularMaterial");
   shaderData->u_ambientStrength = glGetUniformLocation(shaderData->shaderProgram, "u_ambientStrength");
   shaderData->u_eyePosition = glGetUniformLocation(shaderData->shaderProgram, "u_eyePosition");
+  shaderData->u_lightSpaceMatrix = glGetUniformLocation(shaderData->shaderProgram, "u_lightSpaceMatrix");
 }
 
 void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
@@ -102,7 +103,7 @@ void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, in
   glBindTexture(GL_TEXTURE_2D, 0); //Unbind texture when done, so we won't accidentily mess up our texture.
 }
 
-GLsizei screenWidth = 1280, screenHeight = 720;
+GLsizei screenWidth = 1024, screenHeight = 512;
 GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
   //What enum to use?
   GLenum attachment_type;
@@ -223,6 +224,9 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   glUniformMatrix4fv(shaderData->u_view, 1, GL_FALSE, viewMatrix);
   glUniformMatrix4fv(shaderData->u_projection, 1, GL_FALSE, projectionMatrix);
 
+  //Camera
+  glUniform3f(shaderData->u_eyePosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
+
   //Material
   glUniform1f(shaderData->u_shininess, commandDrawObjectData->materialData.shininess);
   glUniform3f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2]);
@@ -231,17 +235,16 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   //Material Settings
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
 
-  //Camera
-  glUniform3f(shaderData->u_eyePosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
-
   //Light
   Light *light = NULL;
-  float *lightPosition = NULL, *lightColor = NULL, *specularIntensity = NULL;
+  float *lightPosition = NULL, *lightColor = NULL, *specularIntensity = NULL, *lightSpaceMatrix = NULL;
   for (unsigned int i = 0; i < lights->size(); ++i) {
     light = lights->at(i).get();
     lightPosition = &light->position()[0];
     lightColor = light->materialSettings()->color_;
     specularIntensity = light->specularIntensity_;
+    lightSpaceMatrix = light->spaceMatrix();
+    glUniformMatrix4fv(shaderData->u_lightSpaceMatrix, 1, GL_FALSE, lightSpaceMatrix);
     glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
     glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
     glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);

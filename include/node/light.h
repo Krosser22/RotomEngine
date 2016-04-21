@@ -25,6 +25,8 @@ namespace ROTOM {
 
     float *viewMatrix();
 
+    float *spaceMatrix();
+
     void renderDepthToTexture(Material *material);
 
     void beginRenderDepthToTexture();

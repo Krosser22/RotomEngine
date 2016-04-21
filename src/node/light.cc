@@ -43,8 +43,14 @@ float *ROTOM::Light::projectionMatrix() {
   return glm::value_ptr(projection_);
 }
 
+//TODO - Change this
 float *ROTOM::Light::viewMatrix() {
   return (float *)glm::value_ptr(glm::lookAt(position(), glm::fvec3(0.0f), glm::fvec3(0.0f, 1.0f, 0.0f)));
+}
+
+//TODO - Change this
+float *ROTOM::Light::spaceMatrix() {
+  return (float *)glm::value_ptr(projection_ * glm::lookAt(position(), glm::fvec3(0.0f), glm::fvec3(0.0f, 1.0f, 0.0f)));
 }
 
 void ROTOM::Light::renderDepthToTexture(Material *material) {
