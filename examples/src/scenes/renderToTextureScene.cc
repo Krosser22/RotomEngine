@@ -188,7 +188,8 @@ void ROTOM::RenderToTextureScene::draw() {
   getCamera()->endRenderColorToTexture();
 
   getLight().begin()->get()->beginRenderDepthToTexture();
-  RenderScene(getLight().begin()->get()->projectionMatrix(), getCamera()->viewMatrix());
+  RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+  //RenderScene(getLight().begin()->get()->projectionMatrix(), getCamera()->viewMatrix());
   getLight().begin()->get()->endRenderDepthToTexture();
 
   RenderImGui();

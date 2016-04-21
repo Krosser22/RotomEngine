@@ -9,6 +9,7 @@ uniform float u_shininess;
 uniform vec3 u_specularIntensity;
 uniform vec3 u_specularMaterial;
 uniform vec3 u_eyePosition;
+uniform sampler2D shadowMap;
 
 in vec3 worldPosition;
 in vec3 normalDirection;
@@ -22,7 +23,7 @@ float ShadowCalculation(vec4 fragPosLightSpace) {
   vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 
   // Transform to [0,1] range
-  projCoords = projCoords * 0.5 + 0.5;
+  projCoords = projCoords * 0.5f + 0.5f;
 
   // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
   float closestDepth = texture(shadowMap, projCoords.xy).r; 
@@ -31,7 +32,7 @@ float ShadowCalculation(vec4 fragPosLightSpace) {
   float currentDepth = projCoords.z;
 
   // Check whether current frag pos is in shadow
-  float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+  float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
 
   return shadow;
 }

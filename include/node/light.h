@@ -35,6 +35,7 @@ namespace ROTOM {
 
   private:
     glm::fmat4 projection_;
+    glm::fmat4 view_;
   };
 }
 

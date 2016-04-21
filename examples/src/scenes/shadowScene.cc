@@ -20,9 +20,12 @@
 void ROTOM::ShadowScene::init() {
   //Camera
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  //getCamera()->setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
 
   //Geometry
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
+  geometryFloor_ = std::shared_ptr<Geometry>(new Geometry());
+  geometryFloor_->loadGeometry("Nanosuit/nanosuit");
 
   //ShadowMaterial
   std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
@@ -59,10 +62,10 @@ void ROTOM::ShadowScene::init() {
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
 
-  drawable5->setGeometry(geometry_);
+  drawable5->setGeometry(geometryFloor_);
   drawable5->setMaterial(shadowMaterial);
-  drawable5->setParent(drawable4);
-  drawable5->setPositionX(1.0f);
+  drawable5->setParent(getRoot());
+  drawable5->setPosition(0.0f, -1.0f, -1.0f);
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -182,8 +185,7 @@ void ROTOM::ShadowScene::update() {
 
 void ROTOM::ShadowScene::draw() {
   getLight().begin()->get()->beginRenderDepthToTexture();
+  //RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
   RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
   getLight().begin()->get()->endRenderDepthToTexture();
-
-  RenderImGui();
 }
