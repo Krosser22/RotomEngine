@@ -58,8 +58,8 @@ void main() {
   
   //Shadow
   float shadow = ShadowCalculation(FragPosLightSpace);
-  fragment = vec4((ambient + (1.0 - shadow) * (diffuse + specular)) * u_color, 1.0f);
 
   //Final
-  //fragment = materialColor * vec4((ambient + diffuse + specular), 1.0f);
+//fragment = materialColor * vec4((ambient +                   (diffuse + specular)), 1.0f);
+  fragment = materialColor * vec4((ambient + (1.0f - shadow) * (diffuse + specular)), 1.0f);
 };

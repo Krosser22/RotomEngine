@@ -221,8 +221,11 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
 
   //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
+
+  //Camera
   glUniformMatrix4fv(shaderData->u_view, 1, GL_FALSE, viewMatrix);
   glUniformMatrix4fv(shaderData->u_projection, 1, GL_FALSE, projectionMatrix);
+  glUniform3f(shaderData->u_eyePosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
 
   //Camera
   glUniform3f(shaderData->u_eyePosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);

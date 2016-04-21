@@ -27,5 +27,5 @@ void main() {
   uvMaterial = uv;
 
   //Shadow
-  FragPosLightSpace = lightSpaceMatrix * vec4(worldPosition, 1.0);
+  FragPosLightSpace = lightSpaceMatrix * vec4(worldPosition, 1.0f);
 };

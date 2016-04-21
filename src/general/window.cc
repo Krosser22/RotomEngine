@@ -458,8 +458,8 @@ bool WindowIsOpened() {
     /*for (unsigned int i = 0; i < scene->getLight().size(); ++i) {
       updateDepthFromLight(scene->getLight().at(i).get());
     }*/
-    ROTOM::RenderScene(scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
     scene->draw();
+    ROTOM::RenderScene(scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
 
     ROTOM::INPUT::Update();
 
@@ -513,6 +513,7 @@ void updateDepthFromLight(ROTOM::Light *light) {
 }
 
 void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix) {
+  GRAPHICS::clearScreen();
   //DisplayList
   if (displayList.isValid_) {
     commandDrawObject.setInput(scene->getRoot(), scene->getLight(), projectionMatrix, viewMatrix);
