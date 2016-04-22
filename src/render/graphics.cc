@@ -80,6 +80,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_specularMaterial = glGetUniformLocation(shaderData->shaderProgram, "u_specularMaterial");
   shaderData->u_ambientStrength = glGetUniformLocation(shaderData->shaderProgram, "u_ambientStrength");
   shaderData->u_eyePosition = glGetUniformLocation(shaderData->shaderProgram, "u_eyePosition");
+  shaderData->u_lightSpaceMatrix = glGetUniformLocation(shaderData->shaderProgram, "u_lightSpaceMatrix");
 }
 
 void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
@@ -102,7 +103,7 @@ void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, in
   glBindTexture(GL_TEXTURE_2D, 0); //Unbind texture when done, so we won't accidentily mess up our texture.
 }
 
-GLsizei screenWidth = 1280, screenHeight = 720;
+GLsizei screenWidth = 1024, screenHeight = 512;
 GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil) {
   //What enum to use?
   GLenum attachment_type;
@@ -216,7 +217,10 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   glUseProgram(shaderData->shaderProgram);
 
   //Texture
+  glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, lights->begin()->get()->material()->texture_);
 
   //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
@@ -236,12 +240,14 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
 
   //Light
   Light *light = NULL;
-  float *lightPosition = NULL, *lightColor = NULL, *specularIntensity = NULL;
+  float *lightPosition = NULL, *lightColor = NULL, *specularIntensity = NULL, *lightSpaceMatrix = NULL;
   for (unsigned int i = 0; i < lights->size(); ++i) {
     light = lights->at(i).get();
     lightPosition = &light->position()[0];
     lightColor = light->materialSettings()->color_;
     specularIntensity = light->specularIntensity_;
+    lightSpaceMatrix = light->spaceMatrix();
+    glUniformMatrix4fv(shaderData->u_lightSpaceMatrix, 1, GL_FALSE, lightSpaceMatrix);
     glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
     glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
     glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);

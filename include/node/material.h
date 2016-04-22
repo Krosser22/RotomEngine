@@ -26,6 +26,7 @@ namespace ROTOM {
     unsigned int u_specularMaterial;
     unsigned int u_ambientStrength;
     unsigned int u_eyePosition;
+    unsigned int u_lightSpaceMatrix;
   };
 
   struct MaterialData {
