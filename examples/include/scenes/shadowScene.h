@@ -6,17 +6,17 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __RENDER_TO_TEXTURE_SCENE_H__
-#define __RENDER_TO_TEXTURE_SCENE_H__
+#ifndef __SHADOW_SCENE_H__
+#define __SHADOW_SCENE_H__
 
 #include "general/scene.h"
 #include <memory>
 
 namespace ROTOM {
-  class RenderToTextureScene : public Scene {
+  class ShadowScene : public Scene {
   public:
-    RenderToTextureScene() {};
-    ~RenderToTextureScene() {};
+    ShadowScene() {};
+    ~ShadowScene() {};
 
     void init();
 
@@ -30,6 +30,7 @@ namespace ROTOM {
     
   private:
     std::shared_ptr<Geometry> geometry_;
+    std::shared_ptr<Geometry> geometryFloor_;
 
     glm::fvec3 cameraPos = glm::fvec3(0.0f, 0.0f, 3.0f);
     glm::fvec3 cameraFront = glm::fvec3(0.0f, 0.0f, -1.0f);
@@ -52,4 +53,4 @@ namespace ROTOM {
   };
 }
 
-#endif //__RENDER_TO_TEXTURE_SCENE_H__
+#endif //__SHADOW_SCENE_H__

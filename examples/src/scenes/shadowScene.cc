@@ -10,38 +10,31 @@
 #include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "scenes/renderToTextureScene.h"
+#include "scenes/shadowScene.h"
 
 // GLM Mathematics
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-void ROTOM::RenderToTextureScene::init() {
+void ROTOM::ShadowScene::init() {
   //Camera
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  //getCamera()->setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
 
   //Geometry
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
+  geometryFloor_ = std::shared_ptr<Geometry>(new Geometry());
+  geometryFloor_->loadGeometry("Nanosuit/nanosuit");
 
-  //Material
-  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
-  material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
-
-  //Material renderColorToTexture
-  std::shared_ptr<Material> materialRenderColorToTexture;
-  materialRenderColorToTexture = std::shared_ptr<Material>(new Material());
-  materialRenderColorToTexture->setShaderFromPath("basics/2_Texture.vertx", "basics/2_Texture.frag");
+  //ShadowMaterial
+  std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
+  shadowMaterial->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
 
   //Material renderDepthToTexture
   std::shared_ptr<Material> materialRenderDepthToTexture;
   materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
   materialRenderDepthToTexture->setShaderFromPath("renderToDepth.vertx", "renderToDepth.frag");
-
-  //Material renderDepthToTexture
-  std::shared_ptr<Material> materialWithShadows;
-  materialWithShadows = std::shared_ptr<Material>(new Material());
-  materialWithShadows->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
   
   //Drawables
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
@@ -51,29 +44,28 @@ void ROTOM::RenderToTextureScene::init() {
   std::shared_ptr<Drawable> drawable5 = std::shared_ptr<Drawable>(new Drawable("5"));
 
   drawable1->setGeometry(geometry_);
-  drawable1->setMaterial(material);
+  drawable1->setMaterial(shadowMaterial);
   drawable1->setParent(getRoot());
-  drawable1->setPosition(-2.0f, 0.0f, -2.0f);
 
   drawable2->setGeometry(geometry_);
-  drawable2->setMaterial(material);
+  drawable2->setMaterial(shadowMaterial);
   drawable2->setParent(drawable1);
   drawable2->setPositionX(1.0f);
 
   drawable3->setGeometry(geometry_);
-  drawable3->setMaterial(materialRenderColorToTexture);
+  drawable3->setMaterial(shadowMaterial);
   drawable3->setParent(drawable2);
   drawable3->setPositionX(1.0f);
 
   drawable4->setGeometry(geometry_);
-  drawable4->setMaterial(materialRenderDepthToTexture);
+  drawable4->setMaterial(shadowMaterial);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
 
-  drawable5->setGeometry(geometry_);
-  drawable5->setMaterial(materialWithShadows);
-  drawable5->setParent(drawable4);
-  drawable5->setPositionX(1.0f);
+  drawable5->setGeometry(geometryFloor_);
+  drawable5->setMaterial(shadowMaterial);
+  drawable5->setParent(getRoot());
+  drawable5->setPosition(0.0f, -1.0f, -1.0f);
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -86,12 +78,10 @@ void ROTOM::RenderToTextureScene::init() {
   light->specularIntensity_[1] = 1.0f;
   light->specularIntensity_[2] = 1.0f;
   AddLight(light);
-
-  getCamera()->renderColorToTexture(materialRenderColorToTexture.get());
   getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture.get());
 }
 
-void ROTOM::RenderToTextureScene::input() {
+void ROTOM::ShadowScene::input() {
   if (INPUT::IsMousePressed(1)) {
     lastX = INPUT::MousePositionX();
     lastY = INPUT::MousePositionY();
@@ -107,7 +97,7 @@ void ROTOM::RenderToTextureScene::input() {
   }
 }
 
-void ROTOM::RenderToTextureScene::movement() {
+void ROTOM::ShadowScene::movement() {
   //Forward
   if (INPUT::IsKeyDown('W')) {
     cameraPos += movementSpeed * cameraFront;
@@ -139,7 +129,7 @@ void ROTOM::RenderToTextureScene::movement() {
   }
 }
 
-void ROTOM::RenderToTextureScene::rotation() {
+void ROTOM::ShadowScene::rotation() {
   float xoffset = INPUT::MousePositionX() - lastX;
   float yoffset = lastY - INPUT::MousePositionY(); // Reversed since y-coordinates go from bottom to left
   lastX = INPUT::MousePositionX();
@@ -167,7 +157,7 @@ void ROTOM::RenderToTextureScene::rotation() {
   cameraFront = glm::normalize(front);
 }
 
-void ROTOM::RenderToTextureScene::scroll() {
+void ROTOM::ShadowScene::scroll() {
   if (fov >= 1.0f && fov <= 45.0f) {
     fov -= INPUT::MouseWheel() * scrollSpeed;
   }
@@ -182,7 +172,7 @@ void ROTOM::RenderToTextureScene::scroll() {
   printf("FOV: %f\n", fov);
 }
 
-void ROTOM::RenderToTextureScene::update() {
+void ROTOM::ShadowScene::update() {
   if (INPUT::IsKeyDown('Q')) {
     Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
     node->setRotationX(node->rotation().x + 0.01f);
@@ -193,14 +183,9 @@ void ROTOM::RenderToTextureScene::update() {
   getCamera()->setViewMatrix(glm::value_ptr(view));
 }
 
-void ROTOM::RenderToTextureScene::draw() {
-  getCamera()->beginRenderColorToTexture();
-  RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
-  getCamera()->endRenderColorToTexture();
-
+void ROTOM::ShadowScene::draw() {
   getLight().begin()->get()->beginRenderDepthToTexture();
-  RenderScene(getLight().begin()->get()->projectionMatrix(), getCamera()->viewMatrix());
+  RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+  //RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
   getLight().begin()->get()->endRenderDepthToTexture();
-
-  RenderImGui();
 }
