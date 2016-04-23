@@ -9,13 +9,10 @@
 #ifndef __NODE_H__
 #define __NODE_H__
 
-#include "geometry.h"
-#include "material.h"
-#include "materialSettings.h"
 #include "general/constants.h"
-#include "glm/gtc/type_ptr.hpp"
-#include <memory>
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <memory>
 
 namespace ROTOM {
   class Node : public std::enable_shared_from_this<Node> {

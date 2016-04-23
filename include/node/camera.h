@@ -10,7 +10,7 @@
 #define __CAMERA_H__
 
 #include "node.h"
-#include "glm/gtc/type_ptr.hpp"
+#include "material.h"
 
 namespace ROTOM {
   class Camera : public Node {

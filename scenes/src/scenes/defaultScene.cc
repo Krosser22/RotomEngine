@@ -6,12 +6,10 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/files.h"
+#include "scenes/defaultScene.h"
 #include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "scenes/defaultScene.h"
-#include "imgui.h"
 
 void ROTOM::DefaultScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
@@ -85,8 +83,4 @@ void ROTOM::DefaultScene::update() {
   getRoot()->getChildAt(0)->moveX(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
-}
-
-void ROTOM::DefaultScene::draw() {
-  RenderImGui();
 }

@@ -6,13 +6,12 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/window.h"
 #include "node/geometry.h"
+#include "general/window.h"
 #include "render/commandSetGeometry.h"
 #include "render/graphics.h"
 #include "taskManager/taskSetGeometry.h"
 #include "taskManager/taskManager.h"
-#include "meshLoader.h"
 
 ROTOM::TaskSetGeometry taskSetGeometry;
 ROTOM::CommandSetGeometry commandSetGeometry;
@@ -93,12 +92,10 @@ ROTOM::Geometry::Geometry() {
 }
 
 ROTOM::Geometry::~Geometry() {
-  // Properly de-allocate all resources once they've outlived their purpose
-  GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
+  GRAPHICS::releaseGeometry(&VAO_, &EBO_, &VBO_);
 }
 
 void ROTOM::Geometry::loadGeometry(float *vertex, int *index, const int vertexCount) {
-  GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
   vertexCount_ = vertexCount;
   GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float) * numberOfElementsPerVertex_, vertexCount_, vertex, index);
 }

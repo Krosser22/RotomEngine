@@ -6,10 +6,9 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/input.h"
-#include "general/time.h"
-#include "general/window.h"
 #include "scenes/meshLoaderScene.h"
+#include "general/input.h"
+#include "general/window.h"
 
 void ROTOM::MeshLoaderScene::init() {
   //Camera
@@ -47,8 +46,4 @@ void ROTOM::MeshLoaderScene::update() {
   if (rotating_) {
     getRoot()->getChildAt(0)->setRotationY(getRoot()->getChildAt(0)->rotation().y + 0.01f);
   }
-}
-
-void ROTOM::MeshLoaderScene::draw() {
-  RenderImGui();
 }

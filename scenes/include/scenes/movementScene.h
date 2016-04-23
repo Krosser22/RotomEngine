@@ -10,7 +10,6 @@
 #define __MOVEMENT_SCENE_H__
 
 #include "general/scene.h"
-#include <memory>
 
 namespace ROTOM {
   class MovementScene : public Scene {
@@ -24,7 +23,7 @@ namespace ROTOM {
 
     void update();
 
-    void draw();
+    void draw() {};
 
     void destroy() {};
     

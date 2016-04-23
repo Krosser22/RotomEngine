@@ -10,9 +10,6 @@
 #define __MESH_LOADER_SCENE_H__
 
 #include "general/scene.h"
-#include "taskManager/taskSetGeometry.h"
-#include "taskManager/taskManager.h"
-#include <memory>
 
 namespace ROTOM {
   class MeshLoaderScene : public Scene {
@@ -26,13 +23,12 @@ namespace ROTOM {
 
     void update();
 
-    void draw();
+    void draw() {};
 
     void destroy() {};
 
   private:
     bool rotating_;
-    TaskSetGeometry taskSetGeometry_;
   };
 }
 

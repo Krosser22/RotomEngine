@@ -10,7 +10,6 @@
 #define __SCENE_H__
 
 #include "node/camera.h"
-#include "node/node.h"
 #include "node/light.h"
 
 namespace ROTOM {

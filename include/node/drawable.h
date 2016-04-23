@@ -9,10 +9,10 @@
 #ifndef __DRAWABLE_H__
 #define __DRAWABLE_H__
 
+#include "node.h"
 #include "geometry.h"
 #include "material.h"
 #include "materialSettings.h"
-#include "node.h"
 
 namespace ROTOM {
   class Drawable : public Node {

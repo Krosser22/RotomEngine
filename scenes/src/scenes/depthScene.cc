@@ -6,18 +6,11 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/files.h"
+#include "scenes/depthScene.h"
 #include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "meshLoader.h"
-#include "scenes/depthScene.h"
-#include "imgui.h"
-
-// GLM Mathematics
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 void ROTOM::DepthScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
@@ -165,8 +158,4 @@ void ROTOM::DepthScene::update() {
   // Camera/View transformation
   glm::fmat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
   getCamera()->setViewMatrix(glm::value_ptr(view));
-}
-
-void ROTOM::DepthScene::draw() {
-  RenderImGui();
 }

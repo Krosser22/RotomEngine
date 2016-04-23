@@ -8,8 +8,8 @@
 
 #include "node/material.h"
 #include "render/graphics.h"
-#include "soil.h"
 #include "general/files.h"
+#include <soil.h>
 
 const static char* vertexShaderSource = "#version 330 core\n"
 "layout(location = 0) in vec3 position;\n"
@@ -18,46 +18,42 @@ const static char* vertexShaderSource = "#version 330 core\n"
 "uniform mat4 u_model;\n"
 "uniform mat4 u_view;\n"
 "uniform mat4 u_projection;\n"
-"uniform vec3 u_lightPosition;\n"
-"out vec3 lightDirection;\n"
+"out vec3 worldPosition;\n"
 "out vec3 normalDirection;\n"
-"out vec4 cameraPosition;\n"
-"out vec4 materialPosition;\n"
 "out vec2 uvMaterial;\n"
 "void main() {\n"
-"  mat4 mv_matrix = u_view * u_model;\n"
-"  cameraPosition = u_view[3];\n"
-"  //Light\n"
-"  lightDirection = normalize(u_view * vec4(u_lightPosition, 1.0f) - mv_matrix * vec4(position, 1.0f)).xyz;\n"
-"  normalDirection = normalize(mv_matrix * vec4(normal, 0.0f)).xyz;\n"
-"  //Material\n"
+"  mat4 modelView = u_view * u_model;\n"
+"  worldPosition = (modelView * vec4(position, 1.0f)).xyz;\n"
+"  gl_Position = u_projection * vec4(worldPosition, 1.0f);\n"
+"  normalDirection = (modelView * vec4(normal, 0.0f)).xyz;\n"
 "  uvMaterial = uv;\n"
-"  gl_Position = u_projection * mv_matrix * vec4(position, 1.0);\n"
 "};\0";
 
 const static char* fragmentShaderSource = "#version 330 core\n"
-"uniform vec4 u_color;\n"
 "uniform sampler2D u_texture;\n"
+"uniform vec4 u_color;\n"
+"uniform vec3 u_lightPosition;\n"
+"uniform float u_ambientStrength;\n"
 "uniform vec3 u_lightColor;\n"
 "uniform float u_shininess;\n"
 "uniform vec3 u_specularIntensity;\n"
 "uniform vec3 u_specularMaterial;\n"
-"in vec3 lightDirection;\n"
+"uniform vec3 u_eyePosition;\n"
+"in vec3 worldPosition;\n"
 "in vec3 normalDirection;\n"
-"in vec4 cameraPosition;\n"
 "in vec2 uvMaterial;\n"
 "out vec4 fragment;\n"
 "void main() {\n"
-"  float cosAngleDifuse = max(0.0, dot(normalize(lightDirection), normalize(normalDirection)));\n"
-"  vec4 difuseColor = vec4(texture(u_texture, uvMaterial).xyz * u_color.xyz * u_lightColor * cosAngleDifuse, 1.0);\n"
-"  vec3 viewDirection = normalize(normalize(normalDirection) - cameraPosition.xyz);\n"
-"  vec3 halfWay = normalize(normalize(lightDirection) + viewDirection);\n"
-"  float cosAngleSpecular = max(0.0, dot(halfWay, normalize(normalDirection)));\n"
-"  vec4 specularColor = vec4(pow(cosAngleSpecular, u_shininess) * u_specularIntensity * u_specularMaterial, 1.0);\n"
-"  vec4 finalColor = difuseColor + specularColor;\n"
-"  finalColor.w = min(1.0, finalColor.w);\n"
-"  vec3 ambientLight = texture(u_texture, uvMaterial).xyz * 0.05;\n"
-"  fragment = finalColor + vec4(ambientLight, 1.0);\n"
+"  vec4 materialColor = texture(u_texture, uvMaterial) * u_color;\n"
+"  vec3 lightDirectionNormalized = normalize(u_lightPosition - worldPosition);\n"
+"  vec3 normalDirectionNormalized = normalize(normalDirection);\n"
+"  vec3 ambient = u_lightColor * u_ambientStrength;\n"
+"  vec3 diffuse = u_lightColor * max(dot(normalDirectionNormalized, lightDirectionNormalized), 0.0f);\n"
+"  vec3 viewDirectionNormalized = normalize(u_eyePosition - worldPosition);\n"
+"  vec3 halfwayDir = normalize(lightDirectionNormalized + viewDirectionNormalized);\n"
+"  float spec = pow(max(dot(normalDirectionNormalized, halfwayDir), 0.0f), u_shininess);\n"
+"  vec3 specular = u_lightColor * spec * u_specularIntensity * u_specularMaterial;\n"
+"  fragment = materialColor * vec4((ambient + diffuse + specular), 1.0f);\n"
 "};\0";
 
 ROTOM::Material::Material(const char *texturePath) {
@@ -73,7 +69,9 @@ ROTOM::Material::Material(const char *texturePath) {
   setShader(vertexShaderSource, fragmentShaderSource);
 }
 
-ROTOM::Material::~Material() {}
+ROTOM::Material::~Material() {
+  GRAPHICS::releaseMaterial(&shaderData_.shaderProgram);
+}
 
 void ROTOM::Material::setShader(const char *vertexShaderSource, const char *fragmentShaderSource) {
   GRAPHICS::setShader(&shaderData_, vertexShaderSource, fragmentShaderSource);

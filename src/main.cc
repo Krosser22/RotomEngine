@@ -7,9 +7,7 @@
 **/
 
 //#include "general/sound.h"
-#include "general/time.h"
 #include "general/window.h"
-//#include "render/renderManager.h"
 #include "taskManager/taskManager.h"
 
 int main(int argc, char** argv) {

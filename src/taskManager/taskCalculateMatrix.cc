@@ -7,9 +7,7 @@
 **/
 
 #include "taskManager/taskCalculateMatrix.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtx/transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 glm::fmat4 identity = glm::fmat4();
 glm::fmat4 modelLocal = glm::fmat4();

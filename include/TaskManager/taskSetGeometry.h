@@ -11,7 +11,6 @@
 
 #include "task.h"
 #include "node/geometry.h"
-#include "node/drawable.h"
 
 namespace ROTOM {
   class TaskSetGeometry : public Task {

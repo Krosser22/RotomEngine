@@ -6,31 +6,30 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __GEOMETRY_SCENE_H__
-#define __GEOMETRY_SCENE_H__
+#ifndef __DEFAULT_SCENE_H__
+#define __DEFAULT_SCENE_H__
 
 #include "general/scene.h"
-#include <memory>
 
 namespace ROTOM {
-  class GeometryScene : public Scene {
+  class DefaultScene : public Scene {
   public:
-    GeometryScene() {};
-    ~GeometryScene() {};
+    DefaultScene() {};
+    ~DefaultScene() {};
 
     void init();
 
-    void input() {};
+    void input();
 
     void update();
 
-    void draw();
+    void draw() {};
 
     void destroy() {};
 
-    static const int amount = 5000;
-    std::shared_ptr<Geometry> geometry;
+    static const int amount_ = 2722;
+    std::shared_ptr<Geometry> geometry_;
   };
 }
 
-#endif //__GEOMETRY_SCENE_H__
+#endif //__DEFAULT_SCENE_H__

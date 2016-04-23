@@ -9,8 +9,6 @@
 #ifndef __MATERIAL_H__
 #define __MATERIAL_H__
 
-#include "materialSettings.h"
-
 namespace ROTOM {
   struct ShaderData {
     unsigned int shaderProgram;

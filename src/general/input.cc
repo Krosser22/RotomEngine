@@ -7,8 +7,7 @@
 **/
 
 #include "general/input.h"
-#include "imgui.h"
-#include <stdio.h>
+#include <imgui.h>
 
 ImGuiIO& io = ImGui::GetIO();
 ImGuiIO ioFrameBefore;

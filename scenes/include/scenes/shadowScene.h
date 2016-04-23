@@ -10,7 +10,6 @@
 #define __SHADOW_SCENE_H__
 
 #include "general/scene.h"
-#include <memory>
 
 namespace ROTOM {
   class ShadowScene : public Scene {

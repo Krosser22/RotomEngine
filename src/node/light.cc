@@ -8,9 +8,7 @@
 
 #include "node/light.h"
 #include "render/graphics.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtx/matrix_decompose.hpp"
-#include "glm/gtc/type_ptr.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 unsigned int textureDepthbuffer;
 unsigned int depthFramebuffer;
@@ -54,11 +52,12 @@ float *ROTOM::Light::spaceMatrix() {
 }
 
 void ROTOM::Light::renderDepthToTexture(Material *material) {
-  GRAPHICS::setRenderDepthTexture(material, &textureDepthbuffer, &depthFramebuffer);
+  //GRAPHICS::setRenderDepthTexture(material, &textureDepthbuffer, &depthFramebuffer);
   matToRenderDepthTexture = material;
 }
 
 void ROTOM::Light::beginRenderDepthToTexture() {
+  printf("CHECK THIS: ROTOM::Light::beginRenderDepthToTexture > textureDepthbuffer ??????");
   matToRenderDepthTexture->texture_ = textureDepthbuffer;
   GRAPHICS::beginFramebuffer(depthFramebuffer);
 }

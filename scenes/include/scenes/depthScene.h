@@ -6,17 +6,16 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __RENDER_TO_TEXTURE_SCENE_H__
-#define __RENDER_TO_TEXTURE_SCENE_H__
+#ifndef __DEPTH_SCENE_H__
+#define __DEPTH_SCENE_H__
 
 #include "general/scene.h"
-#include <memory>
 
 namespace ROTOM {
-  class RenderToTextureScene : public Scene {
+  class DepthScene : public Scene {
   public:
-    RenderToTextureScene() {};
-    ~RenderToTextureScene() {};
+    DepthScene() {};
+    ~DepthScene() {};
 
     void init();
 
@@ -24,12 +23,14 @@ namespace ROTOM {
 
     void update();
 
-    void draw();
+    void draw() {};
 
     void destroy() {};
     
   private:
+    static const int amount = 100;
     std::shared_ptr<Geometry> geometry_;
+    std::shared_ptr<Drawable> drawableBase_;
 
     glm::fvec3 cameraPos = glm::fvec3(0.0f, 0.0f, 3.0f);
     glm::fvec3 cameraFront = glm::fvec3(0.0f, 0.0f, -1.0f);
@@ -40,9 +41,9 @@ namespace ROTOM {
     float lastY = 720 / 2.0;
     float fov = 45.0f;
 
-    float movementSpeed = 0.05f; // Change this value to your liking
-    float rotationSpeed = 0.5f;	// Change this value to your liking
-    float scrollSpeed = 0.05f; // Change this value to your liking
+    float movementSpeed = 0.05f;
+    float rotationSpeed = 0.5f;
+    float scrollSpeed = 0.05f;
 
     void movement();
 
@@ -52,4 +53,4 @@ namespace ROTOM {
   };
 }
 
-#endif //__RENDER_TO_TEXTURE_SCENE_H__
+#endif //__DEPTH_SCENE_H__

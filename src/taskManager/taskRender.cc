@@ -13,9 +13,6 @@ ROTOM::TaskRender::TaskRender() {}
 ROTOM::TaskRender::~TaskRender() {}
 
 void ROTOM::TaskRender::run() {
-  /*if (displayList_->isValid_) {
-    printf("The DisplayList is slow\n");
-  }*/
   displayList_->isValid_ = true;
 }
 

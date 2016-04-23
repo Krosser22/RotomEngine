@@ -14,25 +14,22 @@
 
 namespace ROTOM {
   //Initializes the window
-  bool WindowInit(const unsigned int width, const unsigned int height);
+  void WindowInit(const unsigned int width, const unsigned int height);
 
   //Destroys the window
   void WindowDestroy();
+
+  //Returns the width of the window
+  int WindowWidth();
   
   //Returns the height of the window
   int WindowHeight();
-  
-  //Returns the width of the window
-  int WindowWidth();
 
   //Sets the scene that is going to be used
   void SetScene(Scene *newScene);
 
   //Render the scene from the perspective of a camera
   void RenderScene(float *projectionMatrix, float *viewMatrix);
-
-  //Render ImGui
-  void RenderImGui();
 
   //It will return the actual displayList
   DisplayList *GetActualDisplayList();

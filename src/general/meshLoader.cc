@@ -8,7 +8,7 @@
 
 #include "general/constants.h"
 #include "general/time.h"
-#include "meshLoader.h"
+#include "general/meshLoader.h"
 #include "render/commandSetGeometry.h"
 #include "render/displayList.h"
 #include "glm/gtc/matrix_transform.hpp"

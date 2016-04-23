@@ -7,6 +7,9 @@
 **/
 
 #include "taskManager/taskManager.h"
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 struct TaskManagerData {
   int threardsCount;

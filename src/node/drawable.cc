@@ -21,8 +21,6 @@ ROTOM::Drawable::Drawable(char *name) {
 }
 
 ROTOM::Drawable::~Drawable() {
-  // Properly de-allocate all resources once they've outlived their purpose
-  GRAPHICS::releaseMaterial(material_->shaderData_.shaderProgram);
 }
 
 void ROTOM::Drawable::setGeometry(std::shared_ptr<Geometry> geometry) {

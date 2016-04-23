@@ -10,7 +10,7 @@
 #define __COMMAND_DRAW_OBJECT_H__
 
 #include "command.h"
-#include "node/drawable.h"
+#include "node/geometry.h"
 #include "node/light.h"
 
 namespace ROTOM {

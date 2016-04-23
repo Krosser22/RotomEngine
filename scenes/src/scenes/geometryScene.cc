@@ -6,9 +6,9 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "scenes/geometryScene.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "scenes/geometryScene.h"
 
 void ROTOM::GeometryScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
@@ -46,8 +46,4 @@ void ROTOM::GeometryScene::init() {
 void ROTOM::GeometryScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
   getRoot()->move(sin_time, sin_time, sin_time);
-}
-
-void ROTOM::GeometryScene::draw() {
-  RenderImGui();
 }

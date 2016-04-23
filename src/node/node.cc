@@ -7,9 +7,8 @@
 **/
 
 #include "node/node.h"
-#include "render/graphics.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtx/matrix_decompose.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 ROTOM::Node::Node() {
   type_ = kNodeType_Node;

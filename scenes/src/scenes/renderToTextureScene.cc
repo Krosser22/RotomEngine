@@ -6,16 +6,10 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/files.h"
-#include "general/input.h"
-#include "general/time.h"
-#include "general/window.h"
 #include "scenes/renderToTextureScene.h"
-
-// GLM Mathematics
-#include <glm/glm.hpp>
+#include "general/input.h"
+#include "general/window.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 void ROTOM::RenderToTextureScene::init() {
   //Camera
@@ -29,13 +23,11 @@ void ROTOM::RenderToTextureScene::init() {
   material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
 
   //Material renderColorToTexture
-  std::shared_ptr<Material> materialRenderColorToTexture;
-  materialRenderColorToTexture = std::shared_ptr<Material>(new Material());
+  std::shared_ptr<Material> materialRenderColorToTexture = std::shared_ptr<Material>(new Material());
   materialRenderColorToTexture->setShaderFromPath("basics/2_Texture.vertx", "basics/2_Texture.frag");
 
   //Material renderDepthToTexture
-  std::shared_ptr<Material> materialRenderDepthToTexture;
-  materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
+  std::shared_ptr<Material> materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
   materialRenderDepthToTexture->setShaderFromPath("renderToDepth.vertx", "renderToDepth.frag");
   
   //Drawables
@@ -78,6 +70,7 @@ void ROTOM::RenderToTextureScene::init() {
 
   getCamera()->renderColorToTexture(materialRenderColorToTexture.get());
   getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture.get());
+  renderTarget_.init(WindowWidth(), WindowHeight(), 1);
 }
 
 void ROTOM::RenderToTextureScene::input() {
@@ -191,6 +184,4 @@ void ROTOM::RenderToTextureScene::draw() {
   RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
   //RenderScene(getLight().begin()->get()->projectionMatrix(), getCamera()->viewMatrix());
   getLight().begin()->get()->endRenderDepthToTexture();
-
-  RenderImGui();
 }

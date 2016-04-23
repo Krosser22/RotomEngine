@@ -6,13 +6,8 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/files.h"
-#include "general/input.h"
-#include "general/time.h"
-#include "general/window.h"
 #include "scenes/shaderScene.h"
-#include "imgui.h"
-#include "meshLoader.h"
+#include "general/window.h"
 
 void ROTOM::ShaderScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
@@ -88,8 +83,4 @@ void ROTOM::ShaderScene::update() {
   node->setRotationX(node->rotation().x + 0.01f);
 
   //drawableLight_->setPosition(getLight().at(0)->lightPosition[0], getLight().at(0)->lightPosition[1], getLight().at(0)->lightPosition[2]);
-}
-
-void ROTOM::ShaderScene::draw() {
-  RenderImGui();
 }

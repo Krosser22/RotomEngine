@@ -13,6 +13,7 @@
 #include "scenes/geometryScene.h"
 #include "scenes/movementScene.h"
 #include "scenes/meshLoaderScene.h"
+#include "scenes/proceduralScene.h"
 #include "scenes/renderToTextureScene.h"
 #include "scenes/shaderScene.h"
 #include "scenes/shadowScene.h"
@@ -30,7 +31,8 @@ int ROTOM::main(int argc, char** argv) {
   //GeometryScene scene;
   //MeshLoaderScene scene;
   //MovementScene scene;
-  RenderToTextureScene scene;
+  ProceduralScene scene;
+  //RenderToTextureScene scene;
   //ShaderScene scene;
   //ShadowScene scene;
   //SoundScene scene;
@@ -52,16 +54,15 @@ int ROTOM::main(int argc, char** argv) {
 -----------
 ---DOING---
 -----------
-+Shadows --> Lo primero es sacar el depth buffer
 +Shadows --> GPU gems 3 (Webpage) parte 2
 +Shadows --> Real time shadows (Book)
-Por cada una de las cameras se pintará toda la escena para dicha camera haciendo una pasada por todos los drawables (partiendo desde el root) y todas las lights.
-También será necesario hacer una pasada por cada una de las luces para crear las sombras.
 
 
 ----------
 ---TODO---
 ----------
++Create a texture class to make sure the texture is well deleted when it has taken by none other object
+
 +Cambiar el glBindTexture por glSetActiveTexture
 
 +glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //TODO - Make this an option to choose

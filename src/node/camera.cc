@@ -6,10 +6,9 @@
 *** ////////////////////////////////////////////
 **/
 
-//#include "render/commandRenderTexture.h"
 #include "node/camera.h"
-#include "glm/gtc/matrix_transform.hpp"
 #include "render/graphics.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 unsigned int textureColorbuffer;
 unsigned int colorFramebuffer;
@@ -75,7 +74,7 @@ float *ROTOM::Camera::viewMatrix() {
 //void ROTOM::Camera::doRender() {}
 
 void ROTOM::Camera::renderColorToTexture(Material *material) {
-  GRAPHICS::setRenderColorTexture(material, &textureColorbuffer, &colorFramebuffer);
+  //GRAPHICS::setRenderColorTexture(material, &textureColorbuffer, &colorFramebuffer);
   matToRenderTexture = material;
 }
 
