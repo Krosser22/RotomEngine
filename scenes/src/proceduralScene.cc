@@ -8,26 +8,23 @@
 
 #include "proceduralScene.h"
 #include "general/input.h"
+#include "general/procedural.h"
 #include "general/window.h"
 
 void ROTOM::ProceduralScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-
-  geometry_ = std::shared_ptr<Geometry>(new Geometry());
 
   //Material1: Color
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
   material->setShaderFromPath("basics/5_SpecularLight_Blinn-Phong.vertx", "basics/5_SpecularLight_Blinn-Phong.frag");
 
   //Root
-  getRoot()->setPositionX(-2.9f);
+  getRoot()->setPositionZ(-5.22f);
 
-  //Drawable
-  std::shared_ptr<Drawable> drawable = std::shared_ptr<Drawable>(new Drawable("Drawable"));
-  drawable->setGeometry(geometry_);
-  drawable->setMaterial(material);
-  drawable->setParent(getRoot());
-  drawable->setPositionZ(-5.0f);
+  //Chunk
+  chunk_ = std::shared_ptr<Chunk>(new Chunk("Chunk"));
+  chunk_->init();
+  chunk_->setParent(getRoot());
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -37,10 +34,40 @@ void ROTOM::ProceduralScene::init() {
 }
 
 void ROTOM::ProceduralScene::input() {
+  static float x = 0, y = 0, z = 0;
+  static const float amount_change = 0.01f;
 
+  if (INPUT::IsKeyDown('W')) {
+    x += amount_change;
+  }
+
+  if (INPUT::IsKeyDown('S')) {
+    x -= amount_change;
+  }
+
+  if (INPUT::IsKeyDown('A')) {
+    y += amount_change;
+  }
+
+  if (INPUT::IsKeyDown('D')) {
+    y -= amount_change;
+  }
+
+  if (INPUT::IsKeyDown('Q')) {
+    z += amount_change;
+  }
+
+  if (INPUT::IsKeyDown('E')) {
+    z -= amount_change;
+  }
+
+  //printf("%f, %f, %f = %f\n", x, y, z, PROCEDURAL::perlinNoise(x, y, z));
 }
 
 void ROTOM::ProceduralScene::update() {
-  Node *node = getRoot()->getChildAt(0).get();
-  node->setRotationZ(node->rotation().z + 0.01f);
+
+}
+
+void ROTOM::ProceduralScene::draw() {
+
 }

@@ -10,6 +10,7 @@
 #define __PROCEDURAL_SCENE_H__
 
 #include "general/scene.h"
+#include "node/chunk.h"
 
 namespace ROTOM {
   class ProceduralScene : public Scene {
@@ -23,12 +24,12 @@ namespace ROTOM {
 
     void update();
 
-    void draw() {};
+    void draw();
 
     void destroy() {};
     
   private:
-    std::shared_ptr<Geometry> geometry_;
+    std::shared_ptr<Chunk> chunk_;
   };
 }
 

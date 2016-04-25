@@ -20,8 +20,7 @@ ROTOM::Drawable::Drawable(char *name) {
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
 }
 
-ROTOM::Drawable::~Drawable() {
-}
+ROTOM::Drawable::~Drawable() {}
 
 void ROTOM::Drawable::setGeometry(std::shared_ptr<Geometry> geometry) {
   geometry_ = geometry;

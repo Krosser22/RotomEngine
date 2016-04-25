@@ -211,7 +211,7 @@ glm::fmat4 *ROTOM::Node::modelWorld() {
 }
 
 void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
-  //TODO - Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
+  //Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
   modelLocal_ = glm::inverse(*parent->modelWorld()) * modelWorld_;
 
   glm::quat rotation;

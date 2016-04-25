@@ -30,7 +30,7 @@ namespace ROTOM {
     void setMaterialSettings(std::shared_ptr<MaterialSettings> materialSettings);
     std::shared_ptr<MaterialSettings> materialSettings();
 
-  private:
+  protected:
     std::shared_ptr<ROTOM::Geometry> geometry_;
     std::shared_ptr<ROTOM::Material> material_;
     std::shared_ptr<ROTOM::MaterialSettings> materialSettings_;
