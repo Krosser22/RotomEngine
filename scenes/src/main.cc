@@ -31,11 +31,12 @@ int ROTOM::main(int argc, char** argv) {
   //GeometryScene scene;
   //MeshLoaderScene scene;
   //MovementScene scene;
-  ProceduralScene scene;
-  //RenderToTextureScene scene;
+  //ProceduralScene scene;
+  RenderToTextureScene scene;
   //ShaderScene scene;
   //ShadowScene scene;
   //SoundScene scene;
+
   SetScene(&scene);
   return 0;
 }
@@ -70,6 +71,8 @@ int ROTOM::main(int argc, char** argv) {
 +Load a obj with more than one texture
 
 +Investigate Geometry shaders to make the procedural scene
+
++Compile the sound library to allow me to use it on release
 
 +Add LUA
 

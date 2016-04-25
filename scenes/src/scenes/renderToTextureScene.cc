@@ -20,7 +20,6 @@ void ROTOM::RenderToTextureScene::init() {
 
   //Material
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
-  material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
 
   //Material renderColorToTexture
   std::shared_ptr<Material> materialRenderColorToTexture = std::shared_ptr<Material>(new Material());
@@ -68,8 +67,8 @@ void ROTOM::RenderToTextureScene::init() {
   light->specularIntensity_[2] = 1.0f;
   AddLight(light);
 
-  getCamera()->renderColorToTexture(materialRenderColorToTexture.get());
-  getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture.get());
+  getCamera()->renderColorToTexture(materialRenderColorToTexture.get(), WindowWidth(), WindowHeight());
+  getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture.get(), WindowWidth(), WindowHeight());
   renderTarget_.init(WindowWidth(), WindowHeight(), 1);
 }
 

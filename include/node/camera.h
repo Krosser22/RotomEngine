@@ -46,7 +46,7 @@ namespace ROTOM {
     //Renders all visible (not culled) objects
     //void doRender();
 
-    void renderColorToTexture(Material *material);
+    void renderColorToTexture(Material *material, unsigned int width, unsigned int height);
 
     void beginRenderColorToTexture();
 

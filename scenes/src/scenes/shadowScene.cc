@@ -26,8 +26,7 @@ void ROTOM::ShadowScene::init() {
   shadowMaterial->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
 
   //Material renderDepthToTexture
-  std::shared_ptr<Material> materialRenderDepthToTexture;
-  materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
+  std::shared_ptr<Material> materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
   materialRenderDepthToTexture->setShaderFromPath("renderToDepth.vertx", "renderToDepth.frag");
   
   //Drawables
@@ -72,7 +71,7 @@ void ROTOM::ShadowScene::init() {
   light->specularIntensity_[1] = 1.0f;
   light->specularIntensity_[2] = 1.0f;
   AddLight(light);
-  getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture.get());
+  getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture.get(), WindowWidth(), WindowHeight());
 }
 
 void ROTOM::ShadowScene::input() {

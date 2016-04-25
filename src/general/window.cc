@@ -30,28 +30,35 @@ void ROTOM::WindowInit(unsigned int width, unsigned int height) {
 
 bool WindowIsOpened() {
   if (!ROTOM::GRAPHICS::windowShouldClose()) {
-    //TaskManager
+    //Input
+    ROTOM::INPUT::Update();
+
+    //Clear Screen
+    ROTOM::GRAPHICS::clearScreen();
+
+    //Update TaskManager
     taskCalculateNodesMatrix.setInput(scene->getRoot().get());
     taskCalculateCameraMatrix.setInput(&cameraNode);
     taskRender.setInput(&displayList);
     ROTOM::TASKMANAGER::addTask(&taskCalculateCameraMatrix);
     ROTOM::TASKMANAGER::addTask(&taskCalculateNodesMatrix);
 
-    //Scene
-    assert(scene);
+    //Update Scene
+    //assert(scene);
     scene->input();
     scene->update();
-    /*for (unsigned int i = 0; i < scene->getLight().size(); ++i) {
-      updateDepthFromLight(scene->getLight().at(i).get());
-    }*/
     scene->draw();
-    ROTOM::GRAPHICS::clearScreen();
+
+    //Light
+    /*for (unsigned int i = 0; i < scene->getLight().size(); ++i) {
+    updateDepthFromLight(scene->getLight().at(i).get());
+    }*/
+
+    //Render
     ROTOM::RenderScene(scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
 
-    //HUD
+    //Render HUD
     ROTOM::HUD::Draw();
-
-    ROTOM::INPUT::Update();
 
     ROTOM::GRAPHICS::swapBuffers();
     return true;

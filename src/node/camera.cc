@@ -73,13 +73,12 @@ float *ROTOM::Camera::viewMatrix() {
 
 //void ROTOM::Camera::doRender() {}
 
-void ROTOM::Camera::renderColorToTexture(Material *material) {
-  //GRAPHICS::setRenderColorTexture(material, &textureColorbuffer, &colorFramebuffer);
+void ROTOM::Camera::renderColorToTexture(Material *material, unsigned int width, unsigned int height) {
+  GRAPHICS::setRenderColorTexture(material, &textureColorbuffer, &colorFramebuffer, width, height);
   matToRenderTexture = material;
 }
 
 void ROTOM::Camera::beginRenderColorToTexture() {
-  matToRenderTexture->texture_ = textureColorbuffer;
   GRAPHICS::beginFramebuffer(colorFramebuffer);
 }
 

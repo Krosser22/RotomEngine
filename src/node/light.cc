@@ -51,14 +51,12 @@ float *ROTOM::Light::spaceMatrix() {
   return glm::value_ptr(spaceMatrix);
 }
 
-void ROTOM::Light::renderDepthToTexture(Material *material) {
-  //GRAPHICS::setRenderDepthTexture(material, &textureDepthbuffer, &depthFramebuffer);
+void ROTOM::Light::renderDepthToTexture(Material *material, unsigned int width, unsigned int height) {
+  GRAPHICS::setRenderDepthTexture(material, &textureDepthbuffer, &depthFramebuffer, width, height);
   matToRenderDepthTexture = material;
 }
 
 void ROTOM::Light::beginRenderDepthToTexture() {
-  printf("CHECK THIS: ROTOM::Light::beginRenderDepthToTexture > textureDepthbuffer ??????");
-  matToRenderDepthTexture->texture_ = textureDepthbuffer;
   GRAPHICS::beginFramebuffer(depthFramebuffer);
 }
 

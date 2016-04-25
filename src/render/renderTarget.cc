@@ -12,7 +12,7 @@ ROTOM::RenderTarget::RenderTarget() {}
 
 ROTOM::RenderTarget::~RenderTarget() {}
 
-void ROTOM::RenderTarget::init(int width, int height, int color_attachments) {
+void ROTOM::RenderTarget::init(unsigned int width, unsigned int height, int color_attachments) {
   //GRAPHICS::setRenderDepthTexture(material, &textureDepthbuffer, &depthFramebuffer);
   //matToRenderDepthTexture = material;
 }

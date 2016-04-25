@@ -37,9 +37,9 @@ namespace ROTOM {
 
     void releaseTexture(unsigned int *texture);
 
-    void setRenderColorTexture(Material *material, unsigned int *textureColorbuffer, unsigned int *framebuffer, unsigned int screenWidth, unsigned int screenHeight);
+    void setRenderColorTexture(Material *material, unsigned int *textureColorbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height);
 
-    void setRenderDepthTexture(Material *material, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int screenWidth, unsigned int screenHeight);
+    void setRenderDepthTexture(Material *material, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height);
 
     void releaseMaterial(unsigned int *shaderProgram);
 
