@@ -94,6 +94,10 @@ void ROTOM::Material::setTexture(unsigned char *texture) {
   GRAPHICS::setTexture(&texture_, texture, &textureWidth_, &textureHeight_);
 }
 
+void ROTOM::Material::setTexture(unsigned int *texture) {
+  texture_ = *texture;
+}
+
 void ROTOM::Material::setTextureFromPath(const char *path) {
   //Load and generate the texture and the mipmaps
   unsigned char *image = SOIL_load_image(path, &textureWidth_, &textureHeight_, 0, SOIL_LOAD_RGBA);

@@ -6,62 +6,56 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "scenes/depthScene.h"
+#include "movementScene.h"
 #include "general/input.h"
-#include "general/time.h"
 #include "general/window.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-void ROTOM::DepthScene::init() {
+void ROTOM::MovementScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
+  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
+  material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
 
-  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-  material->setShaderFromPath("depthBuffer.vertx", "depthBuffer.frag");
+  std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
+  std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("2"));
+  std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
+  std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("4"));
 
-  drawableBase_ = std::shared_ptr<Drawable>(new Drawable("DrawableBase"));
-  drawableBase_->setGeometry(geometry_);
-  drawableBase_->setMaterial(material);
-  drawableBase_->setParent(getRoot());
-  drawableBase_->setPosition(-1.0f, -1.0f, 0.0f);
+  drawable1->setGeometry(geometry_);
+  drawable1->setMaterial(material);
+  drawable1->setParent(getRoot());
 
-  std::shared_ptr<Drawable> drawable[amount];
-  const float separation = -2.0f;
-  const float pos_x_started = 8.0f;
-  const float pos_y_started = 0.0f;
-  const float pos_z_started = 0.0f;
-  const int rows = 10;
-  const int cols = 10;
-  float pos[3] = { 0.0f, 0.0f, 0.0f };
-  for (int i = 0; i < amount; ++i) {
-    pos[0] = ((i % cols) * separation) + pos_x_started;
-    pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
-    pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    drawable[i] = std::shared_ptr<Drawable>(new Drawable("i"));
-    drawable[i]->setGeometry(geometry_);
-    drawable[i]->setMaterial(material);
-    drawable[i]->setParent(drawableBase_);
-    drawable[i]->setPosition(pos);
-  }
+  drawable2->setGeometry(geometry_);
+  drawable2->setMaterial(material);
+  drawable2->setParent(drawable1);
+  drawable2->setPositionX(1.0f);
+
+  drawable3->setGeometry(geometry_);
+  drawable3->setMaterial(material);
+  drawable3->setParent(drawable2);
+  drawable3->setPositionX(1.0f);
+
+  drawable4->setGeometry(geometry_);
+  drawable4->setMaterial(material);
+  drawable4->setParent(drawable3);
+  drawable4->setPositionX(1.0f);
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->setPosition(5.0f, 4.0f, 2.0f);
+  light->setPosition(1.00f, 0.0f, 3.50f);
+  light->materialSettings()->color_[0] = 0.8f;
+  light->materialSettings()->color_[1] = 0.6f;
+  light->materialSettings()->color_[2] = 0.4f;
+  light->specularIntensity_[0] = 1.0f;
+  light->specularIntensity_[1] = 1.0f;
+  light->specularIntensity_[2] = 1.0f;
   AddLight(light);
-
-  //Window
-  std::shared_ptr<Drawable> drawableWindow = std::shared_ptr<Drawable>(new Drawable("Window"));
-  std::shared_ptr<Material> TransparentMaterial = std::shared_ptr<Material>(new Material("../../../../img/window.png"));
-  TransparentMaterial->setShaderFromPath("basics/2_Texture.vertx", "basics/2_Texture.frag");
-  drawableWindow->setGeometry(geometry_);
-  drawableWindow->setMaterial(TransparentMaterial);
-  drawableWindow->setParent(getRoot());
-  drawableWindow->setPositionX(-1.0f);
 }
 
-void ROTOM::DepthScene::input() {
+void ROTOM::MovementScene::input() {
   if (INPUT::IsMousePressed(1)) {
     lastX = INPUT::MousePositionX();
     lastY = INPUT::MousePositionY();
@@ -77,7 +71,7 @@ void ROTOM::DepthScene::input() {
   }
 }
 
-void ROTOM::DepthScene::movement() {
+void ROTOM::MovementScene::movement() {
   //Forward
   if (INPUT::IsKeyDown('W')) {
     cameraPos += movementSpeed * cameraFront;
@@ -109,7 +103,7 @@ void ROTOM::DepthScene::movement() {
   }
 }
 
-void ROTOM::DepthScene::rotation() {
+void ROTOM::MovementScene::rotation() {
   float xoffset = INPUT::MousePositionX() - lastX;
   float yoffset = lastY - INPUT::MousePositionY(); // Reversed since y-coordinates go from bottom to left
   lastX = INPUT::MousePositionX();
@@ -137,7 +131,7 @@ void ROTOM::DepthScene::rotation() {
   cameraFront = glm::normalize(front);
 }
 
-void ROTOM::DepthScene::scroll() {
+void ROTOM::MovementScene::scroll() {
   if (fov >= 1.0f && fov <= 45.0f) {
     fov -= INPUT::MouseWheel() * scrollSpeed;
   }
@@ -152,8 +146,9 @@ void ROTOM::DepthScene::scroll() {
   printf("FOV: %f\n", fov);
 }
 
-void ROTOM::DepthScene::update() {
-  drawableBase_->moveZ(sin(TIME::appTime()) * 0.2f);
+void ROTOM::MovementScene::update() {
+  Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
+  node->setRotationX(node->rotation().x + 0.01f);
 
   // Camera/View transformation
   glm::fmat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);

@@ -6,7 +6,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "scenes/meshLoaderScene.h"
+#include "meshLoaderScene.h"
 #include "general/input.h"
 #include "general/window.h"
 

@@ -6,7 +6,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "scenes/shaderScene.h"
+#include "shaderScene.h"
 #include "general/window.h"
 
 void ROTOM::ShaderScene::init() {

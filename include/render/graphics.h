@@ -25,6 +25,8 @@ namespace ROTOM {
 
     void clearScreen();
 
+    void clear();
+
     int screenWidth();
 
     void swapBuffers();
@@ -37,10 +39,6 @@ namespace ROTOM {
 
     void releaseTexture(unsigned int *texture);
 
-    void setRenderColorTexture(Material *material, unsigned int *textureColorbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height);
-
-    void setRenderDepthTexture(Material *material, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height);
-
     void releaseMaterial(unsigned int *shaderProgram);
 
     void drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix);
@@ -48,6 +46,8 @@ namespace ROTOM {
     void loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index);
 
     void releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO);
+
+    void genRenderBuffer(unsigned int *textureColorbuffer, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height);
 
     void beginFramebuffer(unsigned int framebuffer);
 

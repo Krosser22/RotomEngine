@@ -46,12 +46,6 @@ namespace ROTOM {
     //Renders all visible (not culled) objects
     //void doRender();
 
-    void renderColorToTexture(Material *material, unsigned int width, unsigned int height);
-
-    void beginRenderColorToTexture();
-
-    void endRenderColorToTexture();
-
   private:
     glm::fvec3 target_;
     glm::fmat4 projection_;

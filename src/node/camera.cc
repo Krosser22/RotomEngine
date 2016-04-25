@@ -10,10 +10,6 @@
 #include "render/graphics.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-unsigned int textureColorbuffer;
-unsigned int colorFramebuffer;
-ROTOM::Material *matToRenderTexture;
-
 ROTOM::Camera::Camera(char *name) {
   type_ = kNodeType_Camera;
   name_ = name;
@@ -72,16 +68,3 @@ float *ROTOM::Camera::viewMatrix() {
 //void ROTOM::Camera::doCull(const Node *root) {}
 
 //void ROTOM::Camera::doRender() {}
-
-void ROTOM::Camera::renderColorToTexture(Material *material, unsigned int width, unsigned int height) {
-  GRAPHICS::setRenderColorTexture(material, &textureColorbuffer, &colorFramebuffer, width, height);
-  matToRenderTexture = material;
-}
-
-void ROTOM::Camera::beginRenderColorToTexture() {
-  GRAPHICS::beginFramebuffer(colorFramebuffer);
-}
-
-void ROTOM::Camera::endRenderColorToTexture() {
-  GRAPHICS::endFramebuffer();
-}

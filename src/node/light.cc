@@ -10,10 +10,6 @@
 #include "render/graphics.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-unsigned int textureDepthbuffer;
-unsigned int depthFramebuffer;
-ROTOM::Material *matToRenderDepthTexture;
-
 ROTOM::Light::Light(char *name) {
   type_ = kNodeType_Light;
 
@@ -49,17 +45,4 @@ float *ROTOM::Light::viewMatrix() {
 float *ROTOM::Light::spaceMatrix() {
   glm::fmat4 spaceMatrix = projection_ * view_;
   return glm::value_ptr(spaceMatrix);
-}
-
-void ROTOM::Light::renderDepthToTexture(Material *material, unsigned int width, unsigned int height) {
-  GRAPHICS::setRenderDepthTexture(material, &textureDepthbuffer, &depthFramebuffer, width, height);
-  matToRenderDepthTexture = material;
-}
-
-void ROTOM::Light::beginRenderDepthToTexture() {
-  GRAPHICS::beginFramebuffer(depthFramebuffer);
-}
-
-void ROTOM::Light::endRenderDepthToTexture() {
-  GRAPHICS::endFramebuffer();
 }

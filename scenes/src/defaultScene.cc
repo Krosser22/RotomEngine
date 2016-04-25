@@ -6,7 +6,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "scenes/defaultScene.h"
+#include "defaultScene.h"
 #include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"

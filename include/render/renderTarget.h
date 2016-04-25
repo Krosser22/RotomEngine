@@ -15,12 +15,14 @@ namespace ROTOM {
     RenderTarget();
     ~RenderTarget();
     
-    void init(unsigned int width, unsigned int height, int color_attachments = 1);
+    void init(unsigned int width, unsigned int height);
     
-    //Texture* colorTexture(unsigned int index = 0);
-    //Texture* depthTexture();
+    unsigned int *colorTexture();
+
+    unsigned int *depthTexture();
     
     void begin();
+
     void end();
   };
 }

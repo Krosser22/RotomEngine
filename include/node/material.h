@@ -11,6 +11,22 @@
 
 namespace ROTOM {
   struct ShaderData {
+    ShaderData() {
+      shaderProgram = 0;
+      u_color = 0;
+      u_model = 0;
+      u_view = 0;
+      u_projection = 0;
+      u_lightPosition = 0;
+      u_lightColor = 0;
+      u_texture = 0;
+      u_shininess = 0;
+      u_specularIntensity = 0;
+      u_specularMaterial = 0;
+      u_ambientStrength = 0;
+      u_eyePosition = 0;
+      u_lightSpaceMatrix = 0;
+    }
     unsigned int shaderProgram;
     unsigned int u_color;
     unsigned int u_model;
@@ -48,6 +64,7 @@ namespace ROTOM {
 
     //Set the texture of the object
     void setTexture(unsigned char *texture);
+    void setTexture(unsigned int *texture);
     void setTextureFromPath(const char *path);
     const unsigned int texture();
 

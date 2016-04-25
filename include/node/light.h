@@ -27,12 +27,6 @@ namespace ROTOM {
 
     float *spaceMatrix();
 
-    void renderDepthToTexture(Material *material, unsigned int width, unsigned int height);
-
-    void beginRenderDepthToTexture();
-
-    void endRenderDepthToTexture();
-
   private:
     glm::fmat4 projection_;
     glm::fmat4 view_;

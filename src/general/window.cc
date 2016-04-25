@@ -34,7 +34,7 @@ bool WindowIsOpened() {
     ROTOM::INPUT::Update();
 
     //Clear Screen
-    ROTOM::GRAPHICS::clearScreen();
+    ROTOM::GRAPHICS::clear();
 
     //Update TaskManager
     taskCalculateNodesMatrix.setInput(scene->getRoot().get());

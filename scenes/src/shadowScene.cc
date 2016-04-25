@@ -6,7 +6,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "scenes/shadowScene.h"
+#include "shadowScene.h"
 #include "general/input.h"
 #include "general/window.h"
 #include <glm/gtc/matrix_transform.hpp>
@@ -71,7 +71,7 @@ void ROTOM::ShadowScene::init() {
   light->specularIntensity_[1] = 1.0f;
   light->specularIntensity_[2] = 1.0f;
   AddLight(light);
-  getLight().begin()->get()->renderDepthToTexture(materialRenderDepthToTexture.get(), WindowWidth(), WindowHeight());
+  //getLight().begin()->get()->renderDepthToTexture(&materialRenderDepthToTexture.get()->texture_, WindowWidth(), WindowHeight());
 }
 
 void ROTOM::ShadowScene::input() {
@@ -177,8 +177,8 @@ void ROTOM::ShadowScene::update() {
 }
 
 void ROTOM::ShadowScene::draw() {
-  getLight().begin()->get()->beginRenderDepthToTexture();
-  RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+  //getLight().begin()->get()->beginRenderDepthToTexture();
+  //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
   //RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
-  getLight().begin()->get()->endRenderDepthToTexture();
+  //getLight().begin()->get()->endRenderDepthToTexture();
 }

@@ -424,6 +424,10 @@ bool ROTOM::GRAPHICS::windowShouldClose() {
 
 void ROTOM::GRAPHICS::clearScreen() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void ROTOM::GRAPHICS::clear() {
+  clearScreen();
   g_MousePressed[0] = false;
   g_MousePressed[1] = false;
   g_MousePressed[2] = false;
@@ -531,101 +535,6 @@ void ROTOM::GRAPHICS::releaseTexture(unsigned int *texture) {
   }
 }
 
-GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil, GLsizei screenWidth, GLsizei screenHeight) {
-  //What enum to use?
-  GLenum attachment_type;
-  if (!depth && !stencil) {
-    attachment_type = GL_RGB;
-  } else if (depth && !stencil) {
-    attachment_type = GL_DEPTH_COMPONENT;
-  } else if (!depth && stencil) {
-    attachment_type = GL_STENCIL_INDEX;
-  }
-  
-  //Generate texture ID and load texture data 
-  GLuint textureID;
-  glGenTextures(1, &textureID);
-  glBindTexture(GL_TEXTURE_2D, textureID);
-  if (!depth && !stencil) {
-    glTexImage2D(GL_TEXTURE_2D, 0, attachment_type, screenWidth, screenHeight, 0, attachment_type, GL_UNSIGNED_BYTE, NULL);
-  } else { //Using both a stencil and depth test, needs special format arguments
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, screenWidth, screenHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
-  }
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glBindTexture(GL_TEXTURE_2D, 0);
-
-  return textureID;
-}
-
-void ROTOM::GRAPHICS::setRenderColorTexture(Material *material, unsigned int *textureColorbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height) {
-  //Framebuffers
-  if (framebuffer > 0) {
-    glDeleteFramebuffers(1, framebuffer);
-  }
-  glGenFramebuffers(1, framebuffer);
-  glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
-
-  //Create a color attachment texture
-  releaseTexture(textureColorbuffer);
-  *textureColorbuffer = generateAttachmentTexture(false, false, width, height);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *textureColorbuffer, 0);
-
-  //Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
-  GLuint rbo;
-  glGenRenderbuffers(1, &rbo);
-  glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height); // Use a single renderbuffer object for both a depth AND stencil buffer.
-  glBindRenderbuffer(GL_RENDERBUFFER, 0);
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
-
-  //Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-    printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-    system("pause");
-  }
-
-  material->texture_ = *textureColorbuffer;
-
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void ROTOM::GRAPHICS::setRenderDepthTexture(Material *material, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height) {
-  //Framebuffers
-  if (framebuffer > 0) {
-    glDeleteFramebuffers(1, framebuffer);
-  }
-  glGenFramebuffers(1, framebuffer);
-  glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
-
-  //Create depth texture
-  glGenTextures(1, textureDepthbuffer);
-  glBindTexture(GL_TEXTURE_2D, *textureDepthbuffer);
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-  glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *textureDepthbuffer, 0);
-  glDrawBuffer(GL_NONE);
-  glReadBuffer(GL_NONE);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  //Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-    printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-    system("pause");
-  }
-
-  releaseTexture(&material->texture_);
-  material->texture_ = *textureDepthbuffer;
-
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
 void ROTOM::GRAPHICS::releaseMaterial(unsigned int *shaderProgram) {
   glDeleteProgram(*shaderProgram);
 }
@@ -641,8 +550,8 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   //Texture
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, lights->begin()->get()->material()->texture_);
+  //glActiveTexture(GL_TEXTURE1);
+  //glBindTexture(GL_TEXTURE_2D, lights->begin()->get()->material()->texture_);
 
   //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
@@ -727,6 +636,40 @@ void ROTOM::GRAPHICS::releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsi
   if (VBO > 0) {
     glDeleteBuffers(1, VBO);
   }
+}
+
+void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *textureColorbuffer, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height) {
+  //Framebuffer
+  glGenFramebuffers(1, framebuffer);
+  glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
+
+  //Color texture
+  glGenTextures(1, textureColorbuffer);
+  glBindTexture(GL_TEXTURE_2D, *textureColorbuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *textureColorbuffer, 0);
+
+  //Depth texture
+  glGenTextures(1, textureDepthbuffer);
+  glBindTexture(GL_TEXTURE_2D, *textureDepthbuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *textureDepthbuffer, 0);
+
+  //Check status
+  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+    printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+    system("pause");
+  }
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ROTOM::GRAPHICS::beginFramebuffer(unsigned int framebuffer) {

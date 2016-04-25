@@ -6,7 +6,7 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "scenes/proceduralScene.h"
+#include "proceduralScene.h"
 #include "general/input.h"
 #include "general/window.h"
 

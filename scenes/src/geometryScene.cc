@@ -6,17 +6,12 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "scenes/geometryScene.h"
+#include "geometryScene.h"
 #include "general/time.h"
 #include "general/window.h"
 
 void ROTOM::GeometryScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-
-  geometry = std::shared_ptr<Geometry>(new Geometry());
-  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-  std::shared_ptr<Drawable> drawable[amount];
-  geometry->loadGeometry("Monkey/Monkey");
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -24,6 +19,10 @@ void ROTOM::GeometryScene::init() {
   light->setPosition(0.0f, 0.0f, -10.0f);
   AddLight(light);
 
+  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
+  std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
+  geometry->loadGeometry("Monkey/Monkey");
+  std::shared_ptr<Drawable> drawable[amount];
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
   const float pos_y_started = 7.0f;
