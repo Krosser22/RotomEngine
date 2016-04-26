@@ -25,7 +25,7 @@ ROTOM::Light::Light(char *name) {
   setMaterial(lightMaterial);
 
   setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
-  view_ = glm::lookAt(position(), glm::fvec3(0.0f), glm::fvec3(0.0f, 1.0f, 0.0f));
+  view_ = glm::fmat4();
 }
 
 ROTOM::Light::~Light() {}

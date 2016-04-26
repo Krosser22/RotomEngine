@@ -11,21 +11,17 @@
 #include "general/input.h"
 #include "render/graphics.h"
 #include "taskManager/taskCalculateMatrix.h"
-#include "taskManager/taskRender.h"
 #include "taskManager/taskManager.h"
 
 static ROTOM::CommandDrawObject commandDrawObject;
 static ROTOM::DisplayList displayList;
 ROTOM::Node cameraNode("CameraNode");
-ROTOM::TaskRender taskRender;
 ROTOM::TaskCalculateMatrix taskCalculateNodesMatrix;
 ROTOM::TaskCalculateMatrix taskCalculateCameraMatrix;
 static ROTOM::Scene *scene;
 
 void ROTOM::WindowInit(unsigned int width, unsigned int height) {
   GRAPHICS::windowInit(width, height);
-
-  taskCalculateNodesMatrix.nextTaskList_.push_back(&taskRender);
 }
 
 bool WindowIsOpened() {
@@ -39,7 +35,6 @@ bool WindowIsOpened() {
     //Update TaskManager
     taskCalculateNodesMatrix.setInput(scene->getRoot().get());
     taskCalculateCameraMatrix.setInput(&cameraNode);
-    taskRender.setInput(&displayList);
     ROTOM::TASKMANAGER::addTask(&taskCalculateCameraMatrix);
     ROTOM::TASKMANAGER::addTask(&taskCalculateNodesMatrix);
 
@@ -49,12 +44,7 @@ bool WindowIsOpened() {
     scene->update();
     scene->draw();
 
-    //Light
-    /*for (unsigned int i = 0; i < scene->getLight().size(); ++i) {
-    updateDepthFromLight(scene->getLight().at(i).get());
-    }*/
-
-    //Render
+    //Render from the camera perspective
     ROTOM::RenderScene(scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
 
     //Render HUD
@@ -93,16 +83,8 @@ void ROTOM::SetScene(Scene *newScene) {
   scene->destroy();
 }
 
-void updateDepthFromLight(ROTOM::Light *light) {
-
-}
-
 void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix) {
-  //DisplayList
-  if (displayList.isValid_) {
-    commandDrawObject.setInput(scene->getRoot(), scene->getLight(), projectionMatrix, viewMatrix);
-    displayList.isValid_ = false;
-  }
+  commandDrawObject.setInput(scene->getRoot(), scene->getLight(), projectionMatrix, viewMatrix);
   displayList.addCommand(&commandDrawObject);
   displayList.draw();
 }

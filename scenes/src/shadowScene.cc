@@ -14,7 +14,9 @@
 void ROTOM::ShadowScene::init() {
   //Camera
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  //getCamera()->setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
+
+  //RenderTarget
+  renderTarget_.init(WindowWidth(), WindowHeight());
 
   //Geometry
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
@@ -71,7 +73,6 @@ void ROTOM::ShadowScene::init() {
   light->specularIntensity_[1] = 1.0f;
   light->specularIntensity_[2] = 1.0f;
   AddLight(light);
-  //getLight().begin()->get()->renderDepthToTexture(&materialRenderDepthToTexture.get()->texture_, WindowWidth(), WindowHeight());
 }
 
 void ROTOM::ShadowScene::input() {
@@ -172,13 +173,13 @@ void ROTOM::ShadowScene::update() {
   }
 
   // Camera/View transformation
-  glm::fmat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-  getCamera()->setViewMatrix(glm::value_ptr(view));
+  getCamera()->setViewMatrix(glm::value_ptr(glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp)));
 }
 
 void ROTOM::ShadowScene::draw() {
-  //getLight().begin()->get()->beginRenderDepthToTexture();
-  //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
-  //RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
-  //getLight().begin()->get()->endRenderDepthToTexture();
+  renderTarget_.begin();
+  {
+    RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
+  }
+  renderTarget_.end();
 }

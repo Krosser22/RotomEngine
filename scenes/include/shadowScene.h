@@ -10,6 +10,7 @@
 #define __SHADOW_SCENE_H__
 
 #include "general/scene.h"
+#include "render/renderTarget.h"
 
 namespace ROTOM {
   class ShadowScene : public Scene {
@@ -30,6 +31,7 @@ namespace ROTOM {
   private:
     std::shared_ptr<Geometry> geometry_;
     std::shared_ptr<Geometry> geometryFloor_;
+    RenderTarget renderTarget_;
 
     glm::fvec3 cameraPos = glm::fvec3(0.0f, 0.0f, 3.0f);
     glm::fvec3 cameraFront = glm::fvec3(0.0f, 0.0f, -1.0f);

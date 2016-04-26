@@ -15,11 +15,11 @@ void ROTOM::RenderToTextureScene::init() {
   //Camera
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
-  //Geometry
-  geometry_ = std::shared_ptr<Geometry>(new Geometry());
-
   //RenderTarget
   renderTarget_.init(WindowWidth(), WindowHeight());
+
+  //Geometry
+  geometry_ = std::shared_ptr<Geometry>(new Geometry());
 
   //Material
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
@@ -184,8 +184,7 @@ void ROTOM::RenderToTextureScene::draw() {
   if (drawRenderTarget) {
     renderTarget_.begin();
     {
-      //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
-      RenderScene(getLight().begin()->get()->projectionMatrix(), getCamera()->viewMatrix());
+      RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
     }
     renderTarget_.end();
   }

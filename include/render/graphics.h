@@ -27,9 +27,9 @@ namespace ROTOM {
 
     void clear();
 
-    int screenWidth();
-
     void swapBuffers();
+
+    int screenWidth();
 
     int screenHeight();
 
@@ -47,9 +47,9 @@ namespace ROTOM {
 
     void releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO);
 
-    void genRenderBuffer(unsigned int *textureColorbuffer, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height);
+    void genRenderBuffer(int *colorActivePosition, int *depthActivePosition, unsigned int *colorBuffer, unsigned int *depthBuffer, unsigned int *framebuffer, unsigned int width, unsigned int height);
 
-    void beginFramebuffer(unsigned int framebuffer);
+    void beginFramebuffer(RenderTarget *renderTarget);
 
     void endFramebuffer();
   }

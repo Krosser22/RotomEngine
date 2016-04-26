@@ -58,6 +58,7 @@ static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
 
 //Texture
 static int textureID = 0;
+ROTOM::RenderTarget actualRenderTarget;
 
 static void error_callback(int error, const char* description) {
   fputs(description, stderr);
@@ -390,7 +391,7 @@ void ROTOM::GRAPHICS::windowInit(unsigned int width, unsigned int height) {
   }
 
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(1); //TODO - Check this
+  glfwSwapInterval(1);
 
   // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
   glewExperimental = GL_TRUE;
@@ -438,18 +439,18 @@ void ROTOM::GRAPHICS::clear() {
   ImGui_NewFrame();
 }
 
-int ROTOM::GRAPHICS::screenWidth() {
-  int width = 0, height = 0;
-  glfwGetFramebufferSize(window, &width, &height);
-  return width;
-}
-
 void ROTOM::GRAPHICS::swapBuffers() {
   //ImGui
   ImGui::Render();
 
   //SwapBuffers
   glfwSwapBuffers(window);
+}
+
+int ROTOM::GRAPHICS::screenWidth() {
+  int width = 0, height = 0;
+  glfwGetFramebufferSize(window, &width, &height);
+  return width;
 }
 
 int ROTOM::GRAPHICS::screenHeight() {
@@ -512,6 +513,8 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_ambientStrength = glGetUniformLocation(shaderData->shaderProgram, "u_ambientStrength");
   shaderData->u_eyePosition = glGetUniformLocation(shaderData->shaderProgram, "u_eyePosition");
   shaderData->u_lightSpaceMatrix = glGetUniformLocation(shaderData->shaderProgram, "u_lightSpaceMatrix");
+  shaderData->u_colorMap = glGetUniformLocation(shaderData->shaderProgram, "u_colorMap");
+  shaderData->u_depthMap = glGetUniformLocation(shaderData->shaderProgram, "u_depthMap");
 }
 
 unsigned int ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
@@ -542,6 +545,8 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int *shaderProgram) {
   glDeleteProgram(*shaderProgram);
 }
 
+ROTOM::Light *light = NULL;
+float *lightPosition = NULL, *lightColor = NULL, *specularIntensity = NULL;
 void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix) {
   ShaderData *shaderData = &commandDrawObjectData->shaderData;
   MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
@@ -550,7 +555,15 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
 
   glUseProgram(shaderData->shaderProgram);
 
-  //Texture
+  //Texture ColorBuffer
+  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor);
+  glUniform1iv(commandDrawObjectData->shaderData.u_colorMap, 1, &actualRenderTarget.framebufferData_.textureColorActivePosition);
+
+  //Texture DepthBuffer
+  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureDepth);
+  glUniform1iv(commandDrawObjectData->shaderData.u_depthMap, 1, &actualRenderTarget.framebufferData_.textureDepthActivePosition);
+
+  //Texture Object
   glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);
   glUniform1iv(commandDrawObjectData->shaderData.u_texture, 1, &commandDrawObjectData->materialData.textureActivePosition);
 
@@ -571,15 +584,12 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
   glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
 
   //Light
-  Light *light = NULL;
-  float *lightPosition = NULL, *lightColor = NULL, *specularIntensity = NULL, *lightSpaceMatrix = NULL;
   for (unsigned int i = 0; i < lights->size(); ++i) {
     light = lights->at(i).get();
     lightPosition = &light->position()[0];
     lightColor = light->materialSettings()->color_;
     specularIntensity = light->specularIntensity_;
-    lightSpaceMatrix = light->spaceMatrix();
-    glUniformMatrix4fv(shaderData->u_lightSpaceMatrix, 1, GL_FALSE, lightSpaceMatrix);
+    glUniformMatrix4fv(shaderData->u_lightSpaceMatrix, 1, GL_FALSE, light->spaceMatrix());
     glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
     glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
     glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);
@@ -639,30 +649,29 @@ void ROTOM::GRAPHICS::releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsi
   }
 }
 
-void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *textureColorbuffer, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height) {
-  TODO - // Add the two texture parameters (color and depth)
+void ROTOM::GRAPHICS::genRenderBuffer(int *colorActivePosition, int *depthActivePosition, unsigned int *colorBuffer, unsigned int *depthBuffer, unsigned int *framebuffer, unsigned int width, unsigned int height) {
   //Framebuffer
   glGenFramebuffers(1, framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
 
   //Color texture
-  glGenTextures(1, textureColorbuffer);
-  int textureColorActivePosition = GL_TEXTURE0 + textureID++;
-  glActiveTexture(textureColorActivePosition);
-  glBindTexture(GL_TEXTURE_2D, *textureColorbuffer);
+  glGenTextures(1, colorBuffer);
+  *colorActivePosition = GL_TEXTURE0 + textureID++;
+  glActiveTexture(*colorActivePosition);
+  glBindTexture(GL_TEXTURE_2D, *colorBuffer);
   {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   }
   glBindTexture(GL_TEXTURE_2D, 0);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *textureColorbuffer, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *colorBuffer, 0);
 
   //Depth texture
-  glGenTextures(1, textureDepthbuffer);
-  int textureDepthActivePosition = GL_TEXTURE0 + textureID++;
-  glActiveTexture(textureDepthActivePosition);
-  glBindTexture(GL_TEXTURE_2D, *textureDepthbuffer);
+  glGenTextures(1, depthBuffer);
+  *depthActivePosition = GL_TEXTURE0 + textureID++;
+  glActiveTexture(*depthActivePosition);
+  glBindTexture(GL_TEXTURE_2D, *depthBuffer);
   {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -671,7 +680,7 @@ void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *textureColorbuffer, unsigned
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   }
   glBindTexture(GL_TEXTURE_2D, 0);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *textureDepthbuffer, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *depthBuffer, 0);
 
   //Check status
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -682,8 +691,9 @@ void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *textureColorbuffer, unsigned
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void ROTOM::GRAPHICS::beginFramebuffer(unsigned int framebuffer) {
-  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+void ROTOM::GRAPHICS::beginFramebuffer(RenderTarget *renderTarget) {
+  glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->framebufferData_.framebuffer);
+  actualRenderTarget = *renderTarget;
   clearScreen();
 }
 

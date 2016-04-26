@@ -9,28 +9,32 @@
 #include "render/renderTarget.h"
 #include "render/graphics.h"
 
-unsigned int textureColor;
-unsigned int textureDepth;
-unsigned int framebuffer;
 
 ROTOM::RenderTarget::RenderTarget() {}
 
 ROTOM::RenderTarget::~RenderTarget() {}
 
 void ROTOM::RenderTarget::init(unsigned int width, unsigned int height) {
-  GRAPHICS::genRenderBuffer(&textureColor, &textureDepth, &framebuffer, width, height);
+  GRAPHICS::genRenderBuffer(
+    &framebufferData_.textureColorActivePosition, 
+    &framebufferData_.textureDepthActivePosition, 
+    &framebufferData_.textureColor, 
+    &framebufferData_.textureDepth, 
+    &framebufferData_.framebuffer, 
+    width, 
+    height);
 }
 
 unsigned int *ROTOM::RenderTarget::colorTexture() {
-  return &textureColor;
+  return &framebufferData_.textureColor;
 }
 
 unsigned int *ROTOM::RenderTarget::depthTexture() {
-  return &textureDepth;
+  return &framebufferData_.textureDepth;
 }
 
 void ROTOM::RenderTarget::begin() {
-  GRAPHICS::beginFramebuffer(framebuffer);
+  GRAPHICS::beginFramebuffer(this);
 }
 
 void ROTOM::RenderTarget::end() {

@@ -6,24 +6,15 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __DISPLAY_LIST_H__
-#define __DISPLAY_LIST_H__
-
-#include "command.h"
-#include <vector>
+#ifndef __TEXTURE_H__
+#define __TEXTURE_H__
 
 namespace ROTOM {
-  class DisplayList {
+  class Texture {
   public:
-    DisplayList();
-    ~DisplayList();
-
-    std::vector<Command *> commandList_;
-
-    void addCommand(Command *command);
-
-    void draw();
+    Texture(const char *texturePath = "../../../../img/texture.png");
+    ~Texture();
   };
 }
 
-#endif //__DISPLAY_LIST_H__
+#endif //__TEXTURE_H__

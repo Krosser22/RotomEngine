@@ -12,9 +12,11 @@
 #include "command.h"
 #include "node/geometry.h"
 #include "node/light.h"
+#include "render/renderTarget.h"
 
 namespace ROTOM {
   struct CommandDrawObjectData {
+    FramebufferData framebufferData;
     MaterialSettings materialSettings;
     MaterialData materialData;
     ShaderData shaderData;

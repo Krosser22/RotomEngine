@@ -10,10 +10,27 @@
 #define __RENDER_TARGET_H__
 
 namespace ROTOM {
+  struct FramebufferData {
+    FramebufferData() {
+      textureColor = 0;
+      textureDepth = 0;
+      textureColorActivePosition = 0;
+      textureDepthActivePosition = 0;
+      framebuffer = 0;
+    }
+    unsigned int textureColor;
+    unsigned int textureDepth;
+    int textureColorActivePosition;
+    int textureDepthActivePosition;
+    unsigned int framebuffer;
+  };
+
   class RenderTarget {
   public:
     RenderTarget();
     ~RenderTarget();
+
+    FramebufferData framebufferData_;
     
     void init(unsigned int width, unsigned int height);
     
