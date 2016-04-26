@@ -19,12 +19,11 @@ void ROTOM::ProceduralScene::init() {
   material->setShaderFromPath("basics/5_SpecularLight_Blinn-Phong.vertx", "basics/5_SpecularLight_Blinn-Phong.frag");
 
   //Root
-  getRoot()->setPositionZ(-5.22f);
+  getRoot()->setPosition(-5.0f, -10.0f, -28.0f);
 
   //Chunk
   chunk_ = std::shared_ptr<Chunk>(new Chunk("Chunk"));
-  chunk_->init();
-  chunk_->setParent(getRoot());
+  chunk_->init(getRoot());
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));

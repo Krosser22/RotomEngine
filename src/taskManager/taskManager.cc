@@ -13,7 +13,7 @@
 
 struct TaskManagerData {
   int threardsCount;
-  const int threardsNotUsed = 0;
+  const int threardsNotUsed = 1;
 
   //Task in progress or in the task list
   int taskPending;

@@ -19,7 +19,7 @@ namespace ROTOM {
     virtual ~Chunk();
 
     //Set the amount of rows and cols of the chunk and the max of height it is allowed to have
-    void init(unsigned int rows = 10, unsigned int cols = 10, unsigned int maxHeight = 256);
+    void init(std::shared_ptr<Node> parent, unsigned int rows = 10, unsigned int cols = 10, unsigned int maxHeight = 256);
 
     void setRows(unsigned int rows);
 
