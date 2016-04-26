@@ -209,8 +209,26 @@ glm::fmat4 *ROTOM::Node::modelWorld() {
   return &modelWorld_;
 }
 
+/*glm::fmat4 gIdentity = glm::fmat4();
+glm::fmat4 gModelLocal = glm::fmat4();
+glm::fvec3 gRotX = glm::fvec3(1.0f, 0.0f, 0.0f);
+glm::fvec3 gRotY = glm::fvec3(0.0f, 1.0f, 0.0f);
+glm::fvec3 gRotZ = glm::fvec3(0.0f, 0.0f, 1.0f);
+static void calculateModelLocal(ROTOM::Node *node) {
+  gModelLocal = glm::scale(gIdentity, node->scale());
+  gModelLocal = glm::rotate(gModelLocal, node->rotation().x, gRotX);
+  gModelLocal = glm::rotate(gModelLocal, node->rotation().y, gRotY);
+  gModelLocal = glm::rotate(gModelLocal, node->rotation().z, gRotZ);
+  gModelLocal = glm::translate(gModelLocal, node->position());
+  node->setModelLocal(gModelLocal);
+}*/
+
 void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   //Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
+  /*if (isDirtyModelLocal()) {
+    calculateModelLocal(this);
+  }*/
+
   modelLocal_ = glm::inverse(*parent->modelWorld()) * modelWorld_;
 
   glm::quat rotation;
@@ -228,9 +246,9 @@ void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   parent_ = parent;
   parent_->addChild(shared_from_this());
 
-  dirtyModelLocal_ = true;
-
   modelWorld_ = *parent->modelWorld() * modelLocal_;
+
+  dirtyModelLocal_ = true;
 }
 
 std::shared_ptr<ROTOM::Node> ROTOM::Node::parent() {

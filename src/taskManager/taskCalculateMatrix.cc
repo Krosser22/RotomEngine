@@ -15,7 +15,7 @@ glm::fvec3 rotX = glm::fvec3(1.0f, 0.0f, 0.0f);
 glm::fvec3 rotY = glm::fvec3(0.0f, 1.0f, 0.0f);
 glm::fvec3 rotZ = glm::fvec3(0.0f, 0.0f, 1.0f);
 
-inline void calculateModelLocal(ROTOM::Node *node) {
+void calculateModelLocal(ROTOM::Node *node) {
   modelLocal = glm::scale(identity, node->scale());
   modelLocal = glm::rotate(modelLocal, node->rotation().x, rotX);
   modelLocal = glm::rotate(modelLocal, node->rotation().y, rotY);
