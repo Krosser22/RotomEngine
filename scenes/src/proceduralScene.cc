@@ -8,8 +8,8 @@
 
 #include "proceduralScene.h"
 #include "general/input.h"
-#include "general/procedural.h"
 #include "general/window.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 void ROTOM::ProceduralScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
@@ -23,7 +23,7 @@ void ROTOM::ProceduralScene::init() {
 
   //Chunk
   chunk_ = std::shared_ptr<Chunk>(new Chunk("Chunk"));
-  chunk_->init(getRoot());
+  chunk_->init(getRoot(), 25, 1, 1);
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -33,38 +33,102 @@ void ROTOM::ProceduralScene::init() {
 }
 
 void ROTOM::ProceduralScene::input() {
-  static float x = 0, y = 0, z = 0;
-  static const float amount_change = 0.01f;
+  if (INPUT::IsMousePressed(1)) {
+    lastX = INPUT::MousePositionX();
+    lastY = INPUT::MousePositionY();
+  }
 
+  if (INPUT::MouseWheel()) {
+    scroll();
+  }
+
+  if (INPUT::IsMouseDown(1)) {
+    movement();
+    rotation();
+  }
+}
+
+void ROTOM::ProceduralScene::movement() {
+  //Forward
   if (INPUT::IsKeyDown('W')) {
-    x += amount_change;
+    cameraPos += movementSpeed * cameraFront;
   }
 
+  //Backward
   if (INPUT::IsKeyDown('S')) {
-    x -= amount_change;
+    cameraPos -= movementSpeed * cameraFront;
   }
 
+  //Left
   if (INPUT::IsKeyDown('A')) {
-    y += amount_change;
+    cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * movementSpeed;
   }
 
+  //Right
   if (INPUT::IsKeyDown('D')) {
-    y -= amount_change;
+    cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * movementSpeed;
   }
 
-  if (INPUT::IsKeyDown('Q')) {
-    z += amount_change;
-  }
-
+  //Up
   if (INPUT::IsKeyDown('E')) {
-    z -= amount_change;
+    cameraPos += glm::normalize(cameraUp) * movementSpeed;
   }
 
-  //printf("%f, %f, %f = %f\n", x, y, z, PROCEDURAL::perlinNoise(x, y, z));
+  //Down
+  if (INPUT::IsKeyDown('Q')) {
+    cameraPos -= glm::normalize(cameraUp) * movementSpeed;
+  }
+}
+
+void ROTOM::ProceduralScene::rotation() {
+  float xoffset = INPUT::MousePositionX() - lastX;
+  float yoffset = lastY - INPUT::MousePositionY(); // Reversed since y-coordinates go from bottom to left
+  lastX = INPUT::MousePositionX();
+  lastY = INPUT::MousePositionY();
+
+  xoffset *= rotationSpeed;
+  yoffset *= rotationSpeed;
+
+  yaw += xoffset;
+  pitch += yoffset;
+
+  // Make sure that when pitch is out of bounds, screen doesn't get flipped
+  if (pitch > 89.0f) {
+    pitch = 89.0f;
+  }
+
+  if (pitch < -89.0f) {
+    pitch = -89.0f;
+  }
+
+  glm::fvec3 front;
+  front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+  front.y = sin(glm::radians(pitch));
+  front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+  cameraFront = glm::normalize(front);
+}
+
+void ROTOM::ProceduralScene::scroll() {
+  if (fov >= 1.0f && fov <= 45.0f) {
+    fov -= INPUT::MouseWheel() * scrollSpeed;
+  }
+
+  if (fov <= 1.0f) {
+    fov = 1.0f;
+  }
+
+  if (fov >= 45.0f) {
+    fov = 45.0f;
+  }
+  printf("FOV: %f\n", fov);
 }
 
 void ROTOM::ProceduralScene::update() {
+  chunk_->update();
 
+  // Camera/View transformation
+  glm::fmat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+  getCamera()->setViewMatrix(glm::value_ptr(view));
 }
 
 void ROTOM::ProceduralScene::draw() {

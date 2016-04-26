@@ -13,6 +13,9 @@
 void ROTOM::GeometryScene::init() {
   getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
+  //Root
+  getRoot()->setPosition(0.0f, 5.0f, -12.0f);
+
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
@@ -34,7 +37,7 @@ void ROTOM::GeometryScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    drawable[i] = std::shared_ptr<Drawable>(new Drawable("i"));
+    drawable[i] = std::shared_ptr<Drawable>(new Drawable("Drawable"));
     drawable[i]->setGeometry(geometry);
     drawable[i]->setMaterial(material);
     drawable[i]->setParent(getRoot());

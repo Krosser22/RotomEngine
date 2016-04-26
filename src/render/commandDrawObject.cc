@@ -16,7 +16,7 @@ ROTOM::CommandDrawObject::~CommandDrawObject() {}
 void ROTOM::CommandDrawObject::run() {
   GRAPHICS::clearScreen();
   for (unsigned int i = 0; i < commandDrawObjectData_.size(); ++i) {
-    GRAPHICS::drawMaterial(&commandDrawObjectData_.at(i), &lights_, projectionMatrix_, viewMatrix_);
+    GRAPHICS::drawObject(&commandDrawObjectData_.at(i), &lights_, projectionMatrix_, viewMatrix_);
   }
 }
 

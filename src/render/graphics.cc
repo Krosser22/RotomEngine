@@ -56,6 +56,9 @@ static int          g_AttribLocationTex = 0, g_AttribLocationProjMtx = 0;
 static int          g_AttribLocationPosition = 0, g_AttribLocationUV = 0, g_AttribLocationColor = 0;
 static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
 
+//Texture
+static int textureID = 0;
+
 static void error_callback(int error, const char* description) {
   fputs(description, stderr);
 }
@@ -466,7 +469,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);//Check for compile time errors
   if (!success) {
     glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s\n", infoLog);
+    printf("ERROR: VertexShader\n%s\n", infoLog);
   }
 
   //Fragment shader
@@ -476,7 +479,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);//Check for compile time errors
   if (!success) {
     glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-    printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s\n", infoLog);
+    printf("ERROR: FragmentShader\n%s\n", infoLog);
   }
   
   //Link shaders
@@ -487,7 +490,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   glGetProgramiv(shaderData->shaderProgram, GL_LINK_STATUS, &success);//Check for linking errors
   if (!success) {
     glGetProgramInfoLog(shaderData->shaderProgram, 512, NULL, infoLog);
-    printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s\n", infoLog);
+    printf("ERROR: ProgramShader\n%s\n", infoLog);
   }
 
   glDeleteShader(vertexShader);
@@ -511,22 +514,22 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_lightSpaceMatrix = glGetUniformLocation(shaderData->shaderProgram, "u_lightSpaceMatrix");
 }
 
-void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
-  releaseTexture(texture);
+unsigned int ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
   glGenTextures(1, texture);
-  glBindTexture(GL_TEXTURE_2D, *texture); //All upcoming GL_TEXTURE_2D operations now have effect on this texture object
+  int textureActivePosition = GL_TEXTURE0 + textureID++;
+  glActiveTexture(textureActivePosition);
+  glBindTexture(GL_TEXTURE_2D, *texture);
+  {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *textureWidth, *textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
+  glBindTexture(GL_TEXTURE_2D, 0);
 
-  //Set the texture wrapping/filtering options (on the currently bound texture object)
-  //Set the texture wrapping parameters
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  //Set texture filtering parameters
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *textureWidth, *textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-  glGenerateMipmap(GL_TEXTURE_2D);
-  glBindTexture(GL_TEXTURE_2D, 0); //Unbind texture when done, so we won't accidentily mess up our texture.
+  return textureActivePosition;
 }
 
 void ROTOM::GRAPHICS::releaseTexture(unsigned int *texture) {
@@ -539,7 +542,7 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int *shaderProgram) {
   glDeleteProgram(*shaderProgram);
 }
 
-void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix) {
+void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix) {
   ShaderData *shaderData = &commandDrawObjectData->shaderData;
   MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
   float *specularMaterial = commandDrawObjectData->materialData.specularMaterial;
@@ -548,10 +551,8 @@ void ROTOM::GRAPHICS::drawMaterial(CommandDrawObjectData *commandDrawObjectData,
   glUseProgram(shaderData->shaderProgram);
 
   //Texture
-  glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);
-  //glActiveTexture(GL_TEXTURE1);
-  //glBindTexture(GL_TEXTURE_2D, lights->begin()->get()->material()->texture_);
+  glUniform1iv(commandDrawObjectData->shaderData.u_texture, 1, &commandDrawObjectData->materialData.textureActivePosition);
 
   //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
@@ -639,27 +640,36 @@ void ROTOM::GRAPHICS::releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsi
 }
 
 void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *textureColorbuffer, unsigned int *textureDepthbuffer, unsigned int *framebuffer, unsigned int width, unsigned int height) {
+  TODO - // Add the two texture parameters (color and depth)
   //Framebuffer
   glGenFramebuffers(1, framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
 
   //Color texture
   glGenTextures(1, textureColorbuffer);
+  int textureColorActivePosition = GL_TEXTURE0 + textureID++;
+  glActiveTexture(textureColorActivePosition);
   glBindTexture(GL_TEXTURE_2D, *textureColorbuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  }
   glBindTexture(GL_TEXTURE_2D, 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *textureColorbuffer, 0);
 
   //Depth texture
   glGenTextures(1, textureDepthbuffer);
+  int textureDepthActivePosition = GL_TEXTURE0 + textureID++;
+  glActiveTexture(textureDepthActivePosition);
   glBindTexture(GL_TEXTURE_2D, *textureDepthbuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  }
   glBindTexture(GL_TEXTURE_2D, 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *textureDepthbuffer, 0);
 

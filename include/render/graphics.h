@@ -35,13 +35,13 @@ namespace ROTOM {
 
     void setShader(ShaderData *shaderData, const char *vertexShaderSource, const char *fragmentShaderSource);
 
-    void setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight);
+    unsigned int setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight);
 
     void releaseTexture(unsigned int *texture);
 
     void releaseMaterial(unsigned int *shaderProgram);
 
-    void drawMaterial(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix);
+    void drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix);
 
     void loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index);
 
