@@ -27,6 +27,11 @@ void ROTOM::ShadowScene::init() {
   std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
   shadowMaterial->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
   //shadowMaterial->setShaderFromPath("basics/5_SpecularLight_Blinn-Phong.vertx", "basics/5_SpecularLight_Blinn-Phong.frag");
+
+  //Material renderDepthToTexture
+  std::shared_ptr<Material> materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
+  materialRenderDepthToTexture->setShaderFromPath("renderToDepth.vertx", "renderToDepth.frag");
+  materialRenderDepthToTexture->setTexture(renderTarget_.depthTexture());
   
   //Drawables
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
@@ -34,6 +39,7 @@ void ROTOM::ShadowScene::init() {
   std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("3"));
   std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("4"));
   std::shared_ptr<Drawable> drawable5 = std::shared_ptr<Drawable>(new Drawable("5"));
+  std::shared_ptr<Drawable> drawable6 = std::shared_ptr<Drawable>(new Drawable("6"));
 
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(shadowMaterial);
@@ -59,13 +65,15 @@ void ROTOM::ShadowScene::init() {
   drawable5->setParent(getRoot());
   drawable5->setPosition(0.0f, -1.0f, -1.0f);
 
+  drawable6->setGeometry(geometry_);
+  drawable6->setMaterial(materialRenderDepthToTexture);
+  drawable6->setParent(getRoot());
+  drawable6->setPosition(0.0f, 1.0f, 0.0f);
+
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->setPosition(10.0f, 0.0f, 0.0f);
-  light->materialSettings()->color_[0] = 0.8f;
-  light->materialSettings()->color_[1] = 0.6f;
-  light->materialSettings()->color_[2] = 0.4f;
+  light->setPosition(0.0f, 0.0f, -4.0f);
   light->specularIntensity_[0] = 1.0f;
   light->specularIntensity_[1] = 1.0f;
   light->specularIntensity_[2] = 1.0f;

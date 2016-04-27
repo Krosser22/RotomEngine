@@ -63,4 +63,5 @@ void main() {
   //Final
 //fragment = materialColor * vec4((ambient +                   (diffuse + specular)), 1.0f);
   fragment = materialColor * vec4((ambient + (1.0f - shadow) * (diffuse + specular)), 1.0f);
+//fragment = materialColor * vec4((ambient +                   (diffuse + specular)), 1.0f);
 };

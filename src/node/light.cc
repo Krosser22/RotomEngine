@@ -15,9 +15,9 @@ ROTOM::Light::Light(char *name) {
 
   name_ = name;
 
-  specularIntensity_[0] = 0.1f;
-  specularIntensity_[1] = 0.1f;
-  specularIntensity_[2] = 0.1f;
+  specularIntensity_[0] = 1.0f;
+  specularIntensity_[1] = 1.0f;
+  specularIntensity_[2] = 1.0f;
 
   std::shared_ptr<Material> lightMaterial = std::shared_ptr<Material>(new Material());
   lightMaterial->setShaderFromPath("basics/1_Basic.vertx", "basics/1_Basic.frag");
@@ -42,6 +42,6 @@ float *ROTOM::Light::viewMatrix() {
 }
 
 float *ROTOM::Light::spaceMatrix() {
-  glm::fmat4 spaceMatrix = projection_ * modelLocal_;
-  return glm::value_ptr(spaceMatrix);
+  glm::fmat4 lightSpaceMatrix = projection_ * modelLocal_;
+  return glm::value_ptr(lightSpaceMatrix);
 }
