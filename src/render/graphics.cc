@@ -75,7 +75,6 @@ void ImGui_RenderDrawLists(ImDrawData* draw_data) {
   draw_data->ScaleClipRects(io.DisplayFramebufferScale);
 
   // Setup viewport, orthographic projection matrix
-  //glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
   const float ortho_projection[4][4] =
   {
     { 2.0f / io.DisplaySize.x, 0.0f, 0.0f, 0.0f },
@@ -88,14 +87,14 @@ void ImGui_RenderDrawLists(ImDrawData* draw_data) {
   glUniformMatrix4fv(g_AttribLocationProjMtx, 1, GL_FALSE, &ortho_projection[0][0]);
   glBindVertexArray(g_VaoHandle);
 
+  glBindBuffer(GL_ARRAY_BUFFER, g_VboHandle);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_ElementsHandle);
   for (int n = 0; n < draw_data->CmdListsCount; n++) {
     const ImDrawList* cmd_list = draw_data->CmdLists[n];
     const ImDrawIdx* idx_buffer_offset = 0;
 
-    glBindBuffer(GL_ARRAY_BUFFER, g_VboHandle);
     glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)cmd_list->VtxBuffer.size() * sizeof(ImDrawVert), (GLvoid*)&cmd_list->VtxBuffer.front(), GL_STREAM_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_ElementsHandle);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)cmd_list->IdxBuffer.size() * sizeof(ImDrawIdx), (GLvoid*)&cmd_list->IdxBuffer.front(), GL_STREAM_DRAW);
 
     for (const ImDrawCmd* pcmd = cmd_list->CmdBuffer.begin(); pcmd != cmd_list->CmdBuffer.end(); pcmd++) {
@@ -103,7 +102,7 @@ void ImGui_RenderDrawLists(ImDrawData* draw_data) {
         pcmd->UserCallback(cmd_list, pcmd);
       } else {
         glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
-        glScissor((int)pcmd->ClipRect.x, (int)(fb_height - pcmd->ClipRect.w), (int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
+        //glScissor((int)pcmd->ClipRect.x, (int)(fb_height - pcmd->ClipRect.w), (int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
         glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, idx_buffer_offset);
       }
       idx_buffer_offset += pcmd->ElemCount;
@@ -399,14 +398,14 @@ void ROTOM::GRAPHICS::windowInit(unsigned int width, unsigned int height) {
   // Initialize GLEW to setup the OpenGL Function pointers
   glewInit();
 
-  glViewport(0, 0, width, height);
+  //glViewport(0, 0, width, height);
 
-  glDepthRange(0, 1);
-  glDisable(GL_CULL_FACE);
+  //glDepthRange(0, 1);
+  //glDisable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
+  //glDepthFunc(GL_LESS);
   glEnable(GL_BLEND);
-  glBlendEquation(GL_FUNC_ADD);
+  //glBlendEquation(GL_FUNC_ADD);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   ImGui_Init(window, true);
@@ -519,7 +518,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
 
 unsigned int ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
   glGenTextures(1, texture);
-  int textureActivePosition = GL_TEXTURE0 + textureID++;
+  int textureActivePosition = GL_TEXTURE0 + ++textureID;
   glActiveTexture(textureActivePosition);
   glBindTexture(GL_TEXTURE_2D, *texture);
   {
@@ -530,8 +529,6 @@ unsigned int ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *i
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenerateMipmap(GL_TEXTURE_2D);
   }
-  glBindTexture(GL_TEXTURE_2D, 0);
-
   return textureActivePosition;
 }
 
@@ -557,15 +554,15 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
 
   //Texture ColorBuffer
   glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor);
-  glUniform1iv(commandDrawObjectData->shaderData.u_colorMap, 1, &actualRenderTarget.framebufferData_.textureColorActivePosition);
+  //glUniform1iv(commandDrawObjectData->shaderData.u_colorMap, 1, &actualRenderTarget.framebufferData_.textureColorActivePosition);
 
   //Texture DepthBuffer
   glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureDepth);
-  glUniform1iv(commandDrawObjectData->shaderData.u_depthMap, 1, &actualRenderTarget.framebufferData_.textureDepthActivePosition);
+  //glUniform1iv(commandDrawObjectData->shaderData.u_depthMap, 1, &actualRenderTarget.framebufferData_.textureDepthActivePosition);
 
   //Texture Object
   glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);
-  glUniform1iv(commandDrawObjectData->shaderData.u_texture, 1, &commandDrawObjectData->materialData.textureActivePosition);
+  //glUniform1iv(commandDrawObjectData->shaderData.u_texture, 1, &commandDrawObjectData->materialData.textureActivePosition);
 
   //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
@@ -633,7 +630,6 @@ void ROTOM::GRAPHICS::loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigne
   glVertexAttribPointer(2, numberOfUVs, GL_FLOAT, GL_FALSE, numberOfElementsPerVertex, (GLvoid*)((numberOfPositions + numberOfNormals) * sizeof(GLfloat)));
   glEnableVertexAttribArray(2);
 
-  glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
   glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
 }
 
@@ -656,7 +652,7 @@ void ROTOM::GRAPHICS::genRenderBuffer(int *colorActivePosition, int *depthActive
 
   //Color texture
   glGenTextures(1, colorBuffer);
-  *colorActivePosition = GL_TEXTURE0 + textureID++;
+  *colorActivePosition = GL_TEXTURE0 + ++textureID;
   glActiveTexture(*colorActivePosition);
   glBindTexture(GL_TEXTURE_2D, *colorBuffer);
   {
@@ -664,12 +660,11 @@ void ROTOM::GRAPHICS::genRenderBuffer(int *colorActivePosition, int *depthActive
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   }
-  glBindTexture(GL_TEXTURE_2D, 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *colorBuffer, 0);
 
   //Depth texture
   glGenTextures(1, depthBuffer);
-  *depthActivePosition = GL_TEXTURE0 + textureID++;
+  *depthActivePosition = GL_TEXTURE0 + ++textureID;
   glActiveTexture(*depthActivePosition);
   glBindTexture(GL_TEXTURE_2D, *depthBuffer);
   {
@@ -679,7 +674,6 @@ void ROTOM::GRAPHICS::genRenderBuffer(int *colorActivePosition, int *depthActive
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   }
-  glBindTexture(GL_TEXTURE_2D, 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *depthBuffer, 0);
 
   //Check status

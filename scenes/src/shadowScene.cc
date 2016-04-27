@@ -65,7 +65,7 @@ void ROTOM::ShadowScene::init() {
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->setPosition(1.0f, 2.5f, 2.2f);
+  light->setPosition(2.2f, 2.2f, 16.22f);
   light->materialSettings()->color_[0] = 0.8f;
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;

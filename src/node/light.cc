@@ -25,7 +25,6 @@ ROTOM::Light::Light(char *name) {
   setMaterial(lightMaterial);
 
   setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
-  view_ = glm::fmat4();
 }
 
 ROTOM::Light::~Light() {}
@@ -39,10 +38,10 @@ float *ROTOM::Light::projectionMatrix() {
 }
 
 float *ROTOM::Light::viewMatrix() {
-  return glm::value_ptr(view_);
+  return glm::value_ptr(modelLocal_);
 }
 
 float *ROTOM::Light::spaceMatrix() {
-  glm::fmat4 spaceMatrix = projection_ * view_;
+  glm::fmat4 spaceMatrix = projection_ * modelLocal_;
   return glm::value_ptr(spaceMatrix);
 }
