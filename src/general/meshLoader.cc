@@ -105,7 +105,7 @@ void ROTOM::MESHLOADER::Load_OBJ(const char *pathWithoutExtensionFile, Geometry 
     std::vector<glm::fvec2> temp_uvs;
 
     FILE *file = fopen(finalPath, "r");
-    if (file == NULL){
+    if (file == nullptr){
       assert("ERROR: File doesn't found\n" && false);
     } else {
       while (true) {

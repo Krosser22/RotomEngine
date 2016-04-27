@@ -151,7 +151,7 @@ unsigned int ROTOM::Geometry::numberOfElementsPerVertex() {
   return numberOfElementsPerVertex_;
 }
 
-//const struct aiScene* scene = NULL;
+//const struct aiScene* scene = nullptr;
 //GLuint scene_list = 0;
 //struct aiVector3D scene_min, scene_max, scene_center;
 

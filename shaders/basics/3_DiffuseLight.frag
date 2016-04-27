@@ -6,7 +6,7 @@ uniform vec3 u_lightPosition;
 uniform float u_ambientStrength;
 uniform vec3 u_lightColor;
 
-in vec3 worldPosition;
+in vec3 fragmentPosition;
 in vec3 normalDirection;
 in vec2 uvMaterial;
 
@@ -17,7 +17,7 @@ void main() {
   vec4 materialColor = texture(u_texture, uvMaterial) * u_color;
   
   //Normalize on every fragment
-  vec3 lightDirectionNormalized = normalize(u_lightPosition - worldPosition);
+  vec3 lightDirectionNormalized = normalize(u_lightPosition - fragmentPosition);
   vec3 normalDirectionNormalized = normalize(normalDirection);
 
   //Ambient Light

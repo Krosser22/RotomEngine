@@ -46,7 +46,7 @@ IMGUI_API void ImGui_CharCallback(GLFWwindow* window, unsigned int c);
 IMGUI_API void ImGui_RenderDrawLists(ImDrawData* draw_data);
 
 // Data
-static GLFWwindow  *window = NULL;
+static GLFWwindow  *window = nullptr;
 static double       g_Time = 0.0f;
 static bool         g_MousePressed[3] = { false, false, false };
 static float        g_MouseWheel = 0.0f;
@@ -304,7 +304,7 @@ bool ImGui_Init(GLFWwindow* window, bool install_callbacks) {
   io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
   io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
-  io.RenderDrawListsFn = ImGui_RenderDrawLists;       // Alternatively you can set this to NULL and call ImGui::GetDrawData() after ImGui::Render() to get the same ImDrawData pointer.
+  io.RenderDrawListsFn = ImGui_RenderDrawLists;       // Alternatively you can set this to nullptr and call ImGui::GetDrawData() after ImGui::Render() to get the same ImDrawData pointer.
   io.SetClipboardTextFn = ImGui_SetClipboardText;
   io.GetClipboardTextFn = ImGui_GetClipboardText;
 #ifdef _WIN32
@@ -382,7 +382,7 @@ void ROTOM::GRAPHICS::windowInit(unsigned int width, unsigned int height) {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-  window = glfwCreateWindow(width, height, "ROTOM ENGINE", NULL, NULL);
+  window = glfwCreateWindow(width, height, "ROTOM ENGINE", nullptr, nullptr);
   if (!window) {
     printf("Failed to create GLFW window\n");
     glfwTerminate();
@@ -464,21 +464,21 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
 
   //Vertex shader
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
   glCompileShader(vertexShader);
   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);//Check for compile time errors
   if (!success) {
-    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+    glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
     printf("ERROR: VertexShader\n%s\n", infoLog);
   }
 
   //Fragment shader
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
   glCompileShader(fragmentShader);
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);//Check for compile time errors
   if (!success) {
-    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+    glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
     printf("ERROR: FragmentShader\n%s\n", infoLog);
   }
   
@@ -489,7 +489,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   glLinkProgram(shaderData->shaderProgram);
   glGetProgramiv(shaderData->shaderProgram, GL_LINK_STATUS, &success);//Check for linking errors
   if (!success) {
-    glGetProgramInfoLog(shaderData->shaderProgram, 512, NULL, infoLog);
+    glGetProgramInfoLog(shaderData->shaderProgram, 512, nullptr, infoLog);
     printf("ERROR: ProgramShader\n%s\n", infoLog);
   }
 
@@ -510,7 +510,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_specularIntensity = glGetUniformLocation(shaderData->shaderProgram, "u_specularIntensity");
   shaderData->u_specularMaterial = glGetUniformLocation(shaderData->shaderProgram, "u_specularMaterial");
   shaderData->u_ambientStrength = glGetUniformLocation(shaderData->shaderProgram, "u_ambientStrength");
-  shaderData->u_eyePosition = glGetUniformLocation(shaderData->shaderProgram, "u_eyePosition");
+  shaderData->u_viewDirection = glGetUniformLocation(shaderData->shaderProgram, "u_viewDirection");
   shaderData->u_lightSpaceMatrix = glGetUniformLocation(shaderData->shaderProgram, "u_lightSpaceMatrix");
   shaderData->u_colorMap = glGetUniformLocation(shaderData->shaderProgram, "u_colorMap");
   shaderData->u_depthMap = glGetUniformLocation(shaderData->shaderProgram, "u_depthMap");
@@ -542,35 +542,28 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int *shaderProgram) {
   glDeleteProgram(*shaderProgram);
 }
 
-ROTOM::Light *light = NULL;
-float *lightPosition = NULL, *lightColor = NULL, *specularIntensity = NULL;
+ROTOM::ShaderData *shaderData;
+ROTOM::MaterialSettings* materialSettings;
+ROTOM::Light *light = nullptr;
+float *lightPosition = nullptr, *lightColor = nullptr, *specularIntensity = nullptr, *specularMaterial = nullptr, *color = nullptr;
 void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix) {
-  ShaderData *shaderData = &commandDrawObjectData->shaderData;
-  MaterialSettings* materialSettings = &commandDrawObjectData->materialSettings;
-  float *specularMaterial = commandDrawObjectData->materialData.specularMaterial;
-  float *color = materialSettings->color_;
+  shaderData = &commandDrawObjectData->shaderData;
+  materialSettings = &commandDrawObjectData->materialSettings;
+  specularMaterial = commandDrawObjectData->materialData.specularMaterial;
+  color = materialSettings->color_;
 
   glUseProgram(shaderData->shaderProgram);
 
-  //Texture ColorBuffer
-  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor);
-  //glUniform1iv(commandDrawObjectData->shaderData.u_colorMap, 1, &actualRenderTarget.framebufferData_.textureColorActivePosition);
-
-  //Texture DepthBuffer
-  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureDepth);
-  //glUniform1iv(commandDrawObjectData->shaderData.u_depthMap, 1, &actualRenderTarget.framebufferData_.textureDepthActivePosition);
-
-  //Texture Object
-  glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);
-  //glUniform1iv(commandDrawObjectData->shaderData.u_texture, 1, &commandDrawObjectData->materialData.textureActivePosition);
+  //Textures
+  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor);//Texture ColorBuffer
+  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureDepth);//Texture DepthBuffer
+  glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);//Texture Object
 
   //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
-
-  //Camera
   glUniformMatrix4fv(shaderData->u_view, 1, GL_FALSE, viewMatrix);
   glUniformMatrix4fv(shaderData->u_projection, 1, GL_FALSE, projectionMatrix);
-  glUniform3f(shaderData->u_eyePosition, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
+  glUniform3f(shaderData->u_viewDirection, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
 
   //Material
   glUniform1f(shaderData->u_shininess, commandDrawObjectData->materialData.shininess);
@@ -656,7 +649,7 @@ void ROTOM::GRAPHICS::genRenderBuffer(int *colorActivePosition, int *depthActive
   glActiveTexture(*colorActivePosition);
   glBindTexture(GL_TEXTURE_2D, *colorBuffer);
   {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   }
@@ -668,7 +661,7 @@ void ROTOM::GRAPHICS::genRenderBuffer(int *colorActivePosition, int *depthActive
   glActiveTexture(*depthActivePosition);
   glBindTexture(GL_TEXTURE_2D, *depthBuffer);
   {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

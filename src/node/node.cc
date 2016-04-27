@@ -16,7 +16,7 @@ ROTOM::Node::Node() {
   setPosition(0.0f, 0.0f, 0.0f);
   setRotation(0.0f, 0.0f, 0.0f);
   setScale(1.0f, 1.0f, 1.0f);
-  parent_ = NULL;
+  parent_ = nullptr;
 }
 
 ROTOM::Node::Node(char *name) {
@@ -25,11 +25,11 @@ ROTOM::Node::Node(char *name) {
   setPosition(0.0f, 0.0f, 0.0f);
   setRotation(0.0f, 0.0f, 0.0f);
   setScale(1.0f, 1.0f, 1.0f);
-  parent_ = NULL;
+  parent_ = nullptr;
 }
 
 ROTOM::Node::~Node() {
-  if (parent_ != NULL) {
+  if (parent_ != nullptr) {
     parent_->removeChild(shared_from_this());
   }
 
@@ -240,7 +240,7 @@ void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   rotation_.y = glm::degrees(rotation_.y);
   rotation_.z = glm::degrees(rotation_.z);
 
-  if (parent != NULL) {
+  if (parent != nullptr) {
     parent->removeChild(shared_from_this());
   }
   parent_ = parent;

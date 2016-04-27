@@ -36,8 +36,8 @@ void sound::init() {
 }
 
 void ROTOM::SOUND::init() {
-  ALCdevice *device = alcOpenDevice(NULL);
-  ALCcontext *context = alcCreateContext(device, NULL);
+  ALCdevice *device = alcOpenDevice(nullptr);
+  ALCcontext *context = alcCreateContext(device, nullptr);
   alcMakeContextCurrent(context);
   if (!device || !context) {
     printf("No sound hardware detected\n");
@@ -164,8 +164,8 @@ bool ROTOM::SOUND::Sound::isLoop() {
 //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 ROTOM::SOUND::Crossfading::Crossfading() {
-  soundFadeOut_ = NULL;
-  soundFadeIn_ = NULL;
+  soundFadeOut_ = nullptr;
+  soundFadeIn_ = nullptr;
 
   timeStarted_ = 0.0f;
   timeToCrossfading_ = defaultTimeToCrossfading_;

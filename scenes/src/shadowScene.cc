@@ -26,10 +26,7 @@ void ROTOM::ShadowScene::init() {
   //ShadowMaterial
   std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
   shadowMaterial->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
-
-  //Material renderDepthToTexture
-  std::shared_ptr<Material> materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
-  materialRenderDepthToTexture->setShaderFromPath("renderToDepth.vertx", "renderToDepth.frag");
+  //shadowMaterial->setShaderFromPath("basics/5_SpecularLight_Blinn-Phong.vertx", "basics/5_SpecularLight_Blinn-Phong.frag");
   
   //Drawables
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("1"));
@@ -65,7 +62,7 @@ void ROTOM::ShadowScene::init() {
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->setPosition(10.0f, 0.0f, 2.2f);
+  light->setPosition(10.0f, 0.0f, 0.0f);
   light->materialSettings()->color_[0] = 0.8f;
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;

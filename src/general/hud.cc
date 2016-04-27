@@ -484,7 +484,7 @@ void ROTOM::HUD::DrawMaterialSettings(MaterialSettings *materialSettings) {
 #ifdef THIS_WAS_FOR_TESTING
 void ShowExampleMenuFile()
 {
-  ImGui::MenuItem("(dummy menu)", NULL, false, false);
+  ImGui::MenuItem("(dummy menu)", nullptr, false, false);
   if (ImGui::MenuItem("New")) {}
   if (ImGui::MenuItem("Open", "Ctrl+O")) {}
   if (ImGui::BeginMenu("Open Recent"))
@@ -533,7 +533,7 @@ void ShowExampleMenuFile()
   {
     IM_ASSERT(0);
   }
-  if (ImGui::MenuItem("Checked", NULL, true)) {}
+  if (ImGui::MenuItem("Checked", nullptr, true)) {}
   if (ImGui::MenuItem("Quit", "Alt+F4")) {}
 }
 

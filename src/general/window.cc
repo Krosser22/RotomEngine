@@ -69,7 +69,7 @@ int ROTOM::WindowHeight() {
 }
 
 void ROTOM::SetScene(Scene *newScene) {
-  if (scene != NULL) {
+  if (scene != nullptr) {
     scene->destroy();
   }
   scene = newScene;
