@@ -555,9 +555,9 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
   glUseProgram(shaderData->shaderProgram);
 
   //Textures
-  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor);//Texture ColorBuffer
-  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureDepth);//Texture DepthBuffer
-  glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);//Texture Object
+  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor); //Texture ColorBuffer
+  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureDepth); //Texture DepthBuffer
+  glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture); //Texture Object
 
   //Node
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_worldMatrix);

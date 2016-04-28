@@ -6,29 +6,34 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __GEOMETRY_SCENE_H__
-#define __GEOMETRY_SCENE_H__
+#ifndef __DEPTH_SCENE_H__
+#define __DEPTH_SCENE_H__
 
 #include "general/scene.h"
+#include "general/CameraMovement.h"
 
 namespace ROTOM {
-  class GeometryScene : public Scene {
+  class DepthScene : public Scene {
   public:
-    GeometryScene() {};
-    ~GeometryScene() {};
+    DepthScene() {};
+    ~DepthScene() {};
 
     void init();
 
-    void input() {};
+    void input();
 
     void update();
 
     void draw() {};
 
     void destroy() {};
-
-    static const int amount = 5000;
+    
+  private:
+    static const int amount = 100;
+    std::shared_ptr<Geometry> geometry_;
+    std::shared_ptr<Drawable> drawableBase_;
+    CameraMovement cameraMovement_;
   };
 }
 
-#endif //__GEOMETRY_SCENE_H__
+#endif //__DEPTH_SCENE_H__

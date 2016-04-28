@@ -6,14 +6,15 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "renderToTextureScene.h"
+#include "scenes/renderToTextureScene.h"
 #include "general/input.h"
 #include "general/window.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 void ROTOM::RenderToTextureScene::init() {
   //Camera
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  cameraMovement_.setCameraToMove(getCamera());
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //RenderTarget
   renderTarget_.init(WindowWidth(), WindowHeight());
@@ -74,94 +75,7 @@ void ROTOM::RenderToTextureScene::init() {
 }
 
 void ROTOM::RenderToTextureScene::input() {
-  if (INPUT::IsMousePressed(1)) {
-    lastX = INPUT::MousePositionX();
-    lastY = INPUT::MousePositionY();
-  }
-
-  if (INPUT::MouseWheel()) {
-    scroll();
-  }
-
-  if (INPUT::IsMouseDown(1)) {
-    movement();
-    rotation();
-  }
-}
-
-void ROTOM::RenderToTextureScene::movement() {
-  //Forward
-  if (INPUT::IsKeyDown('W')) {
-    cameraPos += movementSpeed * cameraFront;
-  }
-
-  //Backward
-  if (INPUT::IsKeyDown('S')) {
-    cameraPos -= movementSpeed * cameraFront;
-  }
-
-  //Left
-  if (INPUT::IsKeyDown('A')) {
-    cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * movementSpeed;
-  }
-
-  //Right
-  if (INPUT::IsKeyDown('D')) {
-    cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * movementSpeed;
-  }
-
-  //Up
-  if (INPUT::IsKeyDown('E')) {
-    cameraPos += glm::normalize(cameraUp) * movementSpeed;
-  }
-
-  //Down
-  if (INPUT::IsKeyDown('Q')) {
-    cameraPos -= glm::normalize(cameraUp) * movementSpeed;
-  }
-}
-
-void ROTOM::RenderToTextureScene::rotation() {
-  float xoffset = INPUT::MousePositionX() - lastX;
-  float yoffset = lastY - INPUT::MousePositionY(); // Reversed since y-coordinates go from bottom to left
-  lastX = INPUT::MousePositionX();
-  lastY = INPUT::MousePositionY();
-
-  xoffset *= rotationSpeed;
-  yoffset *= rotationSpeed;
-
-  yaw += xoffset;
-  pitch += yoffset;
-
-  // Make sure that when pitch is out of bounds, screen doesn't get flipped
-  if (pitch > 89.0f) {
-    pitch = 89.0f;
-  }
-
-  if (pitch < -89.0f) {
-    pitch = -89.0f;
-  }
-
-  glm::fvec3 front;
-  front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-  front.y = sin(glm::radians(pitch));
-  front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-  cameraFront = glm::normalize(front);
-}
-
-void ROTOM::RenderToTextureScene::scroll() {
-  if (fov >= 1.0f && fov <= 45.0f) {
-    fov -= INPUT::MouseWheel() * scrollSpeed;
-  }
-
-  if (fov <= 1.0f) {
-    fov = 1.0f;
-  }
-
-  if (fov >= 45.0f) {
-    fov = 45.0f;
-  }
-  printf("FOV: %f\n", fov);
+  cameraMovement_.input();
 }
 
 void ROTOM::RenderToTextureScene::update() {
@@ -170,8 +84,7 @@ void ROTOM::RenderToTextureScene::update() {
     node->setRotationX(node->rotation().x + 0.01f);
   }
 
-  // Camera/View transformation
-  getCamera()->setViewMatrix(glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp));
+  cameraMovement_.update();
 }
 
 void ROTOM::RenderToTextureScene::draw() {
@@ -184,6 +97,7 @@ void ROTOM::RenderToTextureScene::draw() {
     renderTarget_.begin();
     {
       RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
+      //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
     }
     renderTarget_.end();
   }

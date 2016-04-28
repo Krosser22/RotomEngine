@@ -6,30 +6,33 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __SHADER_SCENE_H__
-#define __SHADER_SCENE_H__
+#ifndef __DEFAULT_SCENE_H__
+#define __DEFAULT_SCENE_H__
 
 #include "general/scene.h"
+#include "general/CameraMovement.h"
 
 namespace ROTOM {
-  class ShaderScene : public Scene {
+  class DefaultScene : public Scene {
   public:
-    ShaderScene() {};
-    ~ShaderScene() {};
+    DefaultScene() {};
+    ~DefaultScene() {};
 
     void init();
 
-    void input() {};
+    void input();
 
     void update();
 
     void draw() {};
 
     void destroy() {};
-    
+
   private:
+    static const int amount_ = 2722;
     std::shared_ptr<Geometry> geometry_;
+    CameraMovement cameraMovement_;
   };
 }
 
-#endif //__SHADER_SCENE_H__
+#endif //__DEFAULT_SCENE_H__

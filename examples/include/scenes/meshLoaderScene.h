@@ -6,16 +6,17 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __DEFAULT_SCENE_H__
-#define __DEFAULT_SCENE_H__
+#ifndef __MESH_LOADER_SCENE_H__
+#define __MESH_LOADER_SCENE_H__
 
 #include "general/scene.h"
+#include "general/CameraMovement.h"
 
 namespace ROTOM {
-  class DefaultScene : public Scene {
+  class MeshLoaderScene : public Scene {
   public:
-    DefaultScene() {};
-    ~DefaultScene() {};
+    MeshLoaderScene() {};
+    ~MeshLoaderScene() {};
 
     void init();
 
@@ -27,9 +28,10 @@ namespace ROTOM {
 
     void destroy() {};
 
-    static const int amount_ = 2722;
-    std::shared_ptr<Geometry> geometry_;
+  private:
+    bool rotating_;
+    CameraMovement cameraMovement_;
   };
 }
 
-#endif //__DEFAULT_SCENE_H__
+#endif //__MESH_LOADER_SCENE_H__

@@ -6,16 +6,17 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __MESH_LOADER_SCENE_H__
-#define __MESH_LOADER_SCENE_H__
+#ifndef __SHADER_SCENE_H__
+#define __SHADER_SCENE_H__
 
 #include "general/scene.h"
+#include "general/CameraMovement.h"
 
 namespace ROTOM {
-  class MeshLoaderScene : public Scene {
+  class ShaderScene : public Scene {
   public:
-    MeshLoaderScene() {};
-    ~MeshLoaderScene() {};
+    ShaderScene() {};
+    ~ShaderScene() {};
 
     void init();
 
@@ -26,10 +27,11 @@ namespace ROTOM {
     void draw() {};
 
     void destroy() {};
-
+    
   private:
-    bool rotating_;
+    std::shared_ptr<Geometry> geometry_;
+    CameraMovement cameraMovement_;
   };
 }
 
-#endif //__MESH_LOADER_SCENE_H__
+#endif //__SHADER_SCENE_H__

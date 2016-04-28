@@ -11,13 +11,11 @@
 #include "general/input.h"
 #include "render/graphics.h"
 #include "taskManager/taskCalculateMatrix.h"
-#include "taskManager/taskCalculateCameraMatrix.h"
 #include "taskManager/taskManager.h"
 
 static ROTOM::CommandDrawObject commandDrawObject;
 static ROTOM::DisplayList displayList;
 static ROTOM::TaskCalculateMatrix taskCalculateNodesMatrix;
-static ROTOM::TaskCalculateCameraMatrix taskCalculateCameraMatrix;
 static ROTOM::Scene *scene;
 
 void ROTOM::WindowInit(unsigned int width, unsigned int height) {
@@ -34,8 +32,6 @@ bool WindowIsOpened() {
 
     //Update TaskManager
     taskCalculateNodesMatrix.setInput(scene->getRoot().get());
-    taskCalculateCameraMatrix.setInput(scene->getCamera());
-    ROTOM::TASKMANAGER::addTask(&taskCalculateCameraMatrix);
     ROTOM::TASKMANAGER::addTask(&taskCalculateNodesMatrix);
 
     //Update Scene

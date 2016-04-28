@@ -6,13 +6,14 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "defaultScene.h"
+#include "scenes/defaultScene.h"
 #include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
 
 void ROTOM::DefaultScene::init() {
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  cameraMovement_.setCameraToMove(getCamera());
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getRoot()->setPositionZ(-4.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
@@ -64,6 +65,7 @@ void ROTOM::DefaultScene::init() {
     drawable[i]->setPosition(pos);
   }
 }
+
 void ROTOM::DefaultScene::input() {
   //Add Cube
   if (INPUT::IsKeyPressed('R')) {
@@ -76,6 +78,8 @@ void ROTOM::DefaultScene::input() {
     drawableNew->setPositionX(posX);
     posX -= 1.0f;
   }
+
+  cameraMovement_.input();
 }
 
 void ROTOM::DefaultScene::update() {
@@ -83,4 +87,6 @@ void ROTOM::DefaultScene::update() {
   getRoot()->getChildAt(0)->moveX(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
+
+  cameraMovement_.update();
 }

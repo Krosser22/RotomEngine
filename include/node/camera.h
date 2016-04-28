@@ -45,7 +45,7 @@ namespace ROTOM {
     float rotationZ();
 
     void setViewMatrix(glm::fmat4 viewMatrix);
-    void setViewMatrix(glm::fvec3 eye, glm::fvec3 center, glm::fvec3 up);
+    //void setViewMatrix(glm::fvec3 eye, glm::fvec3 center, glm::fvec3 up);
     float *viewMatrix();
     bool isDirtyViewMatrix();
 

@@ -6,8 +6,8 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "scenes/soundScene.h"
 #include "general/sound.h"
-#include "soundScene.h"
 #include <imgui.h>
 
 static const float imgui_width = 150.0f;

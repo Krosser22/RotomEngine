@@ -6,13 +6,13 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "movementScene.h"
+#include "scenes/movementScene.h"
 #include "general/input.h"
 #include "general/window.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 void ROTOM::MovementScene::init() {
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));

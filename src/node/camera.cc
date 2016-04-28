@@ -117,9 +117,9 @@ void ROTOM::Camera::setViewMatrix(glm::fmat4 viewMatrix) {
   dirtyViewMatrix_ = false;
 }
 
-void ROTOM::Camera::setViewMatrix(glm::fvec3 eye, glm::fvec3 center, glm::fvec3 up) {
+/*void ROTOM::Camera::setViewMatrix(glm::fvec3 eye, glm::fvec3 center, glm::fvec3 up) {
   setViewMatrix(glm::lookAt(eye, center, up));
-}
+}*/
 
 float *ROTOM::Camera::viewMatrix() {
   return glm::value_ptr(viewMatrix_);

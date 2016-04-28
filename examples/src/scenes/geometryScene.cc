@@ -6,12 +6,13 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "geometryScene.h"
+#include "scenes/geometryScene.h"
 #include "general/time.h"
 #include "general/window.h"
 
 void ROTOM::GeometryScene::init() {
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  cameraMovement_.setCameraToMove(getCamera());
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //Root
   getRoot()->setPosition(0.0f, 5.0f, -12.0f);
@@ -45,7 +46,13 @@ void ROTOM::GeometryScene::init() {
   }
 }
 
+void ROTOM::GeometryScene::input() {
+  cameraMovement_.input();
+}
+
 void ROTOM::GeometryScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
   getRoot()->move(sin_time, sin_time, sin_time);
+
+  cameraMovement_.update();
 }

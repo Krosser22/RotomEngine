@@ -6,17 +6,18 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __SHADOW_SCENE_H__
-#define __SHADOW_SCENE_H__
+#ifndef __PROCEDURAL_SCENE_H__
+#define __PROCEDURAL_SCENE_H__
 
 #include "general/scene.h"
-#include "render/renderTarget.h"
+#include "node/chunk.h"
+#include "general/CameraMovement.h"
 
 namespace ROTOM {
-  class ShadowScene : public Scene {
+  class ProceduralScene : public Scene {
   public:
-    ShadowScene() {};
-    ~ShadowScene() {};
+    ProceduralScene() {};
+    ~ProceduralScene() {};
 
     void init();
 
@@ -24,14 +25,13 @@ namespace ROTOM {
 
     void update();
 
-    void draw();
+    void draw() {};
 
     void destroy() {};
     
   private:
-    std::shared_ptr<Geometry> geometry_;
-    std::shared_ptr<Geometry> geometryFloor_;
-    RenderTarget renderTarget_;
+    std::shared_ptr<Chunk> chunk_;
+    CameraMovement cameraMovement_;
 
     glm::fvec3 cameraPos = glm::fvec3(0.0f, 0.0f, 3.0f);
     glm::fvec3 cameraFront = glm::fvec3(0.0f, 0.0f, -1.0f);
@@ -54,4 +54,4 @@ namespace ROTOM {
   };
 }
 
-#endif //__SHADOW_SCENE_H__
+#endif //__PROCEDURAL_SCENE_H__

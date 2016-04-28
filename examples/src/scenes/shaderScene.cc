@@ -6,11 +6,12 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "shaderScene.h"
+#include "scenes/shaderScene.h"
 #include "general/window.h"
 
 void ROTOM::ShaderScene::init() {
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  cameraMovement_.setCameraToMove(getCamera());
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
 
@@ -77,10 +78,14 @@ void ROTOM::ShaderScene::init() {
   AddLight(light);
 }
 
+void ROTOM::ShaderScene::input() {
+  cameraMovement_.input();
+}
+
 void ROTOM::ShaderScene::update() {
   //float sinTime = sin(TIME::appTime()) * 0.022f;
   Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
   node->setRotationX(node->rotation().x + 0.01f);
 
-  //drawableLight_->setPosition(getLight().at(0)->lightPosition[0], getLight().at(0)->lightPosition[1], getLight().at(0)->lightPosition[2]);
+  cameraMovement_.update();
 }

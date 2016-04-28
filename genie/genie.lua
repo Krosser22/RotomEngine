@@ -66,14 +66,14 @@ project "ROTOM_testing"
   
   includedirs {
     "../include",
-    "../scenes/include",
+    "../examples/include",
     "../deps/glm",
     "../deps/imgui",
   }
   
   files {
     "../shaders/**.*",
-    "../scenes/**.*",
+    "../examples/**.*",
   }
 
 --[[--------------------------------------------
