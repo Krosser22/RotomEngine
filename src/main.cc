@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
   {
     //ROTOM::SOUND::init();
     ROTOM::main(argc, argv);
+    ROTOM::WindowDestroy();
   }
   ROTOM::TASKMANAGER::destroy();
 

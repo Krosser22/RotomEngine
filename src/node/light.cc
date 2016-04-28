@@ -24,7 +24,7 @@ ROTOM::Light::Light(char *name) {
   setGeometry(std::shared_ptr<Geometry>(new Geometry()));
   setMaterial(lightMaterial);
 
-  setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
+  setupOrtho(10.0f, -10.0f, 10.0f, -10.0f, 0.1f, 10.0f);
 }
 
 ROTOM::Light::~Light() {}

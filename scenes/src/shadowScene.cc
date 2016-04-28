@@ -185,6 +185,7 @@ void ROTOM::ShadowScene::draw() {
   renderTarget_.begin();
   {
     RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
+    //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
   }
   renderTarget_.end();
 }

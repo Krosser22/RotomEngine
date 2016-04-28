@@ -15,9 +15,9 @@
 
 static ROTOM::CommandDrawObject commandDrawObject;
 static ROTOM::DisplayList displayList;
-ROTOM::Node cameraNode("CameraNode");
-ROTOM::TaskCalculateMatrix taskCalculateNodesMatrix;
-ROTOM::TaskCalculateMatrix taskCalculateCameraMatrix;
+static ROTOM::Node cameraNode("CameraNode");
+static ROTOM::TaskCalculateMatrix taskCalculateNodesMatrix;
+static ROTOM::TaskCalculateMatrix taskCalculateCameraMatrix;
 static ROTOM::Scene *scene;
 
 void ROTOM::WindowInit(unsigned int width, unsigned int height) {
@@ -76,11 +76,9 @@ void ROTOM::SetScene(Scene *newScene) {
   scene->setRoot(std::shared_ptr<Node>(new Node("Root")));
   scene->init();
   HUD::Init(scene->getRoot(), scene->getLight(), scene->getCamera());
-  while (WindowIsOpened()) {
-    ;
-  }
-  WindowDestroy();
+  while (WindowIsOpened()) { ; }
   scene->destroy();
+  scene = nullptr;
 }
 
 void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix) {
