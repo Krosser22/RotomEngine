@@ -23,7 +23,7 @@ namespace ROTOM {
     unsigned int geometry_VAO;
     unsigned int geometry_veterCount;
     unsigned int material_texture;
-    float drawable_modelWorld[16];
+    float drawable_worldMatrix[16];
   };
 
   class CommandDrawObject : public Command {

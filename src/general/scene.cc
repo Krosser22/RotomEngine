@@ -8,7 +8,7 @@
 
 #include "general/scene.h"
 
-ROTOM::Camera camera_("Camera");
+ROTOM::Camera camera_;
 std::shared_ptr<ROTOM::Node> root_;
 std::vector<std::shared_ptr<ROTOM::Light>> lights_;
 

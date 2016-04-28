@@ -156,6 +156,5 @@ void ROTOM::DepthScene::update() {
   drawableBase_->moveZ(sin(TIME::appTime()) * 0.2f);
 
   // Camera/View transformation
-  glm::fmat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-  getCamera()->setViewMatrix(glm::value_ptr(view));
+  getCamera()->setViewMatrix(glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp));
 }

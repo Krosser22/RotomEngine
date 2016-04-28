@@ -38,10 +38,13 @@ float *ROTOM::Light::projectionMatrix() {
 }
 
 float *ROTOM::Light::viewMatrix() {
-  return glm::value_ptr(modelLocal_);
+  //glm::fmat4 view = glm::lookAt(position_, rotation_, glm::fvec3(0.0f, -1.0f, 0.0f));
+  glm::fmat4 view = glm::inverse(worldMatrix_);
+  glm::fvec3 pos = glm::fvec3(view[3]);
+  return glm::value_ptr(view);
 }
 
 float *ROTOM::Light::spaceMatrix() {
-  glm::fmat4 lightSpaceMatrix = projection_ * modelLocal_;
+  glm::fmat4 lightSpaceMatrix = projection_ * *viewMatrix();
   return glm::value_ptr(lightSpaceMatrix);
 }

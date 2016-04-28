@@ -79,7 +79,7 @@ void ROTOM::Node::setPosition(const float x, const float y, const float z) {
   position_.x = x;
   position_.y = y;
   position_.z = z;
-  dirtyModelLocal_ = true;
+  dirtyModelMatrix_ = true;
 }
 
 glm::fvec3 ROTOM::Node::position() {
@@ -118,7 +118,7 @@ void ROTOM::Node::setRotation(const float x, const float y, const float z) {
   rotation_.x = x;
   rotation_.y = y;
   rotation_.z = z;
-  dirtyModelLocal_ = true;
+  dirtyModelMatrix_ = true;
 }
 
 glm::fvec3 ROTOM::Node::rotation() {
@@ -157,7 +157,7 @@ void ROTOM::Node::setScale(const float x, const float y, const float z) {
   scale_.x = x;
   scale_.y = y;
   scale_.z = z;
-  dirtyModelLocal_ = true;
+  dirtyModelMatrix_ = true;
 }
 
 glm::fvec3 ROTOM::Node::scale() {
@@ -188,53 +188,35 @@ float ROTOM::Node::scaleZ() {
   return scale_.z;
 }
 
-void ROTOM::Node::setModelLocal(glm::fmat4 modelLocal) {
-  modelLocal_ = modelLocal;
-  dirtyModelLocal_ = false;
+void ROTOM::Node::setModelMatrix(glm::fmat4 modelMatrix) {
+  modelMatrix_ = modelMatrix;
+  dirtyModelMatrix_ = false;
 }
 
-glm::fmat4 *ROTOM::Node::modelLocal() {
-  return &modelLocal_;
+glm::fmat4 *ROTOM::Node::modelMatrix() {
+  return &modelMatrix_;
 }
 
-bool ROTOM::Node::isDirtyModelLocal() {
-  return dirtyModelLocal_;
+bool ROTOM::Node::isDirtyModelMatrix() {
+  return dirtyModelMatrix_;
 }
 
-void ROTOM::Node::setModelWorld(glm::fmat4 modelWorld) {
-  modelWorld_ = modelWorld;
+void ROTOM::Node::setWorldMatrix(glm::fmat4 worldMatrix) {
+  worldMatrix_ = worldMatrix;
 }
 
-glm::fmat4 *ROTOM::Node::modelWorld() {
-  return &modelWorld_;
+glm::fmat4 *ROTOM::Node::worldMatrix() {
+  return &worldMatrix_;
 }
-
-/*glm::fmat4 gIdentity = glm::fmat4();
-glm::fmat4 gModelLocal = glm::fmat4();
-glm::fvec3 gRotX = glm::fvec3(1.0f, 0.0f, 0.0f);
-glm::fvec3 gRotY = glm::fvec3(0.0f, 1.0f, 0.0f);
-glm::fvec3 gRotZ = glm::fvec3(0.0f, 0.0f, 1.0f);
-static void calculateModelLocal(ROTOM::Node *node) {
-  gModelLocal = glm::scale(gIdentity, node->scale());
-  gModelLocal = glm::rotate(gModelLocal, node->rotation().x, gRotX);
-  gModelLocal = glm::rotate(gModelLocal, node->rotation().y, gRotY);
-  gModelLocal = glm::rotate(gModelLocal, node->rotation().z, gRotZ);
-  gModelLocal = glm::translate(gModelLocal, node->position());
-  node->setModelLocal(gModelLocal);
-}*/
 
 void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   //Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
-  /*if (isDirtyModelLocal()) {
-    calculateModelLocal(this);
-  }*/
-
-  modelLocal_ = glm::inverse(*parent->modelWorld()) * modelWorld_;
+  modelMatrix_ = glm::inverse(*parent->worldMatrix()) * worldMatrix_;
 
   glm::quat rotation;
   glm::fvec3 skew;
   glm::fvec4 perspective;
-  glm::decompose(modelLocal_, scale_, rotation, position_, skew, perspective);
+  glm::decompose(modelMatrix_, scale_, rotation, position_, skew, perspective);
   rotation_ = glm::fvec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
   rotation_.x = glm::degrees(rotation_.x);
   rotation_.y = glm::degrees(rotation_.y);
@@ -246,9 +228,9 @@ void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
   parent_ = parent;
   parent_->addChild(shared_from_this());
 
-  modelWorld_ = *parent->modelWorld() * modelLocal_;
+  worldMatrix_ = *parent->worldMatrix() * modelMatrix_;
 
-  dirtyModelLocal_ = true;
+  dirtyModelMatrix_ = true;
 }
 
 std::shared_ptr<ROTOM::Node> ROTOM::Node::parent() {

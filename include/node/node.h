@@ -62,12 +62,12 @@ namespace ROTOM {
     void setScaleZ(const float scaleZ);
     float scaleZ();
 
-    void setModelLocal(glm::fmat4 modelLocal);
-    glm::fmat4 *modelLocal();
-    bool isDirtyModelLocal();
+    void setModelMatrix(glm::fmat4 modelMatrix);
+    glm::fmat4 *modelMatrix();
+    bool isDirtyModelMatrix();
 
-    void setModelWorld(glm::fmat4 modelWorld);
-    glm::fmat4 *modelWorld();
+    void setWorldMatrix(glm::fmat4 worldMatrix);
+    glm::fmat4 *worldMatrix();
 
     void setParent(std::shared_ptr<Node> parent);
     std::shared_ptr<Node> parent();
@@ -85,10 +85,10 @@ namespace ROTOM {
     glm::fvec3 position_;
     glm::fvec3 rotation_;
     glm::fvec3 scale_;
-    bool dirtyModelLocal_;
+    bool dirtyModelMatrix_;
     
-    glm::fmat4 modelLocal_;
-    glm::fmat4 modelWorld_;
+    glm::fmat4 modelMatrix_;
+    glm::fmat4 worldMatrix_;
 
     std::shared_ptr<Node> parent_;
     std::vector<std::shared_ptr<Node>> childs_;

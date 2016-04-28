@@ -560,7 +560,7 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
   glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture);//Texture Object
 
   //Node
-  glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_modelWorld);
+  glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_worldMatrix);
   glUniformMatrix4fv(shaderData->u_view, 1, GL_FALSE, viewMatrix);
   glUniformMatrix4fv(shaderData->u_projection, 1, GL_FALSE, projectionMatrix);
   glUniform3f(shaderData->u_viewDirection, viewMatrix[3], viewMatrix[4], viewMatrix[5]);

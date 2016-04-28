@@ -40,9 +40,9 @@ void ROTOM::CommandDrawObject::setData(Drawable *drawable) {
   commandDrawObjectData.geometry_veterCount = geometry->vertexCount();
   commandDrawObjectData.material_texture = material->texture();
   commandDrawObjectData.materialData = material->materialData_;
-  float *modelWorld = glm::value_ptr(*drawable->modelWorld());
+  float *worldMatrix = glm::value_ptr(*drawable->worldMatrix());
   for (int i = 0; i < 16; ++i) {
-    commandDrawObjectData.drawable_modelWorld[i] = modelWorld[i];
+    commandDrawObjectData.drawable_worldMatrix[i] = worldMatrix[i];
   }
   commandDrawObjectData_.push_back(commandDrawObjectData);
   setInputChilds(drawable);

@@ -13,7 +13,7 @@
 
 void ROTOM::ShadowScene::init() {
   //Camera
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //RenderTarget
   renderTarget_.init(WindowWidth(), WindowHeight());
@@ -157,7 +157,7 @@ void ROTOM::ShadowScene::rotation() {
 }
 
 void ROTOM::ShadowScene::scroll() {
-  if (fov >= 1.0f && fov <= 45.0f) {
+  /*if (fov >= 1.0f && fov <= 45.0f) {
     fov -= INPUT::MouseWheel() * scrollSpeed;
   }
 
@@ -168,7 +168,7 @@ void ROTOM::ShadowScene::scroll() {
   if (fov >= 45.0f) {
     fov = 45.0f;
   }
-  printf("FOV: %f\n", fov);
+  printf("FOV: %f\n", fov);*/
 }
 
 void ROTOM::ShadowScene::update() {
@@ -178,7 +178,7 @@ void ROTOM::ShadowScene::update() {
   }
 
   // Camera/View transformation
-  getCamera()->setViewMatrix(glm::value_ptr(glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp)));
+  getCamera()->setViewMatrix(glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp));
 }
 
 void ROTOM::ShadowScene::draw() {

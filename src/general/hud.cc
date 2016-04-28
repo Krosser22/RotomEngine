@@ -386,7 +386,7 @@ void ROTOM::HUD::DrawCamera(Camera *camera) {
 
   ImGui::Separator();
 
-  DrawNode(camera);
+  //DrawNode(camera);
 }
 
 void ROTOM::HUD::DrawLight(Light *light) {
