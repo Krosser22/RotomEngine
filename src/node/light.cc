@@ -38,8 +38,9 @@ float *ROTOM::Light::projectionMatrix() {
 }
 
 float *ROTOM::Light::viewMatrix() {
-  //glm::fmat4 view = glm::lookAt(position_, rotation_, glm::fvec3(0.0f, -1.0f, 0.0f));
-  glm::fmat4 view = glm::inverse(worldMatrix_);
+  glm::fvec3 target_;
+  glm::fmat4 view = glm::lookAt(position_, target_, glm::fvec3(0.0f, 1.0f, 0.0f));
+  //glm::fmat4 view = glm::inverse(worldMatrix_);
   glm::fvec3 pos = glm::fvec3(view[3]);
   return glm::value_ptr(view);
 }
