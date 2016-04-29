@@ -9,15 +9,18 @@
 #include "general/cameraMovement.h"
 #include "general/input.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+#include <stdio.h>
 
 void ROTOM::CameraMovement::setCameraToMove(Camera *camera) {
   camera_ = camera;
+  cameraPos_ = camera_->position();
 }
 
 void ROTOM::CameraMovement::input() {
   if (INPUT::IsMousePressed(1)) {
-    lastX = INPUT::MousePositionX();
-    lastY = INPUT::MousePositionY();
+    lastX_ = INPUT::MousePositionX();
+    lastY_ = INPUT::MousePositionY();
   }
 
   if (INPUT::MouseWheel()) {
@@ -33,78 +36,87 @@ void ROTOM::CameraMovement::input() {
 void ROTOM::CameraMovement::movement() {
   //Forward
   if (INPUT::IsKeyDown('W')) {
-    cameraPos += movementSpeed * cameraFront;
+    cameraPos_ += movementSpeed_ * cameraFront_;
   }
 
   //Backward
   if (INPUT::IsKeyDown('S')) {
-    cameraPos -= movementSpeed * cameraFront;
+    cameraPos_ -= movementSpeed_ * cameraFront_;
   }
 
   //Left
   if (INPUT::IsKeyDown('A')) {
-    cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * movementSpeed;
+    cameraPos_ -= glm::normalize(glm::cross(cameraFront_, cameraUp_)) * movementSpeed_;
   }
 
   //Right
   if (INPUT::IsKeyDown('D')) {
-    cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * movementSpeed;
+    cameraPos_ += glm::normalize(glm::cross(cameraFront_, cameraUp_)) * movementSpeed_;
   }
 
   //Up
   if (INPUT::IsKeyDown('E')) {
-    cameraPos += glm::normalize(cameraUp) * movementSpeed;
+    cameraPos_ += glm::normalize(cameraUp_) * movementSpeed_;
   }
 
   //Down
   if (INPUT::IsKeyDown('Q')) {
-    cameraPos -= glm::normalize(cameraUp) * movementSpeed;
+    cameraPos_ -= glm::normalize(cameraUp_) * movementSpeed_;
   }
 }
 
 void ROTOM::CameraMovement::rotation() {
-  float xoffset = INPUT::MousePositionX() - lastX;
-  float yoffset = lastY - INPUT::MousePositionY(); // Reversed since y-coordinates go from bottom to left
-  lastX = INPUT::MousePositionX();
-  lastY = INPUT::MousePositionY();
+  xoffset_ = INPUT::MousePositionX() - lastX_;
+  yoffset_ = lastY_ - INPUT::MousePositionY(); // Reversed since y-coordinates go from bottom to left
+  lastX_ = INPUT::MousePositionX();
+  lastY_ = INPUT::MousePositionY();
 
-  xoffset *= rotationSpeed;
-  yoffset *= rotationSpeed;
+  xoffset_ *= rotationSpeed_;
+  yoffset_ *= rotationSpeed_;
 
-  yaw += xoffset;
-  pitch += yoffset;
+  yaw_ += xoffset_;
+  pitch_ += yoffset_;
 
   // Make sure that when pitch is out of bounds, screen doesn't get flipped
-  if (pitch > 89.0f) {
-    pitch = 89.0f;
+  if (pitch_ > 89.0f) {
+    pitch_ = 89.0f;
   }
 
-  if (pitch < -89.0f) {
-    pitch = -89.0f;
+  if (pitch_ < -89.0f) {
+    pitch_ = -89.0f;
   }
 
-  glm::fvec3 front;
-  front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-  front.y = sin(glm::radians(pitch));
-  front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-  cameraFront = glm::normalize(front);
+  front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_)); 
+  front_.y = sin(glm::radians(pitch_));
+  front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  cameraFront_ = glm::normalize(front_);
 }
 
 void ROTOM::CameraMovement::scroll() {
-  if (fov >= 1.0f && fov <= 45.0f) {
-    fov -= INPUT::MouseWheel() * scrollSpeed;
+  if (fov_ >= 1.0f && fov_ <= 45.0f) {
+    fov_ -= INPUT::MouseWheel() * scrollSpeed_;
   }
 
-  if (fov <= 1.0f) {
-    fov = 1.0f;
+  if (fov_ <= 1.0f) {
+    fov_ = 1.0f;
   }
 
-  if (fov >= 45.0f) {
-    fov = 45.0f;
+  if (fov_ >= 45.0f) {
+    fov_ = 45.0f;
   }
 }
 
 void ROTOM::CameraMovement::update() {
   // Camera/View transformation
-  camera_->setViewMatrix(glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp));
+  camera_->setViewMatrix(glm::lookAt(cameraPos_, cameraPos_ + cameraFront_, cameraUp_));
+
+  cameraRot_ = cameraPos_ + front_;
+  printf("%f, %f, %f\n\n", cameraRot_[0], cameraRot_[1], cameraRot_[2]);
+  glm::fmat4 view = glm::fmat4();
+  view = glm::rotate(view, cameraRot_.y, rotX);
+  view = glm::rotate(view, cameraRot_.z, rotY);
+  view = glm::translate(view, -cameraPos_);
+  //camera_->setViewMatrix(view);
+
+
 }

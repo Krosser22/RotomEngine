@@ -8,7 +8,7 @@
 
 #include "node/light.h"
 #include "render/graphics.h"
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 ROTOM::Light::Light(char *name) {
   type_ = kNodeType_Light;
@@ -24,7 +24,8 @@ ROTOM::Light::Light(char *name) {
   setGeometry(std::shared_ptr<Geometry>(new Geometry()));
   setMaterial(lightMaterial);
 
-  setupOrtho(10.0f, -10.0f, -10.0f, 10.0f, 0.1f, 10.0f);
+  setupOrtho(-10.0f, 10.0f, 10.0f, -10.0f, 0.1f, 10.0f);
+  rotation_[0] = -90.0f;
 }
 
 ROTOM::Light::~Light() {}
@@ -38,14 +39,14 @@ float *ROTOM::Light::projectionMatrix() {
 }
 
 float *ROTOM::Light::viewMatrix() {
-  glm::fvec3 target_;
-  glm::fmat4 view = glm::lookAt(position_, glm::fvec3(0.0f), glm::fvec3(0.0f, 1.0f, 0.0f));
-  //glm::fmat4 view = glm::inverse(worldMatrix_);
-  glm::fvec3 pos = glm::fvec3(view[3]);
-  return glm::value_ptr(view);
+  view_ = glm::rotate(view_, rotation_.x, rotX);
+  view_ = glm::rotate(view_, rotation_.y, rotY);
+  view_ = glm::rotate(view_, rotation_.z, rotZ);
+  view_ = glm::translate(-position_);
+  return glm::value_ptr(view_);
 }
 
 float *ROTOM::Light::spaceMatrix() {
-  glm::fmat4 lightSpaceMatrix = projection_ * *viewMatrix();
-  return glm::value_ptr(lightSpaceMatrix);
+  lightSpaceMatrix_ = projection_ * view_;
+  return glm::value_ptr(lightSpaceMatrix_);
 }

@@ -44,7 +44,6 @@ void ROTOM::RenderToTextureScene::init() {
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material);
   drawable1->setParent(getRoot());
-  drawable1->setPosition(-2.0f, 0.0f, -2.0f);
 
   drawable2->setGeometry(geometry_);
   drawable2->setMaterial(material);
@@ -64,7 +63,7 @@ void ROTOM::RenderToTextureScene::init() {
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->setPosition(1.0f, 2.5f, 2.2f);
+  light->setPosition(2.2f, 0.0f, 2.2f);
   light->materialSettings()->color_[0] = 0.8f;
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;
@@ -88,7 +87,7 @@ void ROTOM::RenderToTextureScene::update() {
 }
 
 void ROTOM::RenderToTextureScene::draw() {
-  static bool drawRenderTarget = false;
+  static bool drawRenderTarget = true;
   if (INPUT::IsKeyPressed(' ')) {
     drawRenderTarget = !drawRenderTarget;
   }
@@ -96,8 +95,8 @@ void ROTOM::RenderToTextureScene::draw() {
   if (drawRenderTarget) {
     renderTarget_.begin();
     {
-      RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
-      //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+      //RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
+      RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
     }
     renderTarget_.end();
   }

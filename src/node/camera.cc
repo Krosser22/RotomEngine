@@ -9,6 +9,7 @@
 #include "node/camera.h"
 #include "render/graphics.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 ROTOM::Camera::Camera() {}
 
@@ -122,6 +123,10 @@ void ROTOM::Camera::setViewMatrix(glm::fmat4 viewMatrix) {
 }*/
 
 float *ROTOM::Camera::viewMatrix() {
+  /*viewMatrix_ = glm::rotate(viewMatrix_, rotation_.x, rotX);
+  viewMatrix_ = glm::rotate(viewMatrix_, rotation_.y, rotY);
+  viewMatrix_ = glm::rotate(viewMatrix_, rotation_.z, rotZ);
+  viewMatrix_ = glm::translate(-position_);*/
   return glm::value_ptr(viewMatrix_);
 }
 
