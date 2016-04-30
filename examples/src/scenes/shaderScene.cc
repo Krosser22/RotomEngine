@@ -10,10 +10,8 @@
 #include "general/window.h"
 
 void ROTOM::ShaderScene::init() {
-  cameraMovement_.setCameraToMove(getCamera());
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-
-  geometry_ = std::shared_ptr<Geometry>(new Geometry());
+  getCamera()->setPosition(1.0f, 0.0f, -3.0f);
 
   //Material1: Color
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material());
@@ -35,21 +33,20 @@ void ROTOM::ShaderScene::init() {
   std::shared_ptr<Material> material5 = std::shared_ptr<Material>(new Material());
   material5->setShaderFromPath("basics/5_SpecularLight_Blinn-Phong.vertx", "basics/5_SpecularLight_Blinn-Phong.frag");
 
+  //Drawables
   std::shared_ptr<Drawable> drawable1 = std::shared_ptr<Drawable>(new Drawable("Drawable_1"));
   std::shared_ptr<Drawable> drawable2 = std::shared_ptr<Drawable>(new Drawable("Drawable_2"));
   std::shared_ptr<Drawable> drawable3 = std::shared_ptr<Drawable>(new Drawable("Drawable_3"));
   std::shared_ptr<Drawable> drawable4 = std::shared_ptr<Drawable>(new Drawable("Drawable_4"));
   std::shared_ptr<Drawable> drawable5 = std::shared_ptr<Drawable>(new Drawable("Drawable_5"));
 
-  getRoot()->setPositionX(-2.9f);
+  //Geometry
+  geometry_ = std::shared_ptr<Geometry>(new Geometry());
 
   drawable1->setGeometry(geometry_);
   drawable1->setMaterial(material1);
   drawable1->setParent(getRoot());
-  drawable1->setPositionZ(-5.0f);
-  drawable1->materialSettings()->color_[0] = 0.0f;
-  drawable1->materialSettings()->color_[1] = 0.0f;
-  drawable1->materialSettings()->color_[2] = 0.0f;
+  drawable1->materialSettings()->setColor(0.2f, 0.4f, 0.6f);
 
   drawable2->setGeometry(geometry_);
   drawable2->setMaterial(material2);
@@ -74,18 +71,17 @@ void ROTOM::ShaderScene::init() {
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->setPosition(1.0f, 1.0f, -2.0f);
+  light->setPosition(0.0f, 0.0f, -2.0f);
   AddLight(light);
 }
 
 void ROTOM::ShaderScene::input() {
-  cameraMovement_.input();
+  getCamera()->input();
 }
 
 void ROTOM::ShaderScene::update() {
-  //float sinTime = sin(TIME::appTime()) * 0.022f;
   Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
   node->setRotationX(node->rotation().x + 0.01f);
 
-  cameraMovement_.update();
+  getCamera()->update();
 }

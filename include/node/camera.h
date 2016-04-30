@@ -18,36 +18,19 @@ namespace ROTOM {
     Camera();
     ~Camera();
 
-    void move(const float movement[3]);
-    void move(const float x, const float y, const float z);
-    void moveX(const float movementX);
-    void moveY(const float movementY);
-    void moveZ(const float movementZ);
+    float movementSpeed_ = 0.05f;
+    float rotationSpeed_ = 0.5f;
+    float scrollSpeed_ = 0.05f;
 
-    void setPosition(const float position[3]);
-    void setPosition(const float x, const float y, const float z);
-    glm::fvec3 position();
-    void setPositionX(const float positionX);
-    float positionX();
-    void setPositionY(const float positionY);
-    float positionY();
-    void setPositionZ(const float positionZ);
-    float positionZ();
+    void input();
 
-    void setRotation(const float rotation[3]);
-    void setRotation(const float x, const float y, const float z);
-    glm::fvec3 rotation();
-    void setRotationX(const float rotationX);
-    float rotationX();
-    void setRotationY(const float rotationY);
-    float rotationY();
-    void setRotationZ(const float rotationZ);
-    float rotationZ();
+    void update();
+
+    void setPosition(float x, float y, float z);
 
     void setViewMatrix(glm::fmat4 viewMatrix);
     //void setViewMatrix(glm::fvec3 eye, glm::fvec3 center, glm::fvec3 up);
     float *viewMatrix();
-    bool isDirtyViewMatrix();
 
     void setupPerspective(const float fovy, const float aspect, const float znear, const float zfar);
     void setupOrtho(const float left, const float right, const float bottom, const float top, const float znear, const float zfar);
@@ -71,15 +54,26 @@ namespace ROTOM {
     //void doRender();
 
   private:
-    bool dirtyViewMatrix_;
-    glm::fvec3 position_;
-    glm::fvec3 rotation_;
-    glm::fvec3 target_;
+    float yaw_ = 90.0f;	// Yaw is initialized to 90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right (due to how Eular angles work) so we initially rotate a bit to the left.
+    float pitch_ = 0.0f;
+    float lastX_ = 1280 * 0.5f;
+    float lastY_ = 720 * 0.5f;
+    float fov_ = 45.0f;
+    float xoffset_ = 0.0f;
+    float yoffset_ = 0.0f;
+
+    glm::fvec3 position_ = glm::fvec3(0.0f, 0.0f, 0.0f);
+    glm::fvec3 front_ = glm::fvec3(0.0f, 0.0f, -1.0f);
+    glm::fvec3 up_ = glm::fvec3(0.0f, 1.0f, 0.0f);
+
     glm::fmat4 viewMatrix_;
     glm::fmat4 projectionMatrix_;
-    glm::fvec3 rotX = glm::fvec3(1.0f, 0.0f, 0.0f);
-    glm::fvec3 rotY = glm::fvec3(0.0f, 1.0f, 0.0f);
-    glm::fvec3 rotZ = glm::fvec3(0.0f, 0.0f, 1.0f);
+
+    void movement();
+
+    void rotation();
+
+    void scroll();
   };
 }
 

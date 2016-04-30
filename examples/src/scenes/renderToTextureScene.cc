@@ -13,7 +13,6 @@
 
 void ROTOM::RenderToTextureScene::init() {
   //Camera
-  cameraMovement_.setCameraToMove(getCamera());
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //RenderTarget
@@ -67,23 +66,20 @@ void ROTOM::RenderToTextureScene::init() {
   light->materialSettings()->color_[0] = 0.8f;
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;
-  light->specularIntensity_[0] = 1.0f;
-  light->specularIntensity_[1] = 1.0f;
-  light->specularIntensity_[2] = 1.0f;
   AddLight(light);
 }
 
 void ROTOM::RenderToTextureScene::input() {
-  cameraMovement_.input();
+  getCamera()->input();
 }
 
 void ROTOM::RenderToTextureScene::update() {
-  if (INPUT::IsKeyDown('Q')) {
+  if (INPUT::IsKeyDown('Z')) {
     Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
     node->setRotationX(node->rotation().x + 0.01f);
   }
 
-  cameraMovement_.update();
+  getCamera()->update();
 }
 
 void ROTOM::RenderToTextureScene::draw() {
@@ -95,8 +91,8 @@ void ROTOM::RenderToTextureScene::draw() {
   if (drawRenderTarget) {
     renderTarget_.begin();
     {
-      //RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
-      RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+      RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
+      //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
     }
     renderTarget_.end();
   }

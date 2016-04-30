@@ -12,7 +12,6 @@
 #include "general/window.h"
 
 void ROTOM::DefaultScene::init() {
-  cameraMovement_.setCameraToMove(getCamera());
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getRoot()->setPositionZ(-4.0f);
 
@@ -79,7 +78,7 @@ void ROTOM::DefaultScene::input() {
     posX -= 1.0f;
   }
 
-  cameraMovement_.input();
+  getCamera()->input();
 }
 
 void ROTOM::DefaultScene::update() {
@@ -88,5 +87,5 @@ void ROTOM::DefaultScene::update() {
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
 
-  cameraMovement_.update();
+  getCamera()->update();
 }

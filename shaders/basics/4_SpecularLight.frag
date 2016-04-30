@@ -28,7 +28,7 @@ void main() {
   vec3 ambient = u_lightColor * u_ambientStrength;
 
   //Diffuse Light
-  vec3 diffuse = u_lightColor * max(dot(normalDirectionNormalized, lightDirectionNormalized), 0.0f);
+  vec3 diffuse = u_lightColor * max(dot(lightDirectionNormalized, normalDirectionNormalized), 0.0f);
 
   //Specular Light
   vec3 viewDirectionNormalized = normalize(u_viewDirection - fragmentPosition);

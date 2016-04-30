@@ -10,7 +10,6 @@
 #define __GEOMETRY_SCENE_H__
 
 #include "general/scene.h"
-#include "general/CameraMovement.h"
 
 namespace ROTOM {
   class GeometryScene : public Scene {
@@ -29,7 +28,6 @@ namespace ROTOM {
     void destroy() {};
 
     static const int amount = 5000;
-    CameraMovement cameraMovement_;
   };
 }
 

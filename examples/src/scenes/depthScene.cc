@@ -13,7 +13,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 void ROTOM::DepthScene::init() {
-  cameraMovement_.setCameraToMove(getCamera());
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
@@ -63,11 +62,11 @@ void ROTOM::DepthScene::init() {
 }
 
 void ROTOM::DepthScene::input() {
-  cameraMovement_.input();
+  getCamera()->input();
 }
 
 void ROTOM::DepthScene::update() {
   drawableBase_->moveZ(sin(TIME::appTime()) * 0.2f);
 
-  cameraMovement_.update();
+  getCamera()->update();
 }

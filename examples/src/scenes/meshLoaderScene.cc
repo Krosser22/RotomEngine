@@ -12,7 +12,6 @@
 
 void ROTOM::MeshLoaderScene::init() {
   //Camera
-  cameraMovement_.setCameraToMove(getCamera());
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //Geometry
@@ -42,7 +41,7 @@ void ROTOM::MeshLoaderScene::input() {
     rotating_ = !rotating_;
   }
 
-  cameraMovement_.input();
+  getCamera()->input();
 }
 
 void ROTOM::MeshLoaderScene::update() {
@@ -50,5 +49,5 @@ void ROTOM::MeshLoaderScene::update() {
     getRoot()->getChildAt(0)->setRotationY(getRoot()->getChildAt(0)->rotation().y + 0.01f);
   }
 
-  cameraMovement_.update();
+  getCamera()->update();
 }

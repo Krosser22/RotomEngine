@@ -10,7 +10,6 @@
 #define __DEPTH_SCENE_H__
 
 #include "general/scene.h"
-#include "general/CameraMovement.h"
 
 namespace ROTOM {
   class DepthScene : public Scene {
@@ -32,7 +31,6 @@ namespace ROTOM {
     static const int amount = 100;
     std::shared_ptr<Geometry> geometry_;
     std::shared_ptr<Drawable> drawableBase_;
-    CameraMovement cameraMovement_;
   };
 }
 

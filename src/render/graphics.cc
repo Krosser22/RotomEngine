@@ -545,7 +545,8 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int *shaderProgram) {
 ROTOM::ShaderData *shaderData;
 ROTOM::MaterialSettings* materialSettings;
 ROTOM::Light *light = nullptr;
-float *lightPosition = nullptr, *lightColor = nullptr, *specularIntensity = nullptr, *specularMaterial = nullptr, *color = nullptr;
+glm::fvec3 lightPosition;
+float *lightColor = nullptr, *specularIntensity = nullptr, *specularMaterial = nullptr, *color = nullptr;
 void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix) {
   shaderData = &commandDrawObjectData->shaderData;
   materialSettings = &commandDrawObjectData->materialSettings;
@@ -563,7 +564,11 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
   glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_worldMatrix);
   glUniformMatrix4fv(shaderData->u_view, 1, GL_FALSE, viewMatrix);
   glUniformMatrix4fv(shaderData->u_projection, 1, GL_FALSE, projectionMatrix);
-  glUniform3f(shaderData->u_viewDirection, viewMatrix[3], viewMatrix[4], viewMatrix[5]);
+  glUniform3f(shaderData->u_viewDirection, -viewMatrix[12], -viewMatrix[13], -viewMatrix[14]);
+  //printf("%f %f %f %f\n", viewMatrix[0], viewMatrix[1], viewMatrix[2], viewMatrix[3]);
+  //printf("%f %f %f %f\n", viewMatrix[4], viewMatrix[5], viewMatrix[6], viewMatrix[7]);
+  //printf("%f %f %f %f\n", viewMatrix[8], viewMatrix[9], viewMatrix[10], viewMatrix[11]);
+  //printf("%f %f %f %f\n\n", viewMatrix[12], viewMatrix[13], viewMatrix[14], viewMatrix[15]);
 
   //Material
   glUniform1f(shaderData->u_shininess, commandDrawObjectData->materialData.shininess);
@@ -576,11 +581,11 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
   //Light
   for (unsigned int i = 0; i < lights->size(); ++i) {
     light = lights->at(i).get();
-    lightPosition = &light->position()[0];
+    lightPosition = light->position();
     lightColor = light->materialSettings()->color_;
     specularIntensity = light->specularIntensity_;
     glUniformMatrix4fv(shaderData->u_lightSpaceMatrix, 1, GL_FALSE, light->spaceMatrix());
-    glUniform3f(shaderData->u_lightPosition, lightPosition[0], lightPosition[1], lightPosition[2]);
+    glUniform3f(shaderData->u_lightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
     glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
     glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);
   }

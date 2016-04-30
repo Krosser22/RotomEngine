@@ -10,7 +10,6 @@
 #define __DEFAULT_SCENE_H__
 
 #include "general/scene.h"
-#include "general/CameraMovement.h"
 
 namespace ROTOM {
   class DefaultScene : public Scene {
@@ -31,7 +30,6 @@ namespace ROTOM {
   private:
     static const int amount_ = 2722;
     std::shared_ptr<Geometry> geometry_;
-    CameraMovement cameraMovement_;
   };
 }
 

@@ -12,7 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 void ROTOM::ProceduralScene::init() {
-  cameraMovement_.setCameraToMove(getCamera());
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //Material1: Color
@@ -34,11 +33,11 @@ void ROTOM::ProceduralScene::init() {
 }
 
 void ROTOM::ProceduralScene::input() {
-  cameraMovement_.input();
+  getCamera()->input();
 }
 
 void ROTOM::ProceduralScene::update() {
   chunk_->update();
 
-  cameraMovement_.update();
+  getCamera()->update();
 }

@@ -151,5 +151,5 @@ void ROTOM::MovementScene::update() {
   node->setRotationX(node->rotation().x + 0.01f);
 
   // Camera/View transformation
-  getCamera()->setViewMatrix(glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp));
+  getCamera()->setViewMatrix(glm::lookAt(-cameraPos, -cameraPos + cameraFront, cameraUp));
 }

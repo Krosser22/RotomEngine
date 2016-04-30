@@ -8,130 +8,106 @@
 
 #include "node/camera.h"
 #include "render/graphics.h"
+#include "general/input.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <stdio.h>
 
-ROTOM::Camera::Camera() {}
+ROTOM::Camera::Camera() {
+  front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  front_.y = sin(glm::radians(pitch_));
+  front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  front_ = glm::normalize(front_);
+}
 
 ROTOM::Camera::~Camera() {}
 
-void ROTOM::Camera::move(const float movement[3]) {
-  setPosition(position_.x + movement[0], position_.y + movement[1], position_.z + movement[2]);
+void ROTOM::Camera::input() {
+  if (INPUT::IsMousePressed(1)) {
+    lastX_ = INPUT::MousePositionX();
+    lastY_ = INPUT::MousePositionY();
+  }
+
+  if (INPUT::MouseWheel()) {
+    scroll();
+  }
+
+  if (INPUT::IsMouseDown(1)) {
+    movement();
+    rotation();
+  }
 }
 
-void ROTOM::Camera::move(const float x, const float y, const float z) {
-  setPosition(position_.x + x, position_.y + y, position_.z + z);
+void ROTOM::Camera::movement() {
+  if (INPUT::IsKeyDown('W')) position_ += movementSpeed_ * front_; //Forward
+  if (INPUT::IsKeyDown('S')) position_ -= movementSpeed_ * front_; //Backward
+  if (INPUT::IsKeyDown('A')) position_ += glm::normalize(glm::cross(front_, up_)) * movementSpeed_; //Left
+  if (INPUT::IsKeyDown('D')) position_ -= glm::normalize(glm::cross(front_, up_)) * movementSpeed_; //Right
+  if (INPUT::IsKeyDown('E')) position_ += glm::normalize(up_) * movementSpeed_; //Up
+  if (INPUT::IsKeyDown('Q')) position_ -= glm::normalize(up_) * movementSpeed_; //Down
 }
 
-void ROTOM::Camera::moveX(const float movementX) {
-  setPosition(position_.x + movementX, position_.y, position_.z);
+void ROTOM::Camera::rotation() {
+  xoffset_ = INPUT::MousePositionX() - lastX_;
+  yoffset_ = lastY_ - INPUT::MousePositionY(); // Reversed since y-coordinates go from bottom to left
+  lastX_ = INPUT::MousePositionX();
+  lastY_ = INPUT::MousePositionY();
+
+  xoffset_ *= rotationSpeed_;
+  yoffset_ *= rotationSpeed_;
+
+  yaw_ -= xoffset_;
+  pitch_ += yoffset_;
+
+  // Make sure that when pitch is out of bounds, screen doesn't get flipped
+  if (pitch_ > 89.0f) {
+    pitch_ = 89.0f;
+  }
+
+  if (pitch_ < -89.0f) {
+    pitch_ = -89.0f;
+  }
+
+  front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  front_.y = sin(glm::radians(pitch_));
+  front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  front_ = glm::normalize(front_);
 }
 
-void ROTOM::Camera::moveY(const float movementY) {
-  setPosition(position_.x, position_.y + movementY, position_.z);
+void ROTOM::Camera::scroll() {
+  if (fov_ >= 1.0f && fov_ <= 45.0f) {
+    fov_ -= INPUT::MouseWheel() * scrollSpeed_;
+  }
+
+  if (fov_ <= 1.0f) {
+    fov_ = 1.0f;
+  }
+
+  if (fov_ >= 45.0f) {
+    fov_ = 45.0f;
+  }
+  printf("FOV: %f\n", fov_);
 }
 
-void ROTOM::Camera::moveZ(const float movementZ) {
-  setPosition(position_.x, position_.y, position_.z + movementZ);
+void ROTOM::Camera::update() {
+  //Camera/View transformation
+  viewMatrix_ = glm::lookAt(position_, position_ + front_, up_);
 }
 
-void ROTOM::Camera::setPosition(const float position[3]) {
-  setPosition(position[0], position[1], position[2]);
-}
-
-void ROTOM::Camera::setPosition(const float x, const float y, const float z) {
+void ROTOM::Camera::setPosition(float x, float y, float z) {
   position_.x = x;
   position_.y = y;
   position_.z = z;
-  dirtyViewMatrix_ = true;
-}
-
-glm::fvec3 ROTOM::Camera::position() {
-  return position_;
-}
-
-void ROTOM::Camera::setPositionX(const float positionX) {
-  setPosition(positionX, position_.y, position_.z);
-}
-
-float ROTOM::Camera::positionX() {
-  return position_.x;
-}
-
-void ROTOM::Camera::setPositionY(const float positionY) {
-  setPosition(position_.x, positionY, position_.z);
-}
-
-float ROTOM::Camera::positionY() {
-  return position_.y;
-}
-
-void ROTOM::Camera::setPositionZ(const float positionZ) {
-  setPosition(position_.x, position_.y, positionZ);
-}
-
-float ROTOM::Camera::positionZ() {
-  return position_.z;
-}
-
-void ROTOM::Camera::setRotation(const float rotation[3]) {
-  setRotation(rotation[0], rotation[1], rotation[2]);
-}
-
-void ROTOM::Camera::setRotation(const float x, const float y, const float z) {
-  rotation_.x = x;
-  rotation_.y = y;
-  rotation_.z = z;
-  dirtyViewMatrix_ = true;
-}
-
-glm::fvec3 ROTOM::Camera::rotation() {
-  return rotation_;
-}
-
-void ROTOM::Camera::setRotationX(const float rotationX) {
-  setRotation(rotationX, rotation_.y, rotation_.z);
-}
-
-float ROTOM::Camera::rotationX() {
-  return rotation_.x;
-}
-
-void ROTOM::Camera::setRotationY(const float rotationY) {
-  setRotation(rotation_.x, rotationY, rotation_.z);
-}
-
-float ROTOM::Camera::rotationY() {
-  return rotation_.y;
-}
-
-void ROTOM::Camera::setRotationZ(const float rotationZ) {
-  setRotation(rotation_.x, rotation_.y, rotationZ);
-}
-
-float ROTOM::Camera::rotationZ() {
-  return rotation_.z;
+  viewMatrix_ = glm::lookAt(position_, position_ + front_, up_);
 }
 
 void ROTOM::Camera::setViewMatrix(glm::fmat4 viewMatrix) {
   viewMatrix_ = viewMatrix;
-  dirtyViewMatrix_ = false;
 }
-
-/*void ROTOM::Camera::setViewMatrix(glm::fvec3 eye, glm::fvec3 center, glm::fvec3 up) {
-  setViewMatrix(glm::lookAt(eye, center, up));
-}*/
 
 float *ROTOM::Camera::viewMatrix() {
-  /*viewMatrix_ = glm::rotate(viewMatrix_, rotation_.x, rotX);
-  viewMatrix_ = glm::rotate(viewMatrix_, rotation_.y, rotY);
-  viewMatrix_ = glm::rotate(viewMatrix_, rotation_.z, rotZ);
-  viewMatrix_ = glm::translate(-position_);*/
   return glm::value_ptr(viewMatrix_);
-}
-
-bool ROTOM::Camera::isDirtyViewMatrix() {
-  return dirtyViewMatrix_;
 }
 
 void ROTOM::Camera::setupPerspective(const float fovy, const float aspect, const float znear, const float zfar) {
@@ -150,21 +126,16 @@ float *ROTOM::Camera::projectionMatrix() {
   return glm::value_ptr(projectionMatrix_);
 }
 
+/*
+//void ROTOM::Camera::setViewMatrix(glm::fvec3 eye, glm::fvec3 center, glm::fvec3 up) {setViewMatrix(glm::lookAt(eye, center, up));}
+
 //void ROTOM::Camera::set_view_direction(const float pos[3]) {}
 
-//void ROTOM::Camera::setViewTarget(const float pos[3]) {
-//  glm::fvec3 cameraDirection;
-//  glm::fvec3 p = glm::fvec3(*pos);
-//  cameraDirection = glm::normalize(p - target_);
-//}
+//void ROTOM::Camera::setViewTarget(const float position[3]) {glm::fvec3 cameraDirection = glm::normalize(position - target_);}
 
-//const float *ROTOM::Camera::target() {
-//  return glm::value_ptr(target_);
-//}
+//const float *ROTOM::Camera::target() {return glm::value_ptr(target_);}
 
-//const float *ROTOM::Camera::forward() {
-//  return glm::value_ptr(target_ - position_);
-//}
+//const float *ROTOM::Camera::forward() {return glm::value_ptr(target_ - position_);}
 
 //void ROTOM::Camera::set_up_direction(const float pos[3]) {}
 
@@ -173,3 +144,4 @@ float *ROTOM::Camera::projectionMatrix() {
 //void ROTOM::Camera::doCull(const Camera *root) {}
 
 //void ROTOM::Camera::doRender() {}
+*/

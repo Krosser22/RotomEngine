@@ -19,12 +19,12 @@ ROTOM::Light::Light(char *name) {
   specularIntensity_[1] = 1.0f;
   specularIntensity_[2] = 1.0f;
 
-  std::shared_ptr<Material> lightMaterial = std::shared_ptr<Material>(new Material());
+  std::shared_ptr<Material> lightMaterial = std::shared_ptr<Material>(new Material("../../../../img/transparent.png"));
   lightMaterial->setShaderFromPath("basics/1_Basic.vertx", "basics/1_Basic.frag");
   setGeometry(std::shared_ptr<Geometry>(new Geometry()));
   setMaterial(lightMaterial);
 
-  setupOrtho(-10.0f, 10.0f, 10.0f, -10.0f, 0.1f, 10.0f);
+  setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 10.0f);
   rotation_[0] = -90.0f;
 }
 
@@ -47,6 +47,6 @@ float *ROTOM::Light::viewMatrix() {
 }
 
 float *ROTOM::Light::spaceMatrix() {
-  lightSpaceMatrix_ = projection_ * view_;
+  lightSpaceMatrix_ = projection_ * *viewMatrix();
   return glm::value_ptr(lightSpaceMatrix_);
 }

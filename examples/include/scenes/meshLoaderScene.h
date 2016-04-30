@@ -10,7 +10,6 @@
 #define __MESH_LOADER_SCENE_H__
 
 #include "general/scene.h"
-#include "general/CameraMovement.h"
 
 namespace ROTOM {
   class MeshLoaderScene : public Scene {
@@ -30,7 +29,6 @@ namespace ROTOM {
 
   private:
     bool rotating_;
-    CameraMovement cameraMovement_;
   };
 }
 

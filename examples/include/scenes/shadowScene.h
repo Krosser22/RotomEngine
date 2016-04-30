@@ -11,7 +11,6 @@
 
 #include "general/scene.h"
 #include "render/renderTarget.h"
-#include "general/CameraMovement.h"
 
 namespace ROTOM {
   class ShadowScene : public Scene {
@@ -33,26 +32,6 @@ namespace ROTOM {
     std::shared_ptr<Geometry> geometry_;
     std::shared_ptr<Geometry> geometryFloor_;
     RenderTarget renderTarget_;
-    CameraMovement cameraMovement_;
-
-    glm::fvec3 cameraPos = glm::fvec3(0.0f, 0.0f, 3.0f);
-    glm::fvec3 cameraFront = glm::fvec3(0.0f, 0.0f, -1.0f);
-    glm::fvec3 cameraUp = glm::fvec3(0.0f, 1.0f, 0.0f);
-    float yaw = -90.0f;	// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right (due to how Eular angles work) so we initially rotate a bit to the left.
-    float pitch = 0.0f;
-    float lastX = 1280 / 2.0;
-    float lastY = 720 / 2.0;
-    float fov = 45.0f;
-
-    float movementSpeed = 0.05f; // Change this value to your liking
-    float rotationSpeed = 0.5f;	// Change this value to your liking
-    float scrollSpeed = 0.05f; // Change this value to your liking
-
-    void movement();
-
-    void rotation();
-
-    void scroll();
   };
 }
 

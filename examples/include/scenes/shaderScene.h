@@ -10,7 +10,6 @@
 #define __SHADER_SCENE_H__
 
 #include "general/scene.h"
-#include "general/CameraMovement.h"
 
 namespace ROTOM {
   class ShaderScene : public Scene {
@@ -30,7 +29,6 @@ namespace ROTOM {
     
   private:
     std::shared_ptr<Geometry> geometry_;
-    CameraMovement cameraMovement_;
   };
 }
 

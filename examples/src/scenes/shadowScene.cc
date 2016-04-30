@@ -13,7 +13,6 @@
 
 void ROTOM::ShadowScene::init() {
   //Camera
-  cameraMovement_.setCameraToMove(getCamera());
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //RenderTarget
@@ -64,34 +63,31 @@ void ROTOM::ShadowScene::init() {
   drawable5->setGeometry(geometryFloor_);
   drawable5->setMaterial(shadowMaterial);
   drawable5->setParent(getRoot());
-  drawable5->setPosition(0.0f, -1.0f, -1.0f);
+  drawable5->setPosition(1.8f, 1.0f, -2.2f);
 
   drawable6->setGeometry(geometry_);
   drawable6->setMaterial(materialRenderDepthToTexture);
   drawable6->setParent(getRoot());
-  drawable6->setPosition(0.0f, 1.0f, 0.0f);
+  drawable6->setPosition(1.5f, 1.0f, 0.0f);
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->setPosition(0.0f, 0.0f, -4.0f);
-  light->specularIntensity_[0] = 1.0f;
-  light->specularIntensity_[1] = 1.0f;
-  light->specularIntensity_[2] = 1.0f;
+  light->setPosition(1.5f, 0.0f, 3.0f);
   AddLight(light);
 }
 
 void ROTOM::ShadowScene::input() {
-  cameraMovement_.input();
+  getCamera()->input();
 }
 
 void ROTOM::ShadowScene::update() {
-  if (INPUT::IsKeyDown('Q')) {
+  if (INPUT::IsKeyDown('Z')) {
     Node *node = getRoot()->getChildAt(0)->getChildAt(0).get();
     node->setRotationX(node->rotation().x + 0.01f);
   }
 
-  cameraMovement_.update();
+  getCamera()->update();
 }
 
 void ROTOM::ShadowScene::draw() {
