@@ -41,7 +41,7 @@ bool WindowIsOpened() {
     scene->draw();
 
     //Render from the camera perspective
-    ROTOM::RenderScene(scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix());
+    ROTOM::RenderScene(scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix(), scene->getCamera()->position());
 
     //Render HUD
     ROTOM::HUD::Draw();
@@ -77,8 +77,8 @@ void ROTOM::SetScene(Scene *newScene) {
   scene = nullptr;
 }
 
-void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix) {
-  commandDrawObject.setInput(scene->getRoot(), scene->getLight(), projectionMatrix, viewMatrix);
+void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix, float *viewPosition) {
+  commandDrawObject.setInput(scene->getRoot(), scene->getLight(), projectionMatrix, viewMatrix, viewPosition);
   displayList.addCommand(&commandDrawObject);
   displayList.draw();
 }

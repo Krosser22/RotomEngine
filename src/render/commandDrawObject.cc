@@ -16,15 +16,18 @@ ROTOM::CommandDrawObject::~CommandDrawObject() {}
 void ROTOM::CommandDrawObject::run() {
   GRAPHICS::clearScreen();
   for (unsigned int i = 0; i < commandDrawObjectData_.size(); ++i) {
-    GRAPHICS::drawObject(&commandDrawObjectData_.at(i), &lights_, projectionMatrix_, viewMatrix_);
+    GRAPHICS::drawObject(&commandDrawObjectData_.at(i), &lights_, projectionMatrix_, viewMatrix_, viewPosition_);
   }
 }
 
-void ROTOM::CommandDrawObject::setInput(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, float projectionMatrix[16], float viewMatrix[16]) {
+void ROTOM::CommandDrawObject::setInput(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, float projectionMatrix[16], float viewMatrix[16], float *viewPosition) {
   lights_ = lights;
   for (int i = 0; i < 16; ++i) {
     projectionMatrix_[i] = projectionMatrix[i];
     viewMatrix_[i] = viewMatrix[i];
+  }
+  for (int i = 0; i < 3; ++i) {
+    viewPosition_[i] = viewPosition[i];
   }
   commandDrawObjectData_.clear();
   setInputChilds((Drawable *)root.get());

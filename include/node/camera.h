@@ -27,6 +27,13 @@ namespace ROTOM {
     void update();
 
     void setPosition(float x, float y, float z);
+    float *position();
+
+    void setYaw(float yaw);
+    float yaw();
+
+    void setPitch(float pitch);
+    float pitch();
 
     void setViewMatrix(glm::fmat4 viewMatrix);
     //void setViewMatrix(glm::fvec3 eye, glm::fvec3 center, glm::fvec3 up);

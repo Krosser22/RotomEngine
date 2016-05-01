@@ -91,8 +91,8 @@ void ROTOM::RenderToTextureScene::draw() {
   if (drawRenderTarget) {
     renderTarget_.begin();
     {
-      RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix());
-      //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+      RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix(), getLight().begin()->get()->pos());
+      //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix(), getCamera()->position());
     }
     renderTarget_.end();
   }

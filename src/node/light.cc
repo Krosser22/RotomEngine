@@ -42,7 +42,21 @@ float *ROTOM::Light::viewMatrix() {
   view_ = glm::rotate(view_, rotation_.x, rotX);
   view_ = glm::rotate(view_, rotation_.y, rotY);
   view_ = glm::rotate(view_, rotation_.z, rotZ);
-  view_ = glm::translate(-position_);
+  view_ = glm::translate(position_);
+
+  float pitch = rotation_.x;
+  float yaw = rotation_.y;
+  
+  // Make sure that when pitch is out of bounds, screen doesn't get flipped
+  if (pitch > 89.0f) pitch = 89.0f;
+  if (pitch < -89.0f) pitch = -89.0f;
+
+  glm::fvec3 front;
+  front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+  front.y = sin(glm::radians(pitch));
+  front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+  front = glm::normalize(front);
+  //view_ = glm::lookAt(position_, position_ + front, glm::fvec3(0.0f, 1.0f, 0.0f));
   return glm::value_ptr(view_);
 }
 

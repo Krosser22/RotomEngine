@@ -29,7 +29,7 @@ namespace ROTOM {
   void SetScene(Scene *newScene);
 
   //Render the scene from the perspective of a camera
-  void RenderScene(float *projectionMatrix, float *viewMatrix);
+  void RenderScene(float *projectionMatrix, float *viewMatrix, float *viewPosition);
 
   //It will return the actual displayList
   DisplayList *GetActualDisplayList();

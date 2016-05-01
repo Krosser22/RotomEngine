@@ -24,7 +24,7 @@ namespace ROTOM {
       u_specularIntensity = 0;
       u_specularMaterial = 0;
       u_ambientStrength = 0;
-      u_viewDirection = 0;
+      u_viewPosition = 0;
       u_lightSpaceMatrix = 0;
       u_colorMap = 0;
       u_depthMap = 0;
@@ -41,7 +41,7 @@ namespace ROTOM {
     unsigned int u_specularIntensity;
     unsigned int u_specularMaterial;
     unsigned int u_ambientStrength;
-    unsigned int u_viewDirection;
+    unsigned int u_viewPosition;
     unsigned int u_lightSpaceMatrix;
     unsigned int u_colorMap;
     unsigned int u_depthMap;

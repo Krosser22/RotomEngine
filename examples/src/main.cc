@@ -17,7 +17,7 @@
 #include "scenes/renderToTextureScene.h"
 #include "scenes/shaderScene.h"
 #include "scenes/shadowScene.h"
-//#include "scenes/soundScene.h"
+#include "scenes/soundScene.h"
 
 int ROTOM::main(int argc, char** argv) {
   TIME::Chronometer c;

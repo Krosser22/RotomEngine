@@ -41,13 +41,13 @@ namespace ROTOM {
 
     void releaseMaterial(unsigned int *shaderProgram);
 
-    void drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix);
+    void drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix, float *viewPosition);
 
     void loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index);
 
     void releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO);
 
-    void genRenderBuffer(int *colorActivePosition, int *depthActivePosition, unsigned int *colorBuffer, unsigned int *depthBuffer, unsigned int *framebuffer, unsigned int width, unsigned int height);
+    void genRenderBuffer(int *colorActivePosition, int *depthActivePosition, unsigned int *colorTexture, unsigned int *depthTexture, unsigned int *framebuffer, unsigned int width, unsigned int height);
 
     void beginFramebuffer(RenderTarget *renderTarget);
 

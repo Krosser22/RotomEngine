@@ -87,7 +87,7 @@ void ROTOM::Camera::scroll() {
   if (fov_ >= 45.0f) {
     fov_ = 45.0f;
   }
-  printf("FOV: %f\n", fov_);
+  //printf("FOV: %f\n", fov_);
 }
 
 void ROTOM::Camera::update() {
@@ -100,6 +100,54 @@ void ROTOM::Camera::setPosition(float x, float y, float z) {
   position_.y = y;
   position_.z = z;
   viewMatrix_ = glm::lookAt(position_, position_ + front_, up_);
+}
+
+float *ROTOM::Camera::position() {
+  return glm::value_ptr(position_);
+}
+
+void ROTOM::Camera::setYaw(float yaw) {
+  yaw_ = yaw;
+
+  // Make sure that when pitch is out of bounds, screen doesn't get flipped
+  if (pitch_ > 89.0f) {
+    pitch_ = 89.0f;
+  }
+
+  if (pitch_ < -89.0f) {
+    pitch_ = -89.0f;
+  }
+
+  front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  front_.y = sin(glm::radians(pitch_));
+  front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  front_ = glm::normalize(front_);
+}
+
+float ROTOM::Camera::yaw() {
+  return yaw_;
+}
+
+void ROTOM::Camera::setPitch(float pitch) {
+  pitch_ = pitch;
+
+  // Make sure that when pitch is out of bounds, screen doesn't get flipped
+  if (pitch_ > 89.0f) {
+    pitch_ = 89.0f;
+  }
+
+  if (pitch_ < -89.0f) {
+    pitch_ = -89.0f;
+  }
+
+  front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  front_.y = sin(glm::radians(pitch_));
+  front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+  front_ = glm::normalize(front_);
+}
+
+float ROTOM::Camera::pitch() {
+  return pitch_;
 }
 
 void ROTOM::Camera::setViewMatrix(glm::fmat4 viewMatrix) {

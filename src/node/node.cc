@@ -86,6 +86,10 @@ glm::fvec3 ROTOM::Node::position() {
   return position_;
 }
 
+float *ROTOM::Node::pos() {
+  return glm::value_ptr(position_);
+}
+
 void ROTOM::Node::setPositionX(const float positionX) {
   setPosition(positionX, position_.y, position_.z);
 }

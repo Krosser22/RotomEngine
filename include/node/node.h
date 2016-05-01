@@ -35,6 +35,7 @@ namespace ROTOM {
     void setPosition(const float position[3]);
     void setPosition(const float x, const float y, const float z);
     glm::fvec3 position();
+    float *pos();
     void setPositionX(const float positionX);
     float positionX();
     void setPositionY(const float positionY);

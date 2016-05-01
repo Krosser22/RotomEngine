@@ -8,7 +8,7 @@ uniform vec3 u_lightColor;
 uniform float u_shininess;
 uniform vec3 u_specularIntensity;
 uniform vec3 u_specularMaterial;
-uniform vec3 u_viewDirection;
+uniform vec3 u_viewPosition;
 
 in vec3 fragmentPosition;
 in vec3 normalDirection;
@@ -31,7 +31,7 @@ void main() {
   vec3 diffuse = u_lightColor * max(dot(lightDirectionNormalized, normalDirectionNormalized), 0.0f);
 
   //Specular Light
-  vec3 viewDirectionNormalized = normalize(u_viewDirection - fragmentPosition);
+  vec3 viewDirectionNormalized = normalize(u_viewPosition - fragmentPosition);
   vec3 reflectionDirection = reflect(-lightDirectionNormalized, normalDirectionNormalized);
   float spec = pow(max(dot(viewDirectionNormalized, reflectionDirection), 0.0f), u_shininess);
   vec3 specular = u_lightColor * spec * u_specularIntensity * u_specularMaterial;
