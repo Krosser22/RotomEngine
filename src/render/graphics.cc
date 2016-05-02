@@ -26,26 +26,16 @@
 #define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
 
 struct GLFWwindow;
-
 IMGUI_API bool ImGui_Init(GLFWwindow* window, bool install_callbacks);
 IMGUI_API void ImGui_Shutdown();
 IMGUI_API void ImGui_NewFrame();
-
-// Use if you want to reset your rendering device without losing ImGui state.
 IMGUI_API void ImGui_InvalidateDeviceObjects();
 IMGUI_API bool ImGui_CreateDeviceObjects();
-
-// GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks.
-// You can also handle inputs yourself and use those as a reference.
 IMGUI_API void ImGui_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 IMGUI_API void ImGui_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 IMGUI_API void ImGui_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 IMGUI_API void ImGui_CharCallback(GLFWwindow* window, unsigned int c);
-
 IMGUI_API void ImGui_RenderDrawLists(ImDrawData* draw_data);
-
-// Data
 static GLFWwindow  *window = nullptr;
 static double       g_Time = 0.0f;
 static bool         g_MousePressed[3] = { false, false, false };
@@ -56,8 +46,6 @@ static int          g_AttribLocationTex = 0, g_AttribLocationProjMtx = 0;
 static int          g_AttribLocationPosition = 0, g_AttribLocationUV = 0, g_AttribLocationColor = 0;
 static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
 
-//Texture
-static int textureID = 1;
 ROTOM::RenderTarget actualRenderTarget;
 
 static void error_callback(int error, const char* description) {
@@ -399,13 +387,12 @@ void ROTOM::GRAPHICS::windowInit(unsigned int width, unsigned int height) {
   glewInit();
 
   //glViewport(0, 0, width, height);
-
   //glDepthRange(0, 1);
   //glDisable(GL_CULL_FACE);
-  glEnable(GL_DEPTH_TEST);
   //glDepthFunc(GL_LESS);
-  glEnable(GL_BLEND);
   //glBlendEquation(GL_FUNC_ADD);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   ImGui_Init(window, true);
@@ -516,10 +503,8 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_depthMap = glGetUniformLocation(shaderData->shaderProgram, "u_depthMap");
 }
 
-unsigned int ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
+void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
   glGenTextures(1, texture);
-  int textureActivePosition = GL_TEXTURE0 + ++textureID;
-  glActiveTexture(textureActivePosition);
   glBindTexture(GL_TEXTURE_2D, *texture);
   {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *textureWidth, *textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
@@ -529,7 +514,6 @@ unsigned int ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *i
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenerateMipmap(GL_TEXTURE_2D);
   }
-  return textureActivePosition;
 }
 
 void ROTOM::GRAPHICS::releaseTexture(unsigned int *texture) {
@@ -649,15 +633,13 @@ void ROTOM::GRAPHICS::releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsi
   }
 }
 
-void ROTOM::GRAPHICS::genRenderBuffer(int *colorActivePosition, int *depthActivePosition, unsigned int *colorTexture, unsigned int *depthTexture, unsigned int *framebuffer, unsigned int width, unsigned int height) {
+void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *colorTexture, unsigned int *depthTexture, unsigned int *framebuffer, unsigned int width, unsigned int height) {
   //Framebuffer
   glGenFramebuffers(1, framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
 
   //Color texture
   glGenTextures(1, colorTexture);
-  //*colorActivePosition = GL_TEXTURE0 + ++textureID;
-  //glActiveTexture(*colorActivePosition);
   glBindTexture(GL_TEXTURE_2D, *colorTexture);
   {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
@@ -668,8 +650,6 @@ void ROTOM::GRAPHICS::genRenderBuffer(int *colorActivePosition, int *depthActive
 
   //Depth texture
   glGenTextures(1, depthTexture);
-  *depthActivePosition = GL_TEXTURE0 + ++textureID;
-  glActiveTexture(*depthActivePosition);
   glBindTexture(GL_TEXTURE_2D, *depthTexture);
   {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);

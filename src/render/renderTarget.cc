@@ -16,8 +16,6 @@ ROTOM::RenderTarget::~RenderTarget() {}
 
 void ROTOM::RenderTarget::init(unsigned int width, unsigned int height) {
   GRAPHICS::genRenderBuffer(
-    &framebufferData_.textureColorActivePosition, 
-    &framebufferData_.textureDepthActivePosition, 
     &framebufferData_.textureColor, 
     &framebufferData_.textureDepth, 
     &framebufferData_.framebuffer, 

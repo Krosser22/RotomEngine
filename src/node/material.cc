@@ -91,7 +91,7 @@ void ROTOM::Material::setShaderFromPath(const char *vertexShaderPath, const char
 }
 
 void ROTOM::Material::setTexture(unsigned char *texture) {
-  materialData_.textureActivePosition = GRAPHICS::setTexture(&texture_, texture, &textureWidth_, &textureHeight_);
+  GRAPHICS::setTexture(&texture_, texture, &textureWidth_, &textureHeight_);
 }
 
 void ROTOM::Material::setTexture(unsigned int *texture) {

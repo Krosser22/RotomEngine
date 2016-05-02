@@ -32,9 +32,11 @@ namespace ROTOM {
     glm::fmat4 projection_;
     glm::fmat4 lightSpaceMatrix_;
     glm::fmat4 identity_ = glm::fmat4();
-    glm::fvec3 rotX = glm::fvec3(1.0f, 0.0f, 0.0f);
-    glm::fvec3 rotY = glm::fvec3(0.0f, 1.0f, 0.0f);
-    glm::fvec3 rotZ = glm::fvec3(0.0f, 0.0f, 1.0f);
+    glm::fvec3 rotX_ = glm::fvec3(1.0f, 0.0f, 0.0f);
+    glm::fvec3 rotY_ = glm::fvec3(0.0f, 1.0f, 0.0f);
+    glm::fvec3 rotZ_ = glm::fvec3(0.0f, 0.0f, 1.0f);
+    glm::fvec3 up_ = glm::fvec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 front_ = glm::fvec3(0.0f, 1.0f, 0.0f);
   };
 }
 

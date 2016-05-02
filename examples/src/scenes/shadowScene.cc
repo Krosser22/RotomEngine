@@ -15,7 +15,7 @@
 void ROTOM::ShadowScene::init() {
   //Camera
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(7.0f, 1.22f, 1.0f);
+  getCamera()->setPosition(7.0f, 1.22f, -1.0f);
   getCamera()->setPitch(-10.0f);
   getCamera()->setYaw(190.0f);
 
@@ -87,7 +87,7 @@ void ROTOM::ShadowScene::init() {
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
   light->setPosition(1.5f, 1.0f, 3.0f);
-  light->materialSettings()->setColor(0.2f, 0.4f, 0.6f);
+  //light->materialSettings()->setColor(0.2f, 0.4f, 0.6f);
   AddLight(light);
 }
 
@@ -103,10 +103,18 @@ void ROTOM::ShadowScene::update() {
 
   getCamera()->update();
 
-  //getLight().begin()->get()->setPosition(
-  //  sin(ROTOM::TIME::appTime()) * 5.0f, 
-  //  3.0f /*+ cos(ROTOM::TIME::appTime()) * 1.0f*/, 
-  //  cos(ROTOM::TIME::appTime()) * 5.0f);
+  static bool cameraAutoRotate = false;
+
+  if (INPUT::IsKeyPressed(' ')) {
+    cameraAutoRotate = !cameraAutoRotate;
+  }
+
+  if (cameraAutoRotate) {
+    getLight().begin()->get()->setPosition(
+      sin(ROTOM::TIME::appTime()) * 5.0f,
+      3.0f /*+ cos(ROTOM::TIME::appTime()) * 1.0f*/,
+      cos(ROTOM::TIME::appTime()) * 5.0f);
+  }
 }
 
 void ROTOM::ShadowScene::draw() {

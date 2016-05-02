@@ -14,14 +14,10 @@ namespace ROTOM {
     FramebufferData() {
       textureColor = 0;
       textureDepth = 0;
-      textureColorActivePosition = 0;
-      textureDepthActivePosition = 0;
       framebuffer = 0;
     }
     unsigned int textureColor;
     unsigned int textureDepth;
-    int textureColorActivePosition;
-    int textureDepthActivePosition;
     unsigned int framebuffer;
   };
 

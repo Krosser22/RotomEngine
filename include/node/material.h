@@ -51,7 +51,6 @@ namespace ROTOM {
     float shininess;
     float specularMaterial[3];
     float ambientStrength;
-    int textureActivePosition;
   };
 
   class Material {

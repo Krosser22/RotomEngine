@@ -70,7 +70,7 @@ namespace ROTOM {
     float yoffset_ = 0.0f;
 
     glm::fvec3 position_ = glm::fvec3(0.0f, 0.0f, 0.0f);
-    glm::fvec3 front_ = glm::fvec3(0.0f, 0.0f, -1.0f);
+    glm::fvec3 front_ = glm::fvec3(0.0f, 0.0f, 1.0f);
     glm::fvec3 up_ = glm::fvec3(0.0f, 1.0f, 0.0f);
 
     glm::fmat4 viewMatrix_;

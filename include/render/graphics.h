@@ -35,7 +35,7 @@ namespace ROTOM {
 
     void setShader(ShaderData *shaderData, const char *vertexShaderSource, const char *fragmentShaderSource);
 
-    unsigned int setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight);
+    void setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight);
 
     void releaseTexture(unsigned int *texture);
 
@@ -47,7 +47,7 @@ namespace ROTOM {
 
     void releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO);
 
-    void genRenderBuffer(int *colorActivePosition, int *depthActivePosition, unsigned int *colorTexture, unsigned int *depthTexture, unsigned int *framebuffer, unsigned int width, unsigned int height);
+    void genRenderBuffer(unsigned int *colorTexture, unsigned int *depthTexture, unsigned int *framebuffer, unsigned int width, unsigned int height);
 
     void beginFramebuffer(RenderTarget *renderTarget);
 
