@@ -20,6 +20,8 @@ namespace ROTOM {
     Drawable();
     Drawable(char *name);
     virtual ~Drawable();
+
+    bool visible_;
     
     void setGeometry(std::shared_ptr<Geometry> geometry);
     std::shared_ptr<Geometry> geometry();

@@ -16,6 +16,7 @@
 
 namespace ROTOM {
   struct CommandDrawObjectData {
+    bool visible;
     FramebufferData framebufferData;
     MaterialSettings materialSettings;
     MaterialData materialData;

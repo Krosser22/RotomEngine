@@ -13,7 +13,6 @@ namespace ROTOM {
   enum NodeType {
     kNodeType_Node,
     kNodeType_Drawable,
-    kNodeType_Camera,
     kNodeType_Light,
   };
 

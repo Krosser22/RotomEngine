@@ -238,10 +238,6 @@ void ROTOM::HUD::DrawDetails() {
           DrawDrawable((Drawable *)hud.selected);
           break;
         }
-        case kNodeType_Camera: {
-          DrawCamera((Camera *)hud.selected);
-          break;
-        }
         case kNodeType_Light: {
           DrawLight((Light *)hud.selected);
           break;

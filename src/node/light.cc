@@ -24,8 +24,9 @@ ROTOM::Light::Light(char *name) {
   setGeometry(std::shared_ptr<Geometry>(new Geometry()));
   setMaterial(lightMaterial);
 
-  setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 10.0f);
+  setupOrtho(-10.0f, 10.0f, -10.0f, 10.0f, 0.5f, 200.0f);
   rotation_[0] = -90.0f;
+  visible_ = false;
 }
 
 ROTOM::Light::~Light() {}
@@ -39,13 +40,13 @@ float *ROTOM::Light::projectionMatrix() {
 }
 
 float *ROTOM::Light::viewMatrix() {
-  view_ = glm::rotate(view_, rotation_.x, rotX);
-  view_ = glm::rotate(view_, rotation_.y, rotY);
-  view_ = glm::rotate(view_, rotation_.z, rotZ);
-  view_ = glm::translate(position_);
+  view_ = glm::rotate(identity_, glm::degrees(rotation_.x), rotX);
+  view_ = glm::rotate(view_, glm::degrees(rotation_.y), rotY);
+  view_ = glm::rotate(view_, glm::degrees(rotation_.z), rotZ);
+  view_ = glm::translate(view_, -position_);
 
-  float pitch = rotation_.x;
-  float yaw = rotation_.y;
+  /*float pitch = glm::degrees(rotation_.x);
+  float yaw = glm::degrees(rotation_.y);
   
   // Make sure that when pitch is out of bounds, screen doesn't get flipped
   if (pitch > 89.0f) pitch = 89.0f;
@@ -53,10 +54,10 @@ float *ROTOM::Light::viewMatrix() {
 
   glm::fvec3 front;
   front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-  front.y = sin(glm::radians(pitch));
-  front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+  front.y = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+  front.z = sin(glm::radians(pitch));
   front = glm::normalize(front);
-  //view_ = glm::lookAt(position_, position_ + front, glm::fvec3(0.0f, 1.0f, 0.0f));
+  view_ = glm::lookAt(position_, position_ + front, glm::fvec3(0.0f, 1.0f, 0.0f));*/
   return glm::value_ptr(view_);
 }
 

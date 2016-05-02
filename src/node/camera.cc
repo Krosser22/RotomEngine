@@ -61,13 +61,8 @@ void ROTOM::Camera::rotation() {
   pitch_ += yoffset_;
 
   // Make sure that when pitch is out of bounds, screen doesn't get flipped
-  if (pitch_ > 89.0f) {
-    pitch_ = 89.0f;
-  }
-
-  if (pitch_ < -89.0f) {
-    pitch_ = -89.0f;
-  }
+  if (pitch_ > 89.0f) pitch_ = 89.0f;
+  if (pitch_ < -89.0f) pitch_ = -89.0f;
 
   front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
   front_.y = sin(glm::radians(pitch_));
