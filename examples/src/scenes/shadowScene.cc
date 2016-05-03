@@ -32,7 +32,6 @@ void ROTOM::ShadowScene::init() {
   //ShadowMaterial
   std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
   shadowMaterial->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
-  //shadowMaterial->setShaderFromPath("basics/5_SpecularLight_Blinn-Phong.vertx", "basics/5_SpecularLight_Blinn-Phong.frag");
 
   //Material renderDepthToTexture
   std::shared_ptr<Material> materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());

@@ -60,8 +60,17 @@ int ROTOM::main(int argc, char** argv) {
 ------------------------------------------------------------------------------------------
 -------------------------------------------DOING------------------------------------------
 ------------------------------------------------------------------------------------------
-+Shadows --> GPU gems 3 (Webpage) parte 2
-+Shadows --> Real time shadows (Book)
++Procedural scene
+http://www.andrewwillmott.com/s2007
+http://www.cs.cmu.edu/~ajw/s2007/0251-SphericalWorlds.pdf
+http://acko.net/blog/making-worlds-4-the-devils-in-the-details/
+http://acko.net/
+http://donjon.bin.sh/world/
+http://pcg.wikidot.com/pcg-algorithm:world-building
+http://donjon.bin.sh/code/world/worldgen-2.2a.c
+
++Cubemap
+http://www.custommapmakers.org/skyboxes.php
 
 
 
@@ -73,6 +82,8 @@ int ROTOM::main(int argc, char** argv) {
 +Load a obj with more than one texture
 +Investigate Geometry shaders to make the procedural scene
 +Add LUA
++Shadows --> GPU gems 3 (Webpage) parte 2
++Shadows --> Real time shadows (Book)
 
 
 
