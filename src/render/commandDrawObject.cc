@@ -38,6 +38,7 @@ void ROTOM::CommandDrawObject::setData(Drawable *drawable) {
   Material *material = drawable->material().get();
   Geometry *geometry = drawable->geometry().get();
   commandDrawObjectData.visible = drawable->visible_;
+  commandDrawObjectData.shadows = drawable->shadows_;
   commandDrawObjectData.materialSettings = *drawable->materialSettings().get();
   commandDrawObjectData.shaderData = material->shaderData_;
   commandDrawObjectData.geometry_VAO = *geometry->VAO();

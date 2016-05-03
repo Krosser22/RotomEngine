@@ -28,6 +28,7 @@ namespace ROTOM {
       u_lightSpaceMatrix = 0;
       u_colorMap = 0;
       u_depthMap = 0;
+      u_shadows = 0;
     }
     unsigned int shaderProgram;
     unsigned int u_color;
@@ -45,6 +46,7 @@ namespace ROTOM {
     unsigned int u_lightSpaceMatrix;
     unsigned int u_colorMap;
     unsigned int u_depthMap;
+    unsigned int u_shadows;
   };
 
   struct MaterialData {

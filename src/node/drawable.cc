@@ -13,6 +13,7 @@ ROTOM::Drawable::Drawable() {
   type_ = kNodeType_Drawable;
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
   visible_ = true;
+  shadows_ = true;
 }
 
 ROTOM::Drawable::Drawable(char *name) {
@@ -20,6 +21,7 @@ ROTOM::Drawable::Drawable(char *name) {
   name_ = name;
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
   visible_ = true;
+  shadows_ = true;
 }
 
 ROTOM::Drawable::~Drawable() {}

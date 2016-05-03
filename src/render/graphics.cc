@@ -23,8 +23,6 @@
 #include <GLFW/glfw3native.h>
 #endif
 
-#define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
-
 struct GLFWwindow;
 IMGUI_API bool ImGui_Init(GLFWwindow* window, bool install_callbacks);
 IMGUI_API void ImGui_Shutdown();
@@ -501,6 +499,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_lightSpaceMatrix = glGetUniformLocation(shaderData->shaderProgram, "u_lightSpaceMatrix");
   shaderData->u_colorMap = glGetUniformLocation(shaderData->shaderProgram, "u_colorMap");
   shaderData->u_depthMap = glGetUniformLocation(shaderData->shaderProgram, "u_depthMap");
+  shaderData->u_shadows = glGetUniformLocation(shaderData->shaderProgram, "u_shadows");
 }
 
 void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
@@ -567,6 +566,9 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
     //Material Settings
     glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
 
+    //Shadow
+    glUniform1i(shaderData->u_shadows, commandDrawObjectData->shadows);
+
     //Light
     for (unsigned int i = 0; i < lights->size(); ++i) {
       light = lights->at(i).get();
@@ -579,6 +581,7 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
       glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);
     }
 
+    //Geometry
     glBindVertexArray(commandDrawObjectData->geometry_VAO);
     glDrawElements(GL_TRIANGLES, commandDrawObjectData->geometry_veterCount, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
@@ -633,6 +636,7 @@ void ROTOM::GRAPHICS::releaseGeometry(unsigned int *VAO, unsigned int *VBO, unsi
   }
 }
 
+GLfloat borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *colorTexture, unsigned int *depthTexture, unsigned int *framebuffer, unsigned int width, unsigned int height) {
   //Framebuffer
   glGenFramebuffers(1, framebuffer);
@@ -657,7 +661,6 @@ void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *colorTexture, unsigned int *
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
   }
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *depthTexture, 0);
