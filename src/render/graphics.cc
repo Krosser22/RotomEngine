@@ -500,6 +500,8 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   shaderData->u_colorMap = glGetUniformLocation(shaderData->shaderProgram, "u_colorMap");
   shaderData->u_depthMap = glGetUniformLocation(shaderData->shaderProgram, "u_depthMap");
   shaderData->u_shadows = glGetUniformLocation(shaderData->shaderProgram, "u_shadows");
+  shaderData->u_nearPlane = glGetUniformLocation(shaderData->shaderProgram, "u_nearPlane");
+  shaderData->u_farPlane = glGetUniformLocation(shaderData->shaderProgram, "u_farPlane");
 }
 
 void ROTOM::GRAPHICS::setTexture(unsigned int *texture, unsigned char *image, int *textureWidth, int *textureHeight) {
@@ -566,8 +568,10 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
     //Material Settings
     glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
 
-    //Shadow
+    //Shadow/Depth
     glUniform1i(shaderData->u_shadows, commandDrawObjectData->shadows);
+    glUniform1f(shaderData->u_nearPlane, 1.0f);
+    glUniform1f(shaderData->u_farPlane, 100.0f);
 
     //Light
     for (unsigned int i = 0; i < lights->size(); ++i) {
