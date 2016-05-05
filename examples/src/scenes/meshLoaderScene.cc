@@ -6,14 +6,13 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/input.h"
-#include "general/time.h"
-#include "general/window.h"
 #include "scenes/meshLoaderScene.h"
+#include "general/input.h"
+#include "general/window.h"
 
 void ROTOM::MeshLoaderScene::init() {
   //Camera
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
   //Geometry
   std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
@@ -41,10 +40,14 @@ void ROTOM::MeshLoaderScene::input() {
   if (INPUT::IsKeyPressed('Q')) {
     rotating_ = !rotating_;
   }
+
+  getCamera()->input();
 }
 
 void ROTOM::MeshLoaderScene::update() {
   if (rotating_) {
     getRoot()->getChildAt(0)->setRotationY(getRoot()->getChildAt(0)->rotation().y + 0.01f);
   }
+
+  getCamera()->update();
 }

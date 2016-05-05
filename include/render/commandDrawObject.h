@@ -10,18 +10,22 @@
 #define __COMMAND_DRAW_OBJECT_H__
 
 #include "command.h"
-#include "node/drawable.h"
+#include "node/geometry.h"
 #include "node/light.h"
+#include "render/renderTarget.h"
 
 namespace ROTOM {
   struct CommandDrawObjectData {
+    bool visible;
+    bool shadows;
+    FramebufferData framebufferData;
     MaterialSettings materialSettings;
     MaterialData materialData;
     ShaderData shaderData;
     unsigned int geometry_VAO;
     unsigned int geometry_veterCount;
     unsigned int material_texture;
-    float drawable_modelWorld[16];
+    float drawable_worldMatrix[16];
   };
 
   class CommandDrawObject : public Command {
@@ -31,13 +35,14 @@ namespace ROTOM {
 
     void run();
     
-    void setInput(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, float projectionMatrix[16], float viewMatrix[16]);
+    void setInput(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, float projectionMatrix[16], float viewMatrix[16], float *viewPosition);
 
   private:
     std::vector<CommandDrawObjectData> commandDrawObjectData_;
     std::vector<std::shared_ptr<Light>> lights_;
     float projectionMatrix_[16];
     float viewMatrix_[16];
+    float viewPosition_[3];
 
     void setData(Drawable *node);
 

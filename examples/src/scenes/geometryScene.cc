@@ -6,17 +6,15 @@
 *** ////////////////////////////////////////////
 **/
 
+#include "scenes/geometryScene.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "scenes/geometryScene.h"
 
 void ROTOM::GeometryScene::init() {
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
 
-  geometry = std::shared_ptr<Geometry>(new Geometry());
-  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-  std::shared_ptr<Drawable> drawable[amount];
-  geometry->loadGeometry("Monkey/Monkey");
+  //Root
+  getRoot()->setPosition(0.0f, 5.0f, -12.0f);
 
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
@@ -24,6 +22,10 @@ void ROTOM::GeometryScene::init() {
   light->setPosition(0.0f, 0.0f, -10.0f);
   AddLight(light);
 
+  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
+  std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
+  geometry->loadGeometry("Monkey/Monkey");
+  std::shared_ptr<Drawable> drawable[amount];
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
   const float pos_y_started = 7.0f;
@@ -35,7 +37,7 @@ void ROTOM::GeometryScene::init() {
     pos[0] = ((i % cols) * separation) + pos_x_started;
     pos[1] = ((i / (cols * rows)) * separation) + pos_y_started;
     pos[2] = (((i / cols) % rows) * separation) + pos_z_started;
-    drawable[i] = std::shared_ptr<Drawable>(new Drawable("i"));
+    drawable[i] = std::shared_ptr<Drawable>(new Drawable("Drawable"));
     drawable[i]->setGeometry(geometry);
     drawable[i]->setMaterial(material);
     drawable[i]->setParent(getRoot());
@@ -43,7 +45,13 @@ void ROTOM::GeometryScene::init() {
   }
 }
 
+void ROTOM::GeometryScene::input() {
+  getCamera()->input();
+}
+
 void ROTOM::GeometryScene::update() {
   float sin_time = sin(TIME::appTime()) * 0.022f;
   getRoot()->move(sin_time, sin_time, sin_time);
+
+  getCamera()->update();
 }

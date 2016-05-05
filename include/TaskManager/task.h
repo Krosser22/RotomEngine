@@ -9,9 +9,6 @@
 #ifndef __TASK_H__
 #define __TASK_H__
 
-#include <thread>
-#include <mutex>
-#include <condition_variable>
 #include <vector>
 #include <memory>
 

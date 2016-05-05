@@ -49,7 +49,7 @@ solution "ROTOM"
   os.copyfile("../lib/openal32.lib", "../project/build/bin/windows/openal32.lib")
 
 --[[--------------------------------------------
-------------- EXAMPLES AND TESTING -------------
+-------------- SCENES AND TESTING --------------
 --]]--------------------------------------------
 project "ROTOM_testing"
   targetname "ROTOM_testing"
@@ -62,25 +62,18 @@ project "ROTOM_testing"
     "opengl32",
     "openal32",
     "ROTOM",
-    "ROTOM_tool_meshLoader",
   }
   
   includedirs {
     "../include",
-    "../tools/meshLoader/include",
     "../examples/include",
     "../deps/glm",
     "../deps/imgui",
   }
   
   files {
-    "../img/**.*",
-    "../obj/**.*",
     "../shaders/**.*",
-    "../include/**.h",
     "../examples/**.*",
-    "../deps/imgui/*.cpp",
-    "../tools/meshLoader/include/**.h",
   }
 
 --[[--------------------------------------------
@@ -111,7 +104,6 @@ project "ROTOM"
   
   includedirs {
     "../include",
-    "../tools/meshLoader/include",
     "../deps/glew/include",
     "../deps/glfw/include",
     "../deps/glm",
@@ -119,6 +111,7 @@ project "ROTOM"
     "../deps/openal/include",
     "../deps/soil",
     "../deps/stb",
+    "../deps/tinyobjloader",
   }
   
   files {
@@ -129,40 +122,5 @@ project "ROTOM"
     "../deps/imgui/*.cpp",
     "../deps/soil/*.c",
     "../deps/stb/*.c",
-    "../tools/meshLoader/include/**.h",
-  }
-
---[[--------------------------------------------
--------------- TOOL - Mesh_Loader --------------
---]]--------------------------------------------
-project "ROTOM_tool_meshLoader"
-  targetname "ROTOM_tool_meshLoader"
-  language "C++"
-  location "../project/build"
-	libdirs "../project/build/bin/windows"
-  kind "StaticLib"
-  
-  links {
-    "opengl32",
-    "openal32",
-    "ROTOM",
-  }
-  
-  includedirs {
-    "../include",
-    "../deps/glm",
-    "../deps/imgui",
-    "../tools/meshLoader/include",
-    "../deps/tinyobjloader",
-  }
-  
-  files {
-    "../img/**.*",
-    "../obj/**.*",
-    "../shaders/**.*",
-    "../include/**.h",
-    "../tools/meshLoader/include/**.h",
-    "../tools/meshLoader/src/**.cc",
-    "../deps/imgui/*.cpp",
     "../deps/tinyobjloader/*.cc",
   }

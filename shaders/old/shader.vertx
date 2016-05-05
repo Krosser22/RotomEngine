@@ -1,0 +1,23 @@
+#version 330
+uniform mat4 u_projection_matrix;
+uniform mat4 u_view_matrix;
+uniform mat4 u_model_matrix;
+uniform vec3 u_light_position;
+
+layout(location = 0) in vec3 a_position;
+layout(location = 1) in vec3 a_normal;
+
+out vec4 light_direction;
+out vec4 normal_direction;
+out vec4 camera_position;
+out vec4 material_position;
+
+void main() {
+  mat4 vm_matrix = u_view_matrix * u_model_matrix;
+  gl_Position = u_projection_matrix * vm_matrix * vec4(a_position, 1.0);
+  
+  material_position = vm_matrix * vec4(a_position, 1.0);
+  light_direction = normalize(vec4(-u_light_position, 1.0f) - material_position);
+  normal_direction = normalize(vm_matrix * vec4(a_normal, 0.0));
+  camera_position = u_view_matrix[3];
+};

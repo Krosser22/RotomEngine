@@ -9,13 +9,10 @@
 #ifndef __NODE_H__
 #define __NODE_H__
 
-#include "geometry.h"
-#include "material.h"
-#include "materialSettings.h"
 #include "general/constants.h"
-#include "glm/gtc/type_ptr.hpp"
-#include <memory>
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <memory>
 
 namespace ROTOM {
   class Node : public std::enable_shared_from_this<Node> {
@@ -37,7 +34,8 @@ namespace ROTOM {
 
     void setPosition(const float position[3]);
     void setPosition(const float x, const float y, const float z);
-    glm::vec3 position();
+    glm::fvec3 position();
+    float *pos();
     void setPositionX(const float positionX);
     float positionX();
     void setPositionY(const float positionY);
@@ -47,7 +45,7 @@ namespace ROTOM {
 
     void setRotation(const float rotation[3]);
     void setRotation(const float x, const float y, const float z);
-    glm::vec3 rotation();
+    glm::fvec3 rotation();
     void setRotationX(const float rotationX);
     float rotationX();
     void setRotationY(const float rotationY);
@@ -57,7 +55,7 @@ namespace ROTOM {
 
     void setScale(const float scale[3]);
     void setScale(const float x, const float y, const float z);
-    glm::vec3 scale();
+    glm::fvec3 scale();
     void setScaleX(const float scaleX);
     float scaleX();
     void setScaleY(const float scaleY);
@@ -65,12 +63,12 @@ namespace ROTOM {
     void setScaleZ(const float scaleZ);
     float scaleZ();
 
-    void setModelLocal(glm::mat4 modelLocal);
-    glm::mat4 *modelLocal();
-    bool isDirtyModelLocal();
+    void setModelMatrix(glm::fmat4 modelMatrix);
+    glm::fmat4 *modelMatrix();
+    bool isDirtyModelMatrix();
 
-    void setModelWorld(glm::mat4 modelWorld);
-    glm::mat4 *modelWorld();
+    void setWorldMatrix(glm::fmat4 worldMatrix);
+    glm::fmat4 *worldMatrix();
 
     void setParent(std::shared_ptr<Node> parent);
     std::shared_ptr<Node> parent();
@@ -85,13 +83,13 @@ namespace ROTOM {
 
     std::string name_;
 
-    glm::vec3 position_;
-    glm::vec3 rotation_;
-    glm::vec3 scale_;
-    bool dirtyModelLocal_;
+    glm::fvec3 position_;
+    glm::fvec3 rotation_;
+    glm::fvec3 scale_;
+    bool dirtyModelMatrix_;
     
-    glm::mat4 modelLocal_;
-    glm::mat4 modelWorld_;
+    glm::fmat4 modelMatrix_;
+    glm::fmat4 worldMatrix_;
 
     std::shared_ptr<Node> parent_;
     std::vector<std::shared_ptr<Node>> childs_;

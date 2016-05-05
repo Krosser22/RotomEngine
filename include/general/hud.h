@@ -9,7 +9,6 @@
 #ifndef __HUD_H__
 #define __HUD_H__
 
-#include "node/drawable.h"
 #include "node/camera.h"
 #include "node/light.h"
 #include <memory>

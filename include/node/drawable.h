@@ -9,11 +9,10 @@
 #ifndef __DRAWABLE_H__
 #define __DRAWABLE_H__
 
+#include "node.h"
 #include "geometry.h"
 #include "material.h"
 #include "materialSettings.h"
-#include "node.h"
-#include <memory>
 
 namespace ROTOM {
   class Drawable : public Node {
@@ -21,6 +20,9 @@ namespace ROTOM {
     Drawable();
     Drawable(char *name);
     virtual ~Drawable();
+
+    bool visible_;
+    bool shadows_;
     
     void setGeometry(std::shared_ptr<Geometry> geometry);
     std::shared_ptr<Geometry> geometry();
@@ -31,7 +33,7 @@ namespace ROTOM {
     void setMaterialSettings(std::shared_ptr<MaterialSettings> materialSettings);
     std::shared_ptr<MaterialSettings> materialSettings();
 
-  private:
+  protected:
     std::shared_ptr<ROTOM::Geometry> geometry_;
     std::shared_ptr<ROTOM::Material> material_;
     std::shared_ptr<ROTOM::MaterialSettings> materialSettings_;

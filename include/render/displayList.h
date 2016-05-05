@@ -18,8 +18,6 @@ namespace ROTOM {
     DisplayList();
     ~DisplayList();
 
-    bool isValid_;
-
     std::vector<Command *> commandList_;
 
     void addCommand(Command *command);

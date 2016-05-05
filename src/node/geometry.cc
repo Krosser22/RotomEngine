@@ -6,13 +6,12 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/window.h"
 #include "node/geometry.h"
+#include "general/window.h"
 #include "render/commandSetGeometry.h"
 #include "render/graphics.h"
 #include "taskManager/taskSetGeometry.h"
 #include "taskManager/taskManager.h"
-#include "meshLoader.h"
 
 ROTOM::TaskSetGeometry taskSetGeometry;
 ROTOM::CommandSetGeometry commandSetGeometry;
@@ -93,12 +92,10 @@ ROTOM::Geometry::Geometry() {
 }
 
 ROTOM::Geometry::~Geometry() {
-  // Properly de-allocate all resources once they've outlived their purpose
-  GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
+  GRAPHICS::releaseGeometry(&VAO_, &EBO_, &VBO_);
 }
 
 void ROTOM::Geometry::loadGeometry(float *vertex, int *index, const int vertexCount) {
-  GRAPHICS::releaseGeometry(VAO_, EBO_, VBO_);
   vertexCount_ = vertexCount;
   GRAPHICS::loadGeometry(&VAO_, &VBO_, &EBO_, sizeof(float) * numberOfElementsPerVertex_, vertexCount_, vertex, index);
 }
@@ -154,7 +151,7 @@ unsigned int ROTOM::Geometry::numberOfElementsPerVertex() {
   return numberOfElementsPerVertex_;
 }
 
-//const struct aiScene* scene = NULL;
+//const struct aiScene* scene = nullptr;
 //GLuint scene_list = 0;
 //struct aiVector3D scene_min, scene_max, scene_center;
 
@@ -188,11 +185,11 @@ unsigned int ROTOM::Geometry::numberOfElementsPerVertex() {
   *trafo = prev;
 }*/
 
-void ROTOM::Geometry::getBoundingBox(struct aiVector3D* min, struct aiVector3D* max) {
-  /*struct aiMatrix4x4 trafo;
+/*void ROTOM::Geometry::getBoundingBox(struct aiVector3D* min, struct aiVector3D* max) {
+  struct aiMatrix4x4 trafo;
   aiIdentityMatrix4(&trafo);
 
   min->x = min->y = min->z = 1e10f;
   max->x = max->y = max->z = -1e10f;
-  get_bounding_box_for_node(scene->mRootNode, min, max, &trafo);*/
-}
+  get_bounding_box_for_node(scene->mRootNode, min, max, &trafo);
+}*/

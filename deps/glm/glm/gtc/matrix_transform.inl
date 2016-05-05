@@ -33,7 +33,7 @@
 #include "../geometric.hpp"
 #include "../trigonometric.hpp"
 #include "../matrix.hpp"
-
+#define GLM_LEFT_HANDED
 namespace glm
 {
 	template <typename T, precision P>

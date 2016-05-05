@@ -7,10 +7,13 @@
 **/
 
 #include "taskManager/taskManager.h"
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 struct TaskManagerData {
   int threardsCount;
-  const int threardsNotUsed = 0;
+  const int threardsNotUsed = 1;
 
   //Task in progress or in the task list
   int taskPending;
@@ -37,7 +40,7 @@ void addNextTasksOf(ROTOM::Task *task) {
     taskManagerData.taskList.push_back(task->nextTaskList_.at(i));
     ++taskManagerData.taskPending;
   }
-  task = NULL;
+  task = nullptr;
 
   taskManagerData.lock_taskPending.unlock();
   taskManagerData.lock_taskList.unlock();
@@ -46,7 +49,7 @@ void addNextTasksOf(ROTOM::Task *task) {
 }
 
 ROTOM::Task *getNextTask() {
-  ROTOM::Task *task = NULL;
+  ROTOM::Task *task = nullptr;
   taskManagerData.lock_taskList.lock();
   if (taskManagerData.taskList.size() > 0) {
     task = taskManagerData.taskList.at(taskManagerData.taskList.size() - 1);
@@ -57,7 +60,7 @@ ROTOM::Task *getNextTask() {
 }
 
 void threadLoop(int ID) {
-  ROTOM::Task *actualTask = NULL;
+  ROTOM::Task *actualTask = nullptr;
   while (!taskManagerData.isOff) {
     actualTask = getNextTask();
     if (actualTask) {

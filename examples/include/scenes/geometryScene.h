@@ -10,7 +10,6 @@
 #define __GEOMETRY_SCENE_H__
 
 #include "general/scene.h"
-#include <memory>
 
 namespace ROTOM {
   class GeometryScene : public Scene {
@@ -20,7 +19,7 @@ namespace ROTOM {
 
     void init();
 
-    void input() {};
+    void input();
 
     void update();
 
@@ -29,7 +28,6 @@ namespace ROTOM {
     void destroy() {};
 
     static const int amount = 5000;
-    std::shared_ptr<Geometry> geometry;
   };
 }
 

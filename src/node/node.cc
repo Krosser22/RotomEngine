@@ -7,9 +7,8 @@
 **/
 
 #include "node/node.h"
-#include "render/graphics.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtx/matrix_decompose.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 ROTOM::Node::Node() {
   type_ = kNodeType_Node;
@@ -17,7 +16,7 @@ ROTOM::Node::Node() {
   setPosition(0.0f, 0.0f, 0.0f);
   setRotation(0.0f, 0.0f, 0.0f);
   setScale(1.0f, 1.0f, 1.0f);
-  parent_ = NULL;
+  parent_ = nullptr;
 }
 
 ROTOM::Node::Node(char *name) {
@@ -26,11 +25,11 @@ ROTOM::Node::Node(char *name) {
   setPosition(0.0f, 0.0f, 0.0f);
   setRotation(0.0f, 0.0f, 0.0f);
   setScale(1.0f, 1.0f, 1.0f);
-  parent_ = NULL;
+  parent_ = nullptr;
 }
 
 ROTOM::Node::~Node() {
-  if (parent_ != NULL) {
+  if (parent_ != nullptr) {
     parent_->removeChild(shared_from_this());
   }
 
@@ -80,15 +79,18 @@ void ROTOM::Node::setPosition(const float x, const float y, const float z) {
   position_.x = x;
   position_.y = y;
   position_.z = z;
-  dirtyModelLocal_ = true;
+  dirtyModelMatrix_ = true;
 }
 
-glm::vec3 ROTOM::Node::position() {
+glm::fvec3 ROTOM::Node::position() {
   return position_;
 }
 
+float *ROTOM::Node::pos() {
+  return glm::value_ptr(position_);
+}
+
 void ROTOM::Node::setPositionX(const float positionX) {
-  position_.x = positionX;
   setPosition(positionX, position_.y, position_.z);
 }
 
@@ -120,10 +122,10 @@ void ROTOM::Node::setRotation(const float x, const float y, const float z) {
   rotation_.x = x;
   rotation_.y = y;
   rotation_.z = z;
-  dirtyModelLocal_ = true;
+  dirtyModelMatrix_ = true;
 }
 
-glm::vec3 ROTOM::Node::rotation() {
+glm::fvec3 ROTOM::Node::rotation() {
   return rotation_;
 }
 
@@ -159,10 +161,10 @@ void ROTOM::Node::setScale(const float x, const float y, const float z) {
   scale_.x = x;
   scale_.y = y;
   scale_.z = z;
-  dirtyModelLocal_ = true;
+  dirtyModelMatrix_ = true;
 }
 
-glm::vec3 ROTOM::Node::scale() {
+glm::fvec3 ROTOM::Node::scale() {
   return scale_;
 }
 
@@ -190,49 +192,49 @@ float ROTOM::Node::scaleZ() {
   return scale_.z;
 }
 
-void ROTOM::Node::setModelLocal(glm::mat4 modelLocal) {
-  modelLocal_ = modelLocal;
-  dirtyModelLocal_ = false;
+void ROTOM::Node::setModelMatrix(glm::fmat4 modelMatrix) {
+  modelMatrix_ = modelMatrix;
+  dirtyModelMatrix_ = false;
 }
 
-glm::mat4 *ROTOM::Node::modelLocal() {
-  return &modelLocal_;
+glm::fmat4 *ROTOM::Node::modelMatrix() {
+  return &modelMatrix_;
 }
 
-bool ROTOM::Node::isDirtyModelLocal() {
-  return dirtyModelLocal_;
+bool ROTOM::Node::isDirtyModelMatrix() {
+  return dirtyModelMatrix_;
 }
 
-void ROTOM::Node::setModelWorld(glm::mat4 modelWorld) {
-  modelWorld_ = modelWorld;
+void ROTOM::Node::setWorldMatrix(glm::fmat4 worldMatrix) {
+  worldMatrix_ = worldMatrix;
 }
 
-glm::mat4 *ROTOM::Node::modelWorld() {
-  return &modelWorld_;
+glm::fmat4 *ROTOM::Node::worldMatrix() {
+  return &worldMatrix_;
 }
 
 void ROTOM::Node::setParent(std::shared_ptr<Node> parent) {
-  //TODO - Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
-  modelLocal_ = glm::inverse(*parent->modelWorld()) * modelWorld_;
+  //Para que al attacharle un nuevo padre no se teletransporte [La inversa del padre nuevo] * [tu matriz world]
+  modelMatrix_ = glm::inverse(*parent->worldMatrix()) * worldMatrix_;
 
   glm::quat rotation;
-  glm::vec3 skew;
-  glm::vec4 perspective;
-  glm::decompose(modelLocal_, scale_, rotation, position_, skew, perspective);
-  rotation_ = glm::vec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
+  glm::fvec3 skew;
+  glm::fvec4 perspective;
+  glm::decompose(modelMatrix_, scale_, rotation, position_, skew, perspective);
+  rotation_ = glm::fvec3(*glm::value_ptr(rotation)); //TODO - Change the variable type of rotation to glm::quat
   rotation_.x = glm::degrees(rotation_.x);
   rotation_.y = glm::degrees(rotation_.y);
   rotation_.z = glm::degrees(rotation_.z);
 
-  if (parent != NULL) {
+  if (parent != nullptr) {
     parent->removeChild(shared_from_this());
   }
   parent_ = parent;
   parent_->addChild(shared_from_this());
 
-  dirtyModelLocal_ = true;
+  worldMatrix_ = *parent->worldMatrix() * modelMatrix_;
 
-  modelWorld_ = *parent->modelWorld() * modelLocal_;
+  dirtyModelMatrix_ = true;
 }
 
 std::shared_ptr<ROTOM::Node> ROTOM::Node::parent() {

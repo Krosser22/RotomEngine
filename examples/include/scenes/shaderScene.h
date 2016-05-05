@@ -10,7 +10,6 @@
 #define __SHADER_SCENE_H__
 
 #include "general/scene.h"
-#include <memory>
 
 namespace ROTOM {
   class ShaderScene : public Scene {
@@ -20,7 +19,7 @@ namespace ROTOM {
 
     void init();
 
-    void input() {};
+    void input();
 
     void update();
 

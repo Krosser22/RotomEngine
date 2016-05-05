@@ -10,7 +10,7 @@
 
 void ROTOM::FILES::ReadFile(const char* path, std::shared_ptr<char[]> source) {
   FILE *file = fopen(path, "rb");
-  if (file == NULL) {
+  if (file == nullptr) {
     printf("ERROR: File doesn't found (%s)\n", path);
     system("pause");
   } else {
@@ -27,7 +27,7 @@ void ROTOM::FILES::ReadFile(const char* path, std::shared_ptr<char[]> source) {
 
 void ROTOM::FILES::ReadFile(const char* path, std::shared_ptr<std::string> source) {
   FILE *file = fopen(path, "rb");
-  if (file == NULL) {
+  if (file == nullptr) {
     printf("ERROR: File doesn't found (%s)\n", path);
     system("pause");
   } else {
@@ -49,7 +49,7 @@ void ROTOM::FILES::ReadFile(const char* path, std::shared_ptr<std::string> sourc
 std::string ROTOM::FILES::ReadFile(const char *path) {
   std::string source;
   FILE *file = fopen(path, "rb");
-  if (file == NULL) {
+  if (file == nullptr) {
     printf("ERROR: File doesn't found (%s)\n", path);
     system("pause");
   } else {

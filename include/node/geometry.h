@@ -42,7 +42,7 @@ namespace ROTOM {
 
     unsigned int numberOfElementsPerVertex();
 
-    void getBoundingBox(struct aiVector3D* min, struct aiVector3D* max);
+    //void getBoundingBox(struct aiVector3D* min, struct aiVector3D* max);
 
   private:
     unsigned int numberOfElementsPerVertex_ = 8; //3 = Only positions, 6 = positions and normals, 8 = positions, normals and UV

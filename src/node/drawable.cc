@@ -12,18 +12,19 @@
 ROTOM::Drawable::Drawable() {
   type_ = kNodeType_Drawable;
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
+  visible_ = true;
+  shadows_ = true;
 }
 
 ROTOM::Drawable::Drawable(char *name) {
   type_ = kNodeType_Drawable;
   name_ = name;
   setMaterialSettings(std::shared_ptr<MaterialSettings>(new MaterialSettings()));
+  visible_ = true;
+  shadows_ = true;
 }
 
-ROTOM::Drawable::~Drawable() {
-  // Properly de-allocate all resources once they've outlived their purpose
-  GRAPHICS::releaseMaterial(material_->shaderData_.shaderProgram);
-}
+ROTOM::Drawable::~Drawable() {}
 
 void ROTOM::Drawable::setGeometry(std::shared_ptr<Geometry> geometry) {
   geometry_ = geometry;

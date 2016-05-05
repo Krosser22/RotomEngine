@@ -6,13 +6,11 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "meshLoader.h"
-#include "general/constants.h"
-#include "general/files.h"
 #include "general/hud.h"
+#include "general/files.h"
 #include "general/input.h"
 #include "general/window.h"
-#include "imgui.h"
+#include <imgui.h>
 
 struct HUDDatatrue {
   std::shared_ptr<ROTOM::Node> root;
@@ -22,7 +20,7 @@ struct HUDDatatrue {
 
   ImGuiWindowFlags window_flags = 0;
 
-  bool opened = false;
+  bool opened = true;
 
   int nextPushID = 0;
 
@@ -240,10 +238,6 @@ void ROTOM::HUD::DrawDetails() {
           DrawDrawable((Drawable *)hud.selected);
           break;
         }
-        case kNodeType_Camera: {
-          DrawCamera((Camera *)hud.selected);
-          break;
-        }
         case kNodeType_Light: {
           DrawLight((Light *)hud.selected);
           break;
@@ -388,7 +382,7 @@ void ROTOM::HUD::DrawCamera(Camera *camera) {
 
   ImGui::Separator();
 
-  DrawNode(camera);
+  //DrawNode(camera);
 }
 
 void ROTOM::HUD::DrawLight(Light *light) {
@@ -410,7 +404,7 @@ void ROTOM::HUD::DrawLight(Light *light) {
 
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "SpecularIntensity:");
   ImGui::PushID(hud.nextPushID++);
-  ImGui::DragFloat3("", light->specularIntensity, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
+  ImGui::DragFloat3("", light->specularIntensity_, 1.0f, 0.0f, 1000.0f, "%.2f", 1.0f);
   ImGui::PopID();
 
   ImGui::Separator();
@@ -482,117 +476,3 @@ void ROTOM::HUD::DrawMaterialSettings(MaterialSettings *materialSettings) {
 
   ImGui::Separator();
 }
-
-#ifdef THIS_WAS_FOR_TESTING
-void ShowExampleMenuFile()
-{
-  ImGui::MenuItem("(dummy menu)", NULL, false, false);
-  if (ImGui::MenuItem("New")) {}
-  if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-  if (ImGui::BeginMenu("Open Recent"))
-  {
-    ImGui::MenuItem("fish_hat.c");
-    ImGui::MenuItem("fish_hat.inl");
-    ImGui::MenuItem("fish_hat.h");
-    if (ImGui::BeginMenu("More.."))
-    {
-      ImGui::MenuItem("Hello");
-      ImGui::MenuItem("Sailor");
-      if (ImGui::BeginMenu("Recurse.."))
-      {
-        ShowExampleMenuFile();
-        ImGui::EndMenu();
-      }
-      ImGui::EndMenu();
-    }
-    ImGui::EndMenu();
-  }
-  if (ImGui::MenuItem("Save", "Ctrl+S")) {}
-  if (ImGui::MenuItem("Save As..")) {}
-  ImGui::Separator();
-  if (ImGui::BeginMenu("Options"))
-  {
-    static bool enabled = true;
-    ImGui::MenuItem("Enabled", "", &enabled);
-    ImGui::BeginChild("child", ImVec2(0, 60), true);
-    for (int i = 0; i < 10; i++)
-      ImGui::Text("Scrolling Text %d", i);
-    ImGui::EndChild();
-    static float f = 0.5f;
-    static int n = 0;
-    ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
-    ImGui::InputFloat("Input", &f, 0.1f);
-    ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
-    ImGui::EndMenu();
-  }
-  if (ImGui::BeginMenu("Colors"))
-  {
-    for (int i = 0; i < ImGuiCol_COUNT; i++)
-      ImGui::MenuItem(ImGui::GetStyleColName((ImGuiCol)i));
-    ImGui::EndMenu();
-  }
-  if (ImGui::BeginMenu("Disabled", false)) // Disabled
-  {
-    IM_ASSERT(0);
-  }
-  if (ImGui::MenuItem("Checked", NULL, true)) {}
-  if (ImGui::MenuItem("Quit", "Alt+F4")) {}
-}
-
-void ROTOM::Scene::updateInfo() {
-  ShowExampleMenuFile();
-}
-
-void ROTOM::HUD::drawHUD() {
-  // Menu
-  ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
-  if (ImGui::BeginMainMenuBar())
-  {
-    if (ImGui::BeginMenu("File"))
-    {
-      ShowExampleMenuFile();
-      if (ImGui::MenuItem("New", "CTRL+N")) {
-        ShowExampleMenuFile();
-      }
-      ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Edit"))
-    {
-      if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-      if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-      ImGui::Separator();
-      if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-      if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-      if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-      ImGui::EndMenu();
-    }
-    ImGui::EndMainMenuBar();
-  }
-  
-  
-  
-  //Inspector
-  /*ImGui::PushID("foo");
-  ImGui::MenuItem("Menu item", "CTRL+M");
-  if (ImGui::BeginMenu("Menu inside a regular window"))
-  {
-    updateInfo();
-    ImGui::EndMenu();
-  }
-  ImGui::PopID();
-  ImGui::Separator();*/
-
-  //Information
-  /*ImGui::SetNextWindowPos(ImVec2(0.0f, 20.0f));
-  ImGui::Begin("Info", (bool*)0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
-  {
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::Text("%d Nodes = %d Vertex", nodes_, vertexCount_);
-    if (ImGui::Button("Update info")) {
-      updateInfo();
-    }
-  }
-  ImGui::End();*/
-}
-#endif //THIS_WAS_FOR_TESTING

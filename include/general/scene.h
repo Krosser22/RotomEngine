@@ -9,10 +9,8 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
-#include "node/drawable.h"
 #include "node/camera.h"
 #include "node/light.h"
-#include <memory>
 
 namespace ROTOM {
   class Scene {
@@ -30,19 +28,13 @@ namespace ROTOM {
 
     virtual void destroy() = 0;
 
+    void setRoot(std::shared_ptr<Node> root);
     std::shared_ptr<Node> getRoot();
 
-    void setRoot(std::shared_ptr<Node> root);
-
-    Camera *getCamera();
-
+    void AddLight(std::shared_ptr<Light> light);
     std::vector<std::shared_ptr<Light>> getLight();
 
-    void AddLight(std::shared_ptr<Light> light);
-
-  private:
-    int nodes_ = 0;
-    int vertexCount_ = 0;
+    Camera *getCamera();
   };
 }
 

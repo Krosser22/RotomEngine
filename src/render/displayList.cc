@@ -8,9 +8,7 @@
 
 #include "render/displayList.h"
 
-ROTOM::DisplayList::DisplayList() {
-  isValid_ = false;
-}
+ROTOM::DisplayList::DisplayList() {}
 
 ROTOM::DisplayList::~DisplayList() {}
 

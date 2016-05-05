@@ -15,6 +15,8 @@ namespace ROTOM {
     MaterialSettings();
     ~MaterialSettings();
 
+    void setColor(float r, float g, float b, float a = 1.0f);
+
     float color_[4];
   };
 }

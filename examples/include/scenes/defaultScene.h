@@ -10,7 +10,6 @@
 #define __DEFAULT_SCENE_H__
 
 #include "general/scene.h"
-#include <memory>
 
 namespace ROTOM {
   class DefaultScene : public Scene {
@@ -28,6 +27,7 @@ namespace ROTOM {
 
     void destroy() {};
 
+  private:
     static const int amount_ = 2722;
     std::shared_ptr<Geometry> geometry_;
   };

@@ -6,15 +6,14 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/files.h"
+#include "scenes/defaultScene.h"
 #include "general/input.h"
 #include "general/time.h"
 #include "general/window.h"
-#include "scenes/defaultScene.h"
-#include "imgui.h"
 
 void ROTOM::DefaultScene::init() {
-  getCamera()->setupPerspective(45.0f, (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getRoot()->setPositionZ(-4.0f);
 
   geometry_ = std::shared_ptr<Geometry>(new Geometry());
   std::shared_ptr<Material> material1 = std::shared_ptr<Material>(new Material("../../../../img/texture1.png"));
@@ -42,9 +41,9 @@ void ROTOM::DefaultScene::init() {
   //Light
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
-  light->specularIntensity[0] = 0.1f;
-  light->specularIntensity[1] = 0.1f;
-  light->specularIntensity[2] = 0.1f;
+  light->specularIntensity_[0] = 0.1f;
+  light->specularIntensity_[1] = 0.1f;
+  light->specularIntensity_[2] = 0.1f;
   AddLight(light);
 
   const float separation = -2.2f;
@@ -65,6 +64,7 @@ void ROTOM::DefaultScene::init() {
     drawable[i]->setPosition(pos);
   }
 }
+
 void ROTOM::DefaultScene::input() {
   //Add Cube
   if (INPUT::IsKeyPressed('R')) {
@@ -77,6 +77,8 @@ void ROTOM::DefaultScene::input() {
     drawableNew->setPositionX(posX);
     posX -= 1.0f;
   }
+
+  getCamera()->input();
 }
 
 void ROTOM::DefaultScene::update() {
@@ -84,4 +86,6 @@ void ROTOM::DefaultScene::update() {
   getRoot()->getChildAt(0)->moveX(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->moveY(sin_time);
   getRoot()->getChildAt(0)->getChildAt(0)->getChildAt(0)->moveZ(sin_time);
+
+  getCamera()->update();
 }

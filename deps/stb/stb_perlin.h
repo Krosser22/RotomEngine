@@ -41,8 +41,6 @@ extern "C" float stb_perlin_noise3(float x, float y, float z, int x_wrap=0, int 
 extern float stb_perlin_noise3(float x, float y, float z, int x_wrap, int y_wrap, int z_wrap);
 #endif
 
-#ifdef STB_PERLIN_IMPLEMENTATION
-
 #include <math.h> // floor()
 
 // not same permutation table as Perlin's reference to avoid copyright issues;
@@ -179,4 +177,3 @@ float stb_perlin_noise3(float x, float y, float z, int x_wrap, int y_wrap, int z
 
    return stb__perlin_lerp(n0,n1,u);
 }
-#endif  // STB_PERLIN_IMPLEMENTATION

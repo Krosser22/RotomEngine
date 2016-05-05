@@ -9,10 +9,29 @@
 #ifndef __MATERIAL_H__
 #define __MATERIAL_H__
 
-#include "materialSettings.h"
-
 namespace ROTOM {
   struct ShaderData {
+    ShaderData() {
+      shaderProgram = 0;
+      u_color = 0;
+      u_model = 0;
+      u_view = 0;
+      u_projection = 0;
+      u_lightPosition = 0;
+      u_lightColor = 0;
+      u_texture = 0;
+      u_shininess = 0;
+      u_specularIntensity = 0;
+      u_specularMaterial = 0;
+      u_ambientStrength = 0;
+      u_viewPosition = 0;
+      u_lightSpaceMatrix = 0;
+      u_colorMap = 0;
+      u_depthMap = 0;
+      u_shadows = 0;
+      u_nearPlane = 0;
+      u_farPlane = 0;
+    }
     unsigned int shaderProgram;
     unsigned int u_color;
     unsigned int u_model;
@@ -25,6 +44,13 @@ namespace ROTOM {
     unsigned int u_specularIntensity;
     unsigned int u_specularMaterial;
     unsigned int u_ambientStrength;
+    unsigned int u_viewPosition;
+    unsigned int u_lightSpaceMatrix;
+    unsigned int u_colorMap;
+    unsigned int u_depthMap;
+    unsigned int u_shadows;
+    unsigned int u_nearPlane;
+    unsigned int u_farPlane;
   };
 
   struct MaterialData {
@@ -48,6 +74,7 @@ namespace ROTOM {
 
     //Set the texture of the object
     void setTexture(unsigned char *texture);
+    void setTexture(unsigned int *texture);
     void setTextureFromPath(const char *path);
     const unsigned int texture();
 

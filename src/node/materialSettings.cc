@@ -16,3 +16,11 @@ ROTOM::MaterialSettings::MaterialSettings() {
 }
 
 ROTOM::MaterialSettings::~MaterialSettings() {}
+
+
+void ROTOM::MaterialSettings::setColor(float r, float g, float b, float a) {
+  color_[0] = r;
+  color_[1] = g;
+  color_[2] = b;
+  color_[3] = a;
+}
