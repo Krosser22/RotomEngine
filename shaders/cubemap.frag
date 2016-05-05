@@ -2,7 +2,7 @@
 
 uniform samplerCube u_skybox;
 
-int vec3 uvMaterial
+in vec3 uvMaterial;
 
 out vec4 fragment;
 

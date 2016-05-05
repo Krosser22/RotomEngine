@@ -35,7 +35,7 @@ bool WindowIsOpened() {
     ROTOM::TASKMANAGER::addTask(&taskCalculateNodesMatrix);
 
     //Update Scene
-    //assert(scene);
+    assert(scene);
     scene->input();
     scene->update();
     scene->draw();

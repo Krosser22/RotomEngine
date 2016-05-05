@@ -51,8 +51,8 @@ namespace ROTOM {
     void endFramebuffer();
 
     //Cubemap
-    void loadCubemap();
-    void drawCubemap();
+    void loadCubemap(unsigned int *program, unsigned int *VAO, unsigned int *texture);
+    void drawCubemap(unsigned int *program, unsigned int *VAO, unsigned int *texture, float *cameraProjection, float *cameraView);
   }
 }
 

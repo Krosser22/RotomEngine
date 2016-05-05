@@ -9,11 +9,11 @@
 #include "scenes/cubemapScene.h"
 #include "general/input.h"
 #include "general/window.h"
-#include <glm/gtc/matrix_transform.hpp>
 
 void ROTOM::CubemapScene::init() {
   //Camera
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setPosition(0.0f, 1.0f, -1.0f);
 
   //Geometry
   std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
@@ -54,6 +54,9 @@ void ROTOM::CubemapScene::init() {
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;
   AddLight(light);
+
+  //Cubemap
+  cubemap_.init("");
 }
 
 void ROTOM::CubemapScene::input() {
@@ -69,4 +72,6 @@ void ROTOM::CubemapScene::update() {
   getCamera()->update();
 }
 
-void ROTOM::CubemapScene::draw() {}
+void ROTOM::CubemapScene::draw() {
+  cubemap_.draw(getCamera()->projectionMatrix(), getCamera()->viewMatrix());
+}

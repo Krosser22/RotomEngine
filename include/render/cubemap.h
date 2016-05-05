@@ -17,9 +17,9 @@ namespace ROTOM {
     Cubemap();
     ~Cubemap();
 
-    void init();
+    void init(char *path);
 
-    unsigned int texture();
+    void draw(float *projectionMatrix, float *viewMatrix);
   };
 }
 

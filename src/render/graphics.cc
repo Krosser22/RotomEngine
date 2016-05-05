@@ -452,7 +452,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
   glCompileShader(vertexShader);
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);//Check for compile time errors
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success); //Check for compile time errors
   if (!success) {
     glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
     printf("ERROR: VertexShader\n%s\n", infoLog);
@@ -462,7 +462,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
   glCompileShader(fragmentShader);
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);//Check for compile time errors
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success); //Check for compile time errors
   if (!success) {
     glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
     printf("ERROR: FragmentShader\n%s\n", infoLog);
@@ -473,7 +473,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   glAttachShader(shaderData->shaderProgram, vertexShader);
   glAttachShader(shaderData->shaderProgram, fragmentShader);
   glLinkProgram(shaderData->shaderProgram);
-  glGetProgramiv(shaderData->shaderProgram, GL_LINK_STATUS, &success);//Check for linking errors
+  glGetProgramiv(shaderData->shaderProgram, GL_LINK_STATUS, &success); //Check for linking errors
   if (!success) {
     glGetProgramInfoLog(shaderData->shaderProgram, 512, nullptr, infoLog);
     printf("ERROR: ProgramShader\n%s\n", infoLog);
@@ -701,7 +701,7 @@ void ROTOM::GRAPHICS::endFramebuffer() {
 // -Y (bottom)
 // +Z (front) 
 // -Z (back)
-static GLuint load_cubemap(std::vector<const GLchar*> faces)
+static unsigned int load_cubemap(std::vector<const GLchar*> faces)
 {
   GLuint textureID;
   glGenTextures(1, &textureID);
@@ -710,23 +710,25 @@ static GLuint load_cubemap(std::vector<const GLchar*> faces)
   unsigned char* image;
 
   glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-  for (GLuint i = 0; i < faces.size(); i++)
   {
-    image = SOIL_load_image(faces[i], &width, &height, 0, SOIL_LOAD_RGB);
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    SOIL_free_image_data(image);
+    for (GLuint i = 0; i < faces.size(); i++)
+    {
+      image = SOIL_load_image(faces[i], &width, &height, 0, SOIL_LOAD_RGB);
+      glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+      SOIL_free_image_data(image);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
   }
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
   glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
   return textureID;
 }
 
-void ROTOM::GRAPHICS::loadCubemap() {
+void ROTOM::GRAPHICS::loadCubemap(unsigned int *program, unsigned int *VAO, unsigned int *texture) {
   GLfloat skyboxVertices[] = {
     // Positions          
     -1.0f, 1.0f, -1.0f,
@@ -772,43 +774,53 @@ void ROTOM::GRAPHICS::loadCubemap() {
     1.0f, -1.0f, 1.0f
   };
 
-  GLuint skyboxVAO, skyboxVBO;
-  glGenVertexArrays(1, &skyboxVAO);
+  //Geometry
+  unsigned int skyboxVBO;
+  glGenVertexArrays(1, VAO);
   glGenBuffers(1, &skyboxVBO);
-  glBindVertexArray(skyboxVAO);
-  glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+  glBindVertexArray(*VAO);
+  {
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+  }
   glBindVertexArray(0);
 
+  //Texture
   std::vector<const GLchar*> faces;
-  faces.push_back("skybox/right.jpg");
-  faces.push_back("skybox/left.jpg");
-  faces.push_back("skybox/top.jpg");
-  faces.push_back("skybox/bottom.jpg");
-  faces.push_back("skybox/back.jpg");
-  faces.push_back("skybox/front.jpg");
-  GLuint cubemapTexture = load_cubemap(faces);
+  faces.push_back("../../../../cubemaps/example/right.jpg");
+  faces.push_back("../../../../cubemaps/example/left.jpg");
+  faces.push_back("../../../../cubemaps/example/top.jpg");
+  faces.push_back("../../../../cubemaps/example/bottom.jpg");
+  faces.push_back("../../../../cubemaps/example/back.jpg");
+  faces.push_back("../../../../cubemaps/example/front.jpg");
+  *texture = load_cubemap(faces);
 }
 
-void ROTOM::GRAPHICS::drawCubemap() {
+void ROTOM::GRAPHICS::drawCubemap(unsigned int *program, unsigned int *VAO, unsigned int *texture, float *cameraProjection, float *cameraView) {
   clearScreen();
 
-  // Draw skybox first
-  glDepthMask(GL_FALSE);// Remember to turn depth writing off
+  //Draw skybox first
+  glDepthMask(GL_FALSE);//Remember to turn depth writing off
 
-  skyboxShader.Use();
-  glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
-  glm::mat4 projection = glm::perspective(camera.Zoom, (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
-  glUniformMatrix4fv(glGetUniformLocation(skyboxShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-  glUniformMatrix4fv(glGetUniformLocation(skyboxShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-  // skybox cube
-  glBindVertexArray(skyboxVAO);
-  glActiveTexture(GL_TEXTURE0);
-  glUniform1i(glGetUniformLocation(shader.Program, "skybox"), 0);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-  glDrawArrays(GL_TRIANGLES, 0, 36);
+  //Program
+  glUseProgram(*program);
+
+  //Node
+  glUniformMatrix4fv(glGetUniformLocation(*program, "u_view"), 1, GL_FALSE, cameraView);
+  glUniformMatrix4fv(glGetUniformLocation(*program, "u_projection"), 1, GL_FALSE, cameraProjection);
+  
+  //Geometry
+  glBindVertexArray(*VAO);
+  {
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(*program, "u_skybox"), 0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, *texture);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+  }
   glBindVertexArray(0);
+  
+  //Return the value
   glDepthMask(GL_TRUE);
 }
