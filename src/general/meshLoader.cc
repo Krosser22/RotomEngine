@@ -11,9 +11,9 @@
 #include "general/meshLoader.h"
 #include "render/commandSetGeometry.h"
 #include "render/displayList.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "tiny_obj_loader.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <tiny_obj_loader.h>
 #include <iostream>
 
 void PrintInfo(const std::vector<tinyobj::shape_t>& shapes, const std::vector<tinyobj::material_t>& materials) {

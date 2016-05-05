@@ -9,7 +9,6 @@
 #include "render/renderTarget.h"
 #include "render/graphics.h"
 
-
 ROTOM::RenderTarget::RenderTarget() {}
 
 ROTOM::RenderTarget::~RenderTarget() {}

@@ -6,19 +6,9 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __COMMAND_CLEAR_H__
-#define __COMMAND_CLEAR_H__
+#include "render/cubemap.h"
+#include "render/graphics.h"
 
-#include "command.h"
+ROTOM::Cubemap::Cubemap() {}
 
-namespace ROTOM {
-  class CommandClear : public Command {
-  public:
-    CommandClear();
-    virtual ~CommandClear();
-
-    void run();
-  };
-}
-
-#endif //__COMMAND_CLEAR_H__
+ROTOM::Cubemap::~Cubemap() {}

@@ -6,13 +6,21 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "render/commandClear.h"
-#include "render/graphics.h"
+#ifndef __CUBEMAP_H__
+#define __CUBEMAP_H__
 
-ROTOM::CommandClear::CommandClear() {}
+//http://www.custommapmakers.org/skyboxes.php
 
-ROTOM::CommandClear::~CommandClear() {}
+namespace ROTOM {
+  class Cubemap {
+  public:
+    Cubemap();
+    ~Cubemap();
 
-void ROTOM::CommandClear::run() {
-  GRAPHICS::clearScreen();
+    void init();
+
+    unsigned int texture();
+  };
 }
+
+#endif //__CUBEMAP_H__
