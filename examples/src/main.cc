@@ -8,17 +8,7 @@
 
 #include "general/time.h"
 #include "general/window.h"
-#include "scenes/cubemapScene.h"
 #include "scenes/defaultScene.h"
-#include "scenes/depthScene.h"
-#include "scenes/geometryScene.h"
-#include "scenes/movementScene.h"
-#include "scenes/meshLoaderScene.h"
-#include "scenes/proceduralScene.h"
-#include "scenes/renderToTextureScene.h"
-#include "scenes/shaderScene.h"
-#include "scenes/shadowScene.h"
-#include "scenes/soundScene.h"
 
 int ROTOM::main(int argc, char** argv) {
   TIME::Chronometer c;
@@ -27,18 +17,7 @@ int ROTOM::main(int argc, char** argv) {
   WindowInit(1024, 512);
   printf("Time to create the windows: %0.2f.\n\n", c.end());
 
-  //CubemapScene scene;
-  //DefaultScene scene;
-  //DepthScene scene;
-  //GeometryScene scene;
-  //MeshLoaderScene scene;
-  //MovementScene scene;
-  //ProceduralScene scene;
-  //RenderToTextureScene scene;
-  //ShaderScene scene;
-  ShadowScene scene;
-  //SoundScene scene;
-
+  DefaultScene scene;
   SetScene(&scene);
   return 0;
 }
@@ -48,9 +27,12 @@ int ROTOM::main(int argc, char** argv) {
 ------------------------------------------------------------------------------------------
 -------------------------------------------ASK--------------------------------------------
 ------------------------------------------------------------------------------------------
+Cambio de escenas
+cubemap reflejo / refracción
 
++depth write para transparentes y pintar el cull
 
-
++Postprocesos
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ------------------------------------------------------------------------------------------
 -------------------------------------------DONE-------------------------------------------
@@ -87,6 +69,6 @@ http://www.custommapmakers.org/skyboxes.php
 +Shadows --> GPU gems 3 (Webpage) parte 2
 +Shadows --> Real time shadows (Book)
 
-
++postproceso --> depth of field
 
 *****************************************************************************************/

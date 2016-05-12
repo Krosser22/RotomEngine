@@ -10,6 +10,17 @@
 #include "general/files.h"
 #include "general/input.h"
 #include "general/window.h"
+#include "../examples/include/scenes/cubemapScene.h"
+#include "../examples/include/scenes/defaultScene.h"
+#include "../examples/include/scenes/depthScene.h"
+#include "../examples/include/scenes/geometryScene.h"
+#include "../examples/include/scenes/movementScene.h"
+#include "../examples/include/scenes/meshLoaderScene.h"
+#include "../examples/include/scenes/proceduralScene.h"
+#include "../examples/include/scenes/renderToTextureScene.h"
+#include "../examples/include/scenes/shaderScene.h"
+#include "../examples/include/scenes/shadowScene.h"
+#include "../examples/include/scenes/soundScene.h"
 #include <imgui.h>
 
 struct HUDDatatrue {
@@ -72,6 +83,17 @@ struct HUDDatatrue {
   std::vector<std::string> contentListPath;
   std::vector<std::string> contentListName;
 
+  ROTOM::CubemapScene cubemapScene;
+  ROTOM::DefaultScene defaultScene;
+  ROTOM::DepthScene depthScene;
+  ROTOM::GeometryScene geometryScene;
+  ROTOM::MeshLoaderScene meshLoaderScene;
+  ROTOM::MovementScene movementScene;
+  ROTOM::ProceduralScene proceduralScene;
+  ROTOM::RenderToTextureScene renderToTextureScene;
+  ROTOM::ShaderScene shaderScene;
+  ROTOM::ShadowScene shadowScene;
+  ROTOM::SoundScene soundScene;
 } hud;
 
 void ROTOM::HUD::Init(std::shared_ptr<Node> r, std::vector<std::shared_ptr<Light>> l, Camera *c) {
@@ -199,18 +221,48 @@ void ROTOM::HUD::DrawMenu() {
   ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
   if (ImGui::BeginMainMenuBar())
   {
-    /*if (ImGui::BeginMenu("File"))
-    {
-      if (ImGui::MenuItem("New", "CTRL+N")) {
-      }
-      ImGui::EndMenu();
-      }
-      ImGui::EndMainMenuBar();*/
-
     char fps[256];
     sprintf(fps, "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     hud.fps = fps;
-    ImGui::BeginMenu(hud.fps.c_str());
+    bool sceneMenuIsOpened = ImGui::BeginMenu("Scenes");
+    if (sceneMenuIsOpened) {
+      if (ImGui::MenuItem("Cubemap", "1") || (sceneMenuIsOpened && INPUT::IsKeyPressed('1'))) {
+        SetScene(&hud.cubemapScene);
+      }
+      if (ImGui::MenuItem("Default", "2") || (sceneMenuIsOpened && INPUT::IsKeyPressed('2'))) {
+        SetScene(&hud.defaultScene);
+      }
+      if (ImGui::MenuItem("Depth", "3") || (sceneMenuIsOpened && INPUT::IsKeyPressed('3'))) {
+        SetScene(&hud.depthScene);
+      }
+      if (ImGui::MenuItem("Geometry", "4") || (sceneMenuIsOpened && INPUT::IsKeyPressed('4'))) {
+        SetScene(&hud.geometryScene);
+      }
+      if (ImGui::MenuItem("MeshLoader", "5") || (sceneMenuIsOpened && INPUT::IsKeyPressed('5'))) {
+        SetScene(&hud.meshLoaderScene);
+      }
+      if (ImGui::MenuItem("Movement", "6") || (sceneMenuIsOpened && INPUT::IsKeyPressed('6'))) {
+        SetScene(&hud.movementScene);
+      }
+      if (ImGui::MenuItem("Procedural", "7") || (sceneMenuIsOpened && INPUT::IsKeyPressed('7'))) {
+        SetScene(&hud.proceduralScene);
+      }
+      if (ImGui::MenuItem("RenderToTexture", "8") || (sceneMenuIsOpened && INPUT::IsKeyPressed('8'))) {
+        SetScene(&hud.renderToTextureScene);
+      }
+      if (ImGui::MenuItem("Shader", "9") || (sceneMenuIsOpened && INPUT::IsKeyPressed('9'))) {
+        SetScene(&hud.shaderScene);
+      }
+      if (ImGui::MenuItem("Shadow", "0") || (sceneMenuIsOpened && INPUT::IsKeyPressed('0'))) {
+        SetScene(&hud.shadowScene);
+      }
+      if (ImGui::MenuItem("Sound", "'") || (sceneMenuIsOpened && INPUT::IsKeyPressed('\''))) {
+        SetScene(&hud.soundScene);
+      }
+
+      ImGui::EndMenu();
+    }
+    ImGui::MenuItem(hud.fps.c_str());
     ImGui::EndMainMenuBar();
   }
 }

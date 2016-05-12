@@ -12,6 +12,7 @@
 #include "render/graphics.h"
 #include "taskManager/taskCalculateMatrix.h"
 #include "taskManager/taskManager.h"
+#include <imgui.h>
 
 static ROTOM::CommandDrawObject commandDrawObject;
 static ROTOM::DisplayList displayList;
@@ -65,16 +66,23 @@ int ROTOM::WindowHeight() {
 }
 
 void ROTOM::SetScene(Scene *newScene) {
-  if (scene != nullptr) {
+  if (scene) {
     scene->destroy();
+    scene = nullptr;
+    ImGui::Shutdown();
+    GRAPHICS::swapBuffers();
   }
-  scene = newScene;
-  scene->setRoot(std::shared_ptr<Node>(new Node("Root")));
-  scene->init();
-  HUD::Init(scene->getRoot(), scene->getLight(), scene->getCamera());
-  while (WindowIsOpened()) { ; }
-  scene->destroy();
-  scene = nullptr;
+
+  if (newScene) {
+    scene = newScene;
+    scene->setRoot(std::shared_ptr<Node>(new Node("Root")));
+    scene->init();
+    HUD::Init(scene->getRoot(), scene->getLight(), scene->getCamera());
+    while (WindowIsOpened()) { ; }
+    scene->destroy();
+  } else {
+
+  }
 }
 
 void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix, float *viewPosition) {
