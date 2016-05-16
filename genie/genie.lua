@@ -116,8 +116,8 @@ project "ROTOM"
   
   files {
     "../include/**.h",
-    "../src/**.cc",
-    "../deps/glew/src/glew.c",
+    "../src/**.*",
+    --"../deps/glew/src/glew.c",
     "../deps/glfw/src/*.c",
     "../deps/imgui/*.cpp",
     "../deps/soil/*.c",

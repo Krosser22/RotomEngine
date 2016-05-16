@@ -80,8 +80,6 @@ void ROTOM::SetScene(Scene *newScene) {
     HUD::Init(scene->getRoot(), scene->getLight(), scene->getCamera());
     while (WindowIsOpened()) { ; }
     scene->destroy();
-  } else {
-
   }
 }
 

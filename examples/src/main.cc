@@ -8,6 +8,7 @@
 
 #include "general/time.h"
 #include "general/window.h"
+#include "general/sceneManager.h"
 #include "scenes/defaultScene.h"
 
 int ROTOM::main(int argc, char** argv) {
@@ -18,7 +19,9 @@ int ROTOM::main(int argc, char** argv) {
   printf("Time to create the windows: %0.2f.\n\n", c.end());
 
   DefaultScene scene;
-  SetScene(&scene);
+  StartSceneManager(&scene);
+
+  ROTOM::WindowDestroy();
   return 0;
 }
 

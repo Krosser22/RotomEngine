@@ -6,17 +6,13 @@
 *** ////////////////////////////////////////////
 **/
 
-#include "general/sound.h"
+#include "general/sceneManager.h"
 #include "general/window.h"
-#include "taskManager/taskManager.h"
 
-int main(int argc, char** argv) {
-  ROTOM::TASKMANAGER::init();
-  {
-    //ROTOM::SOUND::init();
-    ROTOM::main(argc, argv);
-  }
-  ROTOM::TASKMANAGER::destroy();
+void ROTOM::StartSceneManager(Scene *newScene) {
+  SetScene(newScene);
+}
 
-  return 0;
+void ROTOM::ChangeScene(Scene *newScene) {
+
 }
