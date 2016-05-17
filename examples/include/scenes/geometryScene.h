@@ -27,7 +27,7 @@ namespace ROTOM {
 
     void destroy() {};
 
-    static const int amount = 5000;
+    static const int amount = 6800; //6800 = 60fps on release
   };
 }
 

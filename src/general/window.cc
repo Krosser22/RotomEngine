@@ -23,7 +23,7 @@ void ROTOM::WindowInit(unsigned int width, unsigned int height) {
   GRAPHICS::windowInit(width, height);
 }
 
-bool WindowIsOpened() {
+bool ROTOM::WindowIsOpened() {
   if (!ROTOM::GRAPHICS::windowShouldClose()) {
     //Input
     ROTOM::INPUT::Update();
@@ -66,21 +66,11 @@ int ROTOM::WindowHeight() {
 }
 
 void ROTOM::SetScene(Scene *newScene) {
-  if (scene) {
-    scene->destroy();
-    scene = nullptr;
-    ImGui::Shutdown();
-    GRAPHICS::swapBuffers();
-  }
-
-  if (newScene) {
-    scene = newScene;
-    scene->setRoot(std::shared_ptr<Node>(new Node("Root")));
-    scene->init();
-    HUD::Init(scene->getRoot(), scene->getLight(), scene->getCamera());
-    while (WindowIsOpened()) { ; }
-    scene->destroy();
-  }
+  assert(&scene);
+  scene = newScene;
+  scene->setRoot(std::shared_ptr<Node>(new Node("Root")));
+  scene->init();
+  HUD::Init(scene->getRoot(), scene->getLight(), scene->getCamera());
 }
 
 void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix, float *viewPosition) {

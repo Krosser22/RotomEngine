@@ -10,6 +10,7 @@
 #include "general/files.h"
 #include "general/input.h"
 #include "general/window.h"
+#include "general/sceneManager.h"
 #include "../examples/include/scenes/cubemapScene.h"
 #include "../examples/include/scenes/defaultScene.h"
 #include "../examples/include/scenes/depthScene.h"
@@ -73,9 +74,9 @@ struct HUDDatatrue {
   std::string fps;
 
   char detailsChildCount[8];
-  float *detailsPosition;
-  float *detailsRotation;
-  float *detailsScale;
+  float detailsPosition[3];
+  float detailsRotation[3];
+  float detailsScale[3];
   char detailsVertexCount[8];
 
   ROTOM::Content content;
@@ -227,37 +228,37 @@ void ROTOM::HUD::DrawMenu() {
     bool sceneMenuIsOpened = ImGui::BeginMenu("Scenes");
     if (sceneMenuIsOpened) {
       if (ImGui::MenuItem("Cubemap", "1") || (sceneMenuIsOpened && INPUT::IsKeyPressed('1'))) {
-        SetScene(&hud.cubemapScene);
+        ChangeScene(&hud.cubemapScene);
       }
       if (ImGui::MenuItem("Default", "2") || (sceneMenuIsOpened && INPUT::IsKeyPressed('2'))) {
-        SetScene(&hud.defaultScene);
+        ChangeScene(&hud.defaultScene);
       }
       if (ImGui::MenuItem("Depth", "3") || (sceneMenuIsOpened && INPUT::IsKeyPressed('3'))) {
-        SetScene(&hud.depthScene);
+        ChangeScene(&hud.depthScene);
       }
       if (ImGui::MenuItem("Geometry", "4") || (sceneMenuIsOpened && INPUT::IsKeyPressed('4'))) {
-        SetScene(&hud.geometryScene);
+        ChangeScene(&hud.geometryScene);
       }
       if (ImGui::MenuItem("MeshLoader", "5") || (sceneMenuIsOpened && INPUT::IsKeyPressed('5'))) {
-        SetScene(&hud.meshLoaderScene);
+        ChangeScene(&hud.meshLoaderScene);
       }
       if (ImGui::MenuItem("Movement", "6") || (sceneMenuIsOpened && INPUT::IsKeyPressed('6'))) {
-        SetScene(&hud.movementScene);
+        ChangeScene(&hud.movementScene);
       }
       if (ImGui::MenuItem("Procedural", "7") || (sceneMenuIsOpened && INPUT::IsKeyPressed('7'))) {
-        SetScene(&hud.proceduralScene);
+        ChangeScene(&hud.proceduralScene);
       }
       if (ImGui::MenuItem("RenderToTexture", "8") || (sceneMenuIsOpened && INPUT::IsKeyPressed('8'))) {
-        SetScene(&hud.renderToTextureScene);
+        ChangeScene(&hud.renderToTextureScene);
       }
       if (ImGui::MenuItem("Shader", "9") || (sceneMenuIsOpened && INPUT::IsKeyPressed('9'))) {
-        SetScene(&hud.shaderScene);
+        ChangeScene(&hud.shaderScene);
       }
       if (ImGui::MenuItem("Shadow", "0") || (sceneMenuIsOpened && INPUT::IsKeyPressed('0'))) {
-        SetScene(&hud.shadowScene);
+        ChangeScene(&hud.shadowScene);
       }
       if (ImGui::MenuItem("Sound", "'") || (sceneMenuIsOpened && INPUT::IsKeyPressed('\''))) {
-        SetScene(&hud.soundScene);
+        ChangeScene(&hud.soundScene);
       }
 
       ImGui::EndMenu();
@@ -371,7 +372,9 @@ void ROTOM::HUD::DrawNode(Node *node) {
 
   ImGui::Separator();
 
-  hud.detailsPosition = &node->position()[0];
+  hud.detailsPosition[0] = node->position()[0];
+  hud.detailsPosition[1] = node->position()[1];
+  hud.detailsPosition[2] = node->position()[2];
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Position:");
   ImGui::PushID(hud.nextPushID++);
   if (ImGui::DragFloat3("", hud.detailsPosition, 0.2f, -100.0f, 100.0f, "%.2f", 1.0f)) {
@@ -381,7 +384,9 @@ void ROTOM::HUD::DrawNode(Node *node) {
 
   ImGui::Separator();
 
-  hud.detailsRotation = &node->rotation()[0];
+  hud.detailsRotation[0] = node->rotation()[0];
+  hud.detailsRotation[1] = node->rotation()[1];
+  hud.detailsRotation[2] = node->rotation()[2];
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Rotation:");
   ImGui::PushID(hud.nextPushID++);
   if (ImGui::DragFloat3("", hud.detailsRotation, 0.2f, -100.0f, 100.0f, "%.2f", 1.0f)) {
@@ -391,7 +396,9 @@ void ROTOM::HUD::DrawNode(Node *node) {
 
   ImGui::Separator();
 
-  hud.detailsScale = &node->scale()[0];
+  hud.detailsScale[0] = node->scale()[0];
+  hud.detailsScale[1] = node->scale()[1];
+  hud.detailsScale[2] = node->scale()[2];
   ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Scale:");
   ImGui::PushID(hud.nextPushID++);
   if (ImGui::DragFloat3("", hud.detailsScale, 0.2f, -100.0f, 100.0f, "%.2f", 1.0f)) {

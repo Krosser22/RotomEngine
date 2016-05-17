@@ -23,7 +23,7 @@ solution "ROTOM"
 
   configuration "Release"
     defines     { "NDEBUG", "LUA_COMPAT_MODULE" }
-    flags       { "OptimizeSize" }
+    flags       { "Optimize" }
     debugdir "../project/build/bin/release"
     os.mkdir "../project/build/bin/release"
 
