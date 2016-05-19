@@ -23,14 +23,13 @@ void ROTOM::ShadowScene::init() {
   renderTarget_.init(WindowWidth(), WindowHeight());
 
   //Geometry
-  geometry_ = std::shared_ptr<Geometry>(new Geometry());
-  geometryFloor_ = std::shared_ptr<Geometry>(new Geometry());
-  //geometryFloor_->loadGeometry("Nanosuit/nanosuit");
-  geometryNanosuit_ = std::shared_ptr<Geometry>(new Geometry());
-  geometryNanosuit_->loadGeometry("Nanosuit/nanosuit");
+  std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
+  std::shared_ptr<Geometry> geometryFloor = std::shared_ptr<Geometry>(new Geometry());
+  std::shared_ptr<Geometry> geometryNanosuit = std::shared_ptr<Geometry>(new Geometry());
+  geometryNanosuit->loadGeometry("Nanosuit/nanosuit");
 
   //ShadowMaterial
-  std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/texture.png"));
+  std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/no_texture.png"));
   shadowMaterial->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
 
   //Material renderDepthToTexture
@@ -47,42 +46,43 @@ void ROTOM::ShadowScene::init() {
   std::shared_ptr<Drawable> drawable6 = std::shared_ptr<Drawable>(new Drawable("depth"));
   std::shared_ptr<Drawable> drawable7 = std::shared_ptr<Drawable>(new Drawable("floor"));
 
-  drawable1->setGeometry(geometry_);
+  drawable1->setGeometry(geometry);
   drawable1->setMaterial(shadowMaterial);
   drawable1->setParent(getRoot());
 
-  drawable2->setGeometry(geometry_);
+  drawable2->setGeometry(geometry);
   drawable2->setMaterial(shadowMaterial);
   drawable2->setParent(drawable1);
   drawable2->setPositionX(1.0f);
 
-  drawable3->setGeometry(geometry_);
+  drawable3->setGeometry(geometry);
   drawable3->setMaterial(shadowMaterial);
   drawable3->setParent(drawable2);
   drawable3->setPositionX(1.0f);
 
-  drawable4->setGeometry(geometry_);
+  drawable4->setGeometry(geometry);
   drawable4->setMaterial(shadowMaterial);
   drawable4->setParent(drawable3);
   drawable4->setPositionX(1.0f);
 
-  drawable5->setGeometry(geometryNanosuit_);
+  drawable5->setGeometry(geometryNanosuit);
   drawable5->setMaterial(shadowMaterial);
   drawable5->setParent(getRoot());
   drawable5->setPosition(0.6f, 0.6f, -1.0f);
 
-  drawable6->setGeometry(geometry_);
+  drawable6->setGeometry(geometry);
   drawable6->setMaterial(materialRenderDepthToTexture);
   drawable6->setParent(getRoot());
   drawable6->setPosition(1.5f, 1.0f, 0.0f);
 
-  drawable7->setGeometry(geometryFloor_);
+  drawable7->setGeometry(geometryFloor);
   drawable7->setMaterial(shadowMaterial);
   drawable7->setParent(getRoot());
   drawable7->setPosition(0.0f, 0.0f, -6.0f);
   drawable7->setScale(100.0f, 100.0f, 1.0f);
 
   //Light
+  clearLight();
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
   light->setPosition(1.5f, 1.0f, 3.0f);
@@ -109,10 +109,9 @@ void ROTOM::ShadowScene::update() {
   }
 
   if (cameraAutoRotate) {
-    getLight().begin()->get()->setPosition(
-      sin(ROTOM::TIME::appTime()) * 5.0f,
-      3.0f /*+ cos(ROTOM::TIME::appTime()) * 1.0f*/,
-      cos(ROTOM::TIME::appTime()) * 5.0f);
+    getLight().begin()->get()->setPositionX(sin(ROTOM::TIME::appTime()) * 5.0f);
+    getLight().begin()->get()->setPositionY(3.0f /*+ cos(ROTOM::TIME::appTime()) * 1.0f*/);
+    getLight().begin()->get()->setPositionZ(cos(ROTOM::TIME::appTime()) * 5.0f);
   }
 }
 

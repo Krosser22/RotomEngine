@@ -26,6 +26,7 @@ void ROTOM::ProceduralScene::init() {
   chunk_->init(getRoot(), 25, 1, 1);
 
   //Light
+  clearLight();
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
   light->setPosition(1.0f, 1.0f, -2.0f);

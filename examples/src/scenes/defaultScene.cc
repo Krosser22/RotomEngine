@@ -39,6 +39,7 @@ void ROTOM::DefaultScene::init() {
   drawable3->setParent(drawable2);
 
   //Light
+  clearLight();
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
   light->specularIntensity_[0] = 0.1f;
@@ -46,6 +47,7 @@ void ROTOM::DefaultScene::init() {
   light->specularIntensity_[2] = 0.1f;
   AddLight(light);
 
+  //Nodes
   const float separation = -2.2f;
   const float pos_x_started = 15.0f;
   const float pos_y_started = 7.0f;

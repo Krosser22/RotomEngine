@@ -30,7 +30,7 @@ ROTOM::Light::Light(char *name) {
 
 ROTOM::Light::~Light() {}
 
-void ROTOM::Light::setupOrtho(const float left, const float right, const float bottom, const float top, const float znear, const float zfar) {
+void ROTOM::Light::setupOrtho(float left, float right, float bottom, float top, float znear, float zfar) {
   projection_ = glm::ortho(left, right, bottom, top, znear, zfar);
 }
 
@@ -39,33 +39,38 @@ float *ROTOM::Light::projectionMatrix() {
 }
 
 float *ROTOM::Light::viewMatrix() {
-  view_ = glm::rotate(identity_, -rotation_.x, rotX_);
-  view_ = glm::rotate(view_, -rotation_.y, rotY_);
-  view_ = glm::rotate(view_, -rotation_.z, rotZ_);
+  view_ = glm::rotate(identity_, rotation_.x, rotX_);
+  view_ = glm::rotate(view_, rotation_.y, rotY_);
+  view_ = glm::rotate(view_, rotation_.z, rotZ_);
   view_ = glm::translate(view_, -position_);
 
   ////////////////////////////////////////////
   ////////////////////////////////////////////
   ////////////////////////////////////////////
 
-  // Make sure that when pitch is out of bounds, screen doesn't get flipped
-  //if (rotation_.y > 89.0f) rotation_.y = 89.0f;
-  //if (rotation_.y < -89.0f) rotation_.y = -89.0f;
-  //front_.x = cos(rotation_.x) * cos(rotation_.y);
-  //front_.y = sin(rotation_.y);
-  //front_.z = sin(rotation_.x) * cos(rotation_.y);
-  //front_ = glm::normalize(front_);
+  //Make sure that when pitch is out of bounds, screen doesn't get flipped
+  /*if (rotation_.y > 89.0f) rotation_.y = 89.0f;
+  if (rotation_.y < -89.0f) rotation_.y = -89.0f;
+  front_.x = sin(rotation_.y);
+  front_.y = cos(rotation_.x) * cos(rotation_.y);
+  front_.z = sin(rotation_.x) * cos(rotation_.y);
+  front_ = glm::normalize(front_);
+  view_ = glm::lookAt(position_, position_ + front_, up_);*/
+
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+
   //view_ = glm::lookAt(position_, position_ + front_, up_);
-
-  ////////////////////////////////////////////
-  ////////////////////////////////////////////
-  ////////////////////////////////////////////
-
-  view_ = glm::lookAt(position_, position_ + glm::fvec3(0.0f, 0.0f, 1.0f), glm::fvec3(0.0f, 1.0f, 0.0f));
   return glm::value_ptr(view_);
 }
 
 float *ROTOM::Light::spaceMatrix() {
   lightSpaceMatrix_ = projection_ * view_;
+
+  //printf("%f %f %f %f\n", lightSpaceMatrix_[0][0], lightSpaceMatrix_[0][1], lightSpaceMatrix_[0][2], lightSpaceMatrix_[0][3]);
+  //printf("%f %f %f %f\n", lightSpaceMatrix_[1][0], lightSpaceMatrix_[1][1], lightSpaceMatrix_[1][2], lightSpaceMatrix_[1][3]);
+  //printf("%f %f %f %f\n", lightSpaceMatrix_[2][0], lightSpaceMatrix_[2][1], lightSpaceMatrix_[2][2], lightSpaceMatrix_[2][3]);
+  //printf("%f %f %f %f\n\n", lightSpaceMatrix_[3][0], lightSpaceMatrix_[3][1], lightSpaceMatrix_[3][2], lightSpaceMatrix_[3][3]);
   return glm::value_ptr(lightSpaceMatrix_);
 }

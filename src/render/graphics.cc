@@ -572,7 +572,7 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
     //Shadow/Depth
     glUniform1i(shaderData->u_shadows, commandDrawObjectData->shadows);
     glUniform1f(shaderData->u_nearPlane, 1.0f);
-    glUniform1f(shaderData->u_farPlane, 100.0f);
+    glUniform1f(shaderData->u_farPlane, 10.0f);
 
     //Light
     for (unsigned int i = 0; i < lights->size(); ++i) {

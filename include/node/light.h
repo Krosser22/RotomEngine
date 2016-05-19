@@ -19,7 +19,7 @@ namespace ROTOM {
 
     float specularIntensity_[3];
 
-    void setupOrtho(const float left, const float right, const float bottom, const float top, const float znear, const float zfar);
+    void setupOrtho(float left, float right, float bottom, float top, float znear, float zfar);
 
     float *projectionMatrix();
 
@@ -36,7 +36,7 @@ namespace ROTOM {
     glm::fvec3 rotY_ = glm::fvec3(0.0f, 1.0f, 0.0f);
     glm::fvec3 rotZ_ = glm::fvec3(0.0f, 0.0f, 1.0f);
     glm::fvec3 up_ = glm::fvec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 front_ = glm::fvec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 front_ = glm::fvec3(0.0f, 0.0f, 1.0f);
   };
 }
 

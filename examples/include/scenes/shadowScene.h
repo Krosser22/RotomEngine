@@ -29,9 +29,6 @@ namespace ROTOM {
     void destroy() {};
     
   private:
-    std::shared_ptr<Geometry> geometry_;
-    std::shared_ptr<Geometry> geometryFloor_;
-    std::shared_ptr<Geometry> geometryNanosuit_;
     RenderTarget renderTarget_;
   };
 }

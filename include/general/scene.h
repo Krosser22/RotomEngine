@@ -33,8 +33,14 @@ namespace ROTOM {
 
     void AddLight(std::shared_ptr<Light> light);
     std::vector<std::shared_ptr<Light>> getLight();
+    void clearLight();
 
     Camera *getCamera();
+
+  protected:
+    ROTOM::Camera camera_;
+    std::shared_ptr<ROTOM::Node> root_;
+    std::vector<std::shared_ptr<ROTOM::Light>> lights_;
   };
 }
 

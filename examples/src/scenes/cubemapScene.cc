@@ -47,6 +47,7 @@ void ROTOM::CubemapScene::init() {
   drawable4->setPositionX(1.0f);
 
   //Light
+  clearLight();
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
   light->setPosition(2.2f, 0.0f, 2.2f);

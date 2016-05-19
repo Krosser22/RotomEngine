@@ -8,10 +8,6 @@
 
 #include "general/scene.h"
 
-ROTOM::Camera camera_;
-std::shared_ptr<ROTOM::Node> root_;
-std::vector<std::shared_ptr<ROTOM::Light>> lights_;
-
 void ROTOM::Scene::setRoot(std::shared_ptr<Node> root) {
   root_ = root;
 }
@@ -26,6 +22,10 @@ void ROTOM::Scene::AddLight(std::shared_ptr<Light> light) {
 
 std::vector<std::shared_ptr<ROTOM::Light>> ROTOM::Scene::getLight() {
   return lights_;
+}
+
+void ROTOM::Scene::clearLight() {
+  lights_.clear();
 }
 
 ROTOM::Camera *ROTOM::Scene::getCamera() {

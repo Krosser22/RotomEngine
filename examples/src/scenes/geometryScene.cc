@@ -17,11 +17,13 @@ void ROTOM::GeometryScene::init() {
   getRoot()->setPosition(0.0f, 5.0f, -12.0f);
 
   //Light
+  clearLight();
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
   light->setPosition(0.0f, 0.0f, -10.0f);
   AddLight(light);
 
+  //Nodes
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
   std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
   geometry->loadGeometry("Monkey/Monkey");

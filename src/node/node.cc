@@ -17,6 +17,7 @@ ROTOM::Node::Node() {
   setRotation(0.0f, 0.0f, 0.0f);
   setScale(1.0f, 1.0f, 1.0f);
   parent_ = nullptr;
+  dirtyModelMatrix_ = true;
 }
 
 ROTOM::Node::Node(char *name) {
@@ -26,6 +27,7 @@ ROTOM::Node::Node(char *name) {
   setRotation(0.0f, 0.0f, 0.0f);
   setScale(1.0f, 1.0f, 1.0f);
   parent_ = nullptr;
+  dirtyModelMatrix_ = true;
 }
 
 ROTOM::Node::~Node() {

@@ -26,6 +26,7 @@ void ROTOM::DepthScene::init() {
   drawableBase_->setParent(getRoot());
   drawableBase_->setPosition(-1.0f, -1.0f, 0.0f);
 
+  //Nodes
   std::shared_ptr<Drawable> drawable[amount];
   const float separation = -2.0f;
   const float pos_x_started = 8.0f;
@@ -46,6 +47,7 @@ void ROTOM::DepthScene::init() {
   }
 
   //Light
+  clearLight();
   std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
   light->setParent(getRoot());
   light->setPosition(5.0f, 4.0f, 2.0f);
