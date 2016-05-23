@@ -28,4 +28,4 @@ void main() {
 
   //Final
   fragment = materialColor * vec4((ambient + diffuse), 1.0f);
-};
+}

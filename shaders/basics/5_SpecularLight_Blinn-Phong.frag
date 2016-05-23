@@ -45,4 +45,4 @@ void main() {
 
   //Final
   fragment = materialColor * vec4((ambient + diffuse + specular), 1.0f);
-};
+}

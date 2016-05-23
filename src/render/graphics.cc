@@ -199,7 +199,7 @@ bool ImGui_CreateDeviceObjects() {
     "out vec4 Out_Color;\n"
     "void main()\n"
     "{\n"
-    "	Out_Color = Frag_Color * texture( Texture, Frag_UV.st);\n"
+    "	Out_Color = Frag_Color * texture(Texture, Frag_UV.st);\n"
     "}\n";
 
   g_ShaderHandle = glCreateProgram();
@@ -572,7 +572,7 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
     //Shadow/Depth
     glUniform1i(shaderData->u_shadows, commandDrawObjectData->shadows);
     glUniform1f(shaderData->u_nearPlane, 1.0f);
-    glUniform1f(shaderData->u_farPlane, 10.0f);
+    glUniform1f(shaderData->u_farPlane, 100.0f);
 
     //Light
     for (unsigned int i = 0; i < lights->size(); ++i) {
@@ -799,10 +799,8 @@ void ROTOM::GRAPHICS::loadCubemap(unsigned int *program, unsigned int *VAO, unsi
 }
 
 void ROTOM::GRAPHICS::drawCubemap(unsigned int *program, unsigned int *VAO, unsigned int *texture, float *cameraProjection, float *cameraView) {
-  clearScreen();
-
   //Draw skybox first
-  glDepthMask(GL_FALSE);//Remember to turn depth writing off
+  glDepthMask(GL_FALSE);
 
   //Program
   glUseProgram(*program);
@@ -813,13 +811,11 @@ void ROTOM::GRAPHICS::drawCubemap(unsigned int *program, unsigned int *VAO, unsi
   
   //Geometry
   glBindVertexArray(*VAO);
-  {
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(glGetUniformLocation(*program, "u_skybox"), 0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, *texture);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-  }
-  glBindVertexArray(0);
+  //glActiveTexture(GL_TEXTURE0);
+  glUniform1i(glGetUniformLocation(*program, "u_skybox"), 0);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, *texture);
+  glDrawArrays(GL_TRIANGLES, 0, 36);
+  //glBindVertexArray(0);
   
   //Return the value
   glDepthMask(GL_TRUE);

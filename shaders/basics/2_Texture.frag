@@ -13,4 +13,4 @@ void main() {
 
   //Final
   fragment = materialColor;
-};
+}

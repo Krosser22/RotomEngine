@@ -8,4 +8,4 @@ out vec4 fragment;
 
 void main() {
 	fragment = texture(u_texture, uvMaterial);
-};
+}

@@ -9,8 +9,15 @@
 #include "general/time.h"
 #include "general/window.h"
 #include "general/sceneManager.h"
+#include "scenes/cubemapScene.h"
 #include "scenes/defaultScene.h"
+#include "scenes/depthScene.h"
+#include "scenes/geometryScene.h"
+#include "scenes/proceduralScene.h"
+#include "scenes/renderToTextureScene.h"
+#include "scenes/shaderScene.h"
 #include "scenes/shadowScene.h"
+#include "scenes/soundScene.h"
 
 int ROTOM::main(int argc, char** argv) {
   TIME::Chronometer c;
@@ -19,8 +26,15 @@ int ROTOM::main(int argc, char** argv) {
   WindowInit(1024, 512);
   printf("Time to create the windows: %0.2f.\n\n", c.end());
 
+  //CubemapScene scene;
   //DefaultScene scene;
+  //DepthScene scene;
+  //GeometryScene scene;
+  //ProceduralScene scene;
+  //RenderToTextureScene scene;
+  //ShaderScene scene;
   ShadowScene scene;
+  //SoundScene scene;
   StartSceneManager(&scene);
 
   ROTOM::WindowDestroy();
@@ -30,25 +44,11 @@ int ROTOM::main(int argc, char** argv) {
 /*****************************************************************************************
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ------------------------------------------------------------------------------------------
--------------------------------------------ASK--------------------------------------------
-------------------------------------------------------------------------------------------
-Cambio de escenas
-cubemap reflejo / refracción
-
-+depth write para transparentes y pintar el cull
-
-+Postprocesos
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-------------------------------------------------------------------------------------------
--------------------------------------------DONE-------------------------------------------
-------------------------------------------------------------------------------------------
-
-
-
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-------------------------------------------------------------------------------------------
 -------------------------------------------DOING------------------------------------------
 ------------------------------------------------------------------------------------------
++Postprocesos
++more than one light --> http://learnopengl.com/#!Advanced-Lighting/Shadows/Point-Shadows
+
 +Procedural scene
 http://www.andrewwillmott.com/s2007
 http://www.cs.cmu.edu/~ajw/s2007/0251-SphericalWorlds.pdf
@@ -68,12 +68,8 @@ http://www.custommapmakers.org/skyboxes.php
 -------------------------------------------TODO-------------------------------------------
 ------------------------------------------------------------------------------------------
 +glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //TODO - Make this an option to choose
-+Load a obj with more than one texture
 +Investigate Geometry shaders to make the procedural scene
-+Add LUA
 +Shadows --> GPU gems 3 (Webpage) parte 2
 +Shadows --> Real time shadows (Book)
-
 +postproceso --> depth of field
-
 *****************************************************************************************/

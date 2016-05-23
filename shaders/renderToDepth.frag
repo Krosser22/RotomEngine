@@ -19,5 +19,5 @@ void main() {
 
   //Final
   fragment = vec4(vec3(LinearizeDepth(depthValue) / u_farPlane), 1.0f); //Perspective
-  //fragment = vec4(depthValue, depthValue, depthValue, 1.0f); //Orthographic
+  //fragment = vec4(vec3(depthValue), 1.0f); //Orthographic
 }

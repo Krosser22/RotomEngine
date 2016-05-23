@@ -9,4 +9,4 @@ out vec4 fragment;
 void main() {
   //Final
 	fragment = texture(u_skybox, uvMaterial);
-};
+}

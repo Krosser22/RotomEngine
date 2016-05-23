@@ -27,4 +27,4 @@ void main() {
 
   //Shadow
   lightFragmentPosition = u_lightSpaceMatrix * vec4(fragmentPosition, 1.0f);
-};
+}
