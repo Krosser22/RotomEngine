@@ -6,16 +6,16 @@
 *** ////////////////////////////////////////////
 **/
 
-#ifndef __LIGHT_H__
-#define __LIGHT_H__
+#ifndef __DIRECTIONAL_LIGHT_H__
+#define __DIRECTIONAL_LIGHT_H__
 
 #include "drawable.h"
 
 namespace ROTOM {
-  class Light : public Drawable {
+  class DirectionalLight : public Drawable {
   public:
-    Light(char *name);
-    virtual ~Light();
+    DirectionalLight(char *name);
+    virtual ~DirectionalLight();
 
     float specularIntensity_[3];
 
@@ -36,8 +36,8 @@ namespace ROTOM {
     glm::fvec3 rotY_ = glm::fvec3(0.0f, 1.0f, 0.0f);
     glm::fvec3 rotZ_ = glm::fvec3(0.0f, 0.0f, 1.0f);
     glm::fvec3 up_ = glm::fvec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 front_ = glm::fvec3(0.0f, 0.0f, 1.0f);
+    glm::fvec3 front_ = glm::fvec3(0.0f, 0.0f, 1.0f);
   };
 }
 
-#endif //__LIGHT_H__
+#endif //__DIRECTIONAL_LIGHT_H__

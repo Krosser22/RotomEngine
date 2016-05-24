@@ -83,7 +83,7 @@ void ROTOM::ShadowScene::init() {
 
   //Light
   clearLight();
-  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
   light->setParent(getRoot());
   light->setPosition(1.5f, 1.0f, 3.0f);
   //light->materialSettings()->setColor(0.2f, 0.4f, 0.6f);

@@ -11,7 +11,7 @@
 
 #include "command.h"
 #include "node/drawable.h"
-#include "node/light.h"
+#include "node/directionalLight.h"
 
 namespace ROTOM {
   class CommandSetGeometry : public Command {

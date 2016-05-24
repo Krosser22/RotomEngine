@@ -10,12 +10,12 @@
 #define __HUD_H__
 
 #include "node/camera.h"
-#include "node/light.h"
+#include "node/directionalLight.h"
 #include <memory>
 
 namespace ROTOM {
   namespace HUD {
-    void Init(std::shared_ptr<Node> root, std::vector<std::shared_ptr<Light>> lights, Camera *camera);
+    void Init(std::shared_ptr<Node> root, std::vector<std::shared_ptr<DirectionalLight>> lights, Camera *camera);
 
     void Draw();
 
@@ -37,7 +37,7 @@ namespace ROTOM {
 
     void DrawCamera(Camera *camera);
 
-    void DrawLight(Light *light);
+    void DrawLight(DirectionalLight *light);
 
     void DrawGeometry(Geometry *geometry);
 

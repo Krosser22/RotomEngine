@@ -48,7 +48,7 @@ void ROTOM::DepthScene::init() {
 
   //Light
   clearLight();
-  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
   light->setParent(getRoot());
   light->setPosition(5.0f, 4.0f, 2.0f);
   AddLight(light);

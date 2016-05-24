@@ -10,7 +10,7 @@
 #define __SCENE_H__
 
 #include "node/camera.h"
-#include "node/light.h"
+#include "node/directionalLight.h"
 
 namespace ROTOM {
   class Scene {
@@ -31,8 +31,8 @@ namespace ROTOM {
     void setRoot(std::shared_ptr<Node> root);
     std::shared_ptr<Node> getRoot();
 
-    void AddLight(std::shared_ptr<Light> light);
-    std::vector<std::shared_ptr<Light>> getLight();
+    void AddLight(std::shared_ptr<DirectionalLight> light);
+    std::vector<std::shared_ptr<DirectionalLight>> getLight();
     void clearLight();
 
     Camera *getCamera();
@@ -40,7 +40,7 @@ namespace ROTOM {
   protected:
     ROTOM::Camera camera_;
     std::shared_ptr<ROTOM::Node> root_;
-    std::vector<std::shared_ptr<ROTOM::Light>> lights_;
+    std::vector<std::shared_ptr<ROTOM::DirectionalLight>> lights_;
   };
 }
 

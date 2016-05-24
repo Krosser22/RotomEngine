@@ -530,10 +530,10 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int *shaderProgram) {
 
 ROTOM::ShaderData *shaderData;
 ROTOM::MaterialSettings* materialSettings;
-ROTOM::Light *light = nullptr;
+ROTOM::DirectionalLight *light = nullptr;
 glm::fvec3 lightPosition;
 float *lightColor = nullptr, *specularIntensity = nullptr, *specularMaterial = nullptr, *color = nullptr;
-void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<Light>> *lights, float *projectionMatrix, float *viewMatrix, float *viewPosition) {
+void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<DirectionalLight>> *lights, float *projectionMatrix, float *viewMatrix, float *viewPosition) {
   if (commandDrawObjectData->visible) {
     shaderData = &commandDrawObjectData->shaderData;
     materialSettings = &commandDrawObjectData->materialSettings;

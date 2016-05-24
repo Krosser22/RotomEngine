@@ -16,11 +16,11 @@ std::shared_ptr<ROTOM::Node> ROTOM::Scene::getRoot() {
   return root_;
 }
 
-void ROTOM::Scene::AddLight(std::shared_ptr<Light> light) {
+void ROTOM::Scene::AddLight(std::shared_ptr<DirectionalLight> light) {
   lights_.push_back(light);
 }
 
-std::vector<std::shared_ptr<ROTOM::Light>> ROTOM::Scene::getLight() {
+std::vector<std::shared_ptr<ROTOM::DirectionalLight>> ROTOM::Scene::getLight() {
   return lights_;
 }
 

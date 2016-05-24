@@ -18,7 +18,7 @@ void ROTOM::GeometryScene::init() {
 
   //Light
   clearLight();
-  std::shared_ptr<Light> light = std::shared_ptr<Light>(new Light("light"));
+  std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
   light->setParent(getRoot());
   light->setPosition(0.0f, 0.0f, -10.0f);
   AddLight(light);

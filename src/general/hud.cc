@@ -24,7 +24,7 @@
 
 struct HUDDatatrue {
   std::shared_ptr<ROTOM::Node> root;
-  std::vector<std::shared_ptr<ROTOM::Light>> lights;
+  std::vector<std::shared_ptr<ROTOM::DirectionalLight>> lights;
   ROTOM::Camera *camera;
   ROTOM::Node *selected;
 
@@ -93,7 +93,7 @@ struct HUDDatatrue {
   ROTOM::SoundScene soundScene;
 } hud;
 
-void ROTOM::HUD::Init(std::shared_ptr<Node> r, std::vector<std::shared_ptr<Light>> l, Camera *c) {
+void ROTOM::HUD::Init(std::shared_ptr<Node> r, std::vector<std::shared_ptr<DirectionalLight>> l, Camera *c) {
   hud.root = r;
   hud.lights = l;
   hud.camera = c;
@@ -281,7 +281,7 @@ void ROTOM::HUD::DrawDetails() {
           break;
         }
         case kNodeType_Light: {
-          DrawLight((Light *)hud.selected);
+          DrawLight((DirectionalLight *)hud.selected);
           break;
         }
         case kNodeType_Node: {
@@ -433,7 +433,7 @@ void ROTOM::HUD::DrawCamera(Camera *camera) {
   //DrawNode(camera);
 }
 
-void ROTOM::HUD::DrawLight(Light *light) {
+void ROTOM::HUD::DrawLight(DirectionalLight *light) {
   ImGui::TextColored(ImVec4(0.4f, 0.4f, 0.4f, 1.0f), "Light");
 
   ImGui::Separator();
