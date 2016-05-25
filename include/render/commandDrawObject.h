@@ -12,6 +12,7 @@
 #include "command.h"
 #include "node/geometry.h"
 #include "node/directionalLight.h"
+#include "node/spotLight.h"
 #include "render/renderTarget.h"
 
 namespace ROTOM {
@@ -35,11 +36,12 @@ namespace ROTOM {
 
     void run();
     
-    void setInput(std::shared_ptr<Node> root, std::vector<std::shared_ptr<DirectionalLight>> lights, float projectionMatrix[16], float viewMatrix[16], float *viewPosition);
+    void setInput(std::shared_ptr<Node> root, std::vector<std::shared_ptr<DirectionalLight>> directionalLights, std::vector<std::shared_ptr<SpotLight>> spotLights, float projectionMatrix[16], float viewMatrix[16], float *viewPosition);
 
   private:
     std::vector<CommandDrawObjectData> commandDrawObjectData_;
-    std::vector<std::shared_ptr<DirectionalLight>> lights_;
+    std::vector<std::shared_ptr<DirectionalLight>> directionalLights_;
+    std::vector<std::shared_ptr<SpotLight>> spotLights_;
     float projectionMatrix_[16];
     float viewMatrix_[16];
     float viewPosition_[3];

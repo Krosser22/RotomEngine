@@ -69,11 +69,11 @@ void ROTOM::ShaderScene::init() {
   drawable5->setPositionX(1.0f);
 
   //Light
-  clearLight();
+  clearLights();
   std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
   light->setParent(getRoot());
   light->setPosition(0.0f, 0.0f, -2.0f);
-  AddLight(light);
+  addDirectionalLight(light);
 }
 
 void ROTOM::ShaderScene::input() {

@@ -12,7 +12,7 @@
 --
 	--premake.make.override = { "TARGET" }
 
-solution "ROTOM"
+solution "ROTOM_testing"
   configurations { "Release", "Debug" }
   location (_OPTIONS["to"])
   
@@ -68,18 +68,17 @@ project "ROTOM_testing"
   
   includedirs {
     "../include",
+    "../examples/include",
     "../deps/glm",
     "../deps/imgui",
   }
   
   excludes {
-	"../include/security.h",
-	"../include/graphics.h",
+    "../include/graphics.h",
   }
   
   files {
-    "../img/*.*",
-    "../include/*.h",
-    "../examples/*.cc",
-    "../deps/imgui/*.cpp",
+    "../shaders/**.*",
+    "../examples/**.*",
+    --"../include/*.h",
   }

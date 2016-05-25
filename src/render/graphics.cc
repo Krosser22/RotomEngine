@@ -466,6 +466,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   if (!success) {
     glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
     printf("ERROR: FragmentShader\n%s\n", infoLog);
+    system("pause");
   }
   
   //Link shaders
@@ -477,6 +478,7 @@ void ROTOM::GRAPHICS::setShader(ShaderData *shaderData, const char *vertexShader
   if (!success) {
     glGetProgramInfoLog(shaderData->shaderProgram, 512, nullptr, infoLog);
     printf("ERROR: ProgramShader\n%s\n", infoLog);
+    system("pause");
   }
 
   glDeleteShader(vertexShader);
@@ -533,7 +535,7 @@ ROTOM::MaterialSettings* materialSettings;
 ROTOM::DirectionalLight *light = nullptr;
 glm::fvec3 lightPosition;
 float *lightColor = nullptr, *specularIntensity = nullptr, *specularMaterial = nullptr, *color = nullptr;
-void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<DirectionalLight>> *lights, float *projectionMatrix, float *viewMatrix, float *viewPosition) {
+void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<DirectionalLight>> *directionalLights, std::vector<std::shared_ptr<SpotLight>> *spotLights, float *projectionMatrix, float *viewMatrix, float *viewPosition) {
   if (commandDrawObjectData->visible) {
     shaderData = &commandDrawObjectData->shaderData;
     materialSettings = &commandDrawObjectData->materialSettings;
@@ -575,8 +577,14 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
     glUniform1f(shaderData->u_farPlane, 100.0f);
 
     //Light
-    for (unsigned int i = 0; i < lights->size(); ++i) {
-      light = lights->at(i).get();
+    std::string directionalLightIT;
+    std::string uniformName;
+    for (unsigned int i = 0; i < directionalLights->size(); ++i) {
+      directionalLightIT = "allLights[";
+      directionalLightIT += i + "].";// +propertyName;
+      uniformName = directionalLightIT + "position";
+
+      light = directionalLights->at(i).get();
       lightPosition = light->position();
       lightColor = light->materialSettings()->color_;
       specularIntensity = light->specularIntensity_;
@@ -585,6 +593,7 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
       glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
       glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);
     }
+
 
     //Geometry
     glBindVertexArray(commandDrawObjectData->geometry_VAO);

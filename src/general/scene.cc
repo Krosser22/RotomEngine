@@ -16,16 +16,25 @@ std::shared_ptr<ROTOM::Node> ROTOM::Scene::getRoot() {
   return root_;
 }
 
-void ROTOM::Scene::AddLight(std::shared_ptr<DirectionalLight> light) {
-  lights_.push_back(light);
+void ROTOM::Scene::addDirectionalLight(std::shared_ptr<DirectionalLight> light) {
+  directionalLights_.push_back(light);
 }
 
-std::vector<std::shared_ptr<ROTOM::DirectionalLight>> ROTOM::Scene::getLight() {
-  return lights_;
+std::vector<std::shared_ptr<ROTOM::DirectionalLight>> ROTOM::Scene::getDirectionalLights() {
+  return directionalLights_;
 }
 
-void ROTOM::Scene::clearLight() {
-  lights_.clear();
+void ROTOM::Scene::addSpotLight(std::shared_ptr<SpotLight> light) {
+  spotLights_.push_back(light);
+}
+
+std::vector<std::shared_ptr<ROTOM::SpotLight>> ROTOM::Scene::getSpotLights() {
+  return spotLights_;
+}
+
+void ROTOM::Scene::clearLights() {
+  directionalLights_.clear();
+  spotLights_.clear();
 }
 
 ROTOM::Camera *ROTOM::Scene::getCamera() {

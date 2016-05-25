@@ -18,8 +18,12 @@ namespace ROTOM {
     virtual ~SpotLight();
 
     float specularIntensity_[3];
+    glm::fvec3 intensity_ = glm::fvec3(2.0f, 2.0f, 2.0f);
+    float attenuation_ = 0.1f;
+    float coneAngle = 15.0f;
+    glm::fvec3 coneDirection = glm::fvec3(0.0f, 0.0f, -1.0f);
 
-    void setupOrtho(float left, float right, float bottom, float top, float znear, float zfar);
+    void setupPerspective(const float fovy, const float aspect, const float znear, const float zfar);
 
     float *projectionMatrix();
 
@@ -28,9 +32,9 @@ namespace ROTOM {
     float *spaceMatrix();
 
   private:
-    glm::fmat4 view_;
-    glm::fmat4 projection_;
-    glm::fmat4 lightSpaceMatrix_;
+    glm::fmat4 view_ = glm::fmat4();
+    glm::fmat4 projection_ = glm::fmat4();
+    glm::fmat4 lightSpaceMatrix_ = glm::fmat4();
     glm::fmat4 identity_ = glm::fmat4();
     glm::fvec3 rotX_ = glm::fvec3(1.0f, 0.0f, 0.0f);
     glm::fvec3 rotY_ = glm::fvec3(0.0f, 1.0f, 0.0f);

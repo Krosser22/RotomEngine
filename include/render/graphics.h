@@ -10,6 +10,7 @@
 #define __GRAPHICS_H__
 
 #include "node/directionalLight.h"
+#include "node/spotLight.h"
 #include "commandDrawObject.h"
 #include "node/material.h"
 
@@ -39,7 +40,7 @@ namespace ROTOM {
     void releaseMaterial(unsigned int *shaderProgram);
 
     //Draw
-    void drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<DirectionalLight>> *lights, float *projectionMatrix, float *viewMatrix, float *viewPosition);
+    void drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<DirectionalLight>> *directionalLights, std::vector<std::shared_ptr<SpotLight>> *spotLights, float *projectionMatrix, float *viewMatrix, float *viewPosition);
 
     //Geometry
     void loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index);

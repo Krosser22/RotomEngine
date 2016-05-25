@@ -8,6 +8,7 @@
 
 #include "node/spotLight.h"
 #include "render/graphics.h"
+#include "general/window.h"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
@@ -25,14 +26,14 @@ ROTOM::SpotLight::SpotLight(char *name) {
   setGeometry(std::shared_ptr<Geometry>(new Geometry()));
   setMaterial(lightMaterial);
 
-  setupOrtho(-22.0f, 22.0f, -22.0f, 22.0f, 1.0f, 10.0f);
+  setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   visible_ = true;
 }
 
 ROTOM::SpotLight::~SpotLight() {}
 
-void ROTOM::SpotLight::setupOrtho(float left, float right, float bottom, float top, float znear, float zfar) {
-  projection_ = glm::ortho(left, right, bottom, top, znear, zfar);
+void ROTOM::SpotLight::setupPerspective(const float fovy, const float aspect, const float znear, const float zfar) {
+  projection_ = glm::perspective(fovy, aspect, znear, zfar);
 }
 
 float *ROTOM::SpotLight::projectionMatrix() {

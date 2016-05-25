@@ -60,14 +60,14 @@ void ROTOM::RenderToTextureScene::init() {
   drawable4->setPositionX(1.0f);
 
   //Light
-  clearLight();
+  clearLights();
   std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
   light->setParent(getRoot());
   light->setPosition(2.2f, 0.0f, 2.2f);
   light->materialSettings()->color_[0] = 0.8f;
   light->materialSettings()->color_[1] = 0.6f;
   light->materialSettings()->color_[2] = 0.4f;
-  AddLight(light);
+  addDirectionalLight(light);
 }
 
 void ROTOM::RenderToTextureScene::input() {
@@ -92,7 +92,7 @@ void ROTOM::RenderToTextureScene::draw() {
   if (drawRenderTarget) {
     renderTarget_.begin();
     {
-      RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix(), getLight().begin()->get()->pos());
+      RenderScene(getDirectionalLights().begin()->get()->projectionMatrix(), getDirectionalLights().begin()->get()->viewMatrix(), getDirectionalLights().begin()->get()->pos());
       //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix(), getCamera()->position());
     }
     renderTarget_.end();

@@ -17,11 +17,11 @@ void ROTOM::GeometryScene::init() {
   getRoot()->setPosition(0.0f, 5.0f, -12.0f);
 
   //Light
-  clearLight();
+  clearLights();
   std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
   light->setParent(getRoot());
   light->setPosition(0.0f, 0.0f, -10.0f);
-  AddLight(light);
+  addDirectionalLight(light);
 
   //Nodes
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());

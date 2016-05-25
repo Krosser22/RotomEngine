@@ -11,11 +11,12 @@
 
 #include "node/camera.h"
 #include "node/directionalLight.h"
+#include "node/spotLight.h"
 #include <memory>
 
 namespace ROTOM {
   namespace HUD {
-    void Init(std::shared_ptr<Node> root, std::vector<std::shared_ptr<DirectionalLight>> lights, Camera *camera);
+    void Init(std::shared_ptr<Node> root, std::vector<std::shared_ptr<DirectionalLight>> directionalLights, std::vector<std::shared_ptr<SpotLight>> spotLights, Camera *camera);
 
     void Draw();
 

@@ -70,11 +70,11 @@ void ROTOM::SetScene(Scene *newScene) {
   scene = newScene;
   scene->setRoot(std::shared_ptr<Node>(new Node("Root")));
   scene->init();
-  HUD::Init(scene->getRoot(), scene->getLight(), scene->getCamera());
+  HUD::Init(scene->getRoot(), scene->getDirectionalLights(), scene->getSpotLights(), scene->getCamera());
 }
 
 void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix, float *viewPosition) {
-  commandDrawObject.setInput(scene->getRoot(), scene->getLight(), projectionMatrix, viewMatrix, viewPosition);
+  commandDrawObject.setInput(scene->getRoot(), scene->getDirectionalLights(), scene->getSpotLights(), projectionMatrix, viewMatrix, viewPosition);
   displayList.addCommand(&commandDrawObject);
   displayList.draw();
 }

@@ -30,7 +30,7 @@ void ROTOM::ShadowScene::init() {
 
   //ShadowMaterial
   std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/no_texture.png"));
-  shadowMaterial->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
+  shadowMaterial->setShaderFromPath("shadows/2_lights.vertx", "shadows/2_lights.frag");
 
   //Material renderDepthToTexture
   std::shared_ptr<Material> materialRenderDepthToTexture = std::shared_ptr<Material>(new Material());
@@ -82,12 +82,20 @@ void ROTOM::ShadowScene::init() {
   drawable7->setScale(100.0f, 100.0f, 1.0f);
 
   //Light
-  clearLight();
-  std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
-  light->setParent(getRoot());
-  light->setPosition(1.5f, 1.0f, 3.0f);
-  //light->materialSettings()->setColor(0.2f, 0.4f, 0.6f);
-  AddLight(light);
+  clearLights();
+
+  //Directional Light
+  std::shared_ptr<DirectionalLight> directionalLight = std::shared_ptr<DirectionalLight>(new DirectionalLight("DirectionalLight"));
+  directionalLight->setParent(getRoot());
+  directionalLight->setPosition(1.5f, 1.0f, 3.0f);
+  addDirectionalLight(directionalLight);
+
+  //Spot Light
+  std::shared_ptr<SpotLight> spotLight = std::shared_ptr<SpotLight>(new SpotLight("SpotLight"));
+  spotLight->setParent(getRoot());
+  spotLight->setPosition(2.2f, 3.0f, 2.2f);
+  spotLight->materialSettings()->setColor(0.2f, 0.4f, 0.6f);
+  addSpotLight(spotLight);
 }
 
 void ROTOM::ShadowScene::input() {
@@ -109,16 +117,16 @@ void ROTOM::ShadowScene::update() {
   }
 
   if (cameraAutoRotate) {
-    getLight().begin()->get()->setPositionX(sin(ROTOM::TIME::appTime()) * 5.0f);
-    getLight().begin()->get()->setPositionY(3.0f /*+ cos(ROTOM::TIME::appTime()) * 1.0f*/);
-    getLight().begin()->get()->setPositionZ(cos(ROTOM::TIME::appTime()) * 5.0f);
+    getSpotLights().begin()->get()->setPositionX(sin(ROTOM::TIME::appTime()) * 2.0f);
+    getSpotLights().begin()->get()->setPositionY(3.0f /*+ cos(ROTOM::TIME::appTime()) * 1.0f*/);
+    getSpotLights().begin()->get()->setPositionZ(cos(ROTOM::TIME::appTime()) * 2.0f);
   }
 }
 
 void ROTOM::ShadowScene::draw() {
   renderTarget_.begin();
   {
-    RenderScene(getLight().begin()->get()->projectionMatrix(), getLight().begin()->get()->viewMatrix(), getLight().begin()->get()->pos());
+    RenderScene(getDirectionalLights().begin()->get()->projectionMatrix(), getDirectionalLights().begin()->get()->viewMatrix(), getDirectionalLights().begin()->get()->pos());
     //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix(), getCamera()->position());
   }
   renderTarget_.end();

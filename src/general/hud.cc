@@ -24,7 +24,8 @@
 
 struct HUDDatatrue {
   std::shared_ptr<ROTOM::Node> root;
-  std::vector<std::shared_ptr<ROTOM::DirectionalLight>> lights;
+  std::vector<std::shared_ptr<ROTOM::DirectionalLight>> directionalLights;
+  std::vector<std::shared_ptr<ROTOM::SpotLight>> spotLights;
   ROTOM::Camera *camera;
   ROTOM::Node *selected;
 
@@ -93,10 +94,11 @@ struct HUDDatatrue {
   ROTOM::SoundScene soundScene;
 } hud;
 
-void ROTOM::HUD::Init(std::shared_ptr<Node> r, std::vector<std::shared_ptr<DirectionalLight>> l, Camera *c) {
-  hud.root = r;
-  hud.lights = l;
-  hud.camera = c;
+void ROTOM::HUD::Init(std::shared_ptr<Node> root, std::vector<std::shared_ptr<DirectionalLight>> directionalLights, std::vector<std::shared_ptr<SpotLight>> spotLights, Camera *camera) {
+  hud.root = root;
+  hud.directionalLights = directionalLights;
+  hud.spotLights = spotLights;
+  hud.camera = camera;
 
   hud.window_flags |= ImGuiWindowFlags_NoResize;
   hud.window_flags |= ImGuiWindowFlags_NoMove;

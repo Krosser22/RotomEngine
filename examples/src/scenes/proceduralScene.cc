@@ -26,11 +26,11 @@ void ROTOM::ProceduralScene::init() {
   chunk_->init(getRoot(), 25, 1, 1);
 
   //Light
-  clearLight();
+  clearLights();
   std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
   light->setParent(getRoot());
   light->setPosition(1.0f, 1.0f, -2.0f);
-  AddLight(light);
+  addDirectionalLight(light);
 }
 
 void ROTOM::ProceduralScene::input() {
