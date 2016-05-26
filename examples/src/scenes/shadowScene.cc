@@ -15,7 +15,7 @@
 void ROTOM::ShadowScene::init() {
   //Camera
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(7.0f, 1.22f, -1.0f);
+  getCamera()->setPosition(12.0f, 1.22f, -1.0f);
   getCamera()->setPitch(-10.0f);
   getCamera()->setYaw(190.0f);
 
@@ -30,6 +30,7 @@ void ROTOM::ShadowScene::init() {
 
   //ShadowMaterial
   std::shared_ptr<Material> shadowMaterial = std::shared_ptr<Material>(new Material("../../../../img/no_texture.png"));
+  //shadowMaterial->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
   shadowMaterial->setShaderFromPath("shadows/2_lights.vertx", "shadows/2_lights.frag");
 
   //Material renderDepthToTexture
@@ -123,9 +124,9 @@ void ROTOM::ShadowScene::update() {
   }
 
   if (cameraAutoRotate) {
-    getSpotLights().begin()->get()->setPositionX(sin(ROTOM::TIME::appTime()) * 2.0f);
+    getSpotLights().begin()->get()->setPositionX(sin(ROTOM::TIME::appTime()) * 0.8f);
     getSpotLights().begin()->get()->setPositionY(3.0f /*+ cos(ROTOM::TIME::appTime()) * 1.0f*/);
-    getSpotLights().begin()->get()->setPositionZ(cos(ROTOM::TIME::appTime()) * 2.0f);
+    getSpotLights().begin()->get()->setPositionZ(cos(ROTOM::TIME::appTime()) * 0.8f);
   }
 }
 
@@ -136,4 +137,8 @@ void ROTOM::ShadowScene::draw() {
     //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix(), getCamera()->position());
   }
   renderTarget_.end();
+}
+
+void ROTOM::ShadowScene::postDraw() {
+  
 }

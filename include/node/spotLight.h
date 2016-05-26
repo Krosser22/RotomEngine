@@ -17,7 +17,6 @@ namespace ROTOM {
     SpotLight(char *name);
     virtual ~SpotLight();
 
-    float specularIntensity_[3];
     glm::fvec3 intensity_ = glm::fvec3(2.0f, 2.0f, 2.0f);
     float attenuation_ = 0.1f;
     float coneAngle = 15.0f;

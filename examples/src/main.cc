@@ -47,7 +47,8 @@ int ROTOM::main(int argc, char** argv) {
 -------------------------------------------DOING------------------------------------------
 ------------------------------------------------------------------------------------------
 +Postprocesos
-+more than one light --> http://learnopengl.com/#!Advanced-Lighting/Shadows/Point-Shadows
+
++truetype
 
 +Procedural scene
 http://www.andrewwillmott.com/s2007
@@ -58,11 +59,6 @@ http://donjon.bin.sh/world/
 http://pcg.wikidot.com/pcg-algorithm:world-building
 http://donjon.bin.sh/code/world/worldgen-2.2a.c
 
-+Cubemap
-http://www.custommapmakers.org/skyboxes.php
-
-
-
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ------------------------------------------------------------------------------------------
 -------------------------------------------TODO-------------------------------------------
@@ -72,4 +68,5 @@ http://www.custommapmakers.org/skyboxes.php
 +Shadows --> GPU gems 3 (Webpage) parte 2
 +Shadows --> Real time shadows (Book)
 +postproceso --> depth of field
++Cubemap images --> http://www.custommapmakers.org/skyboxes.php
 *****************************************************************************************/

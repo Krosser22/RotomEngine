@@ -25,6 +25,8 @@ namespace ROTOM {
 
     void draw() {};
 
+    void postDraw() {};
+
     void destroy() {};
 
     static const int amount = 6800; //6800 = 60fps on release

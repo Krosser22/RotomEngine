@@ -39,10 +39,15 @@ bool ROTOM::WindowIsOpened() {
     assert(scene);
     scene->input();
     scene->update();
+
+    //Draw Scene
     scene->draw();
 
     //Render from the camera perspective
     ROTOM::RenderScene(scene->getCamera()->projectionMatrix(), scene->getCamera()->viewMatrix(), scene->getCamera()->position());
+
+    //PostProcess
+    scene->postDraw();
 
     //Render HUD
     ROTOM::HUD::Draw();

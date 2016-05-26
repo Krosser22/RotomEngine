@@ -27,6 +27,8 @@ namespace ROTOM {
 
     virtual void draw() = 0;
 
+    virtual void postDraw() = 0;
+
     virtual void destroy() = 0;
 
     void setRoot(std::shared_ptr<Node> root);

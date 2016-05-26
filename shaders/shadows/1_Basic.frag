@@ -1,10 +1,14 @@
 #version 330 core
 
+uniform struct Light {
+  vec4 position;
+  vec3 color;
+  vec3 rotation;
+} u_allLights[1];
+
 uniform sampler2D u_texture;
 uniform vec4 u_color;
-uniform vec3 u_lightPosition;
 uniform float u_ambientStrength;
-uniform vec3 u_lightColor;
 uniform float u_shininess;
 uniform vec3 u_specularIntensity;
 uniform vec3 u_specularMaterial;
@@ -63,20 +67,20 @@ void main() {
   vec4 materialColor = texture(u_texture, uvMaterial) * u_color;
   
   //Normalize on every fragment
-  lightDirectionNormalized = normalize(u_lightPosition - fragmentPosition);
+  lightDirectionNormalized = normalize(u_allLights[0].position.xyz - fragmentPosition);
   normalDirectionNormalized = normalize(normalDirection);
 
   //Ambient Light
-  vec3 ambient = u_lightColor * u_ambientStrength;
+  vec3 ambient = u_allLights[0].color * u_ambientStrength;
 
   //Diffuse Light
-  vec3 diffuse = u_lightColor * max(dot(lightDirectionNormalized, normalDirectionNormalized), 0.0f);
+  vec3 diffuse = u_allLights[0].color * max(dot(lightDirectionNormalized, normalDirectionNormalized), 0.0f);
   
   //Blinn-Phong Specular Light
   vec3 viewDirectionNormalized = normalize(u_viewPosition - fragmentPosition);
   vec3 halfwayDir = normalize(lightDirectionNormalized + viewDirectionNormalized);  
   float spec = pow(max(dot(normalDirectionNormalized, halfwayDir), 0.0f), u_shininess);
-  vec3 specular = u_lightColor * spec * u_specularIntensity * u_specularMaterial;
+  vec3 specular = u_allLights[0].color * spec * u_specularIntensity * u_specularMaterial;
   
   //Shadow
   float shadow = u_shadows ? ShadowCalculation(lightFragmentPosition) : 0.0f;

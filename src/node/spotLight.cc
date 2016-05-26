@@ -17,10 +17,6 @@ ROTOM::SpotLight::SpotLight(char *name) {
 
   name_ = name;
 
-  specularIntensity_[0] = 1.0f;
-  specularIntensity_[1] = 1.0f;
-  specularIntensity_[2] = 1.0f;
-
   std::shared_ptr<Material> lightMaterial = std::shared_ptr<Material>(new Material("../../../../img/transparent.png"));
   lightMaterial->setShaderFromPath("basics/1_Basic.vertx", "basics/1_Basic.frag");
   setGeometry(std::shared_ptr<Geometry>(new Geometry()));

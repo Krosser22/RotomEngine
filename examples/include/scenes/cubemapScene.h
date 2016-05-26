@@ -26,6 +26,8 @@ namespace ROTOM {
 
     void draw();
 
+    void postDraw() {};
+
     void destroy() {};
 
   private:
