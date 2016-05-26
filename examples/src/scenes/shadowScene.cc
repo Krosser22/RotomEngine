@@ -91,11 +91,17 @@ void ROTOM::ShadowScene::init() {
   addDirectionalLight(directionalLight);
 
   //Spot Light
-  std::shared_ptr<SpotLight> spotLight = std::shared_ptr<SpotLight>(new SpotLight("SpotLight"));
-  spotLight->setParent(getRoot());
-  spotLight->setPosition(2.2f, 3.0f, 2.2f);
-  spotLight->materialSettings()->setColor(0.2f, 0.4f, 0.6f);
-  addSpotLight(spotLight);
+  std::shared_ptr<SpotLight> spotLight1 = std::shared_ptr<SpotLight>(new SpotLight("SpotLight1"));
+  spotLight1->setParent(getRoot());
+  spotLight1->setPosition(2.2f, 3.0f, 2.2f);
+  spotLight1->materialSettings()->setColor(0.2f, 0.4f, 0.6f);
+  addSpotLight(spotLight1);
+
+  std::shared_ptr<SpotLight> spotLight2 = std::shared_ptr<SpotLight>(new SpotLight("SpotLight2"));
+  spotLight2->setParent(getRoot());
+  spotLight2->setPosition(2.2f, 3.0f, -2.2f);
+  spotLight2->materialSettings()->setColor(0.8f, 0.2f, 0.5f);
+  addSpotLight(spotLight2);
 }
 
 void ROTOM::ShadowScene::input() {
@@ -110,7 +116,7 @@ void ROTOM::ShadowScene::update() {
 
   getCamera()->update();
 
-  static bool cameraAutoRotate = false;
+  static bool cameraAutoRotate = true;
 
   if (INPUT::IsKeyPressed(' ')) {
     cameraAutoRotate = !cameraAutoRotate;

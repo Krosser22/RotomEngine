@@ -532,9 +532,14 @@ void ROTOM::GRAPHICS::releaseMaterial(unsigned int *shaderProgram) {
 
 ROTOM::ShaderData *shaderData;
 ROTOM::MaterialSettings* materialSettings;
-ROTOM::DirectionalLight *light = nullptr;
+ROTOM::DirectionalLight *directionalLight = nullptr;
+ROTOM::SpotLight *spotLight = nullptr;
 glm::fvec3 lightPosition;
 float *lightColor = nullptr, *specularIntensity = nullptr, *specularMaterial = nullptr, *color = nullptr;
+std::string spotLightIT;
+std::string directionalLightIT;
+std::string uniformName;
+int lightCount = 0;
 void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<DirectionalLight>> *directionalLights, std::vector<std::shared_ptr<SpotLight>> *spotLights, float *projectionMatrix, float *viewMatrix, float *viewPosition) {
   if (commandDrawObjectData->visible) {
     shaderData = &commandDrawObjectData->shaderData;
@@ -576,24 +581,68 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
     glUniform1f(shaderData->u_nearPlane, 1.0f);
     glUniform1f(shaderData->u_farPlane, 100.0f);
 
-    //Light
-    std::string directionalLightIT;
-    std::string uniformName;
-    for (unsigned int i = 0; i < directionalLights->size(); ++i) {
-      directionalLightIT = "allLights[";
-      directionalLightIT += i + "].";// +propertyName;
-      uniformName = directionalLightIT + "position";
+    //Lights
+    lightCount = spotLights->size();
+    if (directionalLights->size() > 0) {
+      ++lightCount;
+    }
+    glUniform1i(glGetUniformLocation(shaderData->shaderProgram, "u_spotLightsCount"), lightCount);
 
-      light = directionalLights->at(i).get();
-      lightPosition = light->position();
-      lightColor = light->materialSettings()->color_;
-      specularIntensity = light->specularIntensity_;
-      glUniformMatrix4fv(shaderData->u_lightSpaceMatrix, 1, GL_FALSE, light->spaceMatrix());
-      glUniform3f(shaderData->u_lightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
-      glUniform3f(shaderData->u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
-      glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);
+    //SpotLights
+    for (unsigned int i = 0; i < spotLights->size(); ++i) {
+      spotLightIT = "u_allLights[" + i;
+      spotLightIT += "].";
+
+      spotLight = spotLights->at(i).get();
+      lightPosition = spotLight->position();
+      lightColor = spotLight->materialSettings()->color_;
+      specularIntensity = spotLight->specularIntensity_;
+
+      uniformName = spotLightIT + "position";
+      glUniform4f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), lightPosition.x, lightPosition.y, lightPosition.z, 1.0f);
+
+      uniformName = spotLightIT + "color";
+      glUniform3f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), lightColor[0], lightColor[1], lightColor[2]);
+
+      uniformName = spotLightIT + "attenuation";
+      glUniform1f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), spotLight->attenuation_);
+
+      uniformName = spotLightIT + "ambientCoefficient";
+      glUniform1f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), 0.0f);
+
+      uniformName = spotLightIT + "coneAngle";
+      glUniform1f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), spotLight->coneAngle);
+
+      uniformName = spotLightIT + "coneDirection";
+      glUniform3f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), spotLights->at(i).get()->rotationX(), spotLights->at(i).get()->rotationY(), spotLights->at(i).get()->rotationZ());
     }
 
+    //DirectionalLights
+    if (directionalLights->size() > 0) {
+      directionalLight = directionalLights->at(0).get();
+      glUniformMatrix4fv(shaderData->u_lightSpaceMatrix, 1, GL_FALSE, directionalLight->spaceMatrix());
+      glUniform3f(shaderData->u_specularIntensity, specularIntensity[0], specularIntensity[1], specularIntensity[2]);
+      
+      directionalLightIT = "u_allLights[" + spotLights->size();
+      directionalLightIT += "].";
+
+      directionalLight = directionalLights->begin()->get();
+      lightPosition = directionalLight->position();
+      lightColor = directionalLight->materialSettings()->color_;
+      specularIntensity = directionalLight->specularIntensity_;
+
+      uniformName = directionalLightIT + "position";
+      glUniform4f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), lightPosition.x, lightPosition.y, lightPosition.z, 0.0f);
+
+      uniformName = directionalLightIT + "color";
+      glUniform3f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), lightColor[0], lightColor[1], lightColor[2]);
+
+      uniformName = directionalLightIT + "ambientCoefficient";
+      glUniform1f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), 0.0f);
+
+      uniformName = directionalLightIT + "coneDirection";
+      glUniform3f(glGetUniformLocation(shaderData->shaderProgram, uniformName.c_str()), directionalLights->begin()->get()->rotationX(), directionalLights->begin()->get()->rotationY(), directionalLights->begin()->get()->rotationZ());
+    }
 
     //Geometry
     glBindVertexArray(commandDrawObjectData->geometry_VAO);

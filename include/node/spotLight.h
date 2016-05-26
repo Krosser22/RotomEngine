@@ -21,7 +21,7 @@ namespace ROTOM {
     glm::fvec3 intensity_ = glm::fvec3(2.0f, 2.0f, 2.0f);
     float attenuation_ = 0.1f;
     float coneAngle = 15.0f;
-    glm::fvec3 coneDirection = glm::fvec3(0.0f, 0.0f, -1.0f);
+    glm::fvec3 coneDirection = glm::fvec3(0.0f, -1.0f, 0.0f);
 
     void setupPerspective(const float fovy, const float aspect, const float znear, const float zfar);
 

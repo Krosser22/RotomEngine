@@ -1,21 +1,19 @@
 #version 330 core
 
 #define MAX_LIGHTS 10
-uniform int u_lightsCount;
+uniform int u_spotLightsCount;
 uniform struct Light {
-   vec4 position;
-   vec3 intensities; //a.k.a the color of the light
-   float attenuation;
-   float ambientCoefficient;
-   float coneAngle;
-   vec3 coneDirection;
-} allLights[MAX_LIGHTS];
+  vec4 position;
+  vec3 color;
+  float attenuation;
+  float ambientCoefficient;
+  float coneAngle;
+  vec3 coneDirection;
+} u_allLights[MAX_LIGHTS];
 
 uniform sampler2D u_texture;
 uniform vec4 u_color;
-uniform vec3 u_lightPosition;
 uniform float u_ambientStrength;
-uniform vec3 u_lightColor;
 uniform float u_shininess;
 uniform vec3 u_specularIntensity;
 uniform vec3 u_specularMaterial;
@@ -54,17 +52,17 @@ vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, ve
     }
 
     //ambient
-    vec3 ambient = light.ambientCoefficient * surfaceColor.rgb * light.intensities;
+    vec3 ambient = light.ambientCoefficient * surfaceColor.rgb * light.color;
 
     //diffuse
     float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
-    vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
+    vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.color;
     
     //specular
     float specularCoefficient = 0.0;
     if(diffuseCoefficient > 0.0)
         specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), u_shininess);
-    vec3 specular = specularCoefficient * u_specularMaterial * light.intensities;
+    vec3 specular = specularCoefficient * u_specularMaterial * light.color;
 
     //linear color (color before gamma correction)
     return ambient + attenuation*(diffuse + specular);
@@ -77,8 +75,8 @@ void main() {
 
   //combine color from all the lights
   vec3 linearColor = vec3(0);
-  for(int i = 0; i < u_lightsCount; ++i){
-    linearColor += ApplyLight(allLights[i], surfaceColor.rgb, normal, fragmentPosition, surfaceToCamera);
+  for(int i = 0; i < u_spotLightsCount; ++i){
+    linearColor += ApplyLight(u_allLights[i], surfaceColor.rgb, normal, fragmentPosition, surfaceToCamera);
   }
     
   //final color (after gamma correction)
