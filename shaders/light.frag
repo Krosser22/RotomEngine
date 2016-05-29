@@ -1,28 +1,21 @@
 #version 330 core
 
-uniform vec4 u_color;
+uniform sampler2D u_colorMap;
+uniform float u_exposure;
+
+in vec2 TexCoords;
 
 out vec4 fragment;
 
 void main() {
-	fragment = u_color;
-}
+  const float gamma = 2.2f;
+  vec3 hdrColor = texture(u_colorMap, TexCoords).rgb;
+  
+  //Exposure tone mapping
+  vec3 mapped = vec3(1.0f) - exp(-hdrColor * u_exposure);
 
-
-layout (location = 0) out vec4 FragColor;
-layout (location = 1) out vec4 BrightColor;
-
-in VS_OUT {
-    vec3 FragPos;
-    vec3 Normal;
-    vec2 TexCoords;
-} fs_in;
-
-
-void main()
-{           
-    FragColor = u_color;
-    float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
-    if(brightness > 1.0)
-        BrightColor = vec4(FragColor.rgb, 1.0);
+  //Gamma correction
+  mapped = pow(mapped, vec3(1.0f / gamma));
+  
+  fragment = vec4(mapped, 1.0f);
 }

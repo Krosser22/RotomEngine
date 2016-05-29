@@ -654,49 +654,32 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
   }
 }
 
+GLuint quadVAO = 0;
+GLuint quadVBO;
+GLfloat quadVertices[] = {
+  -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+  -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+   1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+   1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+};
 void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData) {
-  if (commandDrawObjectData->visible) {
-    shaderData = &commandDrawObjectData->shaderData;
-    materialSettings = &commandDrawObjectData->materialSettings;
-    specularMaterial = commandDrawObjectData->materialData.specularMaterial;
-    color = materialSettings->color_;
+  clearScreen();
 
-    glUseProgram(shaderData->shaderProgram);
+  //Program
+  glUseProgram(commandDrawObjectData->shaderData.shaderProgram);
 
-    //Textures
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor); //Texture ColorBuffer
-    glUniform1i(commandDrawObjectData->shaderData.u_colorMap, 0);
+  //Texture Color
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor);
+  glUniform1i(commandDrawObjectData->shaderData.u_colorMap, 0);
 
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureDepth); //Texture DepthBuffer
-    glUniform1i(commandDrawObjectData->shaderData.u_depthMap, 1);
+  //Exposure
+  glUniform1f(glGetUniformLocation(commandDrawObjectData->shaderData.shaderProgram, "u_exposure"), 1.0f);
 
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture); //Texture Object
-    glUniform1i(commandDrawObjectData->shaderData.u_texture, 2);
-
-    //Node
-    glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_worldMatrix);
-
-    //Material
-    glUniform1f(shaderData->u_shininess, commandDrawObjectData->materialData.shininess);
-    glUniform3f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2]);
-    glUniform1f(shaderData->u_ambientStrength, commandDrawObjectData->materialData.ambientStrength);
-
-    //Material Settings
-    glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
-
-    //Shadow/Depth
-    glUniform1i(shaderData->u_shadows, commandDrawObjectData->shadows);
-    glUniform1f(shaderData->u_nearPlane, 1.0f);
-    glUniform1f(shaderData->u_farPlane, 100.0f);
-
-    //Geometry
-    glBindVertexArray(commandDrawObjectData->geometry_VAO);
-    glDrawElements(GL_TRIANGLES, commandDrawObjectData->geometry_veterCount, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-  }
+  //Geometry
+  glBindVertexArray(quadVAO);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glBindVertexArray(0);
 }
 
 void ROTOM::GRAPHICS::loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index) {
@@ -752,39 +735,60 @@ void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *colorTexture, unsigned int *
   //Framebuffer
   glGenFramebuffers(1, framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
-
-  //Color texture
-  glGenTextures(1, colorTexture);
-  glBindTexture(GL_TEXTURE_2D, *colorTexture);
   {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  }
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *colorTexture, 0);
+    //Renderbuffer
+    GLuint renderbuffer;
+    glGenRenderbuffers(1, &renderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
 
-  //Depth texture
-  glGenTextures(1, depthTexture);
-  glBindTexture(GL_TEXTURE_2D, *depthTexture);
-  {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-  }
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *depthTexture, 0);
-  glDrawBuffer(GL_NONE); //No color buffer is drawn to.
+    //Color texture
+    glGenTextures(1, colorTexture);
+    glBindTexture(GL_TEXTURE_2D, *colorTexture);
+    {
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+      //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *colorTexture, 0);
+    
+    //Depth texture
+    glGenTextures(1, depthTexture);
+    glBindTexture(GL_TEXTURE_2D, *depthTexture);
+    {
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+      glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    }
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *depthTexture, 0);
+    glDrawBuffer(GL_NONE); //No color buffer is drawn to.
 
-  //Check status
-  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-    printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-    system("pause");
+    //Check status
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+      printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+      system("pause");
+    }
   }
-
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glActiveTexture(GL_TEXTURE0);
+
+  //Geometry
+  if (quadVAO == 0)
+  {
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+  }
 }
 
 void ROTOM::GRAPHICS::beginFramebuffer(RenderTarget *renderTarget) {

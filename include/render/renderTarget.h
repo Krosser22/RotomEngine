@@ -36,7 +36,7 @@ namespace ROTOM {
     
     void begin();
 
-    void end();
+    void end(bool drawOnScreen = false);
   };
 }
 
