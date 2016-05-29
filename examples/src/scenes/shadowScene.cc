@@ -21,6 +21,7 @@ void ROTOM::ShadowScene::init() {
 
   //RenderTarget
   renderTarget_.init(WindowWidth(), WindowHeight());
+  postProcess_.init(WindowWidth(), WindowHeight());
 
   //Geometry
   std::shared_ptr<Geometry> geometry = std::shared_ptr<Geometry>(new Geometry());
@@ -137,8 +138,11 @@ void ROTOM::ShadowScene::draw() {
     //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix(), getCamera()->position());
   }
   renderTarget_.end();
+
+  //postProcess_.begin();
 }
 
 void ROTOM::ShadowScene::postDraw() {
-  
+  //postProcess_.end();
+  //RenderScene(getCamera()->projectionMatrix(), getCamera()->viewMatrix(), getCamera()->position());
 }

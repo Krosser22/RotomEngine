@@ -34,6 +34,9 @@ namespace ROTOM {
   //Render the scene from the perspective of a camera
   void RenderScene(float *projectionMatrix, float *viewMatrix, float *viewPosition);
 
+  //Render the postProcess
+  void RenderPostProcess(Drawable *drawable);
+
   //It will return the actual displayList
   DisplayList *GetActualDisplayList();
 

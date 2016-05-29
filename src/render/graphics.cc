@@ -654,6 +654,51 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
   }
 }
 
+void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData) {
+  if (commandDrawObjectData->visible) {
+    shaderData = &commandDrawObjectData->shaderData;
+    materialSettings = &commandDrawObjectData->materialSettings;
+    specularMaterial = commandDrawObjectData->materialData.specularMaterial;
+    color = materialSettings->color_;
+
+    glUseProgram(shaderData->shaderProgram);
+
+    //Textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureColor); //Texture ColorBuffer
+    glUniform1i(commandDrawObjectData->shaderData.u_colorMap, 0);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, actualRenderTarget.framebufferData_.textureDepth); //Texture DepthBuffer
+    glUniform1i(commandDrawObjectData->shaderData.u_depthMap, 1);
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, commandDrawObjectData->material_texture); //Texture Object
+    glUniform1i(commandDrawObjectData->shaderData.u_texture, 2);
+
+    //Node
+    glUniformMatrix4fv(shaderData->u_model, 1, GL_FALSE, commandDrawObjectData->drawable_worldMatrix);
+
+    //Material
+    glUniform1f(shaderData->u_shininess, commandDrawObjectData->materialData.shininess);
+    glUniform3f(shaderData->u_specularMaterial, specularMaterial[0], specularMaterial[1], specularMaterial[2]);
+    glUniform1f(shaderData->u_ambientStrength, commandDrawObjectData->materialData.ambientStrength);
+
+    //Material Settings
+    glUniform4f(shaderData->u_color, color[0], color[1], color[2], color[3]);
+
+    //Shadow/Depth
+    glUniform1i(shaderData->u_shadows, commandDrawObjectData->shadows);
+    glUniform1f(shaderData->u_nearPlane, 1.0f);
+    glUniform1f(shaderData->u_farPlane, 100.0f);
+
+    //Geometry
+    glBindVertexArray(commandDrawObjectData->geometry_VAO);
+    glDrawElements(GL_TRIANGLES, commandDrawObjectData->geometry_veterCount, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+  }
+}
+
 void ROTOM::GRAPHICS::loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index) {
   //Release the elements in case the user load a geometry inside a geometry
   releaseGeometry(VAO, VBO, EBO);

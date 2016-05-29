@@ -41,6 +41,7 @@ namespace ROTOM {
 
     //Draw
     void drawObject(CommandDrawObjectData *commandDrawObjectData, std::vector<std::shared_ptr<DirectionalLight>> *directionalLights, std::vector<std::shared_ptr<SpotLight>> *spotLights, float *projectionMatrix, float *viewMatrix, float *viewPosition);
+    void drawObject(CommandDrawObjectData *commandDrawObjectData);
 
     //Geometry
     void loadGeometry(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO, int numberOfElementsPerVertex, unsigned int vertexCount, float *vertex, int *index);

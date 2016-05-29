@@ -84,6 +84,25 @@ void ROTOM::RenderScene(float *projectionMatrix, float *viewMatrix, float *viewP
   displayList.draw();
 }
 
+void ROTOM::RenderPostProcess(Drawable *drawable) {
+  CommandDrawObjectData commandDrawObjectData;
+  Material *material = drawable->material().get();
+  Geometry *geometry = drawable->geometry().get();
+  commandDrawObjectData.visible = drawable->visible_;
+  commandDrawObjectData.shadows = drawable->shadows_;
+  commandDrawObjectData.materialSettings = *drawable->materialSettings().get();
+  commandDrawObjectData.shaderData = material->shaderData_;
+  commandDrawObjectData.geometry_VAO = *geometry->VAO();
+  commandDrawObjectData.geometry_veterCount = geometry->vertexCount();
+  commandDrawObjectData.material_texture = material->texture();
+  commandDrawObjectData.materialData = material->materialData_;
+  float *worldMatrix = glm::value_ptr(*drawable->worldMatrix());
+  for (int i = 0; i < 16; ++i) {
+    commandDrawObjectData.drawable_worldMatrix[i] = worldMatrix[i];
+  }
+  //GRAPHICS::drawObject(&commandDrawObjectData, scene->getDirectionalLights(), scene->getSpotLights(), projectionMatrix, viewMatrix, viewPosition);
+}
+
 ROTOM::DisplayList *ROTOM::GetActualDisplayList() {
   return &displayList;
 }

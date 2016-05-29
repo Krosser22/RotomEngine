@@ -32,6 +32,8 @@ namespace ROTOM {
     
   private:
     RenderTarget renderTarget_;
+
+    RenderTarget postProcess_;
   };
 }
 
