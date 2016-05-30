@@ -10,6 +10,7 @@
 #include "general/window.h"
 
 void ROTOM::ShaderScene::init() {
+  //Camera
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
   getCamera()->setPosition(1.0f, 0.0f, -3.0f);
 
