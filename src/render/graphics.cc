@@ -654,6 +654,7 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData, s
   }
 }
 
+GLuint renderbuffer;
 GLuint quadVAO = 0;
 GLuint quadVBO;
 GLfloat quadVertices[] = {
@@ -674,7 +675,7 @@ void ROTOM::GRAPHICS::drawObject(CommandDrawObjectData *commandDrawObjectData) {
   glUniform1i(commandDrawObjectData->shaderData.u_colorMap, 0);
 
   //Exposure
-  glUniform1f(glGetUniformLocation(commandDrawObjectData->shaderData.shaderProgram, "u_exposure"), 1.0f);
+  glUniform1f(glGetUniformLocation(commandDrawObjectData->shaderData.shaderProgram, "u_exposure"), 5.0f);
 
   //Geometry
   glBindVertexArray(quadVAO);
@@ -737,7 +738,6 @@ void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *colorTexture, unsigned int *
   glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
   {
     //Renderbuffer
-    GLuint renderbuffer;
     glGenRenderbuffers(1, &renderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
@@ -766,7 +766,7 @@ void ROTOM::GRAPHICS::genRenderBuffer(unsigned int *colorTexture, unsigned int *
       glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     }
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *depthTexture, 0);
-    glDrawBuffer(GL_NONE); //No color buffer is drawn to.
+    //glDrawBuffer(GL_NONE); //No color buffer is drawn to.
 
     //Check status
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {

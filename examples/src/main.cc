@@ -27,13 +27,13 @@ int ROTOM::main(int argc, char** argv) {
   printf("Time to create the windows: %0.2f.\n\n", c.end());
 
   //CubemapScene scene;
-  //DefaultScene scene;
+  DefaultScene scene;
   //DepthScene scene;
   //GeometryScene scene;
   //ProceduralScene scene;
   //RenderToTextureScene scene;
   //ShaderScene scene;
-  ShadowScene scene;
+  //ShadowScene scene;
   //SoundScene scene;
   StartSceneManager(&scene);
 
