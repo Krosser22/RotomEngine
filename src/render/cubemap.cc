@@ -27,7 +27,7 @@ ROTOM::Cubemap::~Cubemap() {}
 
 void ROTOM::Cubemap::init(char *path) {
   //TODO - The path of the cubemap is fixed
-  printf("Fix the cubemap path");
+  //printf("Fix the cubemap path\n");
 
   std::string vertexPath = kPath_shaderFiles;
   std::string fragmentPath = kPath_shaderFiles;

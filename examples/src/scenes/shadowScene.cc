@@ -139,9 +139,9 @@ void ROTOM::ShadowScene::draw() {
   }
   renderTarget_.end();
 
-  postProcess_.begin();
+  //postProcess_.begin();
 }
 
 void ROTOM::ShadowScene::postDraw() {
-  postProcess_.end(true);
+  //postProcess_.end(true);
 }

@@ -46,14 +46,10 @@ float ShadowCalculation(vec4 fragPosLightSpace) {
   //PCF (percentage-closer filtering)
   float shadow = 0.0f;
   vec2 texelSize = 1.0f / textureSize(u_depthMap, 0);
-  for(int x = -1; x <= 1; ++x) {
-    for(int y = -1; y <= 1; ++y) {
-      float pcfDepth = texture(u_depthMap, projCoords.xy + vec2(x, y) * texelSize).r;
-      shadow += currentDepth - bias > pcfDepth ? 1.0f : 0.0f;     
-    }
-  }
-  shadow /= 9.0f;
-
+  
+  float pcfDepth = texture(u_depthMap, projCoords.xy + texelSize).r;
+  shadow += currentDepth - bias > pcfDepth ? 1.0f : 0.0f;     
+  
   // Keep the shadow at 0.0f when outside the far_plane region of the light's frustum.
   if(projCoords.z > 1.0f) {
     shadow = 0.0f;

@@ -13,6 +13,7 @@
 #include "general/sceneManager.h"
 #include "../examples/include/scenes/cubemapScene.h"
 #include "../examples/include/scenes/defaultScene.h"
+#include "../examples/include/scenes/demoScene.h"
 #include "../examples/include/scenes/depthScene.h"
 #include "../examples/include/scenes/geometryScene.h"
 #include "../examples/include/scenes/proceduralScene.h"
@@ -85,6 +86,7 @@ struct HUDDatatrue {
 
   ROTOM::CubemapScene cubemapScene;
   ROTOM::DefaultScene defaultScene;
+  ROTOM::DemoScene demoScene;
   ROTOM::DepthScene depthScene;
   ROTOM::GeometryScene geometryScene;
   ROTOM::ProceduralScene proceduralScene;
@@ -231,25 +233,28 @@ void ROTOM::HUD::DrawMenu() {
       if (ImGui::MenuItem("Default", "2") || (sceneMenuIsOpened && INPUT::IsKeyPressed('2'))) {
         ChangeScene(&hud.defaultScene);
       }
-      if (ImGui::MenuItem("Depth", "3") || (sceneMenuIsOpened && INPUT::IsKeyPressed('3'))) {
+      if (ImGui::MenuItem("Demo", "3") || (sceneMenuIsOpened && INPUT::IsKeyPressed('3'))) {
+        ChangeScene(&hud.demoScene);
+      }
+      if (ImGui::MenuItem("Depth", "4") || (sceneMenuIsOpened && INPUT::IsKeyPressed('4'))) {
         ChangeScene(&hud.depthScene);
       }
-      if (ImGui::MenuItem("Geometry", "4") || (sceneMenuIsOpened && INPUT::IsKeyPressed('4'))) {
+      if (ImGui::MenuItem("Geometry", "5") || (sceneMenuIsOpened && INPUT::IsKeyPressed('5'))) {
         ChangeScene(&hud.geometryScene);
       }
-      if (ImGui::MenuItem("Procedural", "5") || (sceneMenuIsOpened && INPUT::IsKeyPressed('5'))) {
+      if (ImGui::MenuItem("Procedural", "6") || (sceneMenuIsOpened && INPUT::IsKeyPressed('6'))) {
         ChangeScene(&hud.proceduralScene);
       }
-      if (ImGui::MenuItem("RenderToTexture", "6") || (sceneMenuIsOpened && INPUT::IsKeyPressed('6'))) {
+      if (ImGui::MenuItem("RenderToTexture", "7") || (sceneMenuIsOpened && INPUT::IsKeyPressed('7'))) {
         ChangeScene(&hud.renderToTextureScene);
       }
-      if (ImGui::MenuItem("Shader", "7") || (sceneMenuIsOpened && INPUT::IsKeyPressed('7'))) {
+      if (ImGui::MenuItem("Shader", "8") || (sceneMenuIsOpened && INPUT::IsKeyPressed('8'))) {
         ChangeScene(&hud.shaderScene);
       }
-      if (ImGui::MenuItem("Shadow", "8") || (sceneMenuIsOpened && INPUT::IsKeyPressed('8'))) {
+      if (ImGui::MenuItem("Shadow", "9") || (sceneMenuIsOpened && INPUT::IsKeyPressed('9'))) {
         ChangeScene(&hud.shadowScene);
       }
-      if (ImGui::MenuItem("Sound", "9") || (sceneMenuIsOpened && INPUT::IsKeyPressed('9'))) {
+      if (ImGui::MenuItem("Sound", "0") || (sceneMenuIsOpened && INPUT::IsKeyPressed('0'))) {
         ChangeScene(&hud.soundScene);
       }
       ImGui::EndMenu();

@@ -11,6 +11,7 @@
 #include "general/sceneManager.h"
 #include "scenes/cubemapScene.h"
 #include "scenes/defaultScene.h"
+#include "scenes/demoScene.h"
 #include "scenes/depthScene.h"
 #include "scenes/geometryScene.h"
 #include "scenes/proceduralScene.h"
@@ -28,11 +29,12 @@ int ROTOM::main(int argc, char** argv) {
 
   //CubemapScene scene;
   //DefaultScene scene;
+  //DemoScene scene;
   //DepthScene scene;
   //GeometryScene scene;
   //ProceduralScene scene;
   //RenderToTextureScene scene;
-  ShaderScene scene;
+  DemoScene scene;
   //ShadowScene scene;
   //SoundScene scene;
   StartSceneManager(&scene);
