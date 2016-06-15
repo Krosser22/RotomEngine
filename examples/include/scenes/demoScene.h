@@ -12,6 +12,7 @@
 #include "general/scene.h"
 #include "render/renderTarget.h"
 #include "render/cubemap.h"
+#include "general/sound.h"
 
 namespace ROTOM {
   class DemoScene : public Scene {
@@ -62,9 +63,11 @@ namespace ROTOM {
     std::shared_ptr<Drawable> drawable_renderToDepth_;
     std::shared_ptr<Drawable> drawable_screenTexture_;
 
-    //Others
+    //Wall
     std::shared_ptr<Drawable> drawable_wall_;
-    std::shared_ptr<Drawable> drawable_floor_;
+
+    //Sound
+    SOUND::Sound *sound_;
   };
 }
 

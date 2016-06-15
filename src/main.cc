@@ -13,7 +13,7 @@
 int main(int argc, char** argv) {
   ROTOM::TASKMANAGER::init();
   {
-    //ROTOM::SOUND::init();
+    ROTOM::SOUND::init();
     ROTOM::main(argc, argv);
   }
   ROTOM::TASKMANAGER::destroy();

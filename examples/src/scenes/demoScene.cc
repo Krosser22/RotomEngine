@@ -119,7 +119,6 @@ void ROTOM::DemoScene::init() {
   drawable_Transparent->setMaterial(material_transparent);
   drawable_Transparent->setParent(drawable_color_);
   drawable_Transparent->setPosition(0.0f, 35.0f, 0.0f);
-  drawable_Transparent->setScale(1.0f, 1.0f, 100.0f);
 
   //Material9: Reflect
   /*std::shared_ptr<Material> material_reflect = std::shared_ptr<Material>(new Material());
@@ -151,6 +150,7 @@ void ROTOM::DemoScene::init() {
 
   //Material12: RenderColorToTexture
   material_renderColorToTexture_ = std::shared_ptr<Material>(new Material());
+  material_renderColorToTexture_->setShaderFromPath("basics/2_Texture.vertx", "basics/2_Texture.frag");
   //material_renderColorToTexture->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
   drawable_renderToDepth_ = std::shared_ptr<Drawable>(new Drawable("ScreenTexture"));
   drawable_renderToDepth_->setGeometry(geometryHUD_);
@@ -169,8 +169,27 @@ void ROTOM::DemoScene::init() {
   directionalLight->setParent(getRoot());
   directionalLight->setPosition(1.5f, 1.0f, 3.0f);
   addDirectionalLight(directionalLight);
+
+  //Spot Light
+  std::shared_ptr<SpotLight> spotLight1 = std::shared_ptr<SpotLight>(new SpotLight("SpotLight1"));
+  spotLight1->setParent(getRoot());
+  spotLight1->setPosition(2.2f, 3.0f, 2.2f);
+  spotLight1->materialSettings()->setColor(0.0f, 1.0f, 1.0f);
+  addSpotLight(spotLight1);
+
+  std::shared_ptr<SpotLight> spotLight2 = std::shared_ptr<SpotLight>(new SpotLight("SpotLight2"));
+  spotLight2->setParent(getRoot());
+  spotLight2->setPosition(0.0f, 3.0f, 0.0f);
+  spotLight2->materialSettings()->setColor(1.0f, 1.0f, 0.0f);
+  addSpotLight(spotLight2);
+
+  //Sound
+  sound_ = new ROTOM::SOUND::Sound("../../../../sound/elevator.ogg");
+  sound_->setLoop(true);
+  sound_->play();
 }
 
+static bool post = false;
 void ROTOM::DemoScene::input() {
   //Add Cube
   /*if (INPUT::IsKeyPressed('R')) {
@@ -192,6 +211,9 @@ void ROTOM::DemoScene::input() {
       material_renderColorToTexture_->setShaderFromPath("screenTexture.vertx", "screenTexture.frag");
     }
     isShader = !isShader;
+  }
+  if (INPUT::IsKeyPressed('2')) {
+    post = !post;
   }
 
   getCamera()->input();
@@ -223,9 +245,13 @@ void ROTOM::DemoScene::draw() {
   }
   renderTarget_.end();
 
-  //postProcess_.begin();
+  if (post) {
+    postProcess_.begin();
+  }
 }
 
 void ROTOM::DemoScene::postDraw() {
-  //postProcess_.end(true);
+  if (post) {
+    postProcess_.end(true);
+  }
 }

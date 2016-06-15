@@ -96,13 +96,13 @@ void ROTOM::ShadowScene::init() {
   std::shared_ptr<SpotLight> spotLight1 = std::shared_ptr<SpotLight>(new SpotLight("SpotLight1"));
   spotLight1->setParent(getRoot());
   spotLight1->setPosition(2.2f, 3.0f, 2.2f);
-  spotLight1->materialSettings()->setColor(0.2f, 0.4f, 0.6f);
+  spotLight1->materialSettings()->setColor(0.0f, 1.0f, 1.0f);
   addSpotLight(spotLight1);
 
   std::shared_ptr<SpotLight> spotLight2 = std::shared_ptr<SpotLight>(new SpotLight("SpotLight2"));
   spotLight2->setParent(getRoot());
-  spotLight2->setPosition(2.2f, 3.0f, -2.2f);
-  spotLight2->materialSettings()->setColor(0.8f, 0.2f, 0.5f);
+  spotLight2->setPosition(0.0f, 3.0f, 0.0f);
+  spotLight2->materialSettings()->setColor(1.0f, 1.0f, 0.0f);
   addSpotLight(spotLight2);
 }
 
