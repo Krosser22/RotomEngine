@@ -13,17 +13,20 @@
 
 void ROTOM::ProceduralScene::init() {
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
+  getCamera()->setPosition(5.0f, 0.0f, 8.0f);
+  getCamera()->setPitch(-18.0f);
+  getCamera()->setYaw(-97.0f);
 
   //Material1: Color
   std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-  material->setShaderFromPath("basics/5_SpecularLight_Blinn-Phong.vertx", "basics/5_SpecularLight_Blinn-Phong.frag");
+  material->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
 
   //Root
   getRoot()->setPosition(-5.0f, -10.0f, -28.0f);
 
   //Chunk
   chunk_ = std::shared_ptr<Chunk>(new Chunk("Chunk"));
-  chunk_->init(getRoot(), 25, 1, 1);
+  chunk_->init(getRoot(), getCamera(), 1);
 
   //Light
   clearLights();

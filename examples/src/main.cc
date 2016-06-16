@@ -32,9 +32,9 @@ int ROTOM::main(int argc, char** argv) {
   //DemoScene scene;
   //DepthScene scene;
   //GeometryScene scene;
-  //ProceduralScene scene;
+  ProceduralScene scene;
   //RenderToTextureScene scene;
-  DemoScene scene;
+  //DemoScene scene;
   //ShadowScene scene;
   //SoundScene scene;
   StartSceneManager(&scene);

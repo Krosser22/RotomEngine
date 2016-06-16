@@ -10,31 +10,24 @@
 #define __CHUNK_H__
 
 #include "drawable.h"
+#include "camera.h"
 
 namespace ROTOM {
   class Chunk {
   public:
-    Chunk();
-    Chunk(char *name);
-    virtual ~Chunk();
+    Chunk() {};
+    Chunk(char *name) {};
+    virtual ~Chunk() {};
 
     //Set the amount of rows and cols of the chunk and the max of height it is allowed to have
-    void init(std::shared_ptr<Node> parent, unsigned int rows = 1, unsigned int cols = 1, unsigned int maxHeight = 256);
+    void init(std::shared_ptr<Node> parent, Camera *camera, unsigned int maxHeight = 256);
 
     void update();
 
-    void setRows(unsigned int rows);
-
-    void setCols(unsigned int cols);
-
     void setMaxHeight(unsigned int maxHeight);
 
-    //Node
-    void move(const float x, const float y, const float z);
-    void setParent(std::shared_ptr<Node> parent);
-
   private:
-    float amountOfChange_ = 0.01f;
+    void updateGeometry();
   };
 }
 
