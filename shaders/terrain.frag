@@ -16,8 +16,10 @@ void main() {
 	float depth = 1.0f - LinearizeDepth(gl_FragCoord.z) / far;
   
 	fragment = vec4(vec3(depth), 1.0f);
-  fragment.g = (posModel.y + 1.f) * fragment.r * 3;
+  fragment.g = (posModel.y + 1.f) / fragment.r * 1;
   fragment.r = 0.0f;
+  float temp = fragment.b;
   fragment = normalize(fragment);
   fragment.a = 1.0f;
+  //fragment.r = temp * 0.7f;
 }

@@ -14,14 +14,13 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <imgui.h>
 
-#define CHUNK_SIDE 60
-#define VERTEX_SIDE 32
-#define INDEX_SIDE 6
-#define AREA_CHUNK_SIDE (CHUNK_SIDE * CHUNK_SIDE)
-#define GEOMETRY_VERTEX_SIDE (VERTEX_SIDE * AREA_CHUNK_SIDE)
-#define GEOMETRY_INDEX_SIDE (INDEX_SIDE * AREA_CHUNK_SIDE)
-
-static const float distance = 0.1f;
+float distance = 0.1f;
+const int chunkSide = 70;
+const int vertexSide = 32;
+const int indexSide = 6;
+const int areaChunkSide = (chunkSide * chunkSide);
+const int geometryVertexSide = (vertexSide * areaChunkSide);
+const int geometryIndexSide = (indexSide * areaChunkSide);
 
 struct ChunkGlobalData {
   ChunkGlobalData() {
@@ -39,19 +38,19 @@ struct ChunkGlobalData {
   int maxHeight;
   float amountOfChange;
 
-  float chunkVertex[GEOMETRY_VERTEX_SIDE];
-  int chunkIndex[GEOMETRY_INDEX_SIDE];
+  float chunkVertex[geometryVertexSide];
+  int chunkIndex[geometryIndexSide];
 
 } chunkGlobalData;
 
-float chunkV[VERTEX_SIDE] = {
+float chunkV[vertexSide] = {
   distance, 0.0f,     0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
   distance, 0.0f, distance, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
       0.0f, 0.0f, distance, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
       0.0f, 0.0f,     0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f
 };
 
-int chunkI[INDEX_SIDE] = {
+int chunkI[indexSide] = {
   0, 1, 3,
   1, 2, 3
 };
@@ -72,16 +71,16 @@ void ROTOM::Chunk::init(std::shared_ptr<Node> parent, Camera *camera, unsigned i
 
     //Geometry
     chunkGlobalData.geometry = std::shared_ptr<Geometry>(new Geometry());
-    chunkGlobalData.geometry->loadGeometry(chunkGlobalData.chunkVertex, chunkGlobalData.chunkIndex, GEOMETRY_INDEX_SIDE);
-    for (unsigned int i = 0; i < AREA_CHUNK_SIDE; ++i) {
+    chunkGlobalData.geometry->loadGeometry(chunkGlobalData.chunkVertex, chunkGlobalData.chunkIndex, geometryIndexSide);
+    for (unsigned int i = 0; i < areaChunkSide; ++i) {
       //Vertex
-      for (unsigned int j = 0; j < VERTEX_SIDE; ++j) {
-        chunkGlobalData.chunkVertex[i * VERTEX_SIDE + j] = chunkV[j];
+      for (unsigned int j = 0; j < vertexSide; ++j) {
+        chunkGlobalData.chunkVertex[i * vertexSide + j] = chunkV[j];
       }
 
       //Index
-      for (unsigned int k = 0; k < INDEX_SIDE; ++k) {
-        chunkGlobalData.chunkIndex[i * INDEX_SIDE + k] = chunkI[k] + (i * 4);
+      for (unsigned int k = 0; k < indexSide; ++k) {
+        chunkGlobalData.chunkIndex[i * indexSide + k] = chunkI[k] + (i * 4);
       }
     }
 
@@ -103,6 +102,7 @@ void ROTOM::Chunk::update() {
     updateGeometry();
     chunkGlobalData.camera->setPositionY(1 + PROCEDURAL::perlinNoise(chunkGlobalData.camera->position()[0], chunkGlobalData.perlinHeight, chunkGlobalData.camera->position()[2]));
   }
+  ImGui::DragFloat("Distance", &distance, 0.02f, 0.0f, 1.0f, "%.03f", 0.02f);
 }
 
 void ROTOM::Chunk::setMaxHeight(unsigned int maxHeight) {
@@ -116,13 +116,13 @@ void ROTOM::Chunk::updateGeometry() {
   static const int stepPos4X = 24, stepPos4Y = 25, stepPos4Z = 26;
 
   int totalStep = 0;
-  float camPosX = chunkGlobalData.camera->position()[0] - (CHUNK_SIDE * distance) / 2;
-  float camPosZ = chunkGlobalData.camera->position()[2] - (CHUNK_SIDE * distance) / 2;
+  float camPosX = chunkGlobalData.camera->position()[0] - (chunkSide * distance) / 2;
+  float camPosZ = chunkGlobalData.camera->position()[2] - (chunkSide * distance) / 2;
 
   float stepX = 0.0f, stepZ = 0.0f;
-  for (unsigned int z = 0; z < CHUNK_SIDE; ++z) {
+  for (unsigned int z = 0; z < chunkSide; ++z) {
     stepX = 0.0f;
-    for (unsigned int x = 0; x < CHUNK_SIDE; ++x) {
+    for (unsigned int x = 0; x < chunkSide; ++x) {
       chunkGlobalData.chunkVertex[stepPos1X + totalStep] = stepX + distance;
       chunkGlobalData.chunkVertex[stepPos1Z + totalStep] = stepZ;
       chunkGlobalData.chunkVertex[stepPos1Y + totalStep] = getHeight(camPosX + stepX + distance, chunkGlobalData.perlinHeight, camPosZ + stepZ);
@@ -138,13 +138,13 @@ void ROTOM::Chunk::updateGeometry() {
       chunkGlobalData.chunkVertex[stepPos4X + totalStep] = stepX;
       chunkGlobalData.chunkVertex[stepPos4Z + totalStep] = stepZ;
       chunkGlobalData.chunkVertex[stepPos4Y + totalStep] = getHeight(camPosX + stepX, chunkGlobalData.perlinHeight, camPosZ + stepZ);
-      totalStep += VERTEX_SIDE;
+      totalStep += vertexSide;
       stepX += distance;
     }
     stepZ += distance;
   }
   chunkGlobalData.drawable->setPosition(camPosX, 0.0f, camPosZ);
-  chunkGlobalData.geometry->loadGeometry(chunkGlobalData.chunkVertex, chunkGlobalData.chunkIndex, GEOMETRY_INDEX_SIDE);
+  chunkGlobalData.geometry->loadGeometry(chunkGlobalData.chunkVertex, chunkGlobalData.chunkIndex, geometryIndexSide);
 }
 
 float ROTOM::Chunk::getHeight(float x, float y, float z) {
