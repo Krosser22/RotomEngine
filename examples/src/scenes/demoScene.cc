@@ -255,3 +255,7 @@ void ROTOM::DemoScene::postDraw() {
     postProcess_.end(true);
   }
 }
+
+void ROTOM::DemoScene::destroy() {
+  sound_->stop();
+}

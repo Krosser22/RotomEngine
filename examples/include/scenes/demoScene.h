@@ -30,7 +30,7 @@ namespace ROTOM {
 
     void postDraw();
 
-    void destroy() {};
+    void destroy();
     
   private:
     std::shared_ptr<Geometry> geometry_;

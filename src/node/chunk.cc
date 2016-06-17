@@ -14,7 +14,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <imgui.h>
 
-#define CHUNK_SIDE 90
+#define CHUNK_SIDE 60
 #define VERTEX_SIDE 32
 #define INDEX_SIDE 6
 #define AREA_CHUNK_SIDE (CHUNK_SIDE * CHUNK_SIDE)
@@ -66,7 +66,7 @@ void ROTOM::Chunk::init(std::shared_ptr<Node> parent, Camera *camera, unsigned i
     //Material
     chunkGlobalData.material = std::shared_ptr<Material>(new Material("../../../../img/no_texture.png"));
     chunkGlobalData.material->setShaderFromPath("basics/4_SpecularLight.vertx", "basics/4_SpecularLight.frag");
-    chunkGlobalData.material->setShaderFromPath("depthBuffer.vertx", "depthBuffer.frag");
+    chunkGlobalData.material->setShaderFromPath("terrain.vertx", "terrain.frag");
 
     chunkGlobalData.materialSettings = std::shared_ptr<MaterialSettings>(new MaterialSettings());
 

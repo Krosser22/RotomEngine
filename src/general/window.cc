@@ -72,6 +72,9 @@ int ROTOM::WindowHeight() {
 
 void ROTOM::SetScene(Scene *newScene) {
   assert(&scene);
+  if (scene) {
+    scene->destroy();
+  }
   scene = newScene;
   scene->setRoot(std::shared_ptr<Node>(new Node("Root")));
   scene->init();
