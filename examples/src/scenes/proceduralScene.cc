@@ -12,28 +12,20 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 void ROTOM::ProceduralScene::init() {
+  //Camera
   getCamera()->setupPerspective(glm::radians(45.0f), (float)WindowWidth() / (float)WindowHeight(), 0.1f, 100.0f);
-  getCamera()->setPosition(5.0f, 0.0f, 8.0f);
-  getCamera()->setPitch(-18.0f);
-  getCamera()->setYaw(-97.0f);
-
-  //Material1: Color
-  std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material());
-  material->setShaderFromPath("shadows/1_Basic.vertx", "shadows/1_Basic.frag");
-
-  //Root
-  getRoot()->setPosition(-5.0f, -10.0f, -28.0f);
-
-  //Chunk
-  chunk_ = std::shared_ptr<Chunk>(new Chunk("Chunk"));
-  chunk_->init(getRoot(), getCamera(), 1);
-
+  getCamera()->setPosition(0.0f, 2.0f, 0.0f);
+  
   //Light
   clearLights();
   std::shared_ptr<DirectionalLight> light = std::shared_ptr<DirectionalLight>(new DirectionalLight("light"));
   light->setParent(getRoot());
-  light->setPosition(1.0f, 1.0f, -2.0f);
+  light->setPosition(0.0f, 10.0f, 0.0f);
   addDirectionalLight(light);
+
+  //Chunk
+  chunk_ = std::shared_ptr<Chunk>(new Chunk("Chunk"));
+  chunk_->init(getRoot(), getCamera(), 10);
 }
 
 void ROTOM::ProceduralScene::input() {
@@ -42,6 +34,4 @@ void ROTOM::ProceduralScene::input() {
 
 void ROTOM::ProceduralScene::update() {
   chunk_->update();
-
-  getCamera()->update();
 }

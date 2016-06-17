@@ -97,6 +97,10 @@ void ROTOM::Camera::setPosition(float x, float y, float z) {
   viewMatrix_ = glm::lookAt(position_, position_ + front_, up_);
 }
 
+void ROTOM::Camera::setPositionY(float y) {
+  setPosition(position_.x, y, position_.z);
+}
+
 float *ROTOM::Camera::position() {
   return glm::value_ptr(position_);
 }

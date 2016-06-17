@@ -28,6 +28,8 @@ namespace ROTOM {
 
   private:
     void updateGeometry();
+
+    float getHeight(float x, float y, float z);
   };
 }
 

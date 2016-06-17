@@ -27,6 +27,7 @@ namespace ROTOM {
     void update();
 
     void setPosition(float x, float y, float z);
+    void setPositionY(float y);
     float *position();
 
     void setYaw(float yaw);
