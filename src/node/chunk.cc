@@ -102,7 +102,7 @@ void ROTOM::Chunk::update() {
     updateGeometry();
     chunkGlobalData.camera->setPositionY(1 + PROCEDURAL::perlinNoise(chunkGlobalData.camera->position()[0], chunkGlobalData.perlinHeight, chunkGlobalData.camera->position()[2]));
   }
-  ImGui::DragFloat("Distance", &distance, 0.02f, 0.0f, 1.0f, "%.03f", 0.02f);
+  ImGui::DragFloat("Distance", &distance, 0.01f, 0.0f, 1.0f, "%.2f", 1.0f);
 }
 
 void ROTOM::Chunk::setMaxHeight(unsigned int maxHeight) {
